@@ -1,4 +1,4 @@
-#include "Time.h"
+﻿#include "Time.h"
 
 Time::Time(float sec) :
     mCurrentTime(0),

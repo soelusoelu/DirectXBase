@@ -1,10 +1,10 @@
-#include "Buffer.h"
+ï»¿#include "Buffer.h"
 #include "Game.h"
 #include "SubResourceDesc.h"
 
 Buffer::Buffer(ID3D11Device* device, const BufferDesc& desc, const SubResourceDesc* data) :
     mDesc(desc) {
-    //ƒoƒbƒtƒ@‚Ìì¬
+    //ãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
     if (data) {
         device->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
     } else {
@@ -13,7 +13,7 @@ Buffer::Buffer(ID3D11Device* device, const BufferDesc& desc, const SubResourceDe
 }
 
 Buffer::~Buffer() {
-    //ƒoƒbƒtƒ@‚ğíœ
+    //ãƒãƒƒãƒ•ã‚¡ã‚’å‰Šé™¤
     SAFE_RELEASE(mBuffer);
 }
 

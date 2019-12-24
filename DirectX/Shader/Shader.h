@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../System/DirectXIncLib.h"
 #include <memory>
@@ -11,28 +11,28 @@ class Shader {
 public:
     Shader(std::shared_ptr<Renderer> renderer, const char* fileName, const char* VSFuncName, const char* PSFuncName);
     ~Shader();
-    //ƒVƒF[ƒ_[‚ğƒZƒbƒg
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     void setVertexShader(ID3D11VertexShader* vertex);
     void setPixelShader(ID3D11PixelShader* pixel);
-    //©g‚ğƒVƒF[ƒ_[‚Æ‚µ‚Ä“o˜^
+    //è‡ªèº«ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¨ã—ã¦ç™»éŒ²
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
-    //g—p‚·‚éƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚ğ“o˜^
+    //ä½¿ç”¨ã™ã‚‹ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã‚’ç™»éŒ²
     void setVSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
     void setPSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
-    //ƒeƒNƒXƒ`ƒƒ‚Ì“o˜^
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç™»éŒ²
     void setVSTextures(std::shared_ptr<Texture> texture, unsigned start = 0, unsigned numTextures = 1);
     void setPSTextures(std::shared_ptr<Texture> texture, unsigned start = 0, unsigned numTextures = 1);
-    //ƒVƒF[ƒ_‚Ìæ“¾
+    //ã‚·ã‚§ãƒ¼ãƒ€ã®å–å¾—
     ID3D11VertexShader* getVertexShader() const;
     ID3D11PixelShader* getPixelShader() const;
-    //ƒRƒ“ƒpƒCƒ‹Ï‚İƒVƒF[ƒ_‚Ìæ“¾
+    //ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ¸ˆã¿ã‚·ã‚§ãƒ¼ãƒ€ã®å–å¾—
     ID3D10Blob* getCompiledShader() const;
-    //ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Ìæ“¾
+    //ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã®å–å¾—
     std::shared_ptr<Buffer> getConstantBuffer() const;
 
 private:
-    //ƒVƒF[ƒ_‚Ì¶¬
+    //ã‚·ã‚§ãƒ¼ãƒ€ã®ç”Ÿæˆ
     void createVertexShader(const char* fileName, const char* funcName);
     void createPixelShader(const char* fileName, const char* funcName);
 

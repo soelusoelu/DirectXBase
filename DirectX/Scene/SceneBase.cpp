@@ -1,4 +1,4 @@
-#include "SceneBase.h"
+﻿#include "SceneBase.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../System/Game.h"

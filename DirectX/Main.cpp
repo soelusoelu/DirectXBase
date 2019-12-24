@@ -1,4 +1,4 @@
-#include "Main.h"
+﻿#include "Main.h"
 #include "Scene/SceneManager.h"
 
 Main::Main(std::shared_ptr<Renderer> renderer) :

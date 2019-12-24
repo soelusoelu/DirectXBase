@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 #include "../Sprite/Sprite.h"
@@ -17,38 +17,38 @@ public:
     virtual void update() override;
     Sprite* getSprite() const;
 
-    //•`‰æ—Dæ‡ˆÊ(0`1A0‚ªè‘O)
+    //æç”»å„ªå…ˆé †ä½(0ï½1ã€0ãŒæ‰‹å‰)
     void setPrimary(float z);
     float getDepth() const;
-    //F–¡A‚½‚Ô‚ñ0`1
+    //è‰²å‘³ã€ãŸã¶ã‚“0ï½1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
-    //•s“§–¾“x(0`1A1‚ª•s“§–¾, 0‚ª“§–¾)
+    //ä¸é€æ˜åº¦(0ï½1ã€1ãŒä¸é€æ˜, 0ãŒé€æ˜)
     void setAlpha(float alpha);
     Vector4 getColor() const;
-    //Ø‚èæ‚è”ÍˆÍ(left, top, right, bottom, 0`1)
+    //åˆ‡ã‚Šå–ã‚Šç¯„å›²(left, top, right, bottom, 0ï½1)
     void setUV(float l, float t, float r, float b);
     Vector4 getUV() const;
-    //‰ñ“]ƒsƒ{ƒbƒgˆÊ’u
+    //å›è»¢ãƒ”ãƒœãƒƒãƒˆä½ç½®
     void setPivot(const Vector2& pivot);
     Vector2 getPivot() const;
-    //ƒeƒNƒXƒ`ƒƒƒTƒCƒY‚Ìæ“¾
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚µã‚¤ã‚ºã®å–å¾—
     Vector2INT getTextureSize() const;
-    //ƒeƒNƒXƒ`ƒƒ‚ÌŒ»İ‚ÌƒTƒCƒY‚ğæ“¾
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç¾åœ¨ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
     Vector2INT getCurrentTextureSize() const;
-    //ƒXƒNƒŠ[ƒ“•\¦ã‚ÌƒTƒCƒY‚Ìæ“¾
+    //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³è¡¨ç¤ºä¸Šã®ã‚µã‚¤ã‚ºã®å–å¾—
     Vector2INT getScreenTextureSize() const;
-    //ó‘ÔŠÇ—
+    //çŠ¶æ…‹ç®¡ç†
     SpriteState getState() const;
-    //Worlds—ñ
+    //Worldè¡Œåˆ—
     void setWorld(const Matrix4& world);
     Matrix4 getWorld() const;
-    //ƒeƒNƒXƒ`ƒƒ
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£
     void setTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
     std::shared_ptr<Texture> texture() const;
-    //ƒVƒF[ƒ_[‚Ìæ“¾
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®å–å¾—
     std::shared_ptr<Shader> shader() const;
-    //ƒtƒ@ƒCƒ‹–¼‚Ìæ“¾
+    //ãƒ•ã‚¡ã‚¤ãƒ«åã®å–å¾—
     const char* fileName() const;
 
 private:

@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include "DirectXIncLib.h"
 
-//�e�N�X�`���̎��
+//テクスチャの種類
 enum class TextureType {
     TEXTURE_TYPE_1D,
     TEXTURE_TYPE_2D,
@@ -10,65 +10,65 @@ enum class TextureType {
     TEXTURE_TYPE_CUBE
 };
 
-//�e�N�X�`���t�H�[�}�b�g
+//テクスチャフォーマット
 enum class TextureFormat {
     TEXTURE_FORMAT_RGBA8,
 };
 
-//�e�N�X�`���̎g�p���@
+//テクスチャの使用方法
 enum class TextureUsage {
-    TEXTURE_USAGE_DEFAULT, //GPU�ɂ��ǂݏ���
-    TEXTURE_USAGE_IMMUTABLE, //GPU�̓ǂݍ��݂̂݉\
-    TEXTURE_USAGE_DYNAMIC, //GPU�̓ǂݍ��݂�CPU�̏������݂��\
-    TEXTURE_USAGE_STAGING //GPU����CPU�ւ̃f�[�^�]�����T�|�[�g
+    TEXTURE_USAGE_DEFAULT, //GPUによる読み書き
+    TEXTURE_USAGE_IMMUTABLE, //GPUの読み込みのみ可能
+    TEXTURE_USAGE_DYNAMIC, //GPUの読み込みとCPUの書き込みが可能
+    TEXTURE_USAGE_STAGING //GPUからCPUへのデータ転送をサポート
 };
 
-//���\�[�X�̎g�p���@
+//リソースの使用方法
 enum class TextureBind {
     TEXTURE_BIND_SHADER_RESOURCE,
     TEXTURE_BIND_RENDER_TARGET
 };
 
-//cpu�A�N�Z�X����
+//cpuアクセス権限
 enum class TextureCPUAccessFlag {
     CPU_ACCESS_NONE,
     CPU_ACCESS_WRITE,
     CPU_ACCESS_READ
 };
 
-//�e�N�X�`�����
+//テクスチャ補間
 enum class TextureFilter {
-    TEXTURE_FILTER_POINT, //��ԂȂ�
-    TEXTURE_FILTER_LINEAR, //���`���
-    TEXTURE_FILTER_TRIANGLE, //�����\�A�d��
+    TEXTURE_FILTER_POINT, //補間なし
+    TEXTURE_FILTER_LINEAR, //線形補間
+    TEXTURE_FILTER_TRIANGLE, //高性能、重い
 };
 
 struct TextureDesc {
-    //��
+    //幅
     unsigned width;
-    //����
+    //高さ
     unsigned height;
-    //�[�x(2D�e�N�X�`���ł�0)
+    //深度(2Dテクスチャでは0)
     unsigned depth;
-    //�~�b�v�}�b�v�̍ŏ��̃��x�� ��{0
+    //ミップマップの最初のレベル 基本0
     unsigned firstMipLevel;
-    //�~�b�v�}�b�v��
+    //ミップマップ数
     unsigned mipLevels;
-    //�e�N�X�`���̎g�p���@
+    //テクスチャの使用方法
     TextureUsage usage;
-    //���\�[�X�̎g�p���@
+    //リソースの使用方法
     TextureBind bindFlags;
-    //cpu�A�N�Z�X����
+    //cpuアクセス権限
     TextureCPUAccessFlag cpuAccessFlags;
-    //�I�v�V���� ��{0
+    //オプション 基本0
     unsigned miscFlags;
-    //�t�H�[�}�b�g
+    //フォーマット
     TextureFormat format;
-    //�e�N�X�`���̃t�B���^�����O
+    //テクスチャのフィルタリング
     TextureFilter filter;
-    //�~�b�v�}�b�v�̃t�B���^�����O
+    //ミップマップのフィルタリング
     TextureFilter mipFilter;
-    //�ǂݍ��ތ��摜���
+    //読み込む元画像情報
     D3DX11_IMAGE_INFO* srcInfo;
 
     TextureDesc() :

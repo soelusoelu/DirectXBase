@@ -1,4 +1,4 @@
-#include "Pause.h"
+﻿#include "Pause.h"
 #include "../Scene/GamePlay.h"
 
 Pause::Pause(std::shared_ptr<GamePlay> game) :

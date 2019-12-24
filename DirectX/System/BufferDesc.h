@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 
-//�o�b�t�@�^�C�v
+//バッファタイプ
 enum class BufferType {
-    BUFFER_TYPE_VERTEX, //���_�o�b�t�@
-    BUFFER_TYPE_INDEX, //�C���f�b�N�X�o�b�t�@
+    BUFFER_TYPE_VERTEX, //頂点バッファ
+    BUFFER_TYPE_INDEX, //インデックスバッファ
     BUFFER_TYPE_CONSTANT_BUFFER,
     BUFFER_TYPE_SHADER_RESOURCE,
     BUFFER_TYPE_STREAM_OUTPUT,
@@ -15,10 +15,10 @@ enum class BufferType {
 };
 
 enum class BufferUsage {
-    BUFFER_USAGE_DEFAULT, //GPU�ɂ��ǂݏ���
-    BUFFER_USAGE_IMMUTABLE, //GPU�̓ǂݍ��݂̂݉\
-    BUFFER_USAGE_DYNAMIC, //GPU�̓ǂݍ��݂�CPU�̏������݂��\
-    BUFFER_USAGE_STAGING //GPU����CPU�ւ̃f�[�^�]�����T�|�[�g
+    BUFFER_USAGE_DEFAULT, //GPUによる読み書き
+    BUFFER_USAGE_IMMUTABLE, //GPUの読み込みのみ可能
+    BUFFER_USAGE_DYNAMIC, //GPUの読み込みとCPUの書き込みが可能
+    BUFFER_USAGE_STAGING //GPUからCPUへのデータ転送をサポート
 };
 
 enum class BufferCPUAccessFlag {
@@ -28,20 +28,20 @@ enum class BufferCPUAccessFlag {
 };
 
 struct BufferDesc {
-    //�f�[�^�̃o�C�g��
+    //データのバイト数
     unsigned size;
-    //�o�b�t�@�̎g�p���@
+    //バッファの使用方法
     BufferUsage usage;
-    //�o�b�t�@�^�C�v(BindFlags)
+    //バッファタイプ(BindFlags)
     BufferType type;
-    //cpu�A�N�Z�X����
+    //cpuアクセス権限
     BufferCPUAccessFlag cpuAccessFlags;
-    //�I�v�V���� ��{0
+    //オプション 基本0
     unsigned miscFlags;
-    //�R���s���[�g�V�F�[�_���g���Ȃ� ��{0
+    //コンピュートシェーダを使うなら 基本0
     unsigned structureByteStride;
 
-    //�R���X�g���N�^
+    //コンストラクタ
     BufferDesc() :
         size(0),
         usage(BufferUsage::BUFFER_USAGE_DEFAULT),

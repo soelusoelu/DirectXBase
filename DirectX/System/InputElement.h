@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "InputElementDesc.h"
 #include "VertexStreamDesc.h"
@@ -10,36 +10,36 @@ class InputElement {
 public:
     InputElement(ID3D11Device* device, const InputElementDesc* desc, unsigned numElements, ID3D10Blob* compile);
     ~InputElement();
-    //ƒfƒBƒXƒNƒŠƒvƒ^‚Ì—v‘f”‚ğ•Ô‚·
+    //ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã®è¦ç´ æ•°ã‚’è¿”ã™
     size_t size() const;
-    //ƒfƒBƒXƒNƒŠƒvƒ^‚Ìæ“¾
+    //ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã®å–å¾—
     const InputElementDesc& desc(unsigned index) const;
-    //’¸“_ƒŒƒCƒAƒEƒg‚Ìæ“¾
+    //é ‚ç‚¹ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®å–å¾—
     ID3D11InputLayout* layout() const;
 
-    //’¸“_ƒoƒbƒtƒ@ƒXƒgƒŠ[ƒ€‚Ìİ’è
+    //é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®è¨­å®š
     void setVertexStream(const VertexStreamDesc* streams, unsigned start = 0);
-    //’¸“_ƒoƒbƒtƒ@ƒXƒgƒŠ[ƒ€‚ÌƒŠƒZƒbƒg
+    //é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ãƒªã‚»ãƒƒãƒˆ
     void resetVertexStream();
 
 private:
-    //’¸“_ƒoƒbƒtƒ@‚Ìİ’è
+    //é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã®è¨­å®š
     //void setVertexBuffer(const Element& element, const VertexStreamDesc& stream, unsigned start);
-    //ƒfƒBƒXƒNƒŠƒvƒ^‚ğ•ÏŠ·
+    //ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚’å¤‰æ›
     //Element toElement(const InputElementDesc& desc);
     D3D11_INPUT_ELEMENT_DESC toElement(const InputElementDesc& desc);
-    //’¸“_ƒ^ƒCƒv‚ğ•ÏŠ·
+    //é ‚ç‚¹ã‚¿ã‚¤ãƒ—ã‚’å¤‰æ›
     const DXGI_FORMAT& toVertexFormat(VertexType type);
     const D3D11_INPUT_CLASSIFICATION toClassification(SlotClass classification);
 
 private:
-    //ƒfƒBƒXƒNƒŠƒvƒ^”z—ñ
+    //ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿é…åˆ—
     std::vector<InputElementDesc> mDesc;
-    //’¸“_éŒ¾”z—ñ
+    //é ‚ç‚¹å®£è¨€é…åˆ—
     D3D11_INPUT_ELEMENT_DESC* mElements;
-    //ƒRƒ“ƒpƒCƒ‹Ï‚İƒVƒF[ƒ_[ƒR[ƒh
+    //ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ¸ˆã¿ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã‚³ãƒ¼ãƒ‰
     ID3D10Blob* mCompiledShader;
-    //’¸“_ƒŒƒCƒAƒEƒg
+    //é ‚ç‚¹ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
     ID3D11InputLayout* mInputLayout;
 };
 

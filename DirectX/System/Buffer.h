@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "BufferDesc.h"
 #include "DirectXIncLib.h"
@@ -10,35 +10,35 @@ class Buffer {
 public:
     Buffer(ID3D11Device* device, const BufferDesc& desc, const SubResourceDesc* data);
     virtual ~Buffer();
-    //ƒfƒBƒXƒNƒŠƒvƒ^‚Ìæ“¾
+    //ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã®å–å¾—
     const BufferDesc& desc() const;
-    //ƒf[ƒ^‚Ìİ’è
+    //ãƒ‡ãƒ¼ã‚¿ã®è¨­å®š
     void setData(const void* data);
-    //ƒf[ƒ^‚Ìæ“¾
+    //ãƒ‡ãƒ¼ã‚¿ã®å–å¾—
     void getData(void* data) const;
-    //ƒoƒbƒtƒ@‚Ìæ“¾
+    //ãƒãƒƒãƒ•ã‚¡ã®å–å¾—
     ID3D11Buffer* buffer() const;
 
 private:
-    //©ìƒoƒbƒtƒ@[ƒfƒXƒNƒŠƒvƒ^‚ğ•ÏŠ·
+    //è‡ªä½œãƒãƒƒãƒ•ã‚¡ãƒ¼ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ã‚’å¤‰æ›
     D3D11_BUFFER_DESC toBufferDesc(const BufferDesc& desc) const;
-    //ƒoƒbƒtƒ@‚Ìƒ^ƒCƒv‚ğ•ÏŠ·
+    //ãƒãƒƒãƒ•ã‚¡ã®ã‚¿ã‚¤ãƒ—ã‚’å¤‰æ›
     unsigned toTarget(BufferType type) const;
-    //ƒoƒbƒtƒ@‚Ìg—p•û–@‚ğ•ÏŠ·
+    //ãƒãƒƒãƒ•ã‚¡ã®ä½¿ç”¨æ–¹æ³•ã‚’å¤‰æ›
     D3D11_USAGE toUsage(BufferUsage usage) const;
-    //CPUƒAƒNƒZƒXŒ ŒÀ‚ğ•ÏŠ·
+    //CPUã‚¢ã‚¯ã‚»ã‚¹æ¨©é™ã‚’å¤‰æ›
     unsigned toCPUAccess(BufferCPUAccessFlag flag) const;
-    //ƒTƒuƒŠƒ\[ƒX‚ğ•ÏŠ·
+    //ã‚µãƒ–ãƒªã‚½ãƒ¼ã‚¹ã‚’å¤‰æ›
     D3D11_SUBRESOURCE_DATA toSubResource(const SubResourceDesc* data) const;
 
-    //ƒRƒs[‹Ö~
+    //ã‚³ãƒ”ãƒ¼ç¦æ­¢
     Buffer(const Buffer&) = delete;
     Buffer& operator=(const Buffer&) = delete;
 
 private:
-    //ƒfƒBƒXƒNƒŠƒvƒ^
+    //ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿
     BufferDesc mDesc;
-    //ƒoƒbƒtƒ@ƒIƒuƒWƒFƒNƒg
+    //ãƒãƒƒãƒ•ã‚¡ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
     ID3D11Buffer* mBuffer;
 };
 

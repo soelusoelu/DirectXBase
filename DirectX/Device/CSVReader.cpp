@@ -1,4 +1,4 @@
-#include "CSVReader.h"
+ï»¿#include "CSVReader.h"
 #include "../System/Game.h"
 #include <cassert>
 #include <fstream>
@@ -32,12 +32,12 @@ int CSVReader::getHeight() {
 }
 
 void CSVReader::parse(const char* fileName) {
-    //’†gƒŠƒZƒbƒg
+    //ä¸­èº«ãƒªã‚»ãƒƒãƒˆ
     mCSV.clear();
 
     setDataDirectory();
 
-    //“Ç‚İ‚İŠJn
+    //èª­ã¿è¾¼ã¿é–‹å§‹
     std::ifstream ifs(fileName, std::ios::in);
     assert(ifs);
 

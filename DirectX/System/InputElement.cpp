@@ -1,4 +1,4 @@
-#include "InputElement.h"
+ï»¿#include "InputElement.h"
 #include "DirectXIncLib.h"
 #include "Game.h"
 
@@ -10,7 +10,7 @@ InputElement::InputElement(ID3D11Device* device, const InputElementDesc* desc, u
         mElements[i] = toElement(mDesc[i]);
     }
 
-    //’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚ğì¬
+    //é ‚ç‚¹ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’ä½œæˆ
     device->CreateInputLayout(mElements, numElements, mCompiledShader->GetBufferPointer(), mCompiledShader->GetBufferSize(), &mInputLayout);
 }
 
@@ -32,16 +32,16 @@ ID3D11InputLayout* InputElement::layout() const {
 }
 
 void InputElement::setVertexStream(const VertexStreamDesc* streams, unsigned start) {
-    //’¸“_ƒXƒgƒŠ[ƒ€‚ÌƒŠƒZƒbƒg
+    //é ‚ç‚¹ã‚¹ãƒˆãƒªãƒ¼ãƒ ã®ãƒªã‚»ãƒƒãƒˆ
     //resetVertexStream();
-    //’¸“_ƒoƒbƒtƒ@‚ğİ’è
+    //é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
     //for (const auto& e : mElements) {
     //    setVertexBuffer(e, streams[e.stream], start);
     //}
 }
 
 void InputElement::resetVertexStream() {
-    //’¸“_”z—ñ‚ğ–³Œø‚É‚·‚é
+    //é ‚ç‚¹é…åˆ—ã‚’ç„¡åŠ¹ã«ã™ã‚‹
     //for (unsigned attr = 0; attr < VERTEX_DECLARATION_MAX; ++attr) {
     //    glDisableVertexAttribArray(attr);
     //}

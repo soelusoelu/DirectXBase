@@ -1,15 +1,15 @@
-#pragma once
+ï»¿#pragma once
 
 #include <memory>
 
 class Buffer;
 
 struct VertexStreamDesc {
-    //’¸“_ƒoƒbƒtƒ@
+    //é ‚ç‚¹ãƒãƒƒãƒ•ã‚¡
     std::shared_ptr<Buffer> buffer;
-    //ƒIƒtƒZƒbƒg
+    //ã‚ªãƒ•ã‚»ãƒƒãƒˆ
     unsigned offset;
-    //ƒXƒgƒ‰ƒCƒh
+    //ã‚¹ãƒˆãƒ©ã‚¤ãƒ‰
     unsigned stride;
 
     VertexStreamDesc() :

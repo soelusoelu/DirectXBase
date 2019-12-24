@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+ï»¿#include "SceneManager.h"
 #include "GamePlay.h"
 #include "Title.h"
 
@@ -13,7 +13,7 @@ SceneManager::~SceneManager() = default;
 void SceneManager::update() {
     mCurrentScene->update();
 
-    //nullptr‚¶‚á‚È‚¯‚ê‚ÎƒV[ƒ“ˆÚs
+    //nullptrã˜ã‚ƒãªã‘ã‚Œã°ã‚·ãƒ¼ãƒ³ç§»è¡Œ
     auto next = mCurrentScene->getNextScene();
     if (next) {
         mCurrentScene = next;

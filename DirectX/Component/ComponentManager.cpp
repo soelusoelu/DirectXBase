@@ -1,4 +1,4 @@
-#include "ComponentManager.h"
+﻿#include "ComponentManager.h"
 #include "Component.h"
 
 ComponentManager::ComponentManager() = default;

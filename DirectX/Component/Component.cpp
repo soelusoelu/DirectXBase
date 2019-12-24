@@ -1,4 +1,4 @@
-#include "Component.h"
+﻿#include "Component.h"
 #include "ComponentManager.h"
 #include "../Actor/Actor.h"
 

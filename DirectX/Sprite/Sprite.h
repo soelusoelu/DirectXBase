@@ -1,12 +1,12 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Utility/Math.h"
 #include <memory>
 
 enum class SpriteState {
-    ACTIVE, //í‚É•`‰æ
-    ONCE, //ˆê‰ñ•`‰æŒãíœ
-    DEAD //•`‰æ‚¹‚¸íœ
+    ACTIVE, //å¸¸ã«æç”»
+    ONCE, //ä¸€å›æç”»å¾Œå‰Šé™¤
+    DEAD //æç”»ã›ãšå‰Šé™¤
 };
 
 class SpriteManager;
@@ -19,64 +19,64 @@ public:
     Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z, bool updateMyself = true);
     ~Sprite();
     Sprite(const Sprite& sprite);
-    //SpriteManager‚É‚Ä–ˆƒtƒŒ[ƒ€Às
+    //SpriteManagerã«ã¦æ¯ãƒ•ãƒ¬ãƒ¼ãƒ å®Ÿè¡Œ
     void update();
-    //•`‰æ
+    //æç”»
     void draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj);
-    //©g‚ÌƒRƒs[‚ğì¬
+    //è‡ªèº«ã®ã‚³ãƒ”ãƒ¼ã‚’ä½œæˆ
     std::shared_ptr<Sprite> copy() const;
-    //ƒsƒNƒZƒ‹’PˆÊ‚ÅˆÊ’uw’è
+    //ãƒ”ã‚¯ã‚»ãƒ«å˜ä½ã§ä½ç½®æŒ‡å®š
     void setPosition(const Vector2& pos);
-    //•`‰æ—Dæ‡ˆÊ(0`1A0‚ªè‘O)
+    //æç”»å„ªå…ˆé †ä½(0ï½1ã€0ãŒæ‰‹å‰)
     void setPrimary(float z);
     Vector2 getPosition() const;
     float getDepth() const;
     void translate(const Vector2& translation);
-    //‰ñ“]
+    //å›è»¢
     void setRotation(float angle);
     Quaternion getRotation() const;
     void rotate(float angle);
-    //”{—¦‚ÅŠgk
+    //å€ç‡ã§æ‹¡ç¸®
     void setScale(const Vector2& scale, bool isCenterShift = false);
     void setScale(float scale, bool isCenterShift = false);
     Vector2 getScale() const;
-    //F–¡A‚½‚Ô‚ñ0`1
+    //è‰²å‘³ã€ãŸã¶ã‚“0ï½1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
-    //•s“§–¾“x(0`1A1‚ª•s“§–¾, 0‚ª“§–¾)
+    //ä¸é€æ˜åº¦(0ï½1ã€1ãŒä¸é€æ˜, 0ãŒé€æ˜)
     void setAlpha(float alpha);
     Vector4 getColor() const;
-    //Ø‚èæ‚è”ÍˆÍ(left, top, right, bottom, 0`1)
+    //åˆ‡ã‚Šå–ã‚Šç¯„å›²(left, top, right, bottom, 0ï½1)
     void setUV(float l, float t, float r, float b);
     Vector4 getUV() const;
-    //‰ñ“]ƒsƒ{ƒbƒgˆÊ’u
+    //å›è»¢ãƒ”ãƒœãƒƒãƒˆä½ç½®
     void setPivot(const Vector2& pivot);
     Vector2 getPivot() const;
-    //ƒeƒNƒXƒ`ƒƒƒTƒCƒY‚Ìæ“¾
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚µã‚¤ã‚ºã®å–å¾—
     Vector2INT getTextureSize() const;
-    //ƒeƒNƒXƒ`ƒƒ‚ÌŒ»İ‚ÌƒTƒCƒY‚ğæ“¾
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ç¾åœ¨ã®ã‚µã‚¤ã‚ºã‚’å–å¾—
     Vector2INT getCurrentTextureSize() const;
-    //ƒXƒNƒŠ[ƒ“•\¦ã‚ÌƒTƒCƒY‚Ìæ“¾
+    //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³è¡¨ç¤ºä¸Šã®ã‚µã‚¤ã‚ºã®å–å¾—
     Vector2INT getScreenTextureSize() const;
-    //ó‘ÔŠÇ—
+    //çŠ¶æ…‹ç®¡ç†
     static void destroy(Sprite* sprite);
     static void destroy(std::shared_ptr<Sprite> sprite);
     SpriteState getState() const;
-    //Worlds—ñ
+    //Worldè¡Œåˆ—
     void setWorld(const Matrix4& world);
     Matrix4 getWorld() const;
-    //ƒeƒNƒXƒ`ƒƒ‚Ìæ“¾
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®å–å¾—
     void setTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
     std::shared_ptr<Texture> texture() const;
-    //ƒVƒF[ƒ_[‚Ìæ“¾
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®å–å¾—
     std::shared_ptr<Shader> shader() const;
-    //ƒtƒ@ƒCƒ‹–¼‚Ìæ“¾
+    //ãƒ•ã‚¡ã‚¤ãƒ«åã®å–å¾—
     const char* fileName() const;
-    //ƒ[ƒ‹ƒhs—ñ‚Ì•ÏXƒtƒ‰ƒO
+    //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®å¤‰æ›´ãƒ•ãƒ©ã‚°
     bool getWorldUpdateFlag() const;
     void onceToDead();
 
-    //SpriteManager‚Ì“o˜^
+    //SpriteManagerã®ç™»éŒ²
     static void setSpriteManager(SpriteManager* manager);
 
 private:

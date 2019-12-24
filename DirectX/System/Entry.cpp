@@ -1,6 +1,6 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 #include <windows.h>
-//ƒƒ‚ƒŠƒŠ[ƒNŒŸo—p
+//ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯æ¤œå‡ºç”¨
 #ifdef _DEBUG
 #include <stdlib.h>
 #include <crtdbg.h>
@@ -11,7 +11,7 @@
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT) {
     Game* game = new Game();
     if (!game) {
-        MessageBox(0, L"ƒNƒ‰ƒX¶¬¸”s ƒAƒvƒŠ‚ğI—¹‚µ‚Ü‚·", NULL, MB_OK);
+        MessageBox(0, L"ã‚¯ãƒ©ã‚¹ç”Ÿæˆå¤±æ•— ã‚¢ãƒ—ãƒªã‚’çµ‚äº†ã—ã¾ã™", NULL, MB_OK);
         return 0;
     }
 
@@ -19,7 +19,7 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT) {
 
     delete game;
 
-    //ƒƒ‚ƒŠƒŠ[ƒNŒŸoŠÖ”
+    //ãƒ¡ãƒ¢ãƒªãƒªãƒ¼ã‚¯æ¤œå‡ºé–¢æ•°
 #ifdef _DEBUG
     _CrtDumpMemoryLeaks();
 #endif // _DEBUG

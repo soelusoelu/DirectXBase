@@ -1,4 +1,4 @@
-#include "Math.h"
+﻿#include "Math.h"
 
 const Vector2 Vector2::zero(0.0f, 0.0f);
 const Vector2 Vector2::right(1.0f, 0.0f);

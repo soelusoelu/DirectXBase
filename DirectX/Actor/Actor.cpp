@@ -1,4 +1,4 @@
-#include "Actor.h"
+﻿#include "Actor.h"
 #include "ActorManager.h"
 #include "Transform2D.h"
 #include "../Component/ComponentManager.h"

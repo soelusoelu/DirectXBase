@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <memory>
 #include <list>
@@ -14,9 +14,9 @@ public:
     void add(Actor* add);
     void clear();
 
-    //ƒAƒNƒ^[”z—ñ‚Ì’†‚©‚çƒvƒŒƒCƒ„[‚ğæ“¾
+    //ã‚¢ã‚¯ã‚¿ãƒ¼é…åˆ—ã®ä¸­ã‹ã‚‰ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å–å¾—
     std::shared_ptr<PlayerActor> getPlayer() const;
-    //ˆê”ÔÅ‰‚ÉŒ©‚Â‚©‚Á‚½Actor‚Ìæ“¾
+    //ä¸€ç•ªæœ€åˆã«è¦‹ã¤ã‹ã£ãŸActorã®å–å¾—
     template<typename T>
     std::shared_ptr<T> getActor() const {
         std::shared_ptr<T> actor = nullptr;
@@ -32,7 +32,7 @@ public:
                 return actor;
             }
         }
-        //ÅŒã‚Ü‚ÅŒ©‚Â‚©‚ç‚È‚¯‚ê‚Înullptr‚ğ•Ô‚·
+        //æœ€å¾Œã¾ã§è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°nullptrã‚’è¿”ã™
         return actor;
     }
 

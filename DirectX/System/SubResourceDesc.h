@@ -1,13 +1,13 @@
-#pragma once
+ï»¿#pragma once
 
 struct SubResourceDesc {
-    //‰Šú‰»ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
+    //åˆæœŸåŒ–ãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
     const void* data;
-    //ƒeƒNƒXƒ`ƒƒ‚Ì‚İ‚Åg—p
-    //ƒeƒNƒXƒ`ƒƒ‚Ì1s‚Ìæ“ª‚©‚çŸ‚Ìs‚Ü‚Å‚Ì‹——£
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã¿ã§ä½¿ç”¨
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ã®1è¡Œã®å…ˆé ­ã‹ã‚‰æ¬¡ã®è¡Œã¾ã§ã®è·é›¢
     unsigned pitch;
-    //3DƒeƒNƒXƒ`ƒƒ‚Ì‚İ‚Åg—p
-    //‚ ‚é[‚³ƒŒƒxƒ‹‚ÌŠJn‚©‚çŸ‚Ì[‚³‚Ü‚Å‚Ì‹——£
+    //3Dãƒ†ã‚¯ã‚¹ãƒãƒ£ã®ã¿ã§ä½¿ç”¨
+    //ã‚ã‚‹æ·±ã•ãƒ¬ãƒ™ãƒ«ã®é–‹å§‹ã‹ã‚‰æ¬¡ã®æ·±ã•ã¾ã§ã®è·é›¢
     unsigned slicePitch;
 
     SubResourceDesc() :
@@ -18,11 +18,11 @@ struct SubResourceDesc {
 };
 
 struct MappedSubResourceDesc {
-    //ƒf[ƒ^‚Ö‚Ìƒ|ƒCƒ“ƒ^
+    //ãƒ‡ãƒ¼ã‚¿ã¸ã®ãƒã‚¤ãƒ³ã‚¿
     void* data;
-    //ƒf[ƒ^‚Ìsƒsƒbƒ`
+    //ãƒ‡ãƒ¼ã‚¿ã®è¡Œãƒ”ãƒƒãƒ
     unsigned rowPitch;
-    //ƒf[ƒ^‚Ì[‚³ƒsƒbƒ`
+    //ãƒ‡ãƒ¼ã‚¿ã®æ·±ã•ãƒ”ãƒƒãƒ
     unsigned depthPitch;
 
     MappedSubResourceDesc() :

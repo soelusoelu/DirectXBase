@@ -1,4 +1,4 @@
-#include "Window.h"
+Ôªø#include "Window.h"
 
 Window* gWindow = nullptr;
 
@@ -9,7 +9,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 HRESULT Window::initWindow(HINSTANCE hInstance, INT iX, INT iY, INT iWidth, INT iHeight, LPCWSTR WindowName) {
     gWindow = this;
-    // ÉEÉBÉìÉhÉEÇÃíËã`
+    // „Ç¶„Ç£„É≥„Éâ„Ç¶„ÅÆÂÆöÁæ©
     WNDCLASSEX wc;
     ZeroMemory(&wc, sizeof(wc));
     wc.cbSize = sizeof(wc);
@@ -22,12 +22,12 @@ HRESULT Window::initWindow(HINSTANCE hInstance, INT iX, INT iY, INT iWidth, INT 
     wc.lpszClassName = WindowName;
     wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
     RegisterClassEx(&wc);
-    //ÉEÉBÉìÉhÉEÇÃçÏê¨
+    //„Ç¶„Ç£„É≥„Éâ„Ç¶„ÅÆ‰ΩúÊàê
     mhWnd = CreateWindow(WindowName, WindowName, WS_OVERLAPPEDWINDOW, 0, 0, iWidth, iHeight, 0, 0, hInstance, 0);
     if (!mhWnd) {
         return E_FAIL;
     }
-    //ÉEÉCÉìÉhÉEÇÃï\é¶
+    //„Ç¶„Ç§„É≥„Éâ„Ç¶„ÅÆË°®Á§∫
     ShowWindow(mhWnd, SW_SHOW);
     UpdateWindow(mhWnd);
 

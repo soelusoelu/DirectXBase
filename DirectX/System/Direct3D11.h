@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "DirectXIncLib.h"
 
@@ -31,8 +31,8 @@ private:
     ID3D11DepthStencilView* mDepthStencilView;
     ID3D11Texture2D* mDepthStencil;
     ID3D11DepthStencilState* mDepthStencilState;
-    ID3D11RasterizerState* mRasterizerState; //�O�ʗp
-    ID3D11RasterizerState* mRasterizerStateBack; //�w�ʗp
+    ID3D11RasterizerState* mRasterizerState; //前面用
+    ID3D11RasterizerState* mRasterizerStateBack; //背面用
     ID3D11BlendState* mBlendState;
 };
 

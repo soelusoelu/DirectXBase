@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 #include <cmath>
 #include <memory.h>
@@ -1065,7 +1065,7 @@ public:
 
     // Concatenate
     // Rotate by q FOLLOWED BY p
-    //ä|ÇØéZ
+    //Êéõ„ÅëÁÆó
     static Quaternion concatenate(const Quaternion& q, const Quaternion& p) {
         Quaternion retVal;
 
@@ -1074,7 +1074,7 @@ public:
         Vector3 qv(q.x, q.y, q.z);
         Vector3 pv(p.x, p.y, p.z);
         //Vector3 newVec = p.w * qv + q.w * pv + Vector3::Cross(pv, qv);
-        Vector3 newVec = p.w * qv + q.w * pv + Vector3::cross(qv, pv); //Ç±Ç¡ÇøÇ≈ÇÕÅH
+        Vector3 newVec = p.w * qv + q.w * pv + Vector3::cross(qv, pv); //„Åì„Å£„Å°„Åß„ÅØÔºü
         retVal.x = newVec.x;
         retVal.y = newVec.y;
         retVal.z = newVec.z;

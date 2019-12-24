@@ -1,4 +1,4 @@
-#include "Game.h"
+ï»¿#include "Game.h"
 #include "Direct3D11.h"
 #include "Window.h"
 #include "../Main.h"
@@ -29,7 +29,7 @@ void Game::run(HINSTANCE hInstance) {
     }
     ShowWindow(mhWnd, SW_SHOW);
     UpdateWindow(mhWnd);
-    // ƒƒbƒZ[ƒWƒ‹[ƒv
+    // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ«ãƒ¼ãƒ—
     MSG msg = { 0 };
     ZeroMemory(&msg, sizeof(msg));
     while (msg.message != WM_QUIT) {
@@ -47,15 +47,15 @@ HRESULT Game::init() {
     if (!mWindow) {
         return E_FAIL;
     }
-    MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ƒEƒBƒ“ƒhƒEì¬¸”s");
+    MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆå¤±æ•—");
     mhWnd = mWindow->gethWnd();
 
     mD3D11 = std::make_unique<Direct3D11>();
     if (!mD3D11) {
-        MSG(L"Direct3D‚Ì‰Šú‰»¸”s");
+        MSG(L"Direct3Dã®åˆæœŸåŒ–å¤±æ•—");
         return E_FAIL;
     }
-    MFALSE(mD3D11->init(mhWnd), L"Direct3D‰Šú‰»¸”s");
+    MFALSE(mD3D11->init(mhWnd), L"Direct3DåˆæœŸåŒ–å¤±æ•—");
 
     mRenderer = std::make_shared<Renderer>(mD3D11->device(), mD3D11->deviceContext());
     mMain = std::make_unique<Main>(mRenderer);

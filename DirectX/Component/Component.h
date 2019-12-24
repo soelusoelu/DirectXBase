@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class Actor;
 
@@ -7,10 +7,10 @@ protected:
     Component(Actor* owner, int updateOrder = 100);
 public:
     virtual ~Component();
-    //getComponent‚Í‚±‚±‚Å‚µ‚Ä
+    //getComponentã¯ã“ã“ã§ã—ã¦
     virtual void start() = 0;
     virtual void update() = 0;
-    //ƒI[ƒi[‚ÌTransform‚ªXV‚³‚ê‚½‚ç
+    //ã‚ªãƒ¼ãƒŠãƒ¼ã®TransformãŒæ›´æ–°ã•ã‚ŒãŸã‚‰
     virtual void onUpdateWorldTransform() {};
 
     int getUpdateOrder() const;

@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-//’¸“_ƒ^ƒCƒv
+//é ‚ç‚¹ã‚¿ã‚¤ãƒ—
 enum class VertexType {
     VERTEX_TYPE_FLOAT1,
     VERTEX_TYPE_FLOAT2,
@@ -28,29 +28,29 @@ enum class VertexType {
     VERTEX_TYPE_UINT4
 };
 
-//’¸“_‚©”Û‚©
+//é ‚ç‚¹ã‹å¦ã‹
 enum class SlotClass {
     SLOT_CLASS_VERTEX_DATA,
     SLOT_CLASS_INSTANCE_DATA
 };
 
-//’¸“_éŒ¾ƒfƒBƒXƒNƒŠƒvƒ^
+//é ‚ç‚¹å®£è¨€ãƒ‡ã‚£ã‚¹ã‚¯ãƒªãƒ—ã‚¿
 struct InputElementDesc {
-    //ƒZƒ}ƒ“ƒeƒBƒbƒN LPCSTR
+    //ã‚»ãƒãƒ³ãƒ†ã‚£ãƒƒã‚¯ LPCSTR
     const char* semantic;
-    //ƒZƒ}ƒ“ƒeƒBƒbƒNƒCƒ“ƒfƒbƒNƒX
+    //ã‚»ãƒãƒ³ãƒ†ã‚£ãƒƒã‚¯ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
     unsigned index;
-    //’¸“_ƒ^ƒCƒv
+    //é ‚ç‚¹ã‚¿ã‚¤ãƒ—
     VertexType type;
-    //ƒXƒƒbƒg
+    //ã‚¹ãƒ­ãƒƒãƒˆ
     unsigned slot;
-    //ƒIƒtƒZƒbƒg
+    //ã‚ªãƒ•ã‚»ãƒƒãƒˆ
     unsigned offset;
-    //’¸“_‚©”Û‚©
+    //é ‚ç‚¹ã‹å¦ã‹
     SlotClass classification;
-    //ƒXƒgƒŠ[ƒ€”Ô†
+    //ã‚¹ãƒˆãƒªãƒ¼ãƒ ç•ªå·
     unsigned stream;
 };
 
-//’¸“_éŒ¾‚ÌÅ‘å’l
+//é ‚ç‚¹å®£è¨€ã®æœ€å¤§å€¤
 const unsigned VERTEX_DECLARATION_MAX = 16;

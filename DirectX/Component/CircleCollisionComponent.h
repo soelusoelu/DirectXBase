@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Collider.h"
 #include "../Utility/Collision.h"

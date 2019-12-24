@@ -1,4 +1,4 @@
-#include "GamePlay.h"
+ï»¿#include "GamePlay.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ActorManager.h"
 #include "../Actor/PlayerActor.h"
@@ -20,7 +20,7 @@ GamePlay::GamePlay() :
 GamePlay::~GamePlay() {
     SAFE_DELETE(mActorManager);
     SAFE_DELETE(mPhysics);
-    //‚È‚º‚©Collider‚ÌPhysics‚ª¶‚«‚Ä‚é‚©‚ç
+    //ãªãœã‹Colliderã®PhysicsãŒç”Ÿãã¦ã‚‹ã‹ã‚‰
     Collider::setPhysics(nullptr);
 }
 
@@ -30,9 +30,9 @@ void GamePlay::startScene() {
 
 void GamePlay::updateScene() {
     if (mState == GameState::PLAY) {
-        //‘ƒAƒNƒ^[ƒAƒbƒvƒf[ƒg
+        //ç·ã‚¢ã‚¯ã‚¿ãƒ¼ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆ
         mActorManager->update();
-        //‘“–‚½‚è”»’è
+        //ç·å½“ãŸã‚Šåˆ¤å®š
         mPhysics->sweepAndPrune();
 
         if (Input::getKeyDown(mPauseKey)) {

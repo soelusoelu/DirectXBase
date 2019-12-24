@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Utility/Math.h"
 #include <memory>
@@ -19,27 +19,27 @@ protected:
 public:
     virtual ~Actor();
 
-    //‚·‚×‚Ä‚ÌXV
+    //ã™ã¹ã¦ã®æ›´æ–°
     void update();
-    //ƒAƒNƒ^[ŒÅ—L‚ÌXV
+    //ã‚¢ã‚¯ã‚¿ãƒ¼å›ºæœ‰ã®æ›´æ–°
     virtual void updateActor() = 0;
 
-    //ƒ[ƒ‹ƒhs—ñ‚ÌXV
+    //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã®æ›´æ–°
     void computeWorldTransform();
 
-    //ƒAƒNƒ^[íœ
+    //ã‚¢ã‚¯ã‚¿ãƒ¼å‰Šé™¤
     static void destroy(Actor* actor);
     static void destroy(std::shared_ptr<Actor> actor);
     static void destroy(Actor* actor, float sec);
     static void destroy(std::shared_ptr<Actor> actor, float sec);
 
-    //ƒQƒbƒ^[AƒZƒbƒ^[
+    //ã‚²ãƒƒã‚¿ãƒ¼ã€ã‚»ãƒƒã‚¿ãƒ¼
     std::shared_ptr<ComponentManager> getComponentManager() const;
     std::shared_ptr<Transform2D> getTransform() const;
     ActorState getState() const;
     const char* getTag() const;
 
-    //ActorManager‚Ì“o˜^
+    //ActorManagerã®ç™»éŒ²
     static void setActorManager(ActorManager* manager);
 
 private:

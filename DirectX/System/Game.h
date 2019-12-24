@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #define TITLE L"DirectX"
 
@@ -39,7 +39,7 @@ private:
     HWND mhWnd;
 };
 
-//ƒvƒƒgƒ^ƒCƒv
+//ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—
 void initDirectory(WCHAR* root);
 void setRootDirectory();
 void setAssetsDirectory();

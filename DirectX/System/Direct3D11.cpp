@@ -1,4 +1,4 @@
-#include "Direct3D11.h"
+ï»¿#include "Direct3D11.h"
 #include "Game.h"
 
 Direct3D11::Direct3D11() {
@@ -39,14 +39,14 @@ bool Direct3D11::init(const HWND& hWnd) {
 }
 
 void Direct3D11::clear() {
-    //‰æ–ÊƒNƒŠƒA(ÀÛ‚Í’PF‚Å‰æ–Ê‚ğ“h‚è‚Â‚Ô‚·ˆ—)
-    float ClearColor[4] = { 0,0,1,1 }; //ƒNƒŠƒAFì¬ RGBA‚Ì‡
-    mDeviceContext->ClearRenderTargetView(mRenderTargetView, ClearColor); //‰æ–ÊƒNƒŠƒA
-    mDeviceContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); //[“xƒoƒbƒtƒ@ƒNƒŠƒA
+    //ç”»é¢ã‚¯ãƒªã‚¢(å®Ÿéš›ã¯å˜è‰²ã§ç”»é¢ã‚’å¡—ã‚Šã¤ã¶ã™å‡¦ç†)
+    float ClearColor[4] = { 0,0,1,1 }; //ã‚¯ãƒªã‚¢è‰²ä½œæˆ RGBAã®é †
+    mDeviceContext->ClearRenderTargetView(mRenderTargetView, ClearColor); //ç”»é¢ã‚¯ãƒªã‚¢
+    mDeviceContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0); //æ·±åº¦ãƒãƒƒãƒ•ã‚¡ã‚¯ãƒªã‚¢
 }
 
 HRESULT Direct3D11::present() {
-    mSwapChain->Present(0, 0); //‰æ–ÊXV(ƒoƒbƒNƒoƒbƒtƒ@‚ğƒtƒƒ“ƒgƒoƒbƒtƒ@‚É)
+    mSwapChain->Present(0, 0); //ç”»é¢æ›´æ–°(ãƒãƒƒã‚¯ãƒãƒƒãƒ•ã‚¡ã‚’ãƒ•ãƒ­ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã«)
     return S_OK;
 }
 
@@ -59,7 +59,7 @@ ID3D11DeviceContext* Direct3D11::deviceContext() const {
 }
 
 void Direct3D11::createSwapChain(const HWND& hWnd) {
-    // ƒfƒoƒCƒX‚ÆƒXƒƒbƒvƒ`ƒF[ƒ“‚Ìì¬
+    // ãƒ‡ãƒã‚¤ã‚¹ã¨ã‚¹ãƒ¯ãƒƒãƒ—ãƒã‚§ãƒ¼ãƒ³ã®ä½œæˆ
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory(&sd, sizeof(sd));
     sd.BufferCount = 1;
@@ -81,7 +81,7 @@ void Direct3D11::createSwapChain(const HWND& hWnd) {
 }
 
 void Direct3D11::createRenderTargetView() {
-    //ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚Ìì¬
+    //ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã®ä½œæˆ
     ID3D11Texture2D* backBuffer;
     mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
     mDevice->CreateRenderTargetView(backBuffer, NULL, &mRenderTargetView);
@@ -89,7 +89,7 @@ void Direct3D11::createRenderTargetView() {
 }
 
 void Direct3D11::createDepthStencilView() {
-    //[“xƒXƒeƒ“ƒVƒ‹ƒrƒ…[‚Ìì¬
+    //æ·±åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆ
     D3D11_TEXTURE2D_DESC descDepth;
     ZeroMemory(&descDepth, sizeof(descDepth));
     descDepth.Width = Game::WINDOW_WIDTH;
@@ -108,12 +108,12 @@ void Direct3D11::createDepthStencilView() {
 }
 
 void Direct3D11::setRenderTargets() {
-    //ƒŒƒ“ƒ_[ƒ^[ƒQƒbƒgƒrƒ…[‚Æ[“xƒXƒeƒ“ƒVƒ‹ƒrƒ…[‚ğƒpƒCƒvƒ‰ƒCƒ“‚ÉƒoƒCƒ“ƒh
+    //ãƒ¬ãƒ³ãƒ€ãƒ¼ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãƒ“ãƒ¥ãƒ¼ã¨æ·±åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ãƒ“ãƒ¥ãƒ¼ã‚’ãƒ‘ã‚¤ãƒ—ãƒ©ã‚¤ãƒ³ã«ãƒã‚¤ãƒ³ãƒ‰
     mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
 }
 
 void Direct3D11::createDepthStencilState() {
-    //k“xƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg‚ğì¬
+    //éœ‡åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆã‚’ä½œæˆ
     D3D11_DEPTH_STENCIL_DESC dc;
     ZeroMemory(&dc, sizeof(dc));
     dc.DepthEnable = true;
@@ -121,12 +121,12 @@ void Direct3D11::createDepthStencilState() {
     dc.DepthFunc = D3D11_COMPARISON_LESS;
     dc.StencilEnable = false;
     mDevice->CreateDepthStencilState(&dc, &mDepthStencilState);
-    //[“xƒXƒeƒ“ƒVƒ‹ƒXƒe[ƒg‚ğ“K—p
+    //æ·±åº¦ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ã‚¹ãƒ†ãƒ¼ãƒˆã‚’é©ç”¨
     mDeviceContext->OMSetDepthStencilState(mDepthStencilState, 0);
 }
 
 void Direct3D11::setViewports() {
-    //ƒrƒ…[ƒ|[ƒg‚Ìİ’è
+    //ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã®è¨­å®š
     D3D11_VIEWPORT vp;
     vp.Width = Game::WINDOW_WIDTH;
     vp.Height = Game::WINDOW_HEIGHT;
@@ -138,7 +138,7 @@ void Direct3D11::setViewports() {
 }
 
 void Direct3D11::createRasterizerState() {
-    //ƒ‰ƒXƒ^ƒ‰ƒCƒYİ’è
+    //ãƒ©ã‚¹ã‚¿ãƒ©ã‚¤ã‚ºè¨­å®š
     D3D11_RASTERIZER_DESC rdc;
     ZeroMemory(&rdc, sizeof(rdc));
     rdc.CullMode = D3D11_CULL_FRONT;
@@ -153,7 +153,7 @@ void Direct3D11::createRasterizerState() {
 }
 
 void Direct3D11::createBlendState() {
-    //ƒAƒ‹ƒtƒ@ƒuƒŒƒ“ƒh—pƒuƒŒƒ“ƒhƒXƒe[ƒgì¬
+    //ã‚¢ãƒ«ãƒ•ã‚¡ãƒ–ãƒ¬ãƒ³ãƒ‰ç”¨ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚¹ãƒ†ãƒ¼ãƒˆä½œæˆ
     D3D11_BLEND_DESC bd;
     ZeroMemory(&bd, sizeof(D3D11_BLEND_DESC));
     bd.IndependentBlendEnable = false;

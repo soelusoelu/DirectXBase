@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Utility/Math.h"
 
@@ -7,21 +7,21 @@ public:
     Transform2D();
     ~Transform2D();
 
-    //ƒ[ƒ‹ƒhs—ñXV
+    //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—æ›´æ–°
     bool computeWorldTransform(const Vector2INT& texSize, const Vector2& pivot, float z);
     Matrix4 getWorldTransform() const;
 
-    //ƒsƒNƒZƒ‹’PˆÊ‚ÅˆÊ’uw’è
+    //ãƒ”ã‚¯ã‚»ãƒ«å˜ä½ã§ä½ç½®æŒ‡å®š
     void setPosition(const Vector2& pos);
     Vector2 getPosition() const;
     void translate(const Vector2& translation);
 
-    //‰ñ“]
+    //å›è»¢
     void setRotation(float angle);
     Quaternion getRotation() const;
     void rotate(float angle);
 
-    //”{—¦‚ÅŠgk
+    //å€ç‡ã§æ‹¡ç¸®
     void setScale(const Vector2& scale);
     void setScale(float scale);
     Vector2 getScale() const;

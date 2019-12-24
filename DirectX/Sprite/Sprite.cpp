@@ -1,4 +1,4 @@
-#include "Sprite.h"
+ï»¿#include "Sprite.h"
 #include "SpriteManager.h"
 #include "Texture.h"
 #include "../Device/Renderer.h"
@@ -67,20 +67,20 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
     }
     onceToDead();
 
-    //©g‚ğg—p‚·‚éƒVƒF[ƒ_[‚Æ‚µ‚Ä“o˜^
+    //è‡ªèº«ã‚’ä½¿ç”¨ã™ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã¨ã—ã¦ç™»éŒ²
     mShader->setVSShader();
     mShader->setPSShader();
-    //ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ğg‚¤ƒVƒF[ƒ_[‚Ì“o˜^
+    //ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½¿ã†ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setVSConstantBuffers();
     mShader->setPSConstantBuffers();
-    //’¸“_ƒŒƒCƒAƒEƒg‚ğƒZƒbƒg
+    //é ‚ç‚¹ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’ã‚»ãƒƒãƒˆ
     renderer->setInputLayout(mTexture->getVertexlayout());
 
-    //ƒVƒF[ƒ_[‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ÉŠeíƒf[ƒ^‚ğ“n‚·
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã«å„ç¨®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™
     D3D11_MAPPED_SUBRESOURCE pData;
     if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         TextureShaderConstantBuffer cb;
-        //ƒ[ƒ‹ƒhAƒJƒƒ‰AË‰es—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ã‚«ãƒ¡ãƒ©ã€å°„å½±è¡Œåˆ—ã‚’æ¸¡ã™
         cb.mWorld = mWorld;
         cb.mWorld.transpose();
         cb.mProjection = proj;
@@ -90,12 +90,12 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
         memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
         renderer->deviceContext()->Unmap(mShader->getConstantBuffer()->buffer(), 0);
     }
-    //ƒeƒNƒXƒ`ƒƒ[‚ğƒVƒF[ƒ_[‚É“n‚·
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
     mShader->setPSTextures(mTexture);
-    //ƒTƒ“ƒvƒ‰[‚ÌƒZƒbƒg
+    //ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã®ã‚»ãƒƒãƒˆ
     auto sample = mTexture->getSampler();
     renderer->deviceContext()->PSSetSamplers(0, 1, &sample);
-    //ƒvƒŠƒ~ƒeƒBƒu‚ğƒŒƒ“ƒ_ƒŠƒ“ƒO
+    //ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
     renderer->drawIndexed(6);
 }
 
@@ -166,7 +166,7 @@ void Sprite::setScale(const Vector2 & scale, bool isCenterShift) {
 
     mScale = scale;
 
-    //ƒsƒ{ƒbƒgC³
+    //ãƒ”ãƒœãƒƒãƒˆä¿®æ­£
     mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
     mPivot.x *= mScale.x;
     mPivot.y *= mScale.y;
@@ -182,7 +182,7 @@ void Sprite::setScale(float scale, bool isCenterShift) {
     mScale.x = scale;
     mScale.y = scale;
 
-    //ƒsƒ{ƒbƒgC³
+    //ãƒ”ãƒœãƒƒãƒˆä¿®æ­£
     mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
     mPivot.x *= mScale.x;
     mPivot.y *= mScale.y;
@@ -225,11 +225,11 @@ void Sprite::setUV(float l, float t, float r, float b) {
     mUV.z = r;
     mUV.w = b;
 
-    //ƒTƒCƒYC³
+    //ã‚µã‚¤ã‚ºä¿®æ­£
     mCurrentSize.x = mDefaultSize.x * (r - l);
     mCurrentSize.y = mDefaultSize.y * (b - t);
 
-    //ƒsƒ{ƒbƒgC³
+    //ãƒ”ãƒœãƒƒãƒˆä¿®æ­£
     mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
     mPivot.x *= mScale.x;
     mPivot.y *= mScale.y;
@@ -321,7 +321,7 @@ void Sprite::setSpriteManager(SpriteManager* manager) {
 }
 
 void Sprite::updateWorld() {
-    //ƒ[ƒ‹ƒhs—ñ‚É•ÏX‚ª¶‚¶‚½‚ç
+    //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã«å¤‰æ›´ãŒç”Ÿã˜ãŸã‚‰
     if (!mWorldUpdateFlag || !mUpdateMyself) {
         return;
     }

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <list>
 #include <memory>
@@ -9,17 +9,17 @@ class ComponentManager {
 public:
     ComponentManager();
     ~ComponentManager();
-    //ŠeƒRƒ“ƒ|[ƒlƒ“ƒg‚Ìstart‚ğˆê“x‚¾‚¯Às
+    //å„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®startã‚’ä¸€åº¦ã ã‘å®Ÿè¡Œ
     void start();
-    //Š—L‚·‚é‚·‚×‚Ä‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ğXV
+    //æ‰€æœ‰ã™ã‚‹ã™ã¹ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æ›´æ–°
     void update();
-    //ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ì’Ç‰Á
+    //ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¿½åŠ 
     void addComponent(Component* component);
 
-    //Š—L‚·‚é‚·‚×‚Ä‚ÌƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌonUpdateWorldTransform‚ğÀs
+    //æ‰€æœ‰ã™ã‚‹ã™ã¹ã¦ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®onUpdateWorldTransformã‚’å®Ÿè¡Œ
     void onUpdateWorldTransform();
 
-    //ƒRƒ“ƒ|[ƒlƒ“ƒg‚Ìæ“¾
+    //ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å–å¾—
     template<typename T>
     std::shared_ptr<T> getComponent() const {
         std::shared_ptr<T> comp = nullptr;
@@ -35,7 +35,7 @@ public:
                 break;
             }
         }
-        //ÅŒã‚Ü‚ÅŒ©‚Â‚©‚ç‚È‚¯‚ê‚Înullptr‚ğ•Ô‚·
+        //æœ€å¾Œã¾ã§è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°nullptrã‚’è¿”ã™
         return comp;
     }
 

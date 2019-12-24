@@ -1,4 +1,4 @@
-#include "Shader.h"
+ï»¿#include "Shader.h"
 #include "../Device/Renderer.h"
 #include "../Sprite/Texture.h"
 #include "../System/Buffer.h"
@@ -85,14 +85,14 @@ std::shared_ptr<Buffer> Shader::getConstantBuffer() const {
 
 void Shader::createVertexShader(const char* fileName, const char* funcName) {
     setShaderDirectory();
-    //ƒuƒƒu‚©‚çƒo[ƒeƒbƒNƒXƒVƒF[ƒ_[ì¬
+    //ãƒ–ãƒ­ãƒ–ã‹ã‚‰ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œæˆ
     if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, funcName, "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
-        MessageBox(0, L"hlsl“Ç‚İ‚İ¸”s", nullptr, MB_OK);
+        MessageBox(0, L"hlslèª­ã¿è¾¼ã¿å¤±æ•—", nullptr, MB_OK);
         return;
     }
     if (FAILED(mDevice->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
         SAFE_RELEASE(mCompileShader);
-        MessageBox(0, L"ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_[ì¬¸”s", nullptr, MB_OK);
+        MessageBox(0, L"ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œæˆå¤±æ•—", nullptr, MB_OK);
         return;
     }
 }
@@ -100,14 +100,14 @@ void Shader::createVertexShader(const char* fileName, const char* funcName) {
 void Shader::createPixelShader(const char* fileName, const char* funcName) {
     ID3D10Blob* compiledShader;
     setShaderDirectory();
-    //ƒuƒƒu‚©‚çƒsƒNƒZƒ‹ƒVƒF[ƒ_[ì¬
+    //ãƒ–ãƒ­ãƒ–ã‹ã‚‰ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œæˆ
     if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, funcName, "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
-        MessageBox(0, L"hlsl“Ç‚İ‚İ¸”s", nullptr, MB_OK);
+        MessageBox(0, L"hlslèª­ã¿è¾¼ã¿å¤±æ•—", nullptr, MB_OK);
         return;
     }
     if (FAILED(mDevice->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
         SAFE_RELEASE(compiledShader);
-        MessageBox(0, L"ƒsƒNƒZƒ‹ƒVƒF[ƒ_[ì¬¸”s", nullptr, MB_OK);
+        MessageBox(0, L"ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ä½œæˆå¤±æ•—", nullptr, MB_OK);
         return;
     }
     SAFE_RELEASE(compiledShader);

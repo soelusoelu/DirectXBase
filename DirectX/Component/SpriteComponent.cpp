@@ -1,4 +1,4 @@
-#include "SpriteComponent.h"
+﻿#include "SpriteComponent.h"
 #include "../Actor/Actor.h"
 #include "../Actor/Transform2D.h"
 #include "../Sprite/Sprite.h"

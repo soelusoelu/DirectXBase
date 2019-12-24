@@ -1,4 +1,4 @@
-#include "ActorManager.h"
+ï»¿#include "ActorManager.h"
 #include "Actor.h"
 #include "PlayerActor.h"
 #include <algorithm>
@@ -43,7 +43,7 @@ std::shared_ptr<PlayerActor> ActorManager::getPlayer() const {
             return p;
         }
     }
-    //ÅŒã‚Ü‚ÅŒ©‚Â‚©‚ç‚È‚¯‚ê‚Înullptr‚ğ•Ô‚·
+    //æœ€å¾Œã¾ã§è¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°nullptrã‚’è¿”ã™
     return p;
 }
 
