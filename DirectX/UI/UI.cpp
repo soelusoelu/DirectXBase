@@ -1,8 +1,10 @@
 ﻿#include "UI.h"
 #include "UIManager.h"
+#include "../Sprite/Sprite.h"
+#include <algorithm>
 
 UI::UI() :
-    //mSprites(0),
+    mSprites(0),
     mState(UIState::ACTIVE) {
     if (mUIManager) {
         mUIManager->add(this);
@@ -10,18 +12,31 @@ UI::UI() :
 }
 
 UI::~UI() {
-    //for (auto&& sprite : mSprites) {
-    //    Sprite::destroy(sprite);
-    //}
+    if (mSprites.empty()) {
+        return;
+    }
+    for (auto&& sprite : mSprites) {
+        Sprite::destroy(sprite);
+    }
+}
+
+void UI::update() {
+    updateUI();
 }
 
 void UI::close() {
     mState = UIState::CLOSING;
 }
 
-void UI::addSprite(std::shared_ptr<Sprite> add) {
-    //mSprites.emplace_back(add);
-    //SpriteManager::add(add);
+void UI::addSprite(Sprite* sprite) {
+    mSprites.emplace_back(sprite);
+}
+
+void UI::removeSprite(Sprite* sprite) {
+    auto itr = std::find(mSprites.begin(), mSprites.end(), sprite);
+    if (itr != mSprites.end()) {
+        mSprites.erase(itr);
+    }
 }
 
 UIState UI::getState() const {

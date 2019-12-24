@@ -115,7 +115,7 @@ void Sprite::setPosition(const Vector2 & pos) {
 void Sprite::setPrimary(float z) {
     mPosition.z = z;
     mWorldUpdateFlag = true;
-    mZSortFlag = true;
+    ZSortFlag = true;
 }
 
 Vector2 Sprite::getPosition() const {
@@ -341,5 +341,5 @@ void Sprite::centerShift(const Vector2 & nextScale) {
     translate(shift);
 }
 
-bool Sprite::mZSortFlag = false;
+bool Sprite::ZSortFlag = false;
 SpriteManager* Sprite::mSpriteManager = nullptr;

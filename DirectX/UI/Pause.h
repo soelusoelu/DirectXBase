@@ -5,12 +5,13 @@
 #include <memory>
 
 class GamePlay;
+class Renderer;
 
 class Pause : public UI {
 public:
-    Pause(std::shared_ptr<GamePlay> game);
+    Pause(std::shared_ptr<GamePlay> game, std::shared_ptr<Renderer> renderer);
     ~Pause();
-    virtual void update() override;
+    virtual void updateUI() override;
 
 private:
     std::weak_ptr<GamePlay> mGame;

@@ -84,7 +84,7 @@ private:
     void centerShift(const Vector2& nextScale);
 
 public:
-    static bool mZSortFlag;
+    static bool ZSortFlag;
 
 private:
     Vector2INT mDefaultSize;

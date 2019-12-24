@@ -19,7 +19,6 @@ void Physics::remove(Collider* circle) {
     if (itr != mColliders.end()) {
         std::iter_swap(itr, mColliders.end() - 1);
         mColliders.pop_back();
-        return;
     }
 }
 

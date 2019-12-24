@@ -8,23 +8,25 @@ enum class UIState {
     CLOSING
 };
 
-class Sprite;
 class UIManager;
+class Sprite;
 
 class UI {
 protected:
     UI();
 public:
     virtual ~UI();
-    virtual void update() = 0;
+    void update();
+    virtual void updateUI() = 0;
     void close();
-    void addSprite(std::shared_ptr<Sprite> add);
+    void addSprite(Sprite* sprite);
+    void removeSprite(Sprite* sprite);
     UIState getState() const;
 
     static void setUIManager(UIManager* manager);
 
 private:
-    //std::list<std::shared_ptr<Sprite>> mSprites;
+    std::list<Sprite*> mSprites;
     UIState mState;
 
     static UIManager* mUIManager;

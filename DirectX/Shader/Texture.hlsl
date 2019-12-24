@@ -1,6 +1,6 @@
-ï»¿//ã‚°ãƒ­ãƒ¼ãƒãƒ«
-Texture2D g_texDecal : register(t0); //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã¯ ãƒ¬ã‚¸ã‚¹ã‚¿ãƒ¼t(n)
-SamplerState g_samLinear : register(s0); //ã‚µãƒ³ãƒ—ãƒ©ãƒ¼ã¯ãƒ¬ã‚¸ã‚¹ã‚¿ãƒ¼s(n)
+//ƒOƒ[ƒoƒ‹
+Texture2D g_texDecal : register(t0); //ƒeƒNƒXƒ`ƒƒ[‚Í ƒŒƒWƒXƒ^[t(n)
+SamplerState g_samLinear : register(s0); //ƒTƒ“ƒvƒ‰[‚ÍƒŒƒWƒXƒ^[s(n)
 
 cbuffer global {
     matrix gWorld;
@@ -9,14 +9,14 @@ cbuffer global {
     float4 gUV;
 };
 
-//æ§‹é€ ä½“
+//\‘¢‘Ì
 struct VS_OUTPUT {
     float4 Pos : SV_POSITION;
     float2 Tex : TEXCOORD;
 };
 
 //
-//ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
+//ƒo[ƒeƒbƒNƒXƒVƒF[ƒ_[
 //
 VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD) {
     VS_OUTPUT output = (VS_OUTPUT)0;
@@ -28,7 +28,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD) {
 }
 
 //
-//ãƒ”ã‚¯ã‚»ãƒ«ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼
+//ƒsƒNƒZƒ‹ƒVƒF[ƒ_[
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {

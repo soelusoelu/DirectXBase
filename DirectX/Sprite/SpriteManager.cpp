@@ -3,7 +3,9 @@
 #include "Texture.h"
 #include <algorithm>
 
-SpriteManager::SpriteManager() = default;
+SpriteManager::SpriteManager() :
+    mSprites(0) {
+}
 
 SpriteManager::~SpriteManager() = default;
 
@@ -51,8 +53,8 @@ void SpriteManager::remove() {
 }
 
 void SpriteManager::sortByZ() {
-    if (Sprite::mZSortFlag) { //z値を変更したやつがいればソート
-        Sprite::mZSortFlag = false;
+    if (Sprite::ZSortFlag) { //z値を変更したやつがいればソート
+        Sprite::ZSortFlag = false;
         //std::sort(mSprites.begin(), mSprites.end(), [](std::shared_ptr<Sprite> a, std::shared_ptr<Sprite> b) {
         //    return a->getDepth() > b->getDepth();
         //});

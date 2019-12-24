@@ -36,7 +36,7 @@ void GamePlay::updateScene() {
         mPhysics->sweepAndPrune();
 
         if (Input::getKeyDown(mPauseKey)) {
-            new Pause(shared_from_this());
+            new Pause(shared_from_this(), mRenderer);
         }
     } else if (mState == GameState::PAUSED) {
 
