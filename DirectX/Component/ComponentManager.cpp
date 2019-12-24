@@ -9,6 +9,10 @@ ComponentManager::~ComponentManager() {
 }
 
 void ComponentManager::start() {
+    if (mStartComponents.empty()) {
+        return;
+    }
+
     for (auto&& comp : mStartComponents) {
         comp->start();
 

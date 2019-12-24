@@ -8,7 +8,7 @@ protected:
 public:
     virtual ~Component();
     //getComponentはここでして
-    virtual void start() {};
+    virtual void start() = 0;
     virtual void update() = 0;
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};

@@ -2,34 +2,32 @@
 
 #include <memory>
 
-enum class Scene {
-    GAME_PLAY,
-
-    NONE
-};
-
-class ActorManager;
 class UIManager;
 class SpriteManager;
 class Renderer;
 
 class SceneBase {
 protected:
-    SceneBase(std::shared_ptr<Renderer> renderer);
+    SceneBase();
     virtual ~SceneBase();
 public:
+    virtual void startScene() = 0;
     void update();
     virtual void updateScene() = 0;
     void draw();
-    void next(Scene next);
-    Scene getNextScene() const;
+    void next(std::shared_ptr<SceneBase> next);
+    std::shared_ptr<SceneBase> getNextScene() const;
+    void setRenderer(std::shared_ptr<Renderer> renderer);
+
+private:
+    void start();
 
 protected:
-    ActorManager* mActorManager;
     UIManager* mUIManager;
     SpriteManager* mSpriteManager;
     std::shared_ptr<Renderer> mRenderer;
 
 private:
-    Scene mNext;
+    std::shared_ptr<SceneBase> mNext;
+    bool mIsStarted;
 };

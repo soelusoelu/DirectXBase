@@ -13,6 +13,7 @@ class SpriteComponent : public Component {
 public:
     SpriteComponent(Actor* owner, std::shared_ptr<Renderer> renderer, const char* fileName, float z);
     ~SpriteComponent();
+    virtual void start() override;
     virtual void update() override;
     Sprite* getSprite() const;
 

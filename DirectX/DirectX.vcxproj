@@ -158,6 +158,7 @@
     <ClCompile Include="Sprite\Texture.cpp" />
     <ClCompile Include="System\Buffer.cpp" />
     <ClCompile Include="System\InputElement.cpp" />
+    <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="System\SubResourceDesc.h" />
     <ClInclude Include="System\TextureDesc.h" />
     <ClInclude Include="System\VertexStreamDesc.h" />
+    <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />

@@ -9,19 +9,21 @@ enum class GameState {
     PAUSED
 };
 
+class ActorManager;
 class Physics;
-class Renderer;
 
 class GamePlay : public SceneBase, public std::enable_shared_from_this<GamePlay> {
 public:
-    GamePlay(std::shared_ptr<Renderer> renderer);
+    GamePlay();
     ~GamePlay();
+    virtual void startScene() override;
     virtual void updateScene() override;
 
     GameState getState() const;
     void setState(GameState state);
 
 private:
+    ActorManager* mActorManager;
     Physics* mPhysics;
     GameState mState;
     KeyCode mPauseKey;

@@ -12,6 +12,9 @@ SpriteComponent::~SpriteComponent() {
     Sprite::destroy(mSprite);
 }
 
+void SpriteComponent::start() {
+}
+
 void SpriteComponent::update() {
 }
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "SceneBase.h"
 #include <memory>
 
 class Renderer;
+class SceneBase;
 
 class SceneManager {
 public:
@@ -13,7 +13,7 @@ public:
     void draw() const;
 
 private:
-    void change(Scene next);
+    void setRendererToScene();
 
 private:
     std::shared_ptr<Renderer> mRenderer;
