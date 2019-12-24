@@ -4,28 +4,30 @@
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../System/Game.h"
-//#include "../UI/UIManager.h"
+#include "../UI/UI.h"
+#include "../UI/UIManager.h"
 
 SceneBase::SceneBase(std::shared_ptr<Renderer> renderer) :
     mActorManager(new ActorManager()),
-    //mUIManager(std::make_unique<UIManager>()),
+    mUIManager(new UIManager()),
     mSpriteManager(new SpriteManager()),
     mRenderer(renderer),
     mNext(Scene::NONE) {
     Actor::setActorManager(mActorManager);
+    UI::setUIManager(mUIManager);
     Sprite::setSpriteManager(mSpriteManager);
 }
 
 SceneBase::~SceneBase() {
     SAFE_DELETE(mActorManager);
-    //mUIManager->clear();
+    SAFE_DELETE(mUIManager);
     SAFE_DELETE(mSpriteManager);
 }
 
 void SceneBase::update() {
     mActorManager->update();
     updateScene();
-    //mUIManager->update();
+    mUIManager->update();
     mSpriteManager->update();
 }
 

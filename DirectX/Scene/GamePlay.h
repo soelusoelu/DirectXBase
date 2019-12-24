@@ -1,10 +1,12 @@
 #pragma once
 
 #include "SceneBase.h"
+#include "../Utility/Input.h"
 #include <memory>
 
 enum class GameState {
     PLAY,
+    PAUSED
 };
 
 class Physics;
@@ -22,4 +24,5 @@ public:
 private:
     Physics* mPhysics;
     GameState mState;
+    KeyCode mPauseKey;
 };

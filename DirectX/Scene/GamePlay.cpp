@@ -3,11 +3,14 @@
 #include "../Component/Collider.h"
 #include "../Device/Physics.h"
 #include "../System/Game.h"
+#include "../UI/Pause.h"
 
 GamePlay::GamePlay(std::shared_ptr<Renderer> renderer) :
     SceneBase(renderer),
     mPhysics(new Physics()),
-    mState(GameState::PLAY) {
+    mState(GameState::PLAY),
+    mPauseKey(KeyCode::Alpha1)
+{
     Collider::setPhysics(mPhysics);
     new PlayerActor(mRenderer);
 }
@@ -22,6 +25,12 @@ void GamePlay::updateScene() {
     if (mState == GameState::PLAY) {
         //‘“–‚½‚è”»’è
         mPhysics->sweepAndPrune();
+
+        if (Input::getKeyDown(mPauseKey)) {
+            new Pause(shared_from_this());
+        }
+    } else if (mState == GameState::PAUSED) {
+
     }
 }
 

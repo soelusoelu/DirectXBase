@@ -26,7 +26,7 @@ public:
 
 protected:
     ActorManager* mActorManager;
-    //std::unique_ptr<UIManager> mUIManager;
+    UIManager* mUIManager;
     SpriteManager* mSpriteManager;
     std::shared_ptr<Renderer> mRenderer;
 
