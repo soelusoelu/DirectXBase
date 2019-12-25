@@ -33,12 +33,7 @@ void Actor::update() {
 }
 
 void Actor::computeWorldTransform() {
-    auto s = mComponentManager->getComponent<SpriteComponent>();
-    if (!s) {
-        return;
-    }
-    if (mTransform->computeWorldTransform(s->getCurrentTextureSize(), s->getPivot(), s->getDepth())) {
-        s->setWorld(mTransform->getWorldTransform());
+    if (mTransform->computeWorldTransform()) {
         mComponentManager->onUpdateWorldTransform();
     }
 }

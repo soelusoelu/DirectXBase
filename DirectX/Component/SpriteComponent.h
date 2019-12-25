@@ -15,6 +15,7 @@ public:
     ~SpriteComponent();
     virtual void start() override;
     virtual void update() override;
+    virtual void onUpdateWorldTransform() override;
     Sprite* getSprite() const;
 
     //描画優先順位(0～1、0が手前)
@@ -40,9 +41,6 @@ public:
     Vector2INT getScreenTextureSize() const;
     //状態管理
     SpriteState getState() const;
-    //World行列
-    void setWorld(const Matrix4& world);
-    Matrix4 getWorld() const;
     //テクスチャ
     void setTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
     std::shared_ptr<Texture> texture() const;

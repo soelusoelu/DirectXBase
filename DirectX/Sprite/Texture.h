@@ -32,6 +32,8 @@ public:
     static void drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer);
     ID3D11ShaderResourceView* texture() const;
     const TextureDesc& desc() const;
+    std::shared_ptr<Buffer> getVertexBuffer() const;
+    std::shared_ptr<Buffer> getIndexBuffer() const;
     std::shared_ptr<InputElement> getVertexlayout() const;
     ID3D11SamplerState* getSampler() const;
 

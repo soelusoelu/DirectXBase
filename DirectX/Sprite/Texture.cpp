@@ -15,14 +15,14 @@ Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mVertexLayout(nullptr),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
-    //バーテックスバッファー作成
-    createVertexBuffer(renderer);
-    //インデックスバッファの作成
-    createIndexBuffer(renderer);
     //テクスチャー作成
     createTexture(renderer, fileName);
     //テクスチャー用サンプラー作成
     createSampler(renderer);
+    //バーテックスバッファー作成
+    createVertexBuffer(renderer);
+    //インデックスバッファの作成
+    createIndexBuffer(renderer);
 }
 
 Texture::~Texture() {
@@ -55,14 +55,8 @@ void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_pt
 
     //プリミティブ・トポロジーをセット
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
-    //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.buffer = sprites.front()->texture()->mVertexBuffer; //頂点バッファとインデックスバッファは共通だから無理やり
-    stream.offset = 0;
-    stream.stride = sizeof(TextureVertex);
-    renderer->setVertexBuffer(&stream);
     //インデックスバッファーをセット
-    renderer->setIndexBuffer(sprites.front()->texture()->mIndexBuffer); //頂点バッファとインデックスバッファは共通だから無理やり
+    renderer->setIndexBuffer(sprites.front()->texture()->mIndexBuffer); //インデックスバッファは共通だから無理やり
 
     for (auto itr = sprites.begin(); itr != sprites.end(); ++itr) {
         (*itr)->draw(renderer, proj);
@@ -77,6 +71,14 @@ const TextureDesc& Texture::desc() const {
     return mDesc;
 }
 
+std::shared_ptr<Buffer> Texture::getVertexBuffer() const {
+    return mVertexBuffer;
+}
+
+std::shared_ptr<Buffer> Texture::getIndexBuffer() const {
+    return mIndexBuffer;
+}
+
 std::shared_ptr<InputElement> Texture::getVertexlayout() const {
     return mVertexLayout;
 }
@@ -86,11 +88,13 @@ ID3D11SamplerState* Texture::getSampler() const {
 }
 
 void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
-    const TextureVertex vertices[] = {
+    auto w = mDesc.width;
+    auto h = mDesc.height;
+    TextureVertex vertices[] = {
         Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
-        Vector3(1.f, 0.f, 0.f), Vector2(1.f, 0.f), //右上
-        Vector3(0.f, 1.f, 0.f), Vector2(0.f, 1.f), //左下
-        Vector3(1.f, 1.f, 0.f), Vector2(1.f, 1.f), //右下
+        Vector3(w, 0.f, 0.f), Vector2(1.f, 0.f), //右上
+        Vector3(0.f, h, 0.f), Vector2(0.f, 1.f), //左下
+        Vector3(w, h, 0.f), Vector2(1.f, 1.f), //右下
     };
 
     BufferDesc bd;
@@ -104,7 +108,7 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
 }
 
 void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
-    constexpr unsigned short indices[] = {
+    static constexpr unsigned short indices[] = {
         0, 1, 2,
         1, 3, 2
     };

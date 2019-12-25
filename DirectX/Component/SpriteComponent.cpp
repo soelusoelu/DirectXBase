@@ -6,6 +6,7 @@
 SpriteComponent::SpriteComponent(Actor* owner, std::shared_ptr<Renderer> renderer, const char* fileName, float z) :
     Component(owner),
     mSprite(new Sprite(renderer, fileName, z, false)) {
+    mOwner->getTransform()->setPrimary(z);
 }
 
 SpriteComponent::~SpriteComponent() {
@@ -18,16 +19,20 @@ void SpriteComponent::start() {
 void SpriteComponent::update() {
 }
 
+void SpriteComponent::onUpdateWorldTransform() {
+    mSprite->setWorld(mOwner->getTransform()->getWorldTransform());
+}
+
 Sprite* SpriteComponent::getSprite() const {
     return mSprite;
 }
 
 void SpriteComponent::setPrimary(float z) {
-    mSprite->setPrimary(z);
+    mOwner->getTransform()->setPrimary(z);
 }
 
 float SpriteComponent::getDepth() const {
-    return mSprite->getDepth();
+    return mOwner->getTransform()->getDepth();
 }
 
 void SpriteComponent::setColor(const Vector3& color) {
@@ -55,11 +60,11 @@ Vector4 SpriteComponent::getUV() const {
 }
 
 void SpriteComponent::setPivot(const Vector2& pivot) {
-    mSprite->setPivot(pivot);
+    mOwner->getTransform()->setPivot(pivot);
 }
 
 Vector2 SpriteComponent::getPivot() const {
-    return mSprite->getPivot();
+    return mOwner->getTransform()->getPivot();
 }
 
 Vector2INT SpriteComponent::getTextureSize() const {
@@ -76,14 +81,6 @@ Vector2INT SpriteComponent::getScreenTextureSize() const {
 
 SpriteState SpriteComponent::getState() const {
     return mSprite->getState();
-}
-
-void SpriteComponent::setWorld(const Matrix4& world) {
-    mSprite->setWorld(world);
-}
-
-Matrix4 SpriteComponent::getWorld() const {
-    return mSprite->getWorld();
 }
 
 void SpriteComponent::setTexture(std::shared_ptr<Renderer> renderer, const char* fileName) {

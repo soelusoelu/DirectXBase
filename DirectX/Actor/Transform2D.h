@@ -8,7 +8,7 @@ public:
     ~Transform2D();
 
     //ワールド行列更新
-    bool computeWorldTransform(const Vector2INT& texSize, const Vector2& pivot, float z);
+    bool computeWorldTransform();
     Matrix4 getWorldTransform() const;
 
     //ピクセル単位で位置指定
@@ -16,10 +16,18 @@ public:
     Vector2 getPosition() const;
     void translate(const Vector2& translation);
 
+    //描画優先順位
+    void setPrimary(float z);
+    float getDepth() const;
+
     //回転
     void setRotation(float angle);
     Quaternion getRotation() const;
     void rotate(float angle);
+
+    //回転ピボット位置
+    void setPivot(const Vector2& pivot);
+    Vector2 getPivot() const;
 
     //倍率で拡縮
     void setScale(const Vector2& scale);
@@ -28,8 +36,9 @@ public:
 
 private:
     Matrix4 mWorldTransform;
-    Vector2 mPosition;
+    Vector3 mPosition;
     Quaternion mRotation;
+    Vector2 mPivot;
     Vector2 mScale;
     bool mIsRecomputeTransform;
 };

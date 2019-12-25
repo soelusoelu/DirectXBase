@@ -23,7 +23,7 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
 
 void SpriteManager::add(Sprite* add) {
     std::shared_ptr<Sprite> s(add);
-    SpriteManager::add(s);
+    this->add(s);
 }
 
 void SpriteManager::add(std::shared_ptr<Sprite> add) {

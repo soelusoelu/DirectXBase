@@ -6,6 +6,7 @@
 #include "../System/Buffer.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/TextureDesc.h"
+#include "../System/VertexStreamDesc.h"
 #include <cassert>
 
 Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z, bool updateMyself) :
@@ -67,6 +68,12 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
     }
     onceToDead();
 
+    //バーテックスバッファーをセット
+    VertexStreamDesc stream;
+    stream.buffer = mTexture->getVertexBuffer();
+    stream.offset = 0;
+    stream.stride = sizeof(TextureVertex);
+    renderer->setVertexBuffer(&stream);
     //自身を使用するシェーダーとして登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -327,7 +334,7 @@ void Sprite::updateWorld() {
     }
     mWorldUpdateFlag = false;
 
-    mWorld = Matrix4::createScale(Vector3(getScreenTextureSize().x, getScreenTextureSize().y, 1.f));
+    mWorld = Matrix4::createScale(Vector3(mScale, 1.f));
     mWorld *= Matrix4::createTranslation(Vector3(-mPivot, 0.f));
     mWorld *= Matrix4::createFromQuaternion(mRotation);
     mWorld *= Matrix4::createTranslation(mPosition + Vector3(mPivot, 0.f));

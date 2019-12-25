@@ -2,22 +2,23 @@
 
 Transform2D::Transform2D() :
     mWorldTransform(Matrix4::identity),
-    mPosition(Vector2::zero),
+    mPosition(Vector3::zero),
     mRotation(Quaternion::identity),
+    mPivot(Vector2::zero),
     mScale(Vector2::one),
     mIsRecomputeTransform(true) {
 }
 
 Transform2D::~Transform2D() = default;
 
-bool Transform2D::computeWorldTransform(const Vector2INT& texSize, const Vector2 & pivot, float z) {
+bool Transform2D::computeWorldTransform() {
     if (mIsRecomputeTransform) {
         mIsRecomputeTransform = false;
 
-        mWorldTransform = Matrix4::createScale(Vector3(mScale.x * texSize.x, mScale.y * texSize.y, 1.f));
-        mWorldTransform *= Matrix4::createTranslation(Vector3(-pivot, 0.f));
+        mWorldTransform = Matrix4::createScale(Vector3(mScale, 1.f));
+        mWorldTransform *= Matrix4::createTranslation(Vector3(-mPivot, 0.f));
         mWorldTransform *= Matrix4::createFromQuaternion(mRotation);
-        mWorldTransform *= Matrix4::createTranslation(Vector3(mPosition, z) + Vector3(pivot, 0.f));
+        mWorldTransform *= Matrix4::createTranslation(Vector3(mPosition) + Vector3(mPivot, 0.f));
 
         return true;
     }
@@ -29,17 +30,28 @@ Matrix4 Transform2D::getWorldTransform() const {
 }
 
 void Transform2D::setPosition(const Vector2 & pos) {
-    mPosition = pos;
+    mPosition.x = pos.x;
+    mPosition.y = pos.y;
     mIsRecomputeTransform = true;
 }
 
 Vector2 Transform2D::getPosition() const {
-    return mPosition;
+    return Vector2(mPosition.x, mPosition.y);
 }
 
 void Transform2D::translate(const Vector2 & translation) {
-    mPosition += translation;
+    mPosition.x += translation.x;
+    mPosition.y += translation.y;
     mIsRecomputeTransform = true;
+}
+
+void Transform2D::setPrimary(float z) {
+    mPosition.z = z;
+    mIsRecomputeTransform = true;
+}
+
+float Transform2D::getDepth() const {
+    return mPosition.z;
 }
 
 void Transform2D::setRotation(float angle) {
@@ -67,6 +79,15 @@ void Transform2D::rotate(float angle) {
     mRotation = Quaternion::concatenate(mRotation, inc);
 
     mIsRecomputeTransform = true;
+}
+
+void Transform2D::setPivot(const Vector2& pivot) {
+    mPivot = pivot;
+    mIsRecomputeTransform = true;
+}
+
+Vector2 Transform2D::getPivot() const {
+    return mPivot;
 }
 
 void Transform2D::setScale(const Vector2 & scale) {
