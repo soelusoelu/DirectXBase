@@ -17,5 +17,5 @@ void PlayerActor::updateActor() {
     static float counter = 0.f;
     counter += Time::deltaTime * 100.f;
     getTransform()->setScale(Math::abs(Math::cos(counter)));
-    getTransform()->rotate(1.f);
+    getTransform()->rotate(3.f);
 }

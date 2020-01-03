@@ -21,7 +21,7 @@ public:
     //SpriteManagerにて毎フレーム実行
     void update();
     //描画
-    void draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj);
+    void draw(const Matrix4& proj);
     //自身のコピーを作成
     std::shared_ptr<Sprite> copy() const;
     //ピクセル単位で位置指定
@@ -65,7 +65,7 @@ public:
     void setWorld(const Matrix4& world);
     Matrix4 getWorld() const;
     //テクスチャの取得
-    void setTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
+    void setTexture(const char* fileName);
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
     std::shared_ptr<Shader> shader() const;
@@ -84,6 +84,7 @@ public:
     static bool ZSortFlag;
 
 private:
+    std::shared_ptr<Renderer> mRenderer;
     Vector2INT mDefaultSize;
     Vector2INT mCurrentSize;
     Vector3 mPosition;

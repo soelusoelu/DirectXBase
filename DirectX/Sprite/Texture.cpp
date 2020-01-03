@@ -64,6 +64,24 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     mVertexBuffer = renderer->createBuffer(bd, &sub);
 }
 
+void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer, const Vector2INT& size) {
+    TextureVertex vertices[] = {
+        Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
+        Vector3(size.x, 0.f, 0.f), Vector2(1.f, 0.f), //右上
+        Vector3(0.f, size.y, 0.f), Vector2(0.f, 1.f), //左下
+        Vector3(size.x, size.y, 0.f), Vector2(1.f, 1.f), //右下
+    };
+
+    BufferDesc bd;
+    bd.size = sizeof(TextureVertex) * 4;
+    bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
+    bd.type = BufferType::BUFFER_TYPE_VERTEX;
+
+    SubResourceDesc sub;
+    sub.data = vertices;
+    mVertexBuffer = renderer->createBuffer(bd, &sub);
+}
+
 void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
     if (sprites.empty()) {
         return;
@@ -84,7 +102,7 @@ void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_pt
     renderer->setIndexBuffer(mIndexBuffer);
 
     for (auto itr = sprites.begin(); itr != sprites.end(); ++itr) {
-        (*itr)->draw(renderer, proj);
+        (*itr)->draw(proj);
     }
 }
 

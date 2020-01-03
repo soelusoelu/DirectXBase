@@ -10,6 +10,7 @@
 #include <cassert>
 
 Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z, bool updateMyself) :
+    mRenderer(renderer),
     mDefaultSize(Vector2INT::zero),
     mCurrentSize(Vector2INT::zero),
     mPosition(Vector2::zero, z),
@@ -20,8 +21,8 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z
     mPivot(Vector2::zero),
     mWorld(Matrix4::identity),
     mState(SpriteState::ACTIVE),
-    mTexture(renderer->createTexture(fileName)),
-    mShader(renderer->createShader("Texture.hlsl", "VS", "PS")),
+    mTexture(mRenderer->createTexture(fileName)),
+    mShader(mRenderer->createShader("Texture.hlsl", "VS", "PS")),
     mFileName(fileName),
     mUpdateMyself(updateMyself),
     mWorldUpdateFlag(true) {
@@ -31,7 +32,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z
     mCurrentSize = mDefaultSize;
     mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
 
-    mTexture->createInputLayout(renderer, mShader->getCompiledShader());
+    mTexture->createInputLayout(mRenderer, mShader->getCompiledShader());
 
     if (mSpriteManager) {
         mSpriteManager->add(this);
@@ -62,7 +63,7 @@ void Sprite::update() {
     updateWorld();
 }
 
-void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
+void Sprite::draw(const Matrix4 & proj) {
     if (getState() == SpriteState::DEAD) {
         return;
     }
@@ -72,7 +73,7 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
     stream.buffer = mTexture->getVertexBuffer();
     stream.offset = 0;
     stream.stride = sizeof(TextureVertex);
-    renderer->setVertexBuffer(&stream);
+    mRenderer->setVertexBuffer(&stream);
     //自身を使用するシェーダーとして登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -80,11 +81,11 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
     mShader->setVSConstantBuffers();
     mShader->setPSConstantBuffers();
     //頂点レイアウトをセット
-    renderer->setInputLayout(mTexture->getVertexlayout());
+    mRenderer->setInputLayout(mTexture->getVertexlayout());
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
-    if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+    if (SUCCEEDED(mRenderer->deviceContext()->Map(mShader->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         TextureShaderConstantBuffer cb;
         //ワールド、カメラ、射影行列を渡す
         cb.mWorld = mWorld;
@@ -94,15 +95,15 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
         cb.mColor = mColor;
         cb.mUV = mUV;
         memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-        renderer->deviceContext()->Unmap(mShader->getConstantBuffer()->buffer(), 0);
+        mRenderer->deviceContext()->Unmap(mShader->getConstantBuffer()->buffer(), 0);
     }
     //テクスチャーをシェーダーに渡す
     mShader->setPSTextures(mTexture);
     //サンプラーのセット
     auto sample = mTexture->getSampler();
-    renderer->deviceContext()->PSSetSamplers(0, 1, &sample);
+    mRenderer->deviceContext()->PSSetSamplers(0, 1, &sample);
     //プリミティブをレンダリング
-    renderer->drawIndexed(6);
+    mRenderer->drawIndexed(6);
 }
 
 std::shared_ptr<Sprite> Sprite::copy() const {
@@ -221,6 +222,9 @@ void Sprite::setUV(float l, float t, float r, float b) {
     mPivot.x *= mScale.x;
     mPivot.y *= mScale.y;
 
+    //バーテックスバッファを作り直す(ボトルネック)
+    mTexture->createVertexBuffer(mRenderer, mCurrentSize);
+
     mWorldUpdateFlag = true;
 }
 
@@ -269,8 +273,8 @@ Matrix4 Sprite::getWorld() const {
     return mWorld;
 }
 
-void Sprite::setTexture(std::shared_ptr<Renderer> renderer, const char* fileName) {
-    mTexture = renderer->createTexture(fileName);
+void Sprite::setTexture(const char* fileName) {
+    mTexture = mRenderer->createTexture(fileName);
     mFileName = fileName;
 
     auto desc = mTexture->desc();
@@ -278,8 +282,8 @@ void Sprite::setTexture(std::shared_ptr<Renderer> renderer, const char* fileName
     mCurrentSize = mDefaultSize;
     mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
 
-    mTexture->createInputLayout(renderer, mShader->getCompiledShader());
-    mTexture->createVertexBuffer(renderer);
+    mTexture->createInputLayout(mRenderer, mShader->getCompiledShader());
+    mTexture->createVertexBuffer(mRenderer);
 }
 
 std::shared_ptr<Texture> Sprite::texture() const {
@@ -298,7 +302,7 @@ bool Sprite::getWorldUpdateFlag() const {
     return mWorldUpdateFlag;
 }
 
-void Sprite::setSpriteManager(SpriteManager* manager) {
+void Sprite::setSpriteManager(SpriteManager * manager) {
     mSpriteManager = manager;
 }
 

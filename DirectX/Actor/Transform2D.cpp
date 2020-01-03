@@ -6,7 +6,6 @@ Transform2D::Transform2D() :
     mRotation(Quaternion::identity),
     mPivot(Vector2::zero),
     mScale(Vector2::one),
-    mUVScale(Vector2::one),
     mIsRecomputeTransform(true) {
 }
 
@@ -17,7 +16,7 @@ bool Transform2D::computeWorldTransform() {
         mIsRecomputeTransform = false;
 
         mWorldTransform = Matrix4::createTranslation(-Vector3(mPivot, 0.f));
-        mWorldTransform *= Matrix4::createScale(Vector3(mScale /** mUVScale*/, 1.f));
+        mWorldTransform *= Matrix4::createScale(Vector3(mScale, 1.f));
         mWorldTransform *= Matrix4::createFromQuaternion(mRotation);
         mWorldTransform *= Matrix4::createTranslation(mPosition + Vector3(mPivot, 0.f));
 
@@ -92,18 +91,11 @@ Vector2 Transform2D::getPivot() const {
 }
 
 void Transform2D::setScale(const Vector2 & scale) {
-    //auto s = mScale - scale;
-    //translate(mPivot * s);
-
-    //mScale = scale;
-    //mIsRecomputeTransform = true;
+    mScale = scale;
+    mIsRecomputeTransform = true;
 }
 
 void Transform2D::setScale(float scale) {
-    auto sX = mScale.x - scale;
-    auto sY = mScale.y - scale;
-    //translate(Vector2(mPivot.x * sX, mPivot.y * sY));
-
     mScale.x = scale;
     mScale.y = scale;
     mIsRecomputeTransform = true;
@@ -111,9 +103,4 @@ void Transform2D::setScale(float scale) {
 
 Vector2 Transform2D::getScale() const {
     return mScale;
-}
-
-void Transform2D::setUVScale(const Vector2& scale) {
-    mUVScale = scale;
-    mIsRecomputeTransform = true;
 }

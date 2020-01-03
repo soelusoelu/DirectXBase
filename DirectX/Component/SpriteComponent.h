@@ -36,7 +36,7 @@ public:
     //状態管理
     SpriteState getState() const;
     //テクスチャ
-    void setTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
+    void setTexture(const char* fileName);
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
     std::shared_ptr<Shader> shader() const;

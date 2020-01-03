@@ -46,8 +46,7 @@ Vector4 SpriteComponent::getColor() const {
 
 void SpriteComponent::setUV(float l, float t, float r, float b) {
     mSprite->setUV(l, t, r, b);
-    //mOwner->getTransform()->setPivot(mSprite->getPivot());
-    mOwner->getTransform()->setUVScale(Vector2(r - l, b - t));
+    mOwner->getTransform()->setPivot(mSprite->getPivot());
 }
 
 Vector4 SpriteComponent::getUV() const {
@@ -73,8 +72,8 @@ SpriteState SpriteComponent::getState() const {
     return mSprite->getState();
 }
 
-void SpriteComponent::setTexture(std::shared_ptr<Renderer> renderer, const char* fileName) {
-    mSprite->setTexture(renderer, fileName);
+void SpriteComponent::setTexture(const char* fileName) {
+    mSprite->setTexture(fileName);
     mOwner->getTransform()->setPivot(mSprite->getPivot());
 }
 
