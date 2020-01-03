@@ -5,8 +5,8 @@
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
+#include "../Sprite/Texture.h"
 #include "../Utility/Input.h"
-#include <iostream>
 
 WCHAR szRootPath[1024] = { 0 };
 
@@ -16,6 +16,7 @@ Game::Game() {
 
 Game::~Game() {
     Input::end();
+    Texture::end();
 }
 
 void Game::run(HINSTANCE hInstance) {

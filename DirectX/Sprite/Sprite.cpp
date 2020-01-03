@@ -66,7 +66,6 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
     if (getState() == SpriteState::DEAD) {
         return;
     }
-    onceToDead();
 
     //バーテックスバッファーをセット
     VertexStreamDesc stream;
@@ -109,7 +108,6 @@ void Sprite::draw(std::shared_ptr<Renderer> renderer, const Matrix4& proj) {
 std::shared_ptr<Sprite> Sprite::copy() const {
     auto s = std::make_shared<Sprite>(*this);
     mSpriteManager->add(s);
-    s->mState = SpriteState::ONCE;
     return s;
 }
 
@@ -166,33 +164,15 @@ void Sprite::rotate(float angle) {
     mWorldUpdateFlag = true;
 }
 
-void Sprite::setScale(const Vector2 & scale, bool isCenterShift) {
-    if (isCenterShift) {
-        centerShift(scale);
-    }
-
+void Sprite::setScale(const Vector2 & scale) {
     mScale = scale;
-
-    //ピボット修正
-    mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
-    mPivot.x *= mScale.x;
-    mPivot.y *= mScale.y;
 
     mWorldUpdateFlag = true;
 }
 
-void Sprite::setScale(float scale, bool isCenterShift) {
-    if (isCenterShift) {
-        centerShift(Vector2(scale, scale));
-    }
-
+void Sprite::setScale(float scale) {
     mScale.x = scale;
     mScale.y = scale;
-
-    //ピボット修正
-    mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
-    mPivot.x *= mScale.x;
-    mPivot.y *= mScale.y;
 
     mWorldUpdateFlag = true;
 }
@@ -299,6 +279,7 @@ void Sprite::setTexture(std::shared_ptr<Renderer> renderer, const char* fileName
     mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
 
     mTexture->createInputLayout(renderer, mShader->getCompiledShader());
+    mTexture->createVertexBuffer(renderer);
 }
 
 std::shared_ptr<Texture> Sprite::texture() const {
@@ -317,12 +298,6 @@ bool Sprite::getWorldUpdateFlag() const {
     return mWorldUpdateFlag;
 }
 
-void Sprite::onceToDead() {
-    if (mState == SpriteState::ONCE) {
-        mState = SpriteState::DEAD;
-    }
-}
-
 void Sprite::setSpriteManager(SpriteManager* manager) {
     mSpriteManager = manager;
 }
@@ -334,18 +309,10 @@ void Sprite::updateWorld() {
     }
     mWorldUpdateFlag = false;
 
-    mWorld = Matrix4::createScale(Vector3(mScale, 1.f));
-    mWorld *= Matrix4::createTranslation(Vector3(-mPivot, 0.f));
+    mWorld = Matrix4::createTranslation(Vector3(-mPivot, 0.f));
+    mWorld *= Matrix4::createScale(Vector3(mScale, 1.f));
     mWorld *= Matrix4::createFromQuaternion(mRotation);
     mWorld *= Matrix4::createTranslation(mPosition + Vector3(mPivot, 0.f));
-}
-
-void Sprite::centerShift(const Vector2 & nextScale) {
-    auto PreviosSize = Vector2(getScreenTextureSize().x, getScreenTextureSize().y);
-    auto nextSize = Vector2(mCurrentSize.x * nextScale.x, mCurrentSize.y * nextScale.y);
-    auto shift = (PreviosSize - nextSize) / 2.f;
-
-    translate(shift);
 }
 
 bool Sprite::ZSortFlag = false;

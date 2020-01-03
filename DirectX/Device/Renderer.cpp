@@ -25,6 +25,10 @@ ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
 }
 
+Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
+    return new Buffer(mDevice, desc, data);
+}
+
 std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
     return std::make_shared<Buffer>(mDevice, desc, data);
 }
@@ -45,7 +49,7 @@ void Renderer::setVertexBuffer(const VertexStreamDesc * stream, unsigned numStre
     mDeviceContext->IASetVertexBuffers(start, numStream, &buffer, &stream->stride, &stream->offset);
 }
 
-void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
+void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {
     mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R16_UINT, offset);
 }
 

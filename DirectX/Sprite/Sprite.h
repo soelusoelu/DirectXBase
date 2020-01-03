@@ -4,9 +4,8 @@
 #include <memory>
 
 enum class SpriteState {
-    ACTIVE, //常に描画
-    ONCE, //一回描画後削除
-    DEAD //描画せず削除
+    ACTIVE,
+    DEAD
 };
 
 class SpriteManager;
@@ -37,8 +36,8 @@ public:
     Quaternion getRotation() const;
     void rotate(float angle);
     //倍率で拡縮
-    void setScale(const Vector2& scale, bool isCenterShift = false);
-    void setScale(float scale, bool isCenterShift = false);
+    void setScale(const Vector2& scale);
+    void setScale(float scale);
     Vector2 getScale() const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
@@ -74,14 +73,12 @@ public:
     const char* fileName() const;
     //ワールド行列の変更フラグ
     bool getWorldUpdateFlag() const;
-    void onceToDead();
 
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);
 
 private:
     void updateWorld();
-    void centerShift(const Vector2& nextScale);
 
 public:
     static bool ZSortFlag;

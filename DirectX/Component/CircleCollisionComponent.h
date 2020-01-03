@@ -5,7 +5,6 @@
 #include <memory>
 
 class Actor;
-class SpriteComponent;
 
 class CircleCollisionComponent : public Collider {
 public:
@@ -18,5 +17,4 @@ public:
 
 private:
     std::shared_ptr<Circle> mCircle;
-    std::shared_ptr<SpriteComponent> mSprite;
 };

@@ -34,12 +34,16 @@ public:
     void setScale(float scale);
     Vector2 getScale() const;
 
+    //uvに応じて
+    void setUVScale(const Vector2& scale);
+
 private:
     Matrix4 mWorldTransform;
     Vector3 mPosition;
     Quaternion mRotation;
     Vector2 mPivot;
     Vector2 mScale;
+    Vector2 mUVScale;
     bool mIsRecomputeTransform;
 };
 

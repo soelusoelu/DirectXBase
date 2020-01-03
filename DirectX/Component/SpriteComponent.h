@@ -18,9 +18,6 @@ public:
     virtual void onUpdateWorldTransform() override;
     Sprite* getSprite() const;
 
-    //描画優先順位(0～1、0が手前)
-    void setPrimary(float z);
-    float getDepth() const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
@@ -30,9 +27,6 @@ public:
     //切り取り範囲(left, top, right, bottom, 0～1)
     void setUV(float l, float t, float r, float b);
     Vector4 getUV() const;
-    //回転ピボット位置
-    void setPivot(const Vector2& pivot);
-    Vector2 getPivot() const;
     //テクスチャサイズの取得
     Vector2INT getTextureSize() const;
     //テクスチャの現在のサイズを取得

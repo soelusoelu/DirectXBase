@@ -11,23 +11,28 @@
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mVertexBuffer(nullptr),
-    mIndexBuffer(nullptr),
     mVertexLayout(nullptr),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
+    if (!mIndexBuffer) {
+        //インデックスバッファの作成
+        createIndexBuffer(renderer);
+    }
     //テクスチャー作成
     createTexture(renderer, fileName);
     //テクスチャー用サンプラー作成
     createSampler(renderer);
     //バーテックスバッファー作成
     createVertexBuffer(renderer);
-    //インデックスバッファの作成
-    createIndexBuffer(renderer);
 }
 
 Texture::~Texture() {
     SAFE_RELEASE(mTexture);
     SAFE_RELEASE(mSampleLinear);
+}
+
+void Texture::end() {
+    SAFE_DELETE(mIndexBuffer);
 }
 
 void Texture::createInputLayout(std::shared_ptr<Renderer> renderer, ID3D10Blob* compiledShader) {
@@ -37,54 +42,6 @@ void Texture::createInputLayout(std::shared_ptr<Renderer> renderer, ID3D10Blob* 
     };
     constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
     mVertexLayout = renderer->createInputLayout(layout, numElements, compiledShader);
-}
-
-void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
-    if (sprites.empty()) {
-        return;
-    }
-    //スプライト共通作業
-    //プロジェクション
-    Matrix4 proj = Matrix4::identity;
-    //原点をスクリーン左上にするために平行移動
-    proj.m[3][0] = -1.f;
-    proj.m[3][1] = 1.f;
-    //ピクセル単位で扱うために
-    proj.m[0][0] = 2.f / Game::WINDOW_WIDTH;
-    proj.m[1][1] = -2.f / Game::WINDOW_HEIGHT;
-
-    //プリミティブ・トポロジーをセット
-    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
-    //インデックスバッファーをセット
-    renderer->setIndexBuffer(sprites.front()->texture()->mIndexBuffer); //インデックスバッファは共通だから無理やり
-
-    for (auto itr = sprites.begin(); itr != sprites.end(); ++itr) {
-        (*itr)->draw(renderer, proj);
-    }
-}
-
-ID3D11ShaderResourceView* Texture::texture() const {
-    return mTexture;
-}
-
-const TextureDesc& Texture::desc() const {
-    return mDesc;
-}
-
-std::shared_ptr<Buffer> Texture::getVertexBuffer() const {
-    return mVertexBuffer;
-}
-
-std::shared_ptr<Buffer> Texture::getIndexBuffer() const {
-    return mIndexBuffer;
-}
-
-std::shared_ptr<InputElement> Texture::getVertexlayout() const {
-    return mVertexLayout;
-}
-
-ID3D11SamplerState* Texture::getSampler() const {
-    return mSampleLinear;
 }
 
 void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
@@ -107,6 +64,50 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     mVertexBuffer = renderer->createBuffer(bd, &sub);
 }
 
+void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
+    if (sprites.empty()) {
+        return;
+    }
+    //スプライト共通作業
+    //プロジェクション
+    Matrix4 proj = Matrix4::identity;
+    //原点をスクリーン左上にするために平行移動
+    proj.m[3][0] = -1.f;
+    proj.m[3][1] = 1.f;
+    //ピクセル単位で扱うために
+    proj.m[0][0] = 2.f / Game::WINDOW_WIDTH;
+    proj.m[1][1] = -2.f / Game::WINDOW_HEIGHT;
+
+    //プリミティブ・トポロジーをセット
+    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //インデックスバッファーをセット
+    renderer->setIndexBuffer(mIndexBuffer);
+
+    for (auto itr = sprites.begin(); itr != sprites.end(); ++itr) {
+        (*itr)->draw(renderer, proj);
+    }
+}
+
+ID3D11ShaderResourceView* Texture::texture() const {
+    return mTexture;
+}
+
+const TextureDesc& Texture::desc() const {
+    return mDesc;
+}
+
+std::shared_ptr<Buffer> Texture::getVertexBuffer() const {
+    return mVertexBuffer;
+}
+
+std::shared_ptr<InputElement> Texture::getVertexlayout() const {
+    return mVertexLayout;
+}
+
+ID3D11SamplerState* Texture::getSampler() const {
+    return mSampleLinear;
+}
+
 void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
     static constexpr unsigned short indices[] = {
         0, 1, 2,
@@ -119,7 +120,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = indices;
-    mIndexBuffer = renderer->createBuffer(bd, &sub);
+    mIndexBuffer = renderer->createRawBuffer(bd, &sub);
 }
 
 void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* fileName) {
@@ -207,3 +208,5 @@ unsigned Texture::toFilter(TextureFilter filter) const {
     };
     return filters[static_cast<unsigned>(filter)];
 }
+
+Buffer* Texture::mIndexBuffer = nullptr;

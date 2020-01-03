@@ -52,15 +52,15 @@ namespace Math {
     }
 
     inline float cos(float degree) {
-        return cosf(degree);
+        return cosf(degree * deg2Rad);
     }
 
     inline float sin(float degree) {
-        return sinf(degree);
+        return sinf(degree * deg2Rad);
     }
 
     inline float tan(float degree) {
-        return tanf(degree);
+        return tanf(degree * deg2Rad);
     }
 
     inline float asin(float value) {
