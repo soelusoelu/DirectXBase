@@ -1,6 +1,8 @@
 ﻿#include "Input.h"
+#include "Math.h"
 #include "../System/Game.h"
 #include <algorithm>
+
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE*, VOID*);
 BOOL CALLBACK enumObjectsCallback(const DIDEVICEOBJECTINSTANCE*, VOID*);
@@ -51,6 +53,7 @@ HRESULT Input::init(HWND hWnd) {
     return S_OK;
 }
 
+
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext) {
     //複数列挙される場合、ユーザーに選択・確認させる
     WCHAR szConfirm[MAX_PATH];
@@ -63,6 +66,7 @@ BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* 
     if (FAILED(Input::mDinput->CreateDevice(pdidInstance->guidInstance, &Input::mPadDevice, NULL))) {
         return DIENUM_CONTINUE;
     }
+
     return DIENUM_STOP;
 }
 
@@ -97,19 +101,21 @@ void Input::update() {
     if ((hr == DI_OK) || (hr == S_FALSE)) {
         mKeyDevice->GetDeviceState(sizeof(mCurrentKeys), &mCurrentKeys);
     }
+
     if (mPadDevice) {
         hr = mPadDevice->Acquire();
         if ((hr == DI_OK) || (hr == S_FALSE)) {
             mPadDevice->GetDeviceState(sizeof(DIJOYSTATE2), &mCurrentJoyState);
         }
     }
+
 }
 
 bool Input::getKeyDown(KeyCode key) {
     return (mCurrentKeys[static_cast<BYTE>(key)] & 0x80 && !(mPreviousKeys[static_cast<BYTE>(key)] & 0x80));
 }
 
-bool Input::getJoyStickDown(JoyCode joy) {
+bool Input::getJoyDown(JoyCode joy) {
     return (mCurrentJoyState.rgbButtons[static_cast<int>(joy)] & 0x80 && !(mPreviousJoyState.rgbButtons[static_cast<int>(joy)] & 0x80));
 }
 
@@ -147,6 +153,22 @@ int Input::vertical() {
     } else {
         return 0;
     }
+}
+
+float Input::joyHorizontal() {
+    return (Math::abs(mCurrentJoyState.lX) > 100.f) ? mCurrentJoyState.lX / 1000.f : 0.f;
+}
+
+float Input::joyVertical() {
+    return (Math::abs(mCurrentJoyState.lY) > 100.f) ? -mCurrentJoyState.lY / 1000.f : 0.f;
+}
+
+float Input::joyRHorizontal() {
+    return (Math::abs(mCurrentJoyState.lRx) > 100.f) ? mCurrentJoyState.lRx / 1000.f : 0.f;
+}
+
+float Input::joyRVertical() {
+    return (Math::abs(mCurrentJoyState.lRx) > 100.f) ? -mCurrentJoyState.lRx / 1000.f : 0.f;
 }
 
 BYTE Input::mCurrentKeys[256] = { 0 };

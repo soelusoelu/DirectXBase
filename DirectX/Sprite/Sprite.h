@@ -5,9 +5,11 @@
 
 enum class SpriteState {
     ACTIVE,
+    NON_ACTIVE,
     DEAD
 };
 
+class Transform2D;
 class SpriteManager;
 class Shader;
 class Texture;
@@ -15,7 +17,8 @@ class Renderer;
 
 class Sprite {
 public:
-    Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z, bool updateMyself = true);
+    Sprite(std::shared_ptr<Renderer> renderer, const char* fileName);
+    Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, std::shared_ptr<Transform2D> transform);
     ~Sprite();
     Sprite(const Sprite& sprite);
     //SpriteManagerにて毎フレーム実行
@@ -24,21 +27,8 @@ public:
     void draw(const Matrix4& proj);
     //自身のコピーを作成
     std::shared_ptr<Sprite> copy() const;
-    //ピクセル単位で位置指定
-    void setPosition(const Vector2& pos);
-    //描画優先順位(0～1、0が手前)
-    void setPrimary(float z);
-    Vector2 getPosition() const;
-    float getDepth() const;
-    void translate(const Vector2& translation);
-    //回転
-    void setRotation(float angle);
-    Quaternion getRotation() const;
-    void rotate(float angle);
-    //倍率で拡縮
-    void setScale(const Vector2& scale);
-    void setScale(float scale);
-    Vector2 getScale() const;
+    //Transform
+    std::shared_ptr<Transform2D> transform() const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
@@ -48,58 +38,34 @@ public:
     //切り取り範囲(left, top, right, bottom, 0～1)
     void setUV(float l, float t, float r, float b);
     Vector4 getUV() const;
-    //回転ピボット位置
-    void setPivot(const Vector2& pivot);
-    Vector2 getPivot() const;
     //テクスチャサイズの取得
-    Vector2INT getTextureSize() const;
-    //テクスチャの現在のサイズを取得
-    Vector2INT getCurrentTextureSize() const;
-    //スクリーン表示上のサイズの取得
-    Vector2INT getScreenTextureSize() const;
+    Vector2 getTextureSize() const;
     //状態管理
     static void destroy(Sprite* sprite);
     static void destroy(std::shared_ptr<Sprite> sprite);
+    void setActive(bool value);
+    bool getActive() const;
     SpriteState getState() const;
-    //World行列
-    void setWorld(const Matrix4& world);
-    Matrix4 getWorld() const;
     //テクスチャの取得
-    void setTexture(const char* fileName);
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
     std::shared_ptr<Shader> shader() const;
     //ファイル名の取得
     const char* fileName() const;
-    //ワールド行列の変更フラグ
-    bool getWorldUpdateFlag() const;
 
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);
 
 private:
-    void updateWorld();
-
-public:
-    static bool ZSortFlag;
-
-private:
     std::shared_ptr<Renderer> mRenderer;
-    Vector2INT mDefaultSize;
-    Vector2INT mCurrentSize;
-    Vector3 mPosition;
-    Quaternion mRotation;
-    Vector2 mScale;
-    Vector4 mColor;
-    Vector4 mUV;
-    Vector2 mPivot;
-    Matrix4 mWorld;
-    SpriteState mState;
+    std::shared_ptr<Transform2D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
+    Vector2 mTextureSize;
+    Vector4 mColor;
+    Vector4 mUV;
+    SpriteState mState;
     const char* mFileName;
-    bool mUpdateMyself;
-    bool mWorldUpdateFlag;
 
     static SpriteManager* mSpriteManager;
 };

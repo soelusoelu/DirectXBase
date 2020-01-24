@@ -1,6 +1,7 @@
 ﻿#include "SpriteManager.h"
 #include "Sprite.h"
 #include "Texture.h"
+#include "../Actor/Transform2D.h"
 #include <algorithm>
 
 SpriteManager::SpriteManager() :
@@ -18,7 +19,7 @@ void SpriteManager::update() {
 }
 
 void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
-    Texture::drawAll(mSprites, renderer);
+	Texture::drawAll(mSprites, renderer);
 }
 
 void SpriteManager::add(Sprite* add) {
@@ -27,10 +28,10 @@ void SpriteManager::add(Sprite* add) {
 }
 
 void SpriteManager::add(std::shared_ptr<Sprite> add) {
-    float z = add->getDepth();
+    float z = add->transform()->getDepth();
     auto itr = mSprites.begin();
     for (; itr != mSprites.end(); ++itr) {
-        if (z > (*itr)->getDepth()) {
+        if (z > (*itr)->transform()->getDepth()) {
             break;
         }
     }
@@ -53,10 +54,10 @@ void SpriteManager::remove() {
 }
 
 void SpriteManager::sortByZ() {
-    if (Sprite::ZSortFlag) { //z値を変更したやつがいればソート
-        Sprite::ZSortFlag = false;
-        //std::sort(mSprites.begin(), mSprites.end(), [](std::shared_ptr<Sprite> a, std::shared_ptr<Sprite> b) {
-        //    return a->getDepth() > b->getDepth();
-        //});
+    if (Transform2D::zSortFlag) { //z値を変更したやつがいればソート
+        Transform2D::zSortFlag = false;
+        std::sort(mSprites.begin(), mSprites.end(), [](std::shared_ptr<Sprite> a, std::shared_ptr<Sprite> b) {
+            return a->transform()->getDepth() > b->transform()->getDepth();
+        });
     }
 }

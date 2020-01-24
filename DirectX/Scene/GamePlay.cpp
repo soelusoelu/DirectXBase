@@ -4,6 +4,7 @@
 #include "../Actor/PlayerActor.h"
 #include "../Component/Collider.h"
 #include "../Device/Physics.h"
+#include "../Scene/Title.h"
 #include "../System/Game.h"
 #include "../UI/Pause.h"
 
@@ -11,8 +12,7 @@ GamePlay::GamePlay() :
     SceneBase(),
     mActorManager(new ActorManager()),
     mPhysics(new Physics()),
-    mState(GameState::PLAY),
-    mPauseKey(KeyCode::Alpha1) {
+    mState(GameState::PLAY) {
     Actor::setActorManager(mActorManager);
     Collider::setPhysics(mPhysics);
 }
@@ -35,8 +35,8 @@ void GamePlay::updateScene() {
         //総当たり判定
         mPhysics->sweepAndPrune();
 
-        if (Input::getKeyDown(mPauseKey)) {
-            new Pause(shared_from_this(), mRenderer);
+        if (!mActorManager->getPlayer()) { //ゲームオーバー
+            nextScene(std::make_shared<Title>());
         }
     } else if (mState == GameState::PAUSED) {
 

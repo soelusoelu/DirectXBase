@@ -1,7 +1,7 @@
 ﻿#include "UI.h"
 #include "UIManager.h"
+#include "../Actor/Transform2D.h"
 #include "../Sprite/Sprite.h"
-#include <algorithm>
 
 UI::UI() :
     mSprites(0),
@@ -21,7 +21,15 @@ UI::~UI() {
 }
 
 void UI::update() {
-    updateUI();
+    if (mState == UIState::ACTIVE) {
+        updateUI();
+    } else if (mState == UIState::NON_ACTIVE) {
+        for (auto&& sprite : mSprites) {
+            if (sprite->getActive()) {
+                sprite->setActive(false);
+            }
+        }
+    }
 }
 
 void UI::close() {
@@ -29,6 +37,7 @@ void UI::close() {
 }
 
 void UI::addSprite(Sprite* sprite) {
+    sprite->transform()->setPrimary(0);
     mSprites.emplace_back(sprite);
 }
 
@@ -37,6 +46,14 @@ void UI::removeSprite(Sprite* sprite) {
     if (itr != mSprites.end()) {
         mSprites.erase(itr);
     }
+}
+
+void UI::setActive(bool value) {
+    mState = (value) ? UIState::ACTIVE : UIState::NON_ACTIVE;
+}
+
+bool UI::getActive() const {
+    return mState == UIState::ACTIVE;
 }
 
 UIState UI::getState() const {

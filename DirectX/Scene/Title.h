@@ -13,5 +13,6 @@ public:
 
 private:
     KeyCode mNextKey;
+    JoyCode mNextJoy;
 };
 

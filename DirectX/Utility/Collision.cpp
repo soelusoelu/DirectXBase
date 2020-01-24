@@ -105,11 +105,6 @@ float Ray::minDistanceSquare(const Ray& s1, const Ray& s2) {
 
 
 
-Circle::Circle() :
-    center(Vector2::zero),
-    radius(0.f) {
-}
-
 Circle::Circle(const Vector2& center, float radius) :
     center(center),
     radius(radius) {

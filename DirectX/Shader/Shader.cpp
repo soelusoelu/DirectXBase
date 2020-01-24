@@ -7,7 +7,7 @@
 #include "../System/InputElement.h"
 #include "../System/InputElementDesc.h"
 
-Shader::Shader(std::shared_ptr<Renderer> renderer, const char* fileName, const char* VSFuncName, const char* PSFuncName) :
+Shader::Shader(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mDevice(renderer->device()),
     mDeviceContext(renderer->deviceContext()),
     mCompileShader(nullptr),
@@ -21,8 +21,8 @@ Shader::Shader(std::shared_ptr<Renderer> renderer, const char* fileName, const c
     cb.cpuAccessFlags = BufferCPUAccessFlag::CPU_ACCESS_WRITE;
     mConstantBuffer = renderer->createBuffer(cb);
 
-    createVertexShader(fileName, VSFuncName);
-    createPixelShader(fileName, PSFuncName);
+    createVertexShader(fileName);
+    createPixelShader(fileName);
 }
 
 Shader::~Shader() {
@@ -83,10 +83,10 @@ std::shared_ptr<Buffer> Shader::getConstantBuffer() const {
     return mConstantBuffer;
 }
 
-void Shader::createVertexShader(const char* fileName, const char* funcName) {
+void Shader::createVertexShader(const char* fileName) {
     setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
-    if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, funcName, "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
+    if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }
@@ -97,11 +97,11 @@ void Shader::createVertexShader(const char* fileName, const char* funcName) {
     }
 }
 
-void Shader::createPixelShader(const char* fileName, const char* funcName) {
+void Shader::createPixelShader(const char* fileName) {
     ID3D10Blob* compiledShader;
     setShaderDirectory();
     //ブロブからピクセルシェーダー作成
-    if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, funcName, "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
+    if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }

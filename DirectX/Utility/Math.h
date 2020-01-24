@@ -98,18 +98,14 @@ public:
     float x;
     float y;
 
-    Vector2()
-        :x(0.0f)
-        , y(0.0f) {
+    Vector2() :
+        x(0.f),
+        y(0.f) {
     }
 
-    explicit Vector2(float inX, float inY)
-        :x(inX)
-        , y(inY) {
-    }
-
-    const float* getAsFloatPtr() const {
-        return reinterpret_cast<const float*>(&x);
+    explicit Vector2(float inX, float inY) :
+        x(inX),
+        y(inY) {
     }
 
     // Set both components in one line
@@ -153,6 +149,9 @@ public:
     }
 
     friend Vector2 operator/(const Vector2& vec, float scalar) {
+        if (scalar == 0) {
+            return vec;
+        }
         return Vector2(vec.x / scalar, vec.y / scalar);
     }
 
@@ -221,13 +220,13 @@ public:
         return temp;
     }
 
-    float dot(const Vector2& vec) {
-        return (x * vec.x + y * vec.y);
-    }
-
     // Dot product between two vectors (a dot b)
     static float dot(const Vector2& a, const Vector2& b) {
         return (a.x * b.x + a.y * b.y);
+    }
+
+    static float cross(const Vector2& a, const Vector2& b) {
+        return (a.x * b.y - a.y * b.x);
     }
 
     // Lerp from A to B by f
@@ -237,7 +236,7 @@ public:
 
     // Reflect V about (normalized) N
     static Vector2 reflect(const Vector2& v, const Vector2& n) {
-        return v - 2.0f * Vector2::dot(v, n) * n;
+        return v - 2.f * Vector2::dot(v, n) * n;
     }
 
     // Transform vector by matrix
@@ -329,9 +328,9 @@ public:
     float z;
 
     Vector3() :
-        x(0.0f),
-        y(0.0f),
-        z(0.0f) {
+        x(0.f),
+        y(0.f),
+        z(0.f) {
     }
 
     explicit Vector3(float inX, float inY, float inZ) :
@@ -344,11 +343,6 @@ public:
         x(vec2.x),
         y(vec2.y),
         z(inZ) {
-    }
-
-    // Cast to a const float pointer
-    const float* getAsFloatPtr() const {
-        return reinterpret_cast<const float*>(&x);
     }
 
     // Set all three components in one line
@@ -392,6 +386,13 @@ public:
     // Scalar multiplication
     friend Vector3 operator*(float scalar, const Vector3& vec) {
         return Vector3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
+    }
+
+    friend Vector3 operator/(const Vector3& vec, float scalar) {
+        if (scalar == 0) {
+            return vec;
+        }
+        return Vector3(vec.x / scalar, vec.y / scalar, vec.z / scalar);
     }
 
     // Scalar *=
@@ -472,21 +473,9 @@ public:
         return temp;
     }
 
-    float dot(const Vector3& vec) {
-        return (x * vec.x + y * vec.y + z * vec.z);
-    }
-
     // Dot product between two vectors (a dot b)
     static float dot(const Vector3& a, const Vector3& b) {
         return (a.x * b.x + a.y * b.y + a.z * b.z);
-    }
-
-    Vector3 cross(const Vector3& vec) {
-        return Vector3(
-            y * vec.z - z * vec.y,
-            z * vec.x - x * vec.z,
-            x * vec.y - y * vec.x
-        );
     }
 
     // Cross product between two vectors (a cross b)
@@ -1073,8 +1062,7 @@ public:
         // ps * qv + qs * pv + pv x qv
         Vector3 qv(q.x, q.y, q.z);
         Vector3 pv(p.x, p.y, p.z);
-        //Vector3 newVec = p.w * qv + q.w * pv + Vector3::Cross(pv, qv);
-        Vector3 newVec = p.w * qv + q.w * pv + Vector3::cross(qv, pv); //こっちでは？
+        Vector3 newVec = p.w * qv + q.w * pv + Vector3::cross(pv, qv);
         retVal.x = newVec.x;
         retVal.y = newVec.y;
         retVal.z = newVec.z;

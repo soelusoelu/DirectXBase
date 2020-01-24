@@ -4,7 +4,7 @@
 
 Collider::Collider(Actor* owner) :
     Component(owner, 1000),
-    mEnable(true) {
+    mEnable(false) {
 }
 
 Collider::~Collider() {
@@ -17,6 +17,7 @@ void Collider::start() {
     startCollider();
     if (mPhysics) {
         mPhysics->add(this);
+        mEnable = true;
     }
 }
 

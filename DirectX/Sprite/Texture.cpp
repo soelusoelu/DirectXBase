@@ -10,11 +10,12 @@
 #include "../System/VertexStreamDesc.h"
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
-    mVertexBuffer(nullptr),
     mVertexLayout(nullptr),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
-    if (!mIndexBuffer) {
+    if (!mVertexBuffer || !mIndexBuffer) {
+        //バーテックスバッファー作成
+        createVertexBuffer(renderer);
         //インデックスバッファの作成
         createIndexBuffer(renderer);
     }
@@ -22,8 +23,6 @@ Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
     createTexture(renderer, fileName);
     //テクスチャー用サンプラー作成
     createSampler(renderer);
-    //バーテックスバッファー作成
-    createVertexBuffer(renderer);
 }
 
 Texture::~Texture() {
@@ -32,6 +31,7 @@ Texture::~Texture() {
 }
 
 void Texture::end() {
+    SAFE_DELETE(mVertexBuffer);
     SAFE_DELETE(mIndexBuffer);
 }
 
@@ -44,45 +44,7 @@ void Texture::createInputLayout(std::shared_ptr<Renderer> renderer, ID3D10Blob* 
     mVertexLayout = renderer->createInputLayout(layout, numElements, compiledShader);
 }
 
-void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
-    auto w = mDesc.width;
-    auto h = mDesc.height;
-    TextureVertex vertices[] = {
-        Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
-        Vector3(w, 0.f, 0.f), Vector2(1.f, 0.f), //右上
-        Vector3(0.f, h, 0.f), Vector2(0.f, 1.f), //左下
-        Vector3(w, h, 0.f), Vector2(1.f, 1.f), //右下
-    };
-
-    BufferDesc bd;
-    bd.size = sizeof(TextureVertex) * 4;
-    bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
-    bd.type = BufferType::BUFFER_TYPE_VERTEX;
-
-    SubResourceDesc sub;
-    sub.data = vertices;
-    mVertexBuffer = renderer->createBuffer(bd, &sub);
-}
-
-void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer, const Vector2INT& size) {
-    TextureVertex vertices[] = {
-        Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
-        Vector3(size.x, 0.f, 0.f), Vector2(1.f, 0.f), //右上
-        Vector3(0.f, size.y, 0.f), Vector2(0.f, 1.f), //左下
-        Vector3(size.x, size.y, 0.f), Vector2(1.f, 1.f), //右下
-    };
-
-    BufferDesc bd;
-    bd.size = sizeof(TextureVertex) * 4;
-    bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
-    bd.type = BufferType::BUFFER_TYPE_VERTEX;
-
-    SubResourceDesc sub;
-    sub.data = vertices;
-    mVertexBuffer = renderer->createBuffer(bd, &sub);
-}
-
-void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
+void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
     if (sprites.empty()) {
         return;
     }
@@ -98,6 +60,12 @@ void Texture::drawAll(std::list<std::shared_ptr<Sprite>> sprites, std::shared_pt
 
     //プリミティブ・トポロジーをセット
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //バーテックスバッファーをセット
+    VertexStreamDesc stream;
+    stream.buffer = mVertexBuffer;
+    stream.offset = 0;
+    stream.stride = sizeof(TextureVertex);
+    renderer->setVertexBuffer(&stream);
     //インデックスバッファーをセット
     renderer->setIndexBuffer(mIndexBuffer);
 
@@ -114,16 +82,30 @@ const TextureDesc& Texture::desc() const {
     return mDesc;
 }
 
-std::shared_ptr<Buffer> Texture::getVertexBuffer() const {
-    return mVertexBuffer;
-}
-
 std::shared_ptr<InputElement> Texture::getVertexlayout() const {
     return mVertexLayout;
 }
 
 ID3D11SamplerState* Texture::getSampler() const {
     return mSampleLinear;
+}
+
+void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
+    TextureVertex vertices[] = {
+        Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
+        Vector3(1.f, 0.f, 0.f), Vector2(1.f, 0.f), //右上
+        Vector3(0.f, 1.f, 0.f), Vector2(0.f, 1.f), //左下
+        Vector3(1.f, 1.f, 0.f), Vector2(1.f, 1.f), //右下
+    };
+
+    BufferDesc bd;
+    bd.size = sizeof(TextureVertex) * 4;
+    bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
+    bd.type = BufferType::BUFFER_TYPE_VERTEX;
+
+    SubResourceDesc sub;
+    sub.data = vertices;
+    mVertexBuffer = renderer->createRawBuffer(bd, &sub);
 }
 
 void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
@@ -227,4 +209,5 @@ unsigned Texture::toFilter(TextureFilter filter) const {
     return filters[static_cast<unsigned>(filter)];
 }
 
+Buffer* Texture::mVertexBuffer = nullptr;
 Buffer* Texture::mIndexBuffer = nullptr;

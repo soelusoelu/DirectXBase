@@ -13,8 +13,11 @@ public:
     virtual void startCollider() override;
     virtual void updateCollider() override;
     virtual void onUpdateWorldTransformCollider() override;
+    void set(const Vector2& center, float radius);
     std::shared_ptr<Circle> getCircle() const;
+    void automation();
 
 private:
     std::shared_ptr<Circle> mCircle;
+    bool mIsAutoUpdate;
 };

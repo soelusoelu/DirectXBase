@@ -9,7 +9,7 @@ Pause::Pause(std::shared_ptr<GamePlay> game, std::shared_ptr<Renderer> renderer)
     if (auto g = mGame.lock()) {
         g->setState(GameState::PAUSED);
     }
-    addSprite(new Sprite(renderer, "cat.png", 0.2f));
+    addSprite(new Sprite(renderer, "cat.png"));
 }
 
 Pause::~Pause() {

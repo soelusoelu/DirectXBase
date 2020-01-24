@@ -1,36 +1,38 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
 #include "Texture.h"
+#include "../Actor/Transform2D.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
-#include "../System/DirectXIncLib.h"
 #include "../System/TextureDesc.h"
 #include "../System/VertexStreamDesc.h"
 #include <cassert>
 
-Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z, bool updateMyself) :
+Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
+    Sprite(renderer, fileName, nullptr) {
+}
+
+Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, std::shared_ptr<Transform2D> transform) :
     mRenderer(renderer),
-    mDefaultSize(Vector2INT::zero),
-    mCurrentSize(Vector2INT::zero),
-    mPosition(Vector2::zero, z),
-    mRotation(Quaternion::identity),
-    mScale(Vector2::one),
+    mTransform(transform),
+    mTexture(mRenderer->createTexture(fileName)),
+    mShader(mRenderer->createShader("Texture.hlsl")),
+    mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
-    mPivot(Vector2::zero),
-    mWorld(Matrix4::identity),
     mState(SpriteState::ACTIVE),
-    mTexture(mRenderer->createTexture(fileName)),
-    mShader(mRenderer->createShader("Texture.hlsl", "VS", "PS")),
-    mFileName(fileName),
-    mUpdateMyself(updateMyself),
-    mWorldUpdateFlag(true) {
+    mFileName(fileName) {
+    if (!mTransform) {
+        mTransform = std::make_shared<Transform2D>();
+    }
 
+    //デスクをもとにサイズ取得
     auto desc = mTexture->desc();
-    mDefaultSize = Vector2INT(desc.width, desc.height);
-    mCurrentSize = mDefaultSize;
-    mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
+    mTextureSize = Vector2(desc.width, desc.height);
+
+    //Transformに通知
+    mTransform->setSize(mTextureSize);
 
     mTexture->createInputLayout(mRenderer, mShader->getCompiledShader());
 
@@ -42,39 +44,28 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, float z
 Sprite::~Sprite() = default;
 
 Sprite::Sprite(const Sprite & sprite) :
-    mDefaultSize(sprite.mDefaultSize),
-    mCurrentSize(sprite.mCurrentSize),
-    mPosition(sprite.mPosition),
-    mRotation(sprite.mRotation),
-    mScale(sprite.mScale),
-    mColor(sprite.mColor),
-    mUV(sprite.mUV),
-    mPivot(sprite.mPivot),
-    mWorld(sprite.mWorld),
-    mState(SpriteState::ACTIVE),
+    mTransform(sprite.mTransform),
+    mTextureSize(sprite.mTextureSize),
     mTexture(sprite.mTexture),
     mShader(sprite.mShader),
-    mFileName(sprite.mFileName),
-    mUpdateMyself(sprite.mUpdateMyself),
-    mWorldUpdateFlag(true) {
+    mColor(sprite.mColor),
+    mUV(sprite.mUV),
+    mState(SpriteState::ACTIVE),
+    mFileName(sprite.mFileName) {
 }
 
 void Sprite::update() {
-    updateWorld();
+    if (mState == SpriteState::ACTIVE) {
+        mTransform->computeWorldTransform();
+    }
 }
 
 void Sprite::draw(const Matrix4 & proj) {
-    if (getState() == SpriteState::DEAD) {
+    if (mState != SpriteState::ACTIVE) {
         return;
     }
 
-    //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.buffer = mTexture->getVertexBuffer();
-    stream.offset = 0;
-    stream.stride = sizeof(TextureVertex);
-    mRenderer->setVertexBuffer(&stream);
-    //自身を使用するシェーダーとして登録
+    //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
     //コンスタントバッファーを使うシェーダーの登録
@@ -87,8 +78,8 @@ void Sprite::draw(const Matrix4 & proj) {
     D3D11_MAPPED_SUBRESOURCE pData;
     if (SUCCEEDED(mRenderer->deviceContext()->Map(mShader->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         TextureShaderConstantBuffer cb;
-        //ワールド、カメラ、射影行列を渡す
-        cb.mWorld = mWorld;
+        //ワールド、射影行列を渡す
+        cb.mWorld = mTransform->getWorldTransform();
         cb.mWorld.transpose();
         cb.mProjection = proj;
         cb.mProjection.transpose();
@@ -112,74 +103,8 @@ std::shared_ptr<Sprite> Sprite::copy() const {
     return s;
 }
 
-void Sprite::setPosition(const Vector2 & pos) {
-    mPosition.x = pos.x;
-    mPosition.y = pos.y;
-    mWorldUpdateFlag = true;
-}
-
-void Sprite::setPrimary(float z) {
-    mPosition.z = z;
-    mWorldUpdateFlag = true;
-    ZSortFlag = true;
-}
-
-Vector2 Sprite::getPosition() const {
-    return Vector2(mPosition.x, mPosition.y);
-}
-
-float Sprite::getDepth() const {
-    return mPosition.z;
-}
-
-void Sprite::translate(const Vector2 & translation) {
-    mPosition.x += translation.x;
-    mPosition.y += translation.y;
-    mWorldUpdateFlag = true;
-}
-
-void Sprite::setRotation(float angle) {
-    angle *= 0.5f;
-    float sinAngle = Math::sin(angle);
-
-    mRotation.z = sinAngle;
-    mRotation.w = Math::cos(angle);
-
-    mWorldUpdateFlag = true;
-}
-
-Quaternion Sprite::getRotation() const {
-    return mRotation;
-}
-
-void Sprite::rotate(float angle) {
-    angle *= 0.5f;
-    float sinAngle = Math::sin(angle);
-
-    Quaternion inc;
-    inc.z = sinAngle;
-    inc.w = Math::cos(angle);
-
-    mRotation = Quaternion::concatenate(mRotation, inc);
-
-    mWorldUpdateFlag = true;
-}
-
-void Sprite::setScale(const Vector2 & scale) {
-    mScale = scale;
-
-    mWorldUpdateFlag = true;
-}
-
-void Sprite::setScale(float scale) {
-    mScale.x = scale;
-    mScale.y = scale;
-
-    mWorldUpdateFlag = true;
-}
-
-Vector2 Sprite::getScale() const {
-    return mScale;
+std::shared_ptr<Transform2D> Sprite::transform() const {
+    return mTransform;
 }
 
 void Sprite::setColor(const Vector3 & color) {
@@ -214,43 +139,20 @@ void Sprite::setUV(float l, float t, float r, float b) {
     mUV.w = b;
 
     //サイズ修正
-    mCurrentSize.x = mDefaultSize.x * (r - l);
-    mCurrentSize.y = mDefaultSize.y * (b - t);
+    Vector2 size;
+    size.x = mTextureSize.x * (r - l);
+    size.y = mTextureSize.y * (b - t);
 
-    //ピボット修正
-    mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
-    mPivot.x *= mScale.x;
-    mPivot.y *= mScale.y;
-
-    //バーテックスバッファを作り直す(ボトルネック)
-    mTexture->createVertexBuffer(mRenderer, mCurrentSize);
-
-    mWorldUpdateFlag = true;
+    //テクスチャサイズを変更したことを通知
+    mTransform->setSize(size);
 }
 
 Vector4 Sprite::getUV() const {
     return mUV;
 }
 
-void Sprite::setPivot(const Vector2 & pivot) {
-    mPivot = pivot;
-    mWorldUpdateFlag = true;
-}
-
-Vector2 Sprite::getPivot() const {
-    return mPivot;
-}
-
-Vector2INT Sprite::getTextureSize() const {
-    return mDefaultSize;
-}
-
-Vector2INT Sprite::getCurrentTextureSize() const {
-    return mCurrentSize;
-}
-
-Vector2INT Sprite::getScreenTextureSize() const {
-    return Vector2INT(mCurrentSize.x * mScale.x, mCurrentSize.y * mScale.y);
+Vector2 Sprite::getTextureSize() const {
+    return mTextureSize;
 }
 
 void Sprite::destroy(Sprite * sprite) {
@@ -261,29 +163,16 @@ void Sprite::destroy(std::shared_ptr<Sprite> sprite) {
     sprite->mState = SpriteState::DEAD;
 }
 
+void Sprite::setActive(bool value) {
+    mState = (value) ? SpriteState::ACTIVE : SpriteState::NON_ACTIVE;
+}
+
+bool Sprite::getActive() const {
+    return mState == SpriteState::ACTIVE;
+}
+
 SpriteState Sprite::getState() const {
     return mState;
-}
-
-void Sprite::setWorld(const Matrix4 & world) {
-    mWorld = world;
-}
-
-Matrix4 Sprite::getWorld() const {
-    return mWorld;
-}
-
-void Sprite::setTexture(const char* fileName) {
-    mTexture = mRenderer->createTexture(fileName);
-    mFileName = fileName;
-
-    auto desc = mTexture->desc();
-    mDefaultSize = Vector2INT(desc.width, desc.height);
-    mCurrentSize = mDefaultSize;
-    mPivot = Vector2(mCurrentSize.x / 2.f, mCurrentSize.y / 2.f);
-
-    mTexture->createInputLayout(mRenderer, mShader->getCompiledShader());
-    mTexture->createVertexBuffer(mRenderer);
 }
 
 std::shared_ptr<Texture> Sprite::texture() const {
@@ -298,26 +187,8 @@ const char* Sprite::fileName() const {
     return mFileName;
 }
 
-bool Sprite::getWorldUpdateFlag() const {
-    return mWorldUpdateFlag;
-}
-
 void Sprite::setSpriteManager(SpriteManager * manager) {
     mSpriteManager = manager;
 }
 
-void Sprite::updateWorld() {
-    //ワールド行列に変更が生じたら
-    if (!mWorldUpdateFlag || !mUpdateMyself) {
-        return;
-    }
-    mWorldUpdateFlag = false;
-
-    mWorld = Matrix4::createTranslation(Vector3(-mPivot, 0.f));
-    mWorld *= Matrix4::createScale(Vector3(mScale, 1.f));
-    mWorld *= Matrix4::createFromQuaternion(mRotation);
-    mWorld *= Matrix4::createTranslation(mPosition + Vector3(mPivot, 0.f));
-}
-
-bool Sprite::ZSortFlag = false;
 SpriteManager* Sprite::mSpriteManager = nullptr;

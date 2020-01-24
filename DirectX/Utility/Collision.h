@@ -16,7 +16,6 @@ struct Ray {
 };
 
 struct Circle {
-    Circle();
     Circle(const Vector2& center, float radius);
     void set(const Vector2& center, float radius);
     bool contains(const Vector2& point) const;

@@ -5,6 +5,7 @@
 
 enum class UIState {
     ACTIVE,
+    NON_ACTIVE,
     CLOSING
 };
 
@@ -21,6 +22,8 @@ public:
     void close();
     void addSprite(Sprite* sprite);
     void removeSprite(Sprite* sprite);
+    void setActive(bool value);
+    bool getActive() const;
     UIState getState() const;
 
     static void setUIManager(UIManager* manager);

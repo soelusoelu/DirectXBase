@@ -9,7 +9,7 @@ class Texture;
 
 class Shader {
 public:
-    Shader(std::shared_ptr<Renderer> renderer, const char* fileName, const char* VSFuncName, const char* PSFuncName);
+    Shader(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Shader();
     //シェーダーをセット
     void setVertexShader(ID3D11VertexShader* vertex);
@@ -33,8 +33,8 @@ public:
 
 private:
     //シェーダの生成
-    void createVertexShader(const char* fileName, const char* funcName);
-    void createPixelShader(const char* fileName, const char* funcName);
+    void createVertexShader(const char* fileName);
+    void createPixelShader(const char* fileName);
 
 private:
     ID3D11Device* mDevice;

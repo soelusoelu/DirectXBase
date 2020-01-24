@@ -26,5 +26,4 @@ private:
     ActorManager* mActorManager;
     Physics* mPhysics;
     GameState mState;
-    KeyCode mPauseKey;
 };

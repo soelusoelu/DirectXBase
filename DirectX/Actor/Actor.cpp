@@ -2,12 +2,12 @@
 #include "ActorManager.h"
 #include "Transform2D.h"
 #include "../Component/ComponentManager.h"
-#include "../Component/SpriteComponent.h"
 #include "../Device/Time.h"
 
-Actor::Actor(const char* tag) :
+Actor::Actor(std::shared_ptr<Renderer> renderer, const char* tag) :
+    mRenderer(renderer),
     mComponentManager(std::make_shared<ComponentManager>()),
-    mTransform(std::make_shared<Transform2D>()),
+    mTransform(std::make_shared<Transform2D>(this)),
     mDestroyTimer(nullptr),
     mState(ActorState::ACTIVE),
     mTag(tag) {
@@ -38,7 +38,7 @@ void Actor::computeWorldTransform() {
     }
 }
 
-void Actor::destroy(Actor * actor) {
+void Actor::destroy(Actor* actor) {
     actor->mState = ActorState::DEAD;
 }
 
@@ -46,7 +46,7 @@ void Actor::destroy(std::shared_ptr<Actor> actor) {
     actor->mState = ActorState::DEAD;
 }
 
-void Actor::destroy(Actor * actor, float sec) {
+void Actor::destroy(Actor* actor, float sec) {
     if (actor->mDestroyTimer) {
         return;
     }
@@ -60,11 +60,15 @@ void Actor::destroy(std::shared_ptr<Actor> actor, float sec) {
     actor->mDestroyTimer = std::make_unique<Time>(sec);
 }
 
-std::shared_ptr<ComponentManager> Actor::getComponentManager() const {
+std::shared_ptr<Renderer> Actor::renderer() const {
+    return mRenderer;
+}
+
+std::shared_ptr<ComponentManager> Actor::componentManager() const {
     return mComponentManager;
 }
 
-std::shared_ptr<Transform2D> Actor::getTransform() const {
+std::shared_ptr<Transform2D> Actor::transform() const {
     return mTransform;
 }
 
@@ -72,12 +76,16 @@ ActorState Actor::getState() const {
     return mState;
 }
 
-const char* Actor::getTag() const {
+const char* Actor::tag() const {
     return mTag;
 }
 
 void Actor::setActorManager(ActorManager* manager) {
     mActorManager = manager;
+}
+
+ActorManager* Actor::getActorManager() {
+    return mActorManager;
 }
 
 void Actor::destroyTimer() {

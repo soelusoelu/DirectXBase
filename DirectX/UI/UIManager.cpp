@@ -6,14 +6,12 @@ UIManager::~UIManager() = default;
 
 void UIManager::update() {
     for (auto&& ui : mUIStack) {
-        if (ui->getState() == UIState::ACTIVE) {
-            ui->update();
-        }
+        ui->update();
     }
     remove();
 }
 
-void UIManager::add(UI* add) {
+void UIManager::add(UI * add) {
     mUIStack.emplace_back(add);
 }
 
