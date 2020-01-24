@@ -140,9 +140,9 @@
   <ItemGroup>
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
-    <ClCompile Include="Component\CircleCollisionComponent.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\Component.cpp" />
@@ -153,7 +153,6 @@
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="Actor\Transform2D.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
-    <ClCompile Include="Component\SpriteComponent.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
@@ -180,9 +179,9 @@
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\SoundComponent.h" />
-    <ClInclude Include="Component\CircleCollisionComponent.h" />
     <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\Component.h" />
@@ -193,7 +192,6 @@
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="Actor\Transform2D.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
-    <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />

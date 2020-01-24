@@ -25,7 +25,7 @@ GamePlay::~GamePlay() {
 }
 
 void GamePlay::startScene() {
-    new PlayerActor(mRenderer);
+    //new PlayerActor(mRenderer);
 }
 
 void GamePlay::updateScene() {
@@ -34,10 +34,6 @@ void GamePlay::updateScene() {
         mActorManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();
-
-        if (!mActorManager->getPlayer()) { //ゲームオーバー
-            nextScene(std::make_shared<Title>());
-        }
     } else if (mState == GameState::PAUSED) {
 
     }

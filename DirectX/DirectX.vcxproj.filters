@@ -6,7 +6,6 @@
   <ItemGroup>
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
-    <ClCompile Include="Component\CircleCollisionComponent.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\Component.cpp" />
@@ -17,7 +16,6 @@
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="Actor\Transform2D.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
-    <ClCompile Include="Component\SpriteComponent.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
@@ -42,11 +40,11 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
+    <ClCompile Include="Actor\Transform3D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\Actor.h" />
-    <ClInclude Include="Component\CircleCollisionComponent.h" />
     <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\Component.h" />
@@ -57,7 +55,6 @@
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="Actor\Transform2D.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
-    <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Sprite\Sprite.h" />
@@ -87,5 +84,6 @@
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\Title.h" />
+    <ClInclude Include="Actor\Transform3D.h" />
   </ItemGroup>
 </Project>

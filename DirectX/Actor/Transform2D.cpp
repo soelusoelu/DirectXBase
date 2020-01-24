@@ -1,18 +1,14 @@
 ﻿#include "Transform2D.h"
 #include "Actor.h"
 
-Transform2D::Transform2D(Actor* owner) :
-    mOwner(owner),
+Transform2D::Transform2D() :
     mWorldTransform(Matrix4::identity),
     mPosition(Vector3::zero),
     mRotation(Quaternion::identity),
     mPivot(Vector2::zero),
     mScale(Vector2::one),
     mSize(Vector2::zero),
-    mParent(),
-    mChildren(0),
     mIsRecomputeTransform(true) {
-    mCount++;
     //setPrimary(50);
     float c = static_cast<float>(mCount) / 50000.f;
     mPosition.z = 0.5f - c;
@@ -20,14 +16,7 @@ Transform2D::Transform2D(Actor* owner) :
 }
 
 Transform2D::~Transform2D() {
-    for (auto&& child : mChildren) {
-        Actor::destroy(child->mOwner);
-    }
     mCount--;
-}
-
-Actor* Transform2D::getOwner() const {
-    return mOwner;
 }
 
 bool Transform2D::computeWorldTransform() {
@@ -56,16 +45,6 @@ void Transform2D::setPosition(const Vector2& pos) {
 }
 
 Vector2 Transform2D::getPosition() const {
-    auto root = mParent.lock();
-    auto pos = mPosition;
-    while (root) {
-        pos += root->mPosition;
-        root = root->mParent.lock();
-    }
-    return Vector2(pos.x, pos.y);
-}
-
-Vector2 Transform2D::getLocalPosition() const {
     return Vector2(mPosition.x, mPosition.y);
 }
 
@@ -99,16 +78,6 @@ void Transform2D::setRotation(float angle) {
 }
 
 Quaternion Transform2D::getRotation() const {
-    auto root = mParent.lock();
-    auto rotation = mRotation;
-    while (root) {
-        rotation = Quaternion::concatenate(rotation, root->mRotation);
-        root = root->mParent.lock();
-    }
-    return rotation;
-}
-
-Quaternion Transform2D::getLocalRotation() const {
     return mRotation;
 }
 
@@ -146,17 +115,6 @@ void Transform2D::setScale(float scale) {
 }
 
 Vector2 Transform2D::getScale() const {
-    auto root = mParent.lock();
-    auto scale = mScale;
-    while (root) {
-        scale.x *= root->mScale.x;
-        scale.y *= root->mScale.y;
-        root = root->mParent.lock();
-    }
-    return scale;
-}
-
-Vector2 Transform2D::getLocalScale() const {
     return mScale;
 }
 
@@ -169,68 +127,9 @@ Vector2 Transform2D::getSize() const {
     return mSize;
 }
 
-void Transform2D::addChild(std::shared_ptr<Transform2D> child) {
-    mChildren.emplace_back(child);
-    child->setParent(shared_from_this());
-}
-
-void Transform2D::removeChild(std::shared_ptr<Transform2D> child) {
-    removeChild(child->mOwner->tag());
-}
-
-void Transform2D::removeChild(const char* tag) {
-    for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr) {
-        if ((*itr)->mOwner->tag() == tag) {
-            Actor::destroy((*itr)->mOwner);
-            mChildren.erase(itr);
-            return;
-        }
-    }
-}
-
-std::shared_ptr<Transform2D> Transform2D::getChild(const char* tag) const {
-    std::shared_ptr<Transform2D> child = nullptr;
-    for (const auto& c : mChildren) {
-        if (c->mOwner->tag() == tag) {
-            child = c;
-        }
-    }
-    return child;
-}
-
-std::shared_ptr<Transform2D> Transform2D::parent() const {
-    return mParent.lock();
-}
-
-std::shared_ptr<Transform2D> Transform2D::root() const {
-    auto root = mParent.lock();
-    while (root) {
-        auto p = root->mParent.lock();
-        if (!p) {
-            break;
-        }
-        root = p;
-    }
-    return root;
-}
-
-size_t Transform2D::getChildCount() const {
-    return mChildren.size();
-}
-
-void Transform2D::setParent(std::shared_ptr<Transform2D> parent) {
-    mParent = parent;
-}
 
 void Transform2D::shouldRecomputeTransform() {
     mIsRecomputeTransform = true;
-
-    if (mChildren.empty()) {
-        return;
-    }
-    for (auto&& child : mChildren) {
-        child->mIsRecomputeTransform = true;
-    }
 }
 
 bool Transform2D::zSortFlag = false;

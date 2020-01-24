@@ -11,7 +11,7 @@ enum class ActorState {
 class ActorManager;
 class ComponentManager;
 class Renderer;
-class Transform2D;
+class Transform3D;
 class Time;
 
 class Actor {
@@ -29,15 +29,13 @@ public:
     void computeWorldTransform();
 
     //アクター削除
-    static void destroy(Actor* actor);
-    static void destroy(std::shared_ptr<Actor> actor);
-    static void destroy(Actor* actor, float sec);
-    static void destroy(std::shared_ptr<Actor> actor, float sec);
+    void destroy();
+    void destroy(float sec);
 
     //ゲッター、セッター
     std::shared_ptr<Renderer> renderer() const;
     std::shared_ptr<ComponentManager> componentManager() const;
-    std::shared_ptr<Transform2D> transform() const;
+    std::shared_ptr<Transform3D> transform() const;
     ActorState getState() const;
     const char* tag() const;
 
@@ -51,7 +49,7 @@ private:
 private:
     std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<ComponentManager> mComponentManager;
-    std::shared_ptr<Transform2D> mTransform;
+    std::shared_ptr<Transform3D> mTransform;
     std::unique_ptr<Time> mDestroyTimer;
     ActorState mState;
     const char* mTag;

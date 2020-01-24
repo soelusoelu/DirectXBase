@@ -5,9 +5,7 @@
 #include <memory>
 
 class Renderer;
-class CircleCollisionComponent;
 class SoundComponent;
-class SpriteComponent;
 class PlayerMoveComponent;
 
 class PlayerActor : public Actor {
@@ -17,9 +15,7 @@ public:
     virtual void updateActor() override;
 
 private:
-    CircleCollisionComponent* mCollide;
     SoundComponent* mSound;
-    SpriteComponent* mSprite;
     PlayerMoveComponent* mMove;
 };
 

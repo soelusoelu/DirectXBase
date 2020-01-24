@@ -10,12 +10,8 @@
 #include <cassert>
 
 Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
-    Sprite(renderer, fileName, nullptr) {
-}
-
-Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, std::shared_ptr<Transform2D> transform) :
     mRenderer(renderer),
-    mTransform(transform),
+    mTransform(std::make_shared<Transform2D>()),
     mTexture(mRenderer->createTexture(fileName)),
     mShader(mRenderer->createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
@@ -23,9 +19,6 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName, std::sh
     mUV(0.f, 0.f, 1.f, 1.f),
     mState(SpriteState::ACTIVE),
     mFileName(fileName) {
-    if (!mTransform) {
-        mTransform = std::make_shared<Transform2D>();
-    }
 
     //デスクをもとにサイズ取得
     auto desc = mTexture->desc();
