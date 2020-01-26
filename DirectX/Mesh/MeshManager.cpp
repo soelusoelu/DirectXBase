@@ -11,9 +11,9 @@ void MeshManager::update() {
     remove();
 }
 
-void MeshManager::draw(std::shared_ptr<Renderer> renderer) {
+void MeshManager::draw(std::shared_ptr<Camera> camera) {
     for (const auto& mesh : mMeshes) {
-        mesh->draw();
+        mesh->draw(camera);
     }
 }
 

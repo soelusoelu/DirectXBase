@@ -16,7 +16,7 @@ public:
 
     //ワールド行列更新
     bool computeWorldTransform();
-    Matrix4 getWorldTransform() const;
+    const Matrix4& getWorldTransform() const;
 
     //ピクセル単位で位置指定
     void setPosition(const Vector3& pos);

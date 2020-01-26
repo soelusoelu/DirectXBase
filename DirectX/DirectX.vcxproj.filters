@@ -46,6 +46,8 @@
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Actor\Field.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -94,5 +96,7 @@
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Actor\Field.h" />
   </ItemGroup>
 </Project>

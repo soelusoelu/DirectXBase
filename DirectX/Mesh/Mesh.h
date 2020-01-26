@@ -4,12 +4,12 @@
 #include "../System/Game.h"
 #include "../Utility/Collision.h"
 #include "../Utility/Math.h"
-#include <list>
 #include <memory>
 #include <string>
 #include <vector>
 
 class Buffer;
+class Camera;
 class MeshManager;
 class Renderer;
 class Texture;
@@ -66,7 +66,7 @@ public:
     Mesh(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Mesh();
     void createSphere(std::shared_ptr<Sphere> sphere) const;
-    void draw() const;
+    void draw(std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
     MeshState getState() const;
 
@@ -76,7 +76,7 @@ private:
     bool loadMesh(const char* fileName);
     bool tempLoad(const char* fileName); //事前に頂点数などを調べる
     bool loadMaterial(const char* fileName, std::vector<Material>* material);
-    void rendererMesh() const;
+    void rendererMesh(std::shared_ptr<Camera> camera) const;
     std::string stringStrip(const std::string& string, const char delimiter);
 
 private:
@@ -91,7 +91,8 @@ private:
     unsigned mNumFace; //ポリゴン数
     unsigned mNumMaterial; //マテリアル数
 
-    std::vector<Vector3> mVertices; //頂点情報
+    Vector3* mVertices; //頂点情報
+    //std::vector<Vector3> mVertices; //頂点情報
     std::vector<Vector3> mNormals; //法線情報
     std::vector<Vector2> mTextures; //テクスチャ座標情報
 

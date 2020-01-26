@@ -28,9 +28,8 @@ public:
     //シェーダの取得
     ID3D11VertexShader* getVertexShader() const;
     ID3D11PixelShader* getPixelShader() const;
-    //インプットレイアウトの生成・取得
+    //インプットレイアウトの生成
     void createInputLayout(const InputElementDesc* layout, unsigned numElements);
-    std::shared_ptr<InputElement> getVertexLayout() const;
     //自身を登録
     void setInputLayout();
     //コンスタントバッファの取得

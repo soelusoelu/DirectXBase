@@ -47,10 +47,6 @@ std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const Sub
     return std::make_shared<Buffer>(mDevice, desc, data);
 }
 
-std::shared_ptr<InputElement> Renderer::createInputLayout(const InputElementDesc* layout, unsigned numElements, ID3D10Blob* compile) const {
-    return std::make_shared<InputElement>(mDevice, layout, numElements, compile);
-}
-
 void Renderer::setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream, unsigned start) {
     /* IASetVertexBuffers
         使い始めのスロット番号
@@ -73,7 +69,7 @@ void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {
 }
 
 void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
-    mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R16_UINT, offset);
+    mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R32_UINT, offset);
 }
 
 void Renderer::setPrimitive(PrimitiveType primitive) {

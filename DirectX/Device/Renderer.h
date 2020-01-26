@@ -38,7 +38,6 @@ public:
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
-    std::shared_ptr<InputElement> createInputLayout(const InputElementDesc* layout, unsigned numElements, ID3D10Blob* compile) const;
     void setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream = 1, unsigned start = 0);
     void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
     void setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset = 0);

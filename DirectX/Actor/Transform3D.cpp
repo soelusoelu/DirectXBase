@@ -37,7 +37,7 @@ bool Transform3D::computeWorldTransform() {
     return false;
 }
 
-Matrix4 Transform3D::getWorldTransform() const {
+const Matrix4& Transform3D::getWorldTransform() const {
     return mWorldTransform;
 }
 

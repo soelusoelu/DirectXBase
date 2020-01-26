@@ -4,14 +4,14 @@
 #include <list>
 
 class Mesh;
-class Renderer;
+class Camera;
 
 class MeshManager {
 public:
     MeshManager();
     ~MeshManager();
     void update();
-    void draw(std::shared_ptr<Renderer> renderer);
+    void draw(std::shared_ptr<Camera> camera);
     void add(Mesh* mesh);
     void clear();
 

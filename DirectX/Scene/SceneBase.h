@@ -6,6 +6,7 @@ class Renderer;
 class MeshManager;
 class SpriteManager;
 class UIManager;
+class Camera;
 
 class SceneBase {
 protected:
@@ -28,6 +29,7 @@ protected:
     MeshManager* mMeshManager;
     SpriteManager* mSpriteManager;
     UIManager* mUIManager;
+    std::shared_ptr<Camera> mCamera;
 
 private:
     std::shared_ptr<SceneBase> mNext;

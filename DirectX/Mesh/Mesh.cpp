@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "MeshManager.h"
 #include "../Actor/Transform3D.h"
+#include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
@@ -54,26 +55,28 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     }
 }
 
-Mesh::~Mesh() = default;
+Mesh::~Mesh() {
+    delete[] mVertices;
+}
 
 void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
     //バウンディングスフィア作成
     //D3DXVECTOR3 center;
-    //D3DXVECTOR3 first(mCoord->x, mCoord->y, mCoord->z);
+    //D3DXVECTOR3 first(mVertices.front().x, mVertices.front().y, mVertices.front().z);
     //D3DXComputeBoundingSphere(&first, mNumVert, sizeof(D3DXVECTOR3), &center, &sphere->radius);
     //sphere->center.x = center.x;
     //sphere->center.y = center.y;
     //sphere->center.z = center.z;
 }
 
-void Mesh::draw() const {
+void Mesh::draw(std::shared_ptr<Camera> camera) const {
     //プリミティブ・トポロジーをセット
     mRenderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
 
     mRenderer->deviceContext()->RSSetState(mRenderer->rasterizerState());
-    rendererMesh();
+    rendererMesh(camera);
     mRenderer->deviceContext()->RSSetState(mRenderer->rasterizerStateBack());
-    rendererMesh();
+    rendererMesh(camera);
 }
 
 void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {
@@ -96,8 +99,8 @@ bool Mesh::loadMesh(const char* fileName) {
     }
 
     //サイズ変更
-    auto* meshVertices = new MeshVertex[mNumVert];
-    mVertices.resize(mNumVert);
+    //mVertices.resize(mNumVert);
+    mVertices = new Vector3[mNumVert];
     mNormals.resize(mNumNormal);
     mTextures.resize(mNumTex);
 
@@ -105,6 +108,8 @@ bool Mesh::loadMesh(const char* fileName) {
     setOBJDirectory();
     std::ifstream ifs(fileName, std::ios::in);
 
+    Vector3* pvNormal = new Vector3[mNumNormal];
+    Vector2* pvTexture = new Vector2[mNumTex];
     std::string line;
     std::string strip;
     unsigned vCount = 0;
@@ -138,9 +143,12 @@ bool Mesh::loadMesh(const char* fileName) {
         if (strip == "vn") {
             auto sub = line.substr(3); //「vn 」の文字数分
             sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
-            mNormals[vnCount].x = -x;
-            mNormals[vnCount].y = y;
-            mNormals[vnCount].z = z;
+            pvNormal[vnCount].x = -x;
+            pvNormal[vnCount].y = y;
+            pvNormal[vnCount].z = z;
+            //mNormals[vnCount].x = -x;
+            //mNormals[vnCount].y = y;
+            //mNormals[vnCount].z = z;
             vnCount++;
         }
 
@@ -148,8 +156,10 @@ bool Mesh::loadMesh(const char* fileName) {
         if (strip == "vt") {
             auto sub = line.substr(3); //「vt 」の文字数分
             sscanf_s(sub.c_str(), "%f %f", &x, &y);
-            mTextures[vtCount].x = x;
-            mTextures[vtCount].y = -y; //OBJファイルはY成分が逆なので合わせる
+            //mTextures[vtCount].x = x;
+            //mTextures[vtCount].y = -y; //OBJファイルはY成分が逆なので合わせる
+            pvTexture[vtCount].x = x;
+            pvTexture[vtCount].y = -y;
             vtCount++;
         }
     }
@@ -161,6 +171,7 @@ bool Mesh::loadMesh(const char* fileName) {
     bool matFlag = false;
     int* faceBuffer = new int[mNumFace * 3]; //3頂点ポリゴンなので、1フェイス=3頂点(3インデックス)
 
+    auto* meshVertices = new MeshVertex[mNumVert];
     int v1 = 0, v2 = 0, v3 = 0;
     int vn1 = 0, vn2 = 0, vn3 = 0;
     int vt1 = 0, vt2 = 0, vt3 = 0;
@@ -199,38 +210,53 @@ bool Mesh::loadMesh(const char* fileName) {
                 //テクスチャー座標 > 頂点数がありえる
                 if (vtCount > vCount) {
                     //フェイス 読み込み→頂点インデックスに テクスチャー座標インデックスを基準にする(テクスチャー座標 >= 頂点座標なので)
-                    sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
+                    //sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
                     faceBuffer[fCount * 3] = vt1 - 1;
                     faceBuffer[fCount * 3 + 1] = vt2 - 1;
                     faceBuffer[fCount * 3 + 2] = vt3 - 1;
                     fCount++;
                     //頂点構造体に代入 テクスチャー座標インデックスを基準にする(テクスチャー座標 >= 頂点座標なので)
                     meshVertices[vt1 - 1].pos = mVertices[v1 - 1];
-                    meshVertices[vt1 - 1].norm = mNormals[vn1 - 1];
-                    meshVertices[vt1 - 1].tex = mTextures[vt1 - 1];
+                    meshVertices[vt1 - 1].norm = pvNormal[vn1 - 1];
+                    meshVertices[vt1 - 1].tex = pvTexture[vt1 - 1];
                     meshVertices[vt2 - 1].pos = mVertices[v2 - 1];
-                    meshVertices[vt2 - 1].norm = mNormals[vn2 - 1];
-                    meshVertices[vt2 - 1].tex = mTextures[vt2 - 1];
+                    meshVertices[vt2 - 1].norm = pvNormal[vn2 - 1];
+                    meshVertices[vt2 - 1].tex = pvTexture[vt2 - 1];
                     meshVertices[vt3 - 1].pos = mVertices[v3 - 1];
-                    meshVertices[vt3 - 1].norm = mNormals[vn3 - 1];
-                    meshVertices[vt3 - 1].tex = mTextures[vt3 - 1];
+                    meshVertices[vt3 - 1].norm = pvNormal[vn3 - 1];
+                    meshVertices[vt3 - 1].tex = pvTexture[vt3 - 1];
+                    //meshVertices[vt1 - 1].pos = mVertices[v1 - 1];
+                    //meshVertices[vt1 - 1].norm = mNormals[vn1 - 1];
+                    //meshVertices[vt1 - 1].tex = mTextures[vt1 - 1];
+                    //meshVertices[vt2 - 1].pos = mVertices[v2 - 1];
+                    //meshVertices[vt2 - 1].norm = mNormals[vn2 - 1];
+                    //meshVertices[vt2 - 1].tex = mTextures[vt2 - 1];
+                    //meshVertices[vt3 - 1].pos = mVertices[v3 - 1];
+                    //meshVertices[vt3 - 1].norm = mNormals[vn3 - 1];
+                    //meshVertices[vt3 - 1].tex = mTextures[vt3 - 1];
                 } else {
                     //フェイス 読み込み→頂点インデックスに
-                    sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
+                    //sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
                     faceBuffer[fCount * 3] = v1 - 1;
                     faceBuffer[fCount * 3 + 1] = v2 - 1;
                     faceBuffer[fCount * 3 + 2] = v3 - 1;
                     fCount++;
                     //頂点構造体に代入
                     meshVertices[v1 - 1].pos = mVertices[v1 - 1];
-                    meshVertices[v1 - 1].norm = mNormals[vn1 - 1];
-                    meshVertices[v1 - 1].tex = mTextures[vt1 - 1];
+                    meshVertices[v1 - 1].norm = pvNormal[vn1 - 1];
+                    meshVertices[v1 - 1].tex = pvTexture[vt1 - 1];
                     meshVertices[v2 - 1].pos = mVertices[v2 - 1];
-                    meshVertices[v2 - 1].norm = mNormals[vn2 - 1];
-                    meshVertices[v2 - 1].tex = mTextures[vt2 - 1];
+                    meshVertices[v2 - 1].norm = pvNormal[vn2 - 1];
+                    meshVertices[v2 - 1].tex = pvTexture[vt2 - 1];
                     meshVertices[v3 - 1].pos = mVertices[v3 - 1];
-                    meshVertices[v3 - 1].norm = mNormals[vn3 - 1];
-                    meshVertices[v3 - 1].tex = mTextures[vt3 - 1];
+                    meshVertices[v3 - 1].norm = pvNormal[vn3 - 1];
+                    meshVertices[v3 - 1].tex = pvTexture[vt3 - 1];
+                    //meshVertices[v1 - 1].norm = mNormals[vn1 - 1];
+                    //meshVertices[v1 - 1].tex = mTextures[vt1 - 1];
+                    //meshVertices[v2 - 1].norm = mNormals[vn2 - 1];
+                    //meshVertices[v2 - 1].tex = mTextures[vt2 - 1];
+                    //meshVertices[v3 - 1].norm = mNormals[vn3 - 1];
+                    //meshVertices[v3 - 1].tex = mTextures[vt3 - 1];
                 }
             }
         }
@@ -265,6 +291,8 @@ bool Mesh::loadMesh(const char* fileName) {
     mVertexBuffer = mRenderer->createBuffer(bd, &sub);
 
     delete[] meshVertices;
+    delete[] pvNormal;
+    delete[] pvTexture;
 
     return true;
 }
@@ -413,7 +441,7 @@ bool Mesh::loadMaterial(const char* fileName, std::vector<Material> * material) 
     return true;
 }
 
-void Mesh::rendererMesh() const {
+void Mesh::rendererMesh(std::shared_ptr<Camera> camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -431,12 +459,12 @@ void Mesh::rendererMesh() const {
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = mTransform->getWorldTransform() /** Singleton<Camera>::instance().getView() * Singleton<Camera>::instance().getProjection()*/;
+        cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
         cb.WVP.transpose();
         //ライトの方向を渡す
-        cb.lightDir = Vector4(1.f, -1.f, 1.f, 0.0f);
+        cb.lightDir = Vector4(1.f, -1.f, 1.f, 0.f);
         //視点位置を渡す
-        //sg.eye = Vector4(Singleton<Camera>::instance().getPosition(), 0);
+        cb.eye = Vector4(camera->getPosition(), 0.f);
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
         mRenderer->deviceContext()->Unmap(mShader->getConstantBuffer(0)->buffer(), 0);
@@ -449,6 +477,10 @@ void Mesh::rendererMesh() const {
     stream.stride = sizeof(MeshVertex);
     mRenderer->setVertexBuffer(&stream);
 
+    //このコンスタントバッファーを使うシェーダーの登録
+    mShader->setVSConstantBuffers(1);
+    mShader->setPSConstantBuffers(1);
+
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (unsigned i = 0; i < mNumMaterial; i++) {
         //使用されていないマテリアル対策
@@ -456,32 +488,27 @@ void Mesh::rendererMesh() const {
             continue;
         }
         //インデックスバッファーをセット
-        stream.stride = sizeof(int);
-        stream.offset = 0;
         mRenderer->setIndexBuffer(mIndexBuffers[i]);
 
         //マテリアルの各要素をエフェクト(シェーダー)に渡す
         D3D11_MAPPED_SUBRESOURCE pData;
         if (SUCCEEDED(mRenderer->deviceContext()->Map(mShader->getConstantBuffer(1)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-            MeshShaderConstantBuffer1 sg;
-            sg.ambient = mMaterials[i].Ka; //アンビエントををシェーダーに渡す
-            sg.diffuse = mMaterials[i].Kd; //ディフューズカラーをシェーダーに渡す
-            sg.specular = mMaterials[i].Ks; //スペキュラーをシェーダーに渡す
-
-            //このコンスタントバッファーを使うシェーダーの登録
-            mShader->setVSConstantBuffers(1);
-            mShader->setVSConstantBuffers(1);
+            MeshShaderConstantBuffer1 cb;
+            cb.ambient = mMaterials[i].Ka; //アンビエントををシェーダーに渡す
+            cb.diffuse = mMaterials[i].Kd; //ディフューズカラーをシェーダーに渡す
+            cb.diffuse.w = 1.f;
+            cb.specular = mMaterials[i].Ks; //スペキュラーをシェーダーに渡す
 
             //テクスチャーをシェーダーに渡す
             if (mMaterials[i].texture) {
                 mRenderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i].texture);
                 mRenderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i].sampleLinear);
-                sg.texture.x = 1;
+                cb.texture.x = 1;
             } else {
-                sg.texture.x = 0;
+                cb.texture.x = 0;
             }
 
-            memcpy_s(pData.pData, pData.RowPitch, (void*)&sg, sizeof(sg));
+            memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
             mRenderer->deviceContext()->Unmap(mShader->getConstantBuffer(1)->buffer(), 0);
         }
         //プリミティブをレンダリング

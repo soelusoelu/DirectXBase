@@ -145,6 +145,7 @@
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Actor\Transform2D.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
+    <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
+    <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\SoundComponent.h" />
@@ -202,6 +205,7 @@
     <ClInclude Include="Actor\Transform2D.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
+    <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />

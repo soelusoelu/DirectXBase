@@ -1,5 +1,6 @@
 ﻿#include "PlayerMoveComponent.h"
 #include "../Actor/Actor.h"
+#include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/SoundComponent.h"
 #include "../Device/Time.h"
@@ -13,6 +14,8 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
+    mOwner->transform()->translate(Vector3::up * 3.f);
+
     mSound = mOwner->componentManager()->getComponent<SoundComponent>();
 }
 
@@ -27,4 +30,6 @@ void PlayerMoveComponent::move() {
         h = Input::joyHorizontal();
         v = Input::joyVertical();
     }
+
+    mOwner->transform()->translate(Vector3(h, 0.f, v));
 }

@@ -1,4 +1,5 @@
 ﻿#include "SceneBase.h"
+#include "../Camera/Camera.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
@@ -12,6 +13,7 @@ SceneBase::SceneBase() :
     mMeshManager(new MeshManager()),
     mSpriteManager(new SpriteManager()),
     mUIManager(new UIManager()),
+    mCamera(std::make_shared<Camera>()),
     mNext(nullptr),
     mIsStarted(false) {
     Mesh::setMeshManager(mMeshManager);
@@ -20,14 +22,15 @@ SceneBase::SceneBase() :
 }
 
 SceneBase::~SceneBase() {
-    SAFE_DELETE(mMeshManager);
     SAFE_DELETE(mSpriteManager);
     SAFE_DELETE(mUIManager);
+    SAFE_DELETE(mMeshManager);
 }
 
 void SceneBase::update() {
     start();
     updateScene();
+    mCamera->update();
     mMeshManager->update();
     mUIManager->update();
     mSpriteManager->update();
@@ -37,7 +40,7 @@ void SceneBase::draw() {
     if (!mRenderer) {
         return;
     }
-    mMeshManager->draw(mRenderer);
+    mMeshManager->draw(mCamera);
     mSpriteManager->draw(mRenderer);
 }
 

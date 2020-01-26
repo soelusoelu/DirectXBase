@@ -1,7 +1,9 @@
 ﻿#include "GamePlay.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ActorManager.h"
+#include "../Actor/Field.h"
 #include "../Actor/PlayerActor.h"
+#include "../Camera/Camera.h"
 #include "../Component/Collider.h"
 #include "../Device/Physics.h"
 #include "../Scene/Title.h"
@@ -26,6 +28,8 @@ GamePlay::~GamePlay() {
 
 void GamePlay::startScene() {
     new PlayerActor(mRenderer);
+    new Field(mRenderer);
+    mCamera->setPlayer(mActorManager->getPlayer());
 }
 
 void GamePlay::updateScene() {

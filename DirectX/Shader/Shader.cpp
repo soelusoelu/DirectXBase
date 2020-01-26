@@ -73,11 +73,7 @@ ID3D11PixelShader* Shader::getPixelShader() const {
 }
 
 void Shader::createInputLayout(const InputElementDesc* layout, unsigned numElements) {
-    mVertexLayout = mRenderer->createInputLayout(layout, numElements, mCompileShader);
-}
-
-std::shared_ptr<InputElement> Shader::getVertexLayout() const {
-    return mVertexLayout;
+    mVertexLayout = std::make_shared<InputElement>(mRenderer->device(), layout, numElements, mCompileShader);
 }
 
 void Shader::setInputLayout() {
