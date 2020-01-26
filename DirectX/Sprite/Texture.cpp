@@ -10,19 +10,19 @@
 #include "../System/VertexStreamDesc.h"
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
-    mVertexLayout(nullptr),
+    mRenderer(renderer),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
     if (!mVertexBuffer || !mIndexBuffer) {
         //バーテックスバッファー作成
-        createVertexBuffer(renderer);
+        createVertexBuffer();
         //インデックスバッファの作成
-        createIndexBuffer(renderer);
+        createIndexBuffer();
     }
     //テクスチャー作成
-    createTexture(renderer, fileName);
+    createTexture(fileName);
     //テクスチャー用サンプラー作成
-    createSampler(renderer);
+    createSampler();
 }
 
 Texture::~Texture() {
@@ -33,15 +33,6 @@ Texture::~Texture() {
 void Texture::end() {
     SAFE_DELETE(mVertexBuffer);
     SAFE_DELETE(mIndexBuffer);
-}
-
-void Texture::createInputLayout(std::shared_ptr<Renderer> renderer, ID3D10Blob* compiledShader) {
-    constexpr InputElementDesc layout[] = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-    };
-    constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
-    mVertexLayout = renderer->createInputLayout(layout, numElements, compiledShader);
 }
 
 void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
@@ -82,15 +73,19 @@ const TextureDesc& Texture::desc() const {
     return mDesc;
 }
 
-std::shared_ptr<InputElement> Texture::getVertexlayout() const {
-    return mVertexLayout;
-}
-
 ID3D11SamplerState* Texture::getSampler() const {
     return mSampleLinear;
 }
 
-void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
+void Texture::setVSTextures(unsigned start, unsigned numTextures) {
+    mRenderer->deviceContext()->VSSetShaderResources(start, numTextures, &mTexture);
+}
+
+void Texture::setPSTextures(unsigned start, unsigned numTextures) {
+    mRenderer->deviceContext()->PSSetShaderResources(start, numTextures, &mTexture);
+}
+
+void Texture::createVertexBuffer() {
     TextureVertex vertices[] = {
         Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
         Vector3(1.f, 0.f, 0.f), Vector2(1.f, 0.f), //右上
@@ -105,10 +100,10 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = vertices;
-    mVertexBuffer = renderer->createRawBuffer(bd, &sub);
+    mVertexBuffer = mRenderer->createRawBuffer(bd, &sub);
 }
 
-void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
+void Texture::createIndexBuffer() {
     static constexpr unsigned short indices[] = {
         0, 1, 2,
         1, 3, 2
@@ -120,10 +115,10 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = indices;
-    mIndexBuffer = renderer->createRawBuffer(bd, &sub);
+    mIndexBuffer = mRenderer->createRawBuffer(bd, &sub);
 }
 
-void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* fileName) {
+void Texture::createTexture(const char* fileName) {
     setTextureDirectory();
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;
@@ -132,19 +127,19 @@ void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* file
     mDesc.width = info.Width;
     mDesc.height = info.Height;
 
-    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), fileName, &toImageLoadInfo(mDesc), nullptr, &mTexture, nullptr))) {
-        MessageBox(0, L"テクスチャ作成失敗", NULL, MB_OK);
+    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(mRenderer->device(), fileName, &toImageLoadInfo(mDesc), nullptr, &mTexture, nullptr))) {
+        MSG(L"テクスチャ作成失敗");
     }
 }
 
-void Texture::createSampler(std::shared_ptr<Renderer> renderer) {
+void Texture::createSampler() {
     D3D11_SAMPLER_DESC sd;
     ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
     sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
     sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
     sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
     sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    renderer->device()->CreateSamplerState(&sd, &mSampleLinear);
+    mRenderer->device()->CreateSamplerState(&sd, &mSampleLinear);
 }
 
 D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc& desc) const {

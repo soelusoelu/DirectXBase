@@ -25,7 +25,7 @@ GamePlay::~GamePlay() {
 }
 
 void GamePlay::startScene() {
-    //new PlayerActor(mRenderer);
+    new PlayerActor(mRenderer);
 }
 
 void GamePlay::updateScene() {

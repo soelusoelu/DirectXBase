@@ -58,6 +58,14 @@ ID3D11DeviceContext* Direct3D11::deviceContext() const {
     return mDeviceContext;
 }
 
+ID3D11RasterizerState* Direct3D11::rasterizerState() const {
+    return mRasterizerState;
+}
+
+ID3D11RasterizerState* Direct3D11::rasterizerStateBack() const {
+    return mRasterizerStateBack;
+}
+
 void Direct3D11::createSwapChain(const HWND& hWnd) {
     // デバイスとスワップチェーンの作成
     DXGI_SWAP_CHAIN_DESC sd;

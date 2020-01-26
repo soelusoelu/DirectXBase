@@ -11,7 +11,7 @@ public:
     SpriteManager();
     ~SpriteManager();
     void update();
-	void draw(std::shared_ptr<Renderer> renderer);
+    void draw(std::shared_ptr<Renderer> renderer);
     void add(Sprite* add);
     void add(std::shared_ptr<Sprite> add);
     void clear();

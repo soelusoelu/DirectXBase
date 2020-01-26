@@ -29,18 +29,19 @@ public:
     Texture(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Texture();
     static void end();
-    void createInputLayout(std::shared_ptr<Renderer> renderer, ID3D10Blob* compiledShader);
     static void drawAll(std::vector<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer);
     ID3D11ShaderResourceView* texture() const;
     const TextureDesc& desc() const;
-    std::shared_ptr<InputElement> getVertexlayout() const;
     ID3D11SamplerState* getSampler() const;
+    //テクスチャの登録
+    void setVSTextures(unsigned start = 0, unsigned numTextures = 1);
+    void setPSTextures(unsigned start = 0, unsigned numTextures = 1);
 
 private:
-    void createVertexBuffer(std::shared_ptr<Renderer> renderer);
-    void createIndexBuffer(std::shared_ptr<Renderer> renderer);
-    void createTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
-    void createSampler(std::shared_ptr<Renderer> renderer);
+    void createVertexBuffer();
+    void createIndexBuffer();
+    void createTexture(const char* fileName);
+    void createSampler();
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
     D3D11_USAGE toUsage(TextureUsage usage) const;
@@ -50,7 +51,7 @@ private:
     unsigned toFilter(TextureFilter filter) const;
 
 private:
-    std::shared_ptr<InputElement> mVertexLayout;
+    std::shared_ptr<Renderer> mRenderer;
     ID3D11ShaderResourceView* mTexture;
     ID3D11SamplerState* mSampleLinear;
     TextureDesc mDesc;

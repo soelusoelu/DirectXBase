@@ -19,10 +19,10 @@ void SpriteManager::update() {
 }
 
 void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
-	Texture::drawAll(mSprites, renderer);
+    Texture::drawAll(mSprites, renderer);
 }
 
-void SpriteManager::add(Sprite* add) {
+void SpriteManager::add(Sprite * add) {
     std::shared_ptr<Sprite> s(add);
     this->add(s);
 }

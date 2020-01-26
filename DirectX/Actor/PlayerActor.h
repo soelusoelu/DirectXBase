@@ -5,6 +5,7 @@
 #include <memory>
 
 class Renderer;
+class MeshComponent;
 class SoundComponent;
 class PlayerMoveComponent;
 
@@ -15,6 +16,7 @@ public:
     virtual void updateActor() override;
 
 private:
+    MeshComponent* mMesh;
     SoundComponent* mSound;
     PlayerMoveComponent* mMove;
 };

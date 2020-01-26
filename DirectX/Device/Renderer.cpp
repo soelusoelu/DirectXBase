@@ -1,5 +1,6 @@
 ﻿#include "Renderer.h"
 #include "Sound.h"
+#include "../Mesh/Mesh.h"
 #include "../System/Buffer.h"
 #include "../Shader/Shader.h"
 #include "../System/DirectXIncLib.h"
@@ -10,9 +11,11 @@
 #include "../Sprite/Texture.h"
 #include "../Sprite/Sprite.h"
 
-Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* context) :
+Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* context, ID3D11RasterizerState* front, ID3D11RasterizerState* back) :
     mDevice(device),
     mDeviceContext(context),
+    mRasterizerState(front),
+    mRasterizerStateBack(back),
     mSoundBase(std::make_unique<SoundBase>()) {
 }
 
@@ -26,6 +29,14 @@ ID3D11Device* Renderer::device() const {
 
 ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
+}
+
+ID3D11RasterizerState* Renderer::rasterizerState() const {
+    return mRasterizerState;
+}
+
+ID3D11RasterizerState* Renderer::rasterizerStateBack() const {
+    return mRasterizerStateBack;
 }
 
 Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
@@ -48,7 +59,12 @@ void Renderer::setVertexBuffer(const VertexStreamDesc* stream, unsigned numStrea
         INPUT_ELEMENT_DESC構造体のサイズが入った配列への先頭ポインタ(stride(読み込み単位)として扱うため)
         頂点バッファ配列の各頂点バッファの頭出しをするオフセット値の配列
     */
-    auto buffer = stream->buffer->buffer();
+    ID3D11Buffer* buffer;
+    if (stream->buffer) {
+        buffer = stream->buffer->buffer();
+    } else {
+        buffer = stream->sharedBuffer->buffer();
+    }
     mDeviceContext->IASetVertexBuffers(start, numStream, &buffer, &stream->stride, &stream->offset);
 }
 
@@ -56,8 +72,8 @@ void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {
     mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R16_UINT, offset);
 }
 
-void Renderer::setInputLayout(std::shared_ptr<InputElement> layout) {
-    mDeviceContext->IASetInputLayout(layout->layout());
+void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
+    mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R16_UINT, offset);
 }
 
 void Renderer::setPrimitive(PrimitiveType primitive) {
@@ -107,6 +123,18 @@ std::shared_ptr<Sound> Renderer::createSE(const char* fileName) {
     return sound;
 }
 
+std::shared_ptr<Mesh> Renderer::createMesh(const char* fileName) {
+    std::shared_ptr<Mesh> mesh;
+    auto itr = mMeshes.find(fileName);
+    if (itr != mMeshes.end()) { //既に読み込まれている
+        mesh = itr->second;
+    } else { //初読み込み
+        mesh = std::make_shared<Mesh>(shared_from_this(), fileName);
+        mMeshes.emplace(fileName, mesh);
+    }
+    return mesh;
+}
+
 void Renderer::draw(unsigned numVertex, unsigned start) {
     mDeviceContext->Draw(numVertex, start);
 }
@@ -119,6 +147,7 @@ void Renderer::clear() {
     mShaders.clear();
     mTextures.clear();
     mSounds.clear();
+    mMeshes.clear();
 }
 
 D3D11_PRIMITIVE_TOPOLOGY Renderer::toPrimitiveMode(PrimitiveType primitive) {

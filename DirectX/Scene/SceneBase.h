@@ -2,9 +2,10 @@
 
 #include <memory>
 
-class UIManager;
-class SpriteManager;
 class Renderer;
+class MeshManager;
+class SpriteManager;
+class UIManager;
 
 class SceneBase {
 protected:
@@ -23,9 +24,10 @@ private:
     void start();
 
 protected:
-    UIManager* mUIManager;
-    SpriteManager* mSpriteManager;
     std::shared_ptr<Renderer> mRenderer;
+    MeshManager* mMeshManager;
+    SpriteManager* mSpriteManager;
+    UIManager* mUIManager;
 
 private:
     std::shared_ptr<SceneBase> mNext;

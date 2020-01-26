@@ -74,6 +74,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>D:\Download\Autodesk\FBX\FBX SDK\2019.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Download\Autodesk\FBX\FBX SDK\2019.0\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -97,12 +99,14 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;K_PLUGIN;K_FBXSDK;K_NODLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>LIBMCT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -141,6 +145,7 @@
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
+    <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
@@ -154,6 +159,9 @@
     <ClCompile Include="Actor\Transform2D.cpp" />
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
+    <ClCompile Include="Mesh\MeshManager.cpp" />
+    <ClCompile Include="Mesh\Mesh.cpp" />
+    <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -180,6 +188,7 @@
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
+    <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\SoundComponent.h" />
     <ClInclude Include="Component\Collider.h" />
@@ -193,6 +202,9 @@
     <ClInclude Include="Actor\Transform2D.h" />
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
+    <ClInclude Include="Mesh\MeshManager.h" />
+    <ClInclude Include="Mesh\Mesh.h" />
+    <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
@@ -221,6 +233,10 @@
     <ClInclude Include="System\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shader\Mesh.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\Texture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>

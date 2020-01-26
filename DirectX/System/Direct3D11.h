@@ -11,7 +11,8 @@ public:
     HRESULT present();
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
-
+    ID3D11RasterizerState* rasterizerState() const;
+    ID3D11RasterizerState* rasterizerStateBack() const;
 
 private:
     void createSwapChain(const HWND& hWnd);

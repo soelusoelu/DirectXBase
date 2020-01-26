@@ -17,6 +17,7 @@ public:
     void enabled();
     void disabled();
     bool getEnable() const;
+    void automation();
     void addHitCollider(Collider* hit);
     std::list<Collider*> onCollisionEnter();
     std::list<Collider*> onCollisionStay();
@@ -28,10 +29,13 @@ protected:
     Collider(Actor* owner);
     virtual ~Collider();
 
+protected:
+    bool mIsAutoUpdate;
+
 private:
-    bool mEnable;
     std::list<Collider*> mPreviousCollider;
     std::list<Collider*> mCurrentCollider;
+    bool mEnable;
 
     static Physics* mPhysics;
 };

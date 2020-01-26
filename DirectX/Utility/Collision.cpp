@@ -123,11 +123,6 @@ bool Circle::contains(const Vector2& point) const {
 
 
 
-Sphere::Sphere() :
-    center(Vector3::zero),
-    radius(0.f) {
-}
-
 Sphere::Sphere(const Vector3& center, float radius) :
     center(center),
     radius(radius) {

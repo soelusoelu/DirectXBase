@@ -2,10 +2,13 @@
 
 #include "../System/DirectXIncLib.h"
 #include <memory>
+#include <vector>
 
 class Buffer;
 class Renderer;
 class Texture;
+class InputElement;
+class InputElementDesc;
 
 class Shader {
 public:
@@ -17,19 +20,21 @@ public:
     //自身をシェーダーとして登録
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
+    //コンスタントバッファの作成
+    void createConstantBuffer(unsigned bufferSize, unsigned index = 0);
     //使用するコンスタントバッファを登録
     void setVSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
     void setPSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
-    //テクスチャの登録
-    void setVSTextures(std::shared_ptr<Texture> texture, unsigned start = 0, unsigned numTextures = 1);
-    void setPSTextures(std::shared_ptr<Texture> texture, unsigned start = 0, unsigned numTextures = 1);
     //シェーダの取得
     ID3D11VertexShader* getVertexShader() const;
     ID3D11PixelShader* getPixelShader() const;
-    //コンパイル済みシェーダの取得
-    ID3D10Blob* getCompiledShader() const;
+    //インプットレイアウトの生成・取得
+    void createInputLayout(const InputElementDesc* layout, unsigned numElements);
+    std::shared_ptr<InputElement> getVertexLayout() const;
+    //自身を登録
+    void setInputLayout();
     //コンスタントバッファの取得
-    std::shared_ptr<Buffer> getConstantBuffer() const;
+    std::shared_ptr<Buffer> getConstantBuffer(unsigned index = 0) const;
 
 private:
     //シェーダの生成
@@ -37,10 +42,10 @@ private:
     void createPixelShader(const char* fileName);
 
 private:
-    ID3D11Device* mDevice;
-    ID3D11DeviceContext* mDeviceContext;
+    std::shared_ptr<Renderer> mRenderer;
     ID3D10Blob* mCompileShader;
     ID3D11VertexShader* mVertexShader;
     ID3D11PixelShader* mPixelShader;
-    std::shared_ptr<Buffer> mConstantBuffer;
+    std::vector<std::shared_ptr<Buffer>> mConstantBuffers;
+    std::shared_ptr<InputElement> mVertexLayout;
 };

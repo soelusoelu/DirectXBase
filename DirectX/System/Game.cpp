@@ -58,7 +58,7 @@ HRESULT Game::init() {
     }
     MFALSE(mD3D11->init(mhWnd), L"Direct3D初期化失敗");
 
-    mRenderer = std::make_shared<Renderer>(mD3D11->device(), mD3D11->deviceContext());
+    mRenderer = std::make_shared<Renderer>(mD3D11->device(), mD3D11->deviceContext(), mD3D11->rasterizerState(), mD3D11->rasterizerStateBack());
     mMain = std::make_unique<Main>(mRenderer);
 
     Random::init();
@@ -141,5 +141,12 @@ void setDataDirectory() {
     WCHAR tmp[1024] = { 0 };
     wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
     wcscat_s(tmp, L"\\Assets/Data");
+    SetCurrentDirectory(tmp);
+}
+
+void setOBJDirectory() {
+    WCHAR tmp[1024] = { 0 };
+    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
+    wcscat_s(tmp, L"\\Assets/OBJ");
     SetCurrentDirectory(tmp);
 }

@@ -4,6 +4,7 @@
 
 Collider::Collider(Actor* owner) :
     Component(owner, 1000),
+    mIsAutoUpdate(true),
     mEnable(false) {
 }
 
@@ -30,6 +31,9 @@ void Collider::update() {
 }
 
 void Collider::onUpdateWorldTransform() {
+    if (!mIsAutoUpdate) {
+        return;
+    }
     onUpdateWorldTransformCollider();
 }
 
@@ -43,6 +47,12 @@ void Collider::disabled() {
 
 bool Collider::getEnable() const {
     return mEnable;
+}
+
+void Collider::automation() {
+    if (!mIsAutoUpdate) {
+        mIsAutoUpdate = true;
+    }
 }
 
 void Collider::addHitCollider(Collider* hit) {

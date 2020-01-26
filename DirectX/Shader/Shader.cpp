@@ -8,18 +8,11 @@
 #include "../System/InputElementDesc.h"
 
 Shader::Shader(std::shared_ptr<Renderer> renderer, const char* fileName) :
-    mDevice(renderer->device()),
-    mDeviceContext(renderer->deviceContext()),
+    mRenderer(renderer),
     mCompileShader(nullptr),
     mVertexShader(nullptr),
     mPixelShader(nullptr),
-    mConstantBuffer(nullptr) {
-    BufferDesc cb;
-    cb.size = sizeof(TextureShaderConstantBuffer);
-    cb.usage = BufferUsage::BUFFER_USAGE_DYNAMIC;
-    cb.type = BufferType::BUFFER_TYPE_CONSTANT_BUFFER;
-    cb.cpuAccessFlags = BufferCPUAccessFlag::CPU_ACCESS_WRITE;
-    mConstantBuffer = renderer->createBuffer(cb);
+    mConstantBuffers(0) {
 
     createVertexShader(fileName);
     createPixelShader(fileName);
@@ -40,31 +33,35 @@ void Shader::setPixelShader(ID3D11PixelShader* pixel) {
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
-    mDeviceContext->VSSetShader(mVertexShader, &classInstances, numClassInstances);
+    mRenderer->deviceContext()->VSSetShader(mVertexShader, &classInstances, numClassInstances);
 }
 
 void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
-    mDeviceContext->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+    mRenderer->deviceContext()->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+}
+
+void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
+    auto num = mConstantBuffers.size();
+    if (index >= num) {
+        mConstantBuffers.resize(num + 1);
+    }
+
+    BufferDesc cb;
+    cb.size = bufferSize;
+    cb.usage = BufferUsage::BUFFER_USAGE_DYNAMIC;
+    cb.type = BufferType::BUFFER_TYPE_CONSTANT_BUFFER;
+    cb.cpuAccessFlags = BufferCPUAccessFlag::CPU_ACCESS_WRITE;
+    mConstantBuffers[index] = mRenderer->createBuffer(cb);
 }
 
 void Shader::setVSConstantBuffers(unsigned start, unsigned numBuffers) {
-    auto buf = mConstantBuffer->buffer();
-    mDeviceContext->VSSetConstantBuffers(start, numBuffers, &buf);
+    auto buf = mConstantBuffers[start]->buffer();
+    mRenderer->deviceContext()->VSSetConstantBuffers(start, numBuffers, &buf);
 }
 
 void Shader::setPSConstantBuffers(unsigned start, unsigned numBuffers) {
-    auto buf = mConstantBuffer->buffer();
-    mDeviceContext->PSSetConstantBuffers(start, numBuffers, &buf);
-}
-
-void Shader::setVSTextures(std::shared_ptr<Texture> texture, unsigned start, unsigned numTextures) {
-    auto tex = texture->texture();
-    mDeviceContext->VSSetShaderResources(start, numTextures, &tex);
-}
-
-void Shader::setPSTextures(std::shared_ptr<Texture> texture, unsigned start, unsigned numTextures) {
-    auto tex = texture->texture();
-    mDeviceContext->PSSetShaderResources(start, numTextures, &tex);
+    auto buf = mConstantBuffers[start]->buffer();
+    mRenderer->deviceContext()->PSSetConstantBuffers(start, numBuffers, &buf);
 }
 
 ID3D11VertexShader* Shader::getVertexShader() const {
@@ -75,12 +72,20 @@ ID3D11PixelShader* Shader::getPixelShader() const {
     return mPixelShader;
 }
 
-ID3D10Blob* Shader::getCompiledShader() const {
-    return mCompileShader;
+void Shader::createInputLayout(const InputElementDesc* layout, unsigned numElements) {
+    mVertexLayout = mRenderer->createInputLayout(layout, numElements, mCompileShader);
 }
 
-std::shared_ptr<Buffer> Shader::getConstantBuffer() const {
-    return mConstantBuffer;
+std::shared_ptr<InputElement> Shader::getVertexLayout() const {
+    return mVertexLayout;
+}
+
+void Shader::setInputLayout() {
+    mRenderer->deviceContext()->IASetInputLayout(mVertexLayout->layout());
+}
+
+std::shared_ptr<Buffer> Shader::getConstantBuffer(unsigned index) const {
+    return mConstantBuffers[index];
 }
 
 void Shader::createVertexShader(const char* fileName) {
@@ -90,7 +95,7 @@ void Shader::createVertexShader(const char* fileName) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }
-    if (FAILED(mDevice->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
+    if (FAILED(mRenderer->device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
         SAFE_RELEASE(mCompileShader);
         MessageBox(0, L"バーテックスシェーダー作成失敗", nullptr, MB_OK);
         return;
@@ -105,7 +110,7 @@ void Shader::createPixelShader(const char* fileName) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }
-    if (FAILED(mDevice->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
+    if (FAILED(mRenderer->device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
         SAFE_RELEASE(compiledShader);
         MessageBox(0, L"ピクセルシェーダー作成失敗", nullptr, MB_OK);
         return;

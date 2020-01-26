@@ -5,6 +5,7 @@
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
+#include "../System/InputElementDesc.h"
 #include "../System/TextureDesc.h"
 #include "../System/VertexStreamDesc.h"
 #include <cassert>
@@ -27,7 +28,15 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
     //Transformに通知
     mTransform->setSize(mTextureSize);
 
-    mTexture->createInputLayout(mRenderer, mShader->getCompiledShader());
+    mShader->createConstantBuffer(sizeof(TextureShaderConstantBuffer), 0);
+
+    //インプットレイアウトの生成
+    constexpr InputElementDesc layout[] = {
+        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
+        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
+    };
+    constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
+    mShader->createInputLayout(layout, numElements);
 
     if (mSpriteManager) {
         mSpriteManager->add(this);
@@ -65,7 +74,7 @@ void Sprite::draw(const Matrix4 & proj) {
     mShader->setVSConstantBuffers();
     mShader->setPSConstantBuffers();
     //頂点レイアウトをセット
-    mRenderer->setInputLayout(mTexture->getVertexlayout());
+    mShader->setInputLayout();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
@@ -82,7 +91,7 @@ void Sprite::draw(const Matrix4 & proj) {
         mRenderer->deviceContext()->Unmap(mShader->getConstantBuffer()->buffer(), 0);
     }
     //テクスチャーをシェーダーに渡す
-    mShader->setPSTextures(mTexture);
+    mTexture->setPSTextures();
     //サンプラーのセット
     auto sample = mTexture->getSampler();
     mRenderer->deviceContext()->PSSetSamplers(0, 1, &sample);
