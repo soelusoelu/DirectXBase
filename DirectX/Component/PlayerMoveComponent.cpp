@@ -31,5 +31,5 @@ void PlayerMoveComponent::move() {
         v = Input::joyVertical();
     }
 
-    mOwner->transform()->translate(Vector3(h, 0.f, v));
+    mOwner->transform()->translate(Vector3(h, 0.f, v) * Time::deltaTime);
 }

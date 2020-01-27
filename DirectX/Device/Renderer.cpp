@@ -20,7 +20,7 @@ Renderer::Renderer(ID3D11Device* device, ID3D11DeviceContext* context, ID3D11Ras
 }
 
 Renderer::~Renderer() {
-    mSounds.clear();
+    clear();
 }
 
 ID3D11Device* Renderer::device() const {
@@ -62,6 +62,7 @@ void Renderer::setVertexBuffer(const VertexStreamDesc* stream, unsigned numStrea
         buffer = stream->sharedBuffer->buffer();
     }
     mDeviceContext->IASetVertexBuffers(start, numStream, &buffer, &stream->stride, &stream->offset);
+    //buffer->Release();
 }
 
 void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {

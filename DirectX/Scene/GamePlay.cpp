@@ -28,7 +28,7 @@ GamePlay::~GamePlay() {
 
 void GamePlay::startScene() {
     new PlayerActor(mRenderer);
-    new Field(mRenderer);
+    //new Field(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
 }
 

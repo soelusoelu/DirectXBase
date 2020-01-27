@@ -34,7 +34,7 @@ bool Transform2D::computeWorldTransform() {
     return false;
 }
 
-Matrix4 Transform2D::getWorldTransform() const {
+const Matrix4& Transform2D::getWorldTransform() const {
     return mWorldTransform;
 }
 
@@ -77,7 +77,7 @@ void Transform2D::setRotation(float angle) {
     shouldRecomputeTransform();
 }
 
-Quaternion Transform2D::getRotation() const {
+const Quaternion& Transform2D::getRotation() const {
     return mRotation;
 }
 
@@ -99,7 +99,7 @@ void Transform2D::setPivot(const Vector2& pivot) {
     shouldRecomputeTransform();
 }
 
-Vector2 Transform2D::getPivot() const {
+const Vector2& Transform2D::getPivot() const {
     return mPivot;
 }
 
@@ -114,7 +114,7 @@ void Transform2D::setScale(float scale) {
     shouldRecomputeTransform();
 }
 
-Vector2 Transform2D::getScale() const {
+const Vector2& Transform2D::getScale() const {
     return mScale;
 }
 
@@ -123,7 +123,7 @@ void Transform2D::setSize(const Vector2& size) {
     shouldRecomputeTransform();
 }
 
-Vector2 Transform2D::getSize() const {
+const Vector2& Transform2D::getSize() const {
     return mSize;
 }
 

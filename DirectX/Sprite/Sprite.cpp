@@ -28,7 +28,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
     //Transformに通知
     mTransform->setSize(mTextureSize);
 
-    mShader->createConstantBuffer(sizeof(TextureShaderConstantBuffer), 0);
+    mShader->createConstantBuffer(mRenderer, sizeof(TextureShaderConstantBuffer), 0);
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {
@@ -57,13 +57,13 @@ Sprite::Sprite(const Sprite & sprite) :
 }
 
 void Sprite::update() {
-    if (mState == SpriteState::ACTIVE) {
+    if (getActive()) {
         mTransform->computeWorldTransform();
     }
 }
 
 void Sprite::draw(const Matrix4 & proj) {
-    if (mState != SpriteState::ACTIVE) {
+    if (!getActive() || isDead()) {
         return;
     }
 
@@ -125,7 +125,7 @@ void Sprite::setAlpha(float alpha) {
     mColor.w = alpha;
 }
 
-Vector4 Sprite::getColor() const {
+const Vector4& Sprite::getColor() const {
     return mColor;
 }
 
@@ -149,20 +149,16 @@ void Sprite::setUV(float l, float t, float r, float b) {
     mTransform->setSize(size);
 }
 
-Vector4 Sprite::getUV() const {
+const Vector4& Sprite::getUV() const {
     return mUV;
 }
 
-Vector2 Sprite::getTextureSize() const {
+const Vector2& Sprite::getTextureSize() const {
     return mTextureSize;
 }
 
-void Sprite::destroy(Sprite * sprite) {
-    sprite->mState = SpriteState::DEAD;
-}
-
-void Sprite::destroy(std::shared_ptr<Sprite> sprite) {
-    sprite->mState = SpriteState::DEAD;
+void Sprite::destroy() {
+    mState = SpriteState::DEAD;
 }
 
 void Sprite::setActive(bool value) {
@@ -173,8 +169,8 @@ bool Sprite::getActive() const {
     return mState == SpriteState::ACTIVE;
 }
 
-SpriteState Sprite::getState() const {
-    return mState;
+bool Sprite::isDead() const {
+    return mState == SpriteState::DEAD;
 }
 
 std::shared_ptr<Texture> Sprite::texture() const {

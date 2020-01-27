@@ -11,7 +11,7 @@ public:
 
     //ワールド行列更新
     bool computeWorldTransform();
-    Matrix4 getWorldTransform() const;
+    const Matrix4& getWorldTransform() const;
 
     //ピクセル単位で位置指定
     void setPosition(const Vector2& pos);
@@ -24,21 +24,21 @@ public:
 
     //回転
     void setRotation(float angle);
-    Quaternion getRotation() const;
+    const Quaternion& getRotation() const;
     void rotate(float angle);
 
     //回転縮小ピボット位置
     void setPivot(const Vector2& pivot);
-    Vector2 getPivot() const;
+    const Vector2& getPivot() const;
 
     //倍率で拡縮
     void setScale(const Vector2& scale);
     void setScale(float scale);
-    Vector2 getScale() const;
+    const Vector2& getScale() const;
 
     //ポリゴンサイズ
     void setSize(const Vector2& size);
-    Vector2 getSize() const;
+    const Vector2& getSize() const;
 
 public:
     static bool zSortFlag;

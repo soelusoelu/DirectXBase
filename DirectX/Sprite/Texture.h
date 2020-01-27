@@ -30,18 +30,18 @@ public:
     ~Texture();
     static void end();
     static void drawAll(std::vector<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer);
-    ID3D11ShaderResourceView* texture() const;
     const TextureDesc& desc() const;
+    ID3D11ShaderResourceView* texture() const;
     ID3D11SamplerState* getSampler() const;
     //テクスチャの登録
     void setVSTextures(unsigned start = 0, unsigned numTextures = 1);
     void setPSTextures(unsigned start = 0, unsigned numTextures = 1);
 
 private:
-    void createVertexBuffer();
-    void createIndexBuffer();
-    void createTexture(const char* fileName);
-    void createSampler();
+    void createVertexBuffer(std::shared_ptr<Renderer> renderer);
+    void createIndexBuffer(std::shared_ptr<Renderer> renderer);
+    void createTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
+    void createSampler(std::shared_ptr<Renderer> renderer);
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
     D3D11_USAGE toUsage(TextureUsage usage) const;
@@ -51,7 +51,7 @@ private:
     unsigned toFilter(TextureFilter filter) const;
 
 private:
-    std::shared_ptr<Renderer> mRenderer;
+    ID3D11DeviceContext* mDeviceContext;
     ID3D11ShaderResourceView* mTexture;
     ID3D11SamplerState* mSampleLinear;
     TextureDesc mDesc;

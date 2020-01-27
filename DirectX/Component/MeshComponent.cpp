@@ -9,6 +9,10 @@ MeshComponent::MeshComponent(Actor* owner, const char* filename) :
     mMesh->setTransform(mOwner->transform());
 }
 
+MeshComponent::~MeshComponent() {
+    mMesh->destroy();
+}
+
 void MeshComponent::start() {
 }
 
@@ -17,4 +21,12 @@ void MeshComponent::update() {
 
 std::shared_ptr<Mesh> MeshComponent::getMesh() const {
     return mMesh;
+}
+
+void MeshComponent::setActive(bool value) {
+    mMesh->setActive(value);
+}
+
+bool MeshComponent::getActive() const {
+    return mMesh->getActive();
 }

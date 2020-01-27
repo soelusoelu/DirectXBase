@@ -11,10 +11,8 @@ void MeshManager::update() {
     remove();
 }
 
-void MeshManager::draw(std::shared_ptr<Camera> camera) {
-    for (const auto& mesh : mMeshes) {
-        mesh->draw(camera);
-    }
+void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+    Mesh::drawAll(mMeshes, renderer, camera);
 }
 
 void MeshManager::add(Mesh* mesh) {
@@ -28,7 +26,7 @@ void MeshManager::clear() {
 void MeshManager::remove() {
     auto itr = mMeshes.begin();
     while (itr != mMeshes.end()) {
-        if ((*itr)->getState() == MeshState::DEAD) {
+        if ((*itr)->isDead()) {
             itr = mMeshes.erase(itr);
         } else {
             ++itr;

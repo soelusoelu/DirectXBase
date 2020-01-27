@@ -45,7 +45,7 @@ void SpriteManager::clear() {
 void SpriteManager::remove() {
     auto itr = mSprites.begin();
     while (itr != mSprites.end()) {
-        if ((*itr)->getState() == SpriteState::DEAD) {
+        if ((*itr)->isDead()) {
             itr = mSprites.erase(itr);
         } else {
             ++itr;

@@ -21,7 +21,7 @@ public:
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     //コンスタントバッファの作成
-    void createConstantBuffer(unsigned bufferSize, unsigned index = 0);
+    void createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned bufferSize, unsigned index = 0);
     //使用するコンスタントバッファを登録
     void setVSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
     void setPSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
@@ -41,7 +41,8 @@ private:
     void createPixelShader(const char* fileName);
 
 private:
-    std::shared_ptr<Renderer> mRenderer;
+    ID3D11Device* mDevice;
+    ID3D11DeviceContext* mDeviceContext;
     ID3D10Blob* mCompileShader;
     ID3D11VertexShader* mVertexShader;
     ID3D11PixelShader* mPixelShader;

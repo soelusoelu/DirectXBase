@@ -16,7 +16,7 @@ UI::~UI() {
         return;
     }
     for (auto&& sprite : mSprites) {
-        Sprite::destroy(sprite);
+        sprite->destroy();
     }
 }
 

@@ -22,9 +22,9 @@ SceneBase::SceneBase() :
 }
 
 SceneBase::~SceneBase() {
+    SAFE_DELETE(mMeshManager);
     SAFE_DELETE(mSpriteManager);
     SAFE_DELETE(mUIManager);
-    SAFE_DELETE(mMeshManager);
 }
 
 void SceneBase::update() {
@@ -40,7 +40,7 @@ void SceneBase::draw() {
     if (!mRenderer) {
         return;
     }
-    mMeshManager->draw(mCamera);
+    mMeshManager->draw(mRenderer, mCamera);
     mSpriteManager->draw(mRenderer);
 }
 
