@@ -93,9 +93,7 @@ private:
     unsigned mNumTex; //テクスチャ座標数
     unsigned mNumFace; //ポリゴン数
 
-    //std::vector<Vector3> mVertices; //頂点情報
-    //std::vector<Vector3> mNormals; //法線情報
-    //std::vector<Vector2> mTextures; //テクスチャ座標情報
+    Vector3* mVertices; //頂点情報
 
     std::shared_ptr<Buffer> mVertexBuffer;
     std::vector<std::shared_ptr<Buffer>> mIndexBuffers;

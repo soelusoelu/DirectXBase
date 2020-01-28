@@ -22,9 +22,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mNumNormal(0),
     mNumTex(0),
     mNumFace(0),
-    //mVertices(0),
-    //mNormals(0),
-    //mTextures(0),
+    mVertices(nullptr),
     mVertexBuffer(nullptr),
     mIndexBuffers(0),
     mState(MeshState::ACTIVE) {
@@ -51,7 +49,9 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     }
 }
 
-Mesh::~Mesh() = default;
+Mesh::~Mesh() {
+    SAFE_DELETE_ARRAY(mVertices);
+}
 
 void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
     //バウンディングスフィア作成
@@ -65,7 +65,7 @@ void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
 
 void Mesh::drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) {
     //プリミティブ・トポロジーをセット
-    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
 
     for (const auto& mesh : meshes) {
         if (!mesh->getActive() || mesh->isDead()) {
@@ -111,10 +111,7 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
     }
 
     //サイズ変更
-    //mVertices.resize(mNumVert);
-    //mNormals.resize(mNumNormal);
-    //mTextures.resize(mNumTex);
-    Vector3* mVertices = new Vector3[mNumVert];
+    mVertices = new Vector3[mNumVert];
     Vector3* mNormals = new Vector3[mNumNormal];
     Vector2* mTextures = new Vector2[mNumTex];
 
@@ -166,7 +163,7 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
             auto sub = line.substr(3); //「vt 」の文字数分
             sscanf_s(sub.c_str(), "%f %f", &x, &y);
             mTextures[vtCount].x = x;
-            mTextures[vtCount].y = -y; //OBJファイルはY成分が逆なので合わせる
+            mTextures[vtCount].y = 1 - y; //OBJファイルはY成分が逆なので合わせる
             vtCount++;
         }
     }
