@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../System/DirectXIncLib.h"
 #include "../System/Game.h"
@@ -24,20 +24,20 @@ enum class MeshState {
 };
 
 struct MeshShaderConstantBuffer0 {
-    Matrix4 world; //ƒ[ƒ‹ƒhs—ñ
-    Matrix4 WVP; //ƒ[ƒ‹ƒh‚©‚çË‰e‚Ü‚Å‚Ì•ÏŠ·s—ñ
-    Vector4 lightDir; //ƒ‰ƒCƒg•ûŒü
-    Vector4 eye; //ƒJƒƒ‰ˆÊ’u
+    Matrix4 world; //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—
+    Matrix4 WVP; //ãƒ¯ãƒ¼ãƒ«ãƒ‰ã‹ã‚‰å°„å½±ã¾ã§ã®å¤‰æ›è¡Œåˆ—
+    Vector4 lightDir; //ãƒ©ã‚¤ãƒˆæ–¹å‘
+    Vector4 eye; //ã‚«ãƒ¡ãƒ©ä½ç½®
 };
 
 struct MeshShaderConstantBuffer1 {
-    Vector4 ambient; //ƒAƒ“ƒrƒGƒ“ƒgŒõ
-    Vector4 diffuse; //ƒfƒBƒtƒ…[ƒYF
-    Vector4 specular; //‹¾–Ê”½Ë
-    Vector4 texture; //ƒeƒNƒXƒ`ƒƒ[‚ª“\‚ç‚ê‚Ä‚¢‚éƒƒbƒVƒ…‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+    Vector4 ambient; //ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆå…‰
+    Vector4 diffuse; //ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºè‰²
+    Vector4 specular; //é¡é¢åå°„
+    Vector4 texture; //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ãŒè²¼ã‚‰ã‚Œã¦ã„ã‚‹ãƒ¡ãƒƒã‚·ãƒ¥ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
 };
 
-//’¸“_‚Ì\‘¢‘Ì
+//é ‚ç‚¹ã®æ§‹é€ ä½“
 struct MeshVertex {
     Vector3 pos;
     Vector3 norm;
@@ -46,13 +46,13 @@ struct MeshVertex {
 
 struct Material {
     std::string matName; //newmtl
-    Vector4 Ka; //ƒAƒ“ƒrƒGƒ“ƒg
-    Vector4 Kd; //ƒfƒBƒtƒ…[ƒY
-    Vector4 Ks; //ƒXƒyƒLƒ…ƒ‰[
-    std::string textureName; //ƒeƒNƒXƒ`ƒƒ[ƒtƒ@ƒCƒ‹–¼
+    Vector4 Ka; //ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆ
+    Vector4 Kd; //ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚º
+    Vector4 Ks; //ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼
+    std::string textureName; //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«å
     ID3D11ShaderResourceView* texture;
     ID3D11SamplerState* sampleLinear;
-    unsigned numFace; //‚»‚Ìƒ}ƒeƒŠƒAƒ‹‚Å‚ ‚éƒ|ƒŠƒSƒ“”
+    unsigned numFace; //ãã®ãƒãƒ†ãƒªã‚¢ãƒ«ã§ã‚ã‚‹ãƒãƒªã‚´ãƒ³æ•°
     Material() {
         ZeroMemory(this, sizeof(Material));
     }
@@ -78,25 +78,24 @@ public:
 
 private:
     bool loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName);
-    bool tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName); //–‘O‚É’¸“_”‚È‚Ç‚ğ’²‚×‚é
-    bool loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<Material>* material);
+    bool tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName); //äº‹å‰ã«é ‚ç‚¹æ•°ãªã©ã‚’èª¿ã¹ã‚‹
+    bool loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>>* materials);
     void rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
     std::string stringStrip(const std::string& string, const char delimiter);
 
 private:
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;
-    std::vector<Material> mMaterials;
+    std::vector<std::unique_ptr<Material>> mMaterials;
 
-    unsigned mNumVert; //’¸“_”
-    unsigned mNumNormal; //–@ü”
-    unsigned mNumTex; //ƒeƒNƒXƒ`ƒƒÀ•W”
-    unsigned mNumFace; //ƒ|ƒŠƒSƒ“”
-    unsigned mNumMaterial; //ƒ}ƒeƒŠƒAƒ‹”
+    unsigned mNumVert; //é ‚ç‚¹æ•°
+    unsigned mNumNormal; //æ³•ç·šæ•°
+    unsigned mNumTex; //ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™æ•°
+    unsigned mNumFace; //ãƒãƒªã‚´ãƒ³æ•°
 
-    std::vector<Vector3> mVertices; //’¸“_î•ñ
-    std::vector<Vector3> mNormals; //–@üî•ñ
-    std::vector<Vector2> mTextures; //ƒeƒNƒXƒ`ƒƒÀ•Wî•ñ
+    //std::vector<Vector3> mVertices; //é ‚ç‚¹æƒ…å ±
+    //std::vector<Vector3> mNormals; //æ³•ç·šæƒ…å ±
+    //std::vector<Vector2> mTextures; //ãƒ†ã‚¯ã‚¹ãƒãƒ£åº§æ¨™æƒ…å ±
 
     std::shared_ptr<Buffer> mVertexBuffer;
     std::vector<std::shared_ptr<Buffer>> mIndexBuffers;

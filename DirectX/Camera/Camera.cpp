@@ -22,10 +22,10 @@ void Camera::update() {
         auto forward = t->forward();
 
         mPosition.x = -forward.x * 2.f;
-        mPosition.y = t->getPosition().y + 2.f;
-        mPosition.z = t->getPosition().z - 5.f;
+        mPosition.y = t->getPosition().y + 0.5f;
+        mPosition.z = -forward.z * 2.f;
 
-        mLookAt.set(t->getPosition().x, t->getPosition().y + 1.f, t->getPosition().z + 2.f);
+        mLookAt.set(t->getPosition().x, t->getPosition().y + 1.f, t->getPosition().z + 5.f);
     }
     mView = Matrix4::createLookAt(mPosition, mLookAt, mUp);
 }

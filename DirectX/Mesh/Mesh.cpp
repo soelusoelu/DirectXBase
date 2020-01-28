@@ -1,4 +1,4 @@
-#include "Mesh.h"
+ï»¿#include "Mesh.h"
 #include "MeshManager.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
@@ -22,23 +22,22 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mNumNormal(0),
     mNumTex(0),
     mNumFace(0),
-    mNumMaterial(0),
-    mVertices(0),
-    mNormals(0),
-    mTextures(0),
+    //mVertices(0),
+    //mNormals(0),
+    //mTextures(0),
     mVertexBuffer(nullptr),
     mIndexBuffers(0),
     mState(MeshState::ACTIVE) {
     if (!loadMesh(renderer, fileName)) {
-        MSG(L"ƒƒbƒVƒ…ì¬¸”s");
+        MSG(L"ãƒ¡ãƒƒã‚·ãƒ¥ä½œæˆå¤±æ•—");
         return;
     }
 
-    //ƒƒbƒVƒ…—pƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Ìì¬
+    //ãƒ¡ãƒƒã‚·ãƒ¥ç”¨ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
     mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer0), 0);
     mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer1), 1);
 
-    //ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚Ì¶¬
+    //ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ç”Ÿæˆ
     constexpr InputElementDesc layout[] = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
@@ -55,7 +54,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
 Mesh::~Mesh() = default;
 
 void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
-    //ƒoƒEƒ“ƒfƒBƒ“ƒOƒXƒtƒBƒAì¬
+    //ãƒã‚¦ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚¹ãƒ•ã‚£ã‚¢ä½œæˆ
     //D3DXVECTOR3 center;
     //D3DXVECTOR3 first(mVertices.front().x, mVertices.front().y, mVertices.front().z);
     //D3DXComputeBoundingSphere(&first, mNumVert, sizeof(D3DXVECTOR3), &center, &sphere->radius);
@@ -65,7 +64,7 @@ void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
 }
 
 void Mesh::drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) {
-    //ƒvƒŠƒ~ƒeƒBƒuEƒgƒ|ƒƒW[‚ğƒZƒbƒg
+    //ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ãƒ»ãƒˆãƒãƒ­ã‚¸ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
 
     for (const auto& mesh : meshes) {
@@ -105,18 +104,21 @@ void Mesh::setMeshManager(MeshManager * manager) {
 }
 
 bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
-    //–‘O‚É’¸“_”‚È‚Ç‚ğ’²‚×‚é
+    //äº‹å‰ã«é ‚ç‚¹æ•°ãªã©ã‚’èª¿ã¹ã‚‹
     if (!tempLoad(renderer, fileName)) {
-        MSG(L"Meshƒtƒ@ƒCƒ‹‚Ì–‘O“Ç‚İ‚İ¸”s");
+        MSG(L"Meshãƒ•ã‚¡ã‚¤ãƒ«ã®äº‹å‰èª­ã¿è¾¼ã¿å¤±æ•—");
         return false;
     }
 
-    //ƒTƒCƒY•ÏX
-    mVertices.resize(mNumVert);
-    mNormals.resize(mNumNormal);
-    mTextures.resize(mNumTex);
+    //ã‚µã‚¤ã‚ºå¤‰æ›´
+    //mVertices.resize(mNumVert);
+    //mNormals.resize(mNumNormal);
+    //mTextures.resize(mNumTex);
+    Vector3* mVertices = new Vector3[mNumVert];
+    Vector3* mNormals = new Vector3[mNumNormal];
+    Vector2* mTextures = new Vector2[mNumTex];
 
-    //OBJƒtƒ@ƒCƒ‹‚ğŠJ‚¢‚Ä“à—e‚ğ“Ç‚İ‚Ş
+    //OBJãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã„ã¦å†…å®¹ã‚’èª­ã¿è¾¼ã‚€
     setOBJDirectory();
     std::ifstream ifs(fileName, std::ios::in);
 
@@ -127,21 +129,21 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
     unsigned vtCount = 0;
     float x, y, z;
 
-    //–{“Ç‚İ‚İ
+    //æœ¬èª­ã¿è¾¼ã¿
     while (!ifs.eof()) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         std::getline(ifs, line);
 
         if (line.empty() || line[0] == '#') {
             continue;
         }
 
-        //‹ó”’‚ª—ˆ‚é‚Ü‚Å“Ç‚İ‚İ
+        //ç©ºç™½ãŒæ¥ã‚‹ã¾ã§èª­ã¿è¾¼ã¿
         strip = stringStrip(line, ' ');
 
-        //’¸“_“Ç‚İ‚İ
+        //é ‚ç‚¹èª­ã¿è¾¼ã¿
         if (strip == "v") {
-            auto sub = line.substr(2); //uv v‚Ì•¶š”•ª
+            auto sub = line.substr(2); //ã€Œv ã€ã®æ–‡å­—æ•°åˆ†
             sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
             mVertices[vCount].x = -x;
             mVertices[vCount].y = y;
@@ -149,9 +151,9 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
             vCount++;
         }
 
-        //–@ü“Ç‚İ‚İ
+        //æ³•ç·šèª­ã¿è¾¼ã¿
         if (strip == "vn") {
-            auto sub = line.substr(3); //uvn v‚Ì•¶š”•ª
+            auto sub = line.substr(3); //ã€Œvn ã€ã®æ–‡å­—æ•°åˆ†
             sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
             mNormals[vnCount].x = -x;
             mNormals[vnCount].y = y;
@@ -159,22 +161,22 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
             vnCount++;
         }
 
-        //ƒeƒNƒXƒ`ƒƒ[À•W “Ç‚İ‚İ
+        //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼åº§æ¨™ èª­ã¿è¾¼ã¿
         if (strip == "vt") {
-            auto sub = line.substr(3); //uvt v‚Ì•¶š”•ª
+            auto sub = line.substr(3); //ã€Œvt ã€ã®æ–‡å­—æ•°åˆ†
             sscanf_s(sub.c_str(), "%f %f", &x, &y);
             mTextures[vtCount].x = x;
-            mTextures[vtCount].y = -y; //OBJƒtƒ@ƒCƒ‹‚ÍY¬•ª‚ª‹t‚È‚Ì‚Å‡‚í‚¹‚é
+            mTextures[vtCount].y = -y; //OBJãƒ•ã‚¡ã‚¤ãƒ«ã¯Yæˆåˆ†ãŒé€†ãªã®ã§åˆã‚ã›ã‚‹
             vtCount++;
         }
     }
 
-    //ƒ}ƒeƒŠƒAƒ‹‚Ì”‚¾‚¯ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğì¬
-    mIndexBuffers.resize(mNumMaterial);
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ã®æ•°ã ã‘ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½œæˆ
+    mIndexBuffers.resize(mMaterials.size());
 
-    //ƒtƒFƒCƒX“Ç‚İ‚İ ƒoƒ‰ƒoƒ‰‚Éû˜^‚³‚ê‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚Ì‚ÅAƒ}ƒeƒŠƒAƒ‹–¼‚ğ—Š‚è‚É‚Â‚È‚¬‡‚í‚¹‚é
+    //ãƒ•ã‚§ã‚¤ã‚¹èª­ã¿è¾¼ã¿ ãƒãƒ©ãƒãƒ©ã«åéŒ²ã•ã‚Œã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã®ã§ã€ãƒãƒ†ãƒªã‚¢ãƒ«åã‚’é ¼ã‚Šã«ã¤ãªãåˆã‚ã›ã‚‹
     bool matFlag = false;
-    int* faceBuffer = new int[mNumFace * 3]; //3’¸“_ƒ|ƒŠƒSƒ“‚È‚Ì‚ÅA1ƒtƒFƒCƒX=3’¸“_(3ƒCƒ“ƒfƒbƒNƒX)
+    int* faceBuffer = new int[mNumFace * 3]; //3é ‚ç‚¹ãƒãƒªã‚´ãƒ³ãªã®ã§ã€1ãƒ•ã‚§ã‚¤ã‚¹=3é ‚ç‚¹(3ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹)
 
     auto* meshVertices = new MeshVertex[mNumVert];
     int v1 = 0, v2 = 0, v3 = 0;
@@ -182,89 +184,64 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
     int vt1 = 0, vt2 = 0, vt3 = 0;
     unsigned fCount = 0;
 
-    for (unsigned i = 0; i < mNumMaterial; i++) {
+    for (unsigned i = 0; i < mMaterials.size(); i++) {
         ifs.clear();
         ifs.seekg(0, std::ios_base::beg);
         fCount = 0;
 
         while (!ifs.eof()) {
-            //ƒL[ƒ[ƒh “Ç‚İ‚İ
+            //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ èª­ã¿è¾¼ã¿
             std::getline(ifs, line);
 
             if (line.empty() || line[0] == '#') {
                 continue;
             }
 
-            //‹ó”’‚ª—ˆ‚é‚Ü‚Å“Ç‚İ‚İ
+            //ç©ºç™½ãŒæ¥ã‚‹ã¾ã§èª­ã¿è¾¼ã¿
             strip = stringStrip(line, ' ');
 
-            //ƒtƒFƒCƒX “Ç‚İ‚İ¨’¸“_ƒCƒ“ƒfƒbƒNƒX‚É
+            //ãƒ•ã‚§ã‚¤ã‚¹ èª­ã¿è¾¼ã¿â†’é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«
             if (strip == "usemtl") {
-                auto mat = line.substr(7); //uusemtl v‚Ì•¶š”•ª
-                matFlag = (mMaterials[i].matName == mat);
+                auto mat = line.substr(7); //ã€Œusemtl ã€ã®æ–‡å­—æ•°åˆ†
+                matFlag = (mMaterials[i]->matName == mat);
             }
 
             if (strip == "f" && matFlag) {
-                auto sub = line.substr(2); //uf v‚Ì•¶š”•ª
-                if (mMaterials[i].texture) { //ƒeƒNƒXƒ`ƒƒ[‚ ‚èƒT[ƒtƒFƒCƒX
+                auto sub = line.substr(2); //ã€Œf ã€ã®æ–‡å­—æ•°åˆ†
+                if (mMaterials[i]->texture) { //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚ã‚Šã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
                     sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
-                } else { //ƒeƒNƒXƒ`ƒƒ[–³‚µƒT[ƒtƒFƒCƒX
+                } else { //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ç„¡ã—ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹
                     sscanf_s(sub.c_str(), "%d//%d %d//%d %d//%d", &v1, &vn1, &v2, &vn2, &v3, &vn3);
                 }
 
-                //ƒeƒNƒXƒ`ƒƒ[À•W > ’¸“_”‚ª‚ ‚è‚¦‚é
-                if (vtCount > vCount) {
-                    //ƒtƒFƒCƒX “Ç‚İ‚İ¨’¸“_ƒCƒ“ƒfƒbƒNƒX‚É ƒeƒNƒXƒ`ƒƒ[À•WƒCƒ“ƒfƒbƒNƒX‚ğŠî€‚É‚·‚é(ƒeƒNƒXƒ`ƒƒ[À•W >= ’¸“_À•W‚È‚Ì‚Å)
-                    //sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
-                    faceBuffer[fCount * 3] = vt1 - 1;
-                    faceBuffer[fCount * 3 + 1] = vt2 - 1;
-                    faceBuffer[fCount * 3 + 2] = vt3 - 1;
-                    fCount++;
-                    //’¸“_\‘¢‘Ì‚É‘ã“ü ƒeƒNƒXƒ`ƒƒ[À•WƒCƒ“ƒfƒbƒNƒX‚ğŠî€‚É‚·‚é(ƒeƒNƒXƒ`ƒƒ[À•W >= ’¸“_À•W‚È‚Ì‚Å)
-                    meshVertices[vt1 - 1].pos = mVertices[v1 - 1];
-                    meshVertices[vt1 - 1].norm = mNormals[vn1 - 1];
-                    meshVertices[vt1 - 1].tex = mTextures[vt1 - 1];
-                    meshVertices[vt2 - 1].pos = mVertices[v2 - 1];
-                    meshVertices[vt2 - 1].norm = mNormals[vn2 - 1];
-                    meshVertices[vt2 - 1].tex = mTextures[vt2 - 1];
-                    meshVertices[vt3 - 1].pos = mVertices[v3 - 1];
-                    meshVertices[vt3 - 1].norm = mNormals[vn3 - 1];
-                    meshVertices[vt3 - 1].tex = mTextures[vt3 - 1];
-                } else {
-                    //ƒtƒFƒCƒX “Ç‚İ‚İ¨’¸“_ƒCƒ“ƒfƒbƒNƒX‚É
-                    //sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
-                    faceBuffer[fCount * 3] = v1 - 1;
-                    faceBuffer[fCount * 3 + 1] = v2 - 1;
-                    faceBuffer[fCount * 3 + 2] = v3 - 1;
-                    fCount++;
-                    //’¸“_\‘¢‘Ì‚É‘ã“ü
-                    meshVertices[v1 - 1].pos = mVertices[v1 - 1];
-                    meshVertices[v1 - 1].norm = mNormals[vn1 - 1];
-                    //meshVertices[v1 - 1].tex = mTextures[vt1 - 1];
-                    meshVertices[v2 - 1].pos = mVertices[v2 - 1];
-                    meshVertices[v2 - 1].norm = mNormals[vn2 - 1];
-                    //meshVertices[v2 - 1].tex = mTextures[vt2 - 1];
-                    meshVertices[v3 - 1].pos = mVertices[v3 - 1];
-                    meshVertices[v3 - 1].norm = mNormals[vn3 - 1];
-                    //meshVertices[v3 - 1].tex = mTextures[vt3 - 1];
-                    if (vt1 >= 1) {
-                        meshVertices[v1 - 1].tex = mTextures[vt1 - 1];
-                    }
-                    if (vt2 >= 1) {
-                        meshVertices[v2 - 1].tex = mTextures[vt2 - 1];
-                    }
-                    if (vt3 >= 1) {
-                        meshVertices[v3 - 1].tex = mTextures[vt3 - 1];
-                    }
-                }
+                //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼åº§æ¨™ > é ‚ç‚¹æ•°ãŒã‚ã‚Šãˆã‚‹
+                int index1 = (vtCount > vCount) ? vt1 : v1;
+                int index2 = (vtCount > vCount) ? vt2 : v2;
+                int index3 = (vtCount > vCount) ? vt3 : v3;
+
+                //ãƒ•ã‚§ã‚¤ã‚¹ èª­ã¿è¾¼ã¿â†’é ‚ç‚¹ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«
+                faceBuffer[fCount * 3] = index1 - 1;
+                faceBuffer[fCount * 3 + 1] = index2 - 1;
+                faceBuffer[fCount * 3 + 2] = index3 - 1;
+                fCount++;
+                //é ‚ç‚¹æ§‹é€ ä½“ã«ä»£å…¥
+                meshVertices[index1 - 1].pos = mVertices[v1 - 1];
+                meshVertices[index1 - 1].norm = mNormals[vn1 - 1];
+                meshVertices[index1 - 1].tex = mTextures[vt1 - 1];
+                meshVertices[index2 - 1].pos = mVertices[v2 - 1];
+                meshVertices[index2 - 1].norm = mNormals[vn2 - 1];
+                meshVertices[index2 - 1].tex = mTextures[vt2 - 1];
+                meshVertices[index3 - 1].pos = mVertices[v3 - 1];
+                meshVertices[index3 - 1].norm = mNormals[vn3 - 1];
+                meshVertices[index3 - 1].tex = mTextures[vt3 - 1];
             }
         }
-        if (fCount == 0) { //g—p‚³‚ê‚Ä‚¢‚È‚¢ƒ}ƒeƒŠƒAƒ‹‘Îô
+        if (fCount == 0) { //ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„ãƒãƒ†ãƒªã‚¢ãƒ«å¯¾ç­–
             mIndexBuffers[i] = nullptr;
             continue;
         }
 
-        //ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğì¬
+        //ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½œæˆ
         BufferDesc bd;
         bd.size = sizeof(int) * fCount * 3;
         bd.usage = BufferUsage::BUFFER_USAGE_DEFAULT;
@@ -274,14 +251,14 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
 
         mIndexBuffers[i] = renderer->createBuffer(bd, &sub);
 
-        mMaterials[i].numFace = fCount;
+        mMaterials[i]->numFace = fCount;
     }
 
     delete[] faceBuffer;
 
-    //ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@[‚ğì¬
+    //ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½œæˆ
     BufferDesc bd;
-    bd.size = sizeof(MeshVertex) * vCount;
+    bd.size = sizeof(MeshVertex) * mNumVert;
     bd.usage = BufferUsage::BUFFER_USAGE_DEFAULT;
     bd.type = BufferType::BUFFER_TYPE_VERTEX;
     SubResourceDesc sub;
@@ -295,51 +272,51 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
 }
 
 bool Mesh::tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName) {
-    //OBJƒtƒ@ƒCƒ‹‚ğŠJ‚¢‚Ä“à—e‚ğ“Ç‚İ‚Ş
+    //OBJãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã„ã¦å†…å®¹ã‚’èª­ã¿è¾¼ã‚€
     setOBJDirectory();
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        MSG(L"OBJƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ");
+        MSG(L"OBJãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“");
         return false;
     }
 
     std::string line;
     std::string strip;
-    //–‘O‚É’¸“_”Aƒ|ƒŠƒSƒ“”‚ğ’²‚×‚é
+    //äº‹å‰ã«é ‚ç‚¹æ•°ã€ãƒãƒªã‚´ãƒ³æ•°ã‚’èª¿ã¹ã‚‹
     while (!ifs.eof()) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         std::getline(ifs, line);
 
         if (line.empty() || line[0] == '#') {
             continue;
         }
 
-        //‹ó”’‚ª—ˆ‚é‚Ü‚Å“Ç‚İ‚İ
+        //ç©ºç™½ãŒæ¥ã‚‹ã¾ã§èª­ã¿è¾¼ã¿
         strip = stringStrip(line, ' ');
 
-        //ƒ}ƒeƒŠƒAƒ‹“Ç‚İ‚İ
+        //ãƒãƒ†ãƒªã‚¢ãƒ«èª­ã¿è¾¼ã¿
         if (strip == "mtllib") {
-            auto mat = line.substr(7); //umtllib v‚Ì•¶š”•ª
+            auto mat = line.substr(7); //ã€Œmtllib ã€ã®æ–‡å­—æ•°åˆ†
             loadMaterial(renderer, mat.c_str(), &mMaterials);
         }
-        //’¸“_
+        //é ‚ç‚¹
         if (strip == "v") {
             mNumVert++;
         }
-        //–@ü
+        //æ³•ç·š
         if (strip == "vn") {
             mNumNormal++;
         }
-        //ƒeƒNƒXƒ`ƒƒ[À•W
+        //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼åº§æ¨™
         if (strip == "vt") {
             mNumTex++;
         }
-        //ƒtƒFƒCƒX(ƒ|ƒŠƒSƒ“)
+        //ãƒ•ã‚§ã‚¤ã‚¹(ãƒãƒªã‚´ãƒ³)
         if (strip == "f") {
             mNumFace++;
         }
     }
-    //ƒeƒNƒXƒ`ƒƒ[À•W > ’¸“_”‚ª‚ ‚è‚¦‚éB‚»‚Ìê‡A’¸“_‚ğ‘‚â‚·•K—v‚ª‚ ‚é
+    //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼åº§æ¨™ > é ‚ç‚¹æ•°ãŒã‚ã‚Šãˆã‚‹ã€‚ãã®å ´åˆã€é ‚ç‚¹ã‚’å¢—ã‚„ã™å¿…è¦ãŒã‚ã‚‹
     if (mNumTex > mNumVert) {
         mNumVert = mNumTex;
     }
@@ -347,19 +324,22 @@ bool Mesh::tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName) {
     return true;
 }
 
-bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<Material> * material) {
-    //ƒ}ƒeƒŠƒAƒ‹ƒtƒ@ƒCƒ‹‚ğŠJ‚¢‚Ä“à—e‚ğ“Ç‚İ‚Ş
+bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>> * materials) {
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã„ã¦å†…å®¹ã‚’èª­ã¿è¾¼ã‚€
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        MSG(L"mtlƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñ");
+        MSG(L"mtlãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“");
         return false;
     }
 
-    //ƒ}ƒeƒŠƒAƒ‹”‚ğ’²‚×‚é
-    mNumMaterial = 0;
+    //ãƒãƒ†ãƒªã‚¢ãƒ«æ•°ã‚’èª¿ã¹ã‚‹
+    if (!materials->empty()) {
+        materials->clear();
+    }
+
     std::string line;
     while (!ifs.eof()) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         std::getline(ifs, line);
 
         if (line.empty() || line[0] == '#') {
@@ -368,22 +348,20 @@ bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName
 
         auto strip = stringStrip(line, ' ');
 
-        //ƒ}ƒeƒŠƒAƒ‹–¼
+        //ãƒãƒ†ãƒªã‚¢ãƒ«å
         if (strip == "newmtl") {
-            mNumMaterial++;
+            materials->emplace_back(std::make_unique<Material>());
         }
     }
-    material->resize(mNumMaterial);
-    std::vector<Material> materials(mNumMaterial);
 
-    //–{“Ç‚İ‚İ
+    //æœ¬èª­ã¿è¾¼ã¿
     ifs.clear();
     ifs.seekg(0, std::ios_base::beg);
     Vector4 v(0.f, 0.f, 0.f, 1.f);
     int matCount = -1;
 
     while (!ifs.eof()) {
-        //ƒL[ƒ[ƒh“Ç‚İ‚İ
+        //ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰èª­ã¿è¾¼ã¿
         std::getline(ifs, line);
 
         if (line.empty() || line[0] == '#') {
@@ -392,35 +370,35 @@ bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName
 
         auto strip = stringStrip(line, ' ');
 
-        //ƒ}ƒeƒŠƒAƒ‹–¼
+        //ãƒãƒ†ãƒªã‚¢ãƒ«å
         if (strip == "newmtl") {
             matCount++;
-            materials[matCount].matName = line.substr(7); //unewmtl v‚Ì•¶š”•ª
+            (*materials)[matCount]->matName = line.substr(7); //ã€Œnewmtl ã€ã®æ–‡å­—æ•°åˆ†
         }
-        //Ka ƒAƒ“ƒrƒGƒ“ƒg
+        //Ka ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆ
         if (strip == "Ka") {
-            auto sub = line.substr(3); //uKa v‚Ì•¶š”•ª
+            auto sub = line.substr(3); //ã€ŒKa ã€ã®æ–‡å­—æ•°åˆ†
             sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            materials[matCount].Ka = v;
+            (*materials)[matCount]->Ka = v;
         }
-        //Kd ƒfƒBƒtƒ…[ƒY
+        //Kd ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚º
         if (strip == "Kd") {
-            auto sub = line.substr(3); //uKd v‚Ì•¶š”•ª
+            auto sub = line.substr(3); //ã€ŒKd ã€ã®æ–‡å­—æ•°åˆ†
             auto i = sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            materials[matCount].Kd = v;
+            (*materials)[matCount]->Kd = v;
         }
-        //Ks ƒXƒyƒLƒ…ƒ‰[
+        //Ks ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼
         if (strip == "Ks") {
-            auto sub = line.substr(3); //uKs v‚Ì•¶š”•ª
+            auto sub = line.substr(3); //ã€ŒKs ã€ã®æ–‡å­—æ•°åˆ†
             sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            materials[matCount].Ks = v;
+            (*materials)[matCount]->Ks = v;
         }
-        //map_Kd ƒeƒNƒXƒ`ƒƒ[
+        //map_Kd ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼
         if (strip == "map_Kd") {
-            materials[matCount].textureName = line.substr(7); //umap_Kd v‚Ì•¶š”•ª
-            //ƒeƒNƒXƒ`ƒƒ[‚ğì¬
-            if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), materials[matCount].textureName.c_str(), nullptr, nullptr, &materials[matCount].texture, nullptr))) {
-                MSG(L"Mesh‚ÌƒeƒNƒXƒ`ƒƒ‚ª‘¶İ‚µ‚Ü‚¹‚ñ");
+            (*materials)[matCount]->textureName = line.substr(7); //ã€Œmap_Kd ã€ã®æ–‡å­—æ•°åˆ†
+            //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’ä½œæˆ
+            if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), (*materials)[matCount]->textureName.c_str(), nullptr, nullptr, &(*materials)[matCount]->texture, nullptr))) {
+                MSG(L"Meshã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒå­˜åœ¨ã—ã¾ã›ã‚“");
                 return false;
             }
             D3D11_SAMPLER_DESC sd;
@@ -429,77 +407,74 @@ bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName
             sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
             sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
             sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-            renderer->device()->CreateSamplerState(&sd, &materials[matCount].sampleLinear);
+            renderer->device()->CreateSamplerState(&sd, &(*materials)[matCount]->sampleLinear);
         }
     }
-
-    material->swap(materials);
 
     return true;
 }
 
 void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
-    //g—p‚·‚éƒVƒF[ƒ_[‚Ì“o˜^
+    //ä½¿ç”¨ã™ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setVSShader();
     mShader->setPSShader();
-    //‚±‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ğg‚¤ƒVƒF[ƒ_[‚Ì“o˜^
+    //ã“ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½¿ã†ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setVSConstantBuffers(0);
     mShader->setPSConstantBuffers(0);
-    //’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚ğƒZƒbƒg
+    //é ‚ç‚¹ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’ã‚»ãƒƒãƒˆ
     mShader->setInputLayout();
 
-    //ƒVƒF[ƒ_[‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ÉŠeíƒf[ƒ^‚ğ“n‚·
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã«å„ç¨®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™
     D3D11_MAPPED_SUBRESOURCE pData;
     if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer(0)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
         MeshShaderConstantBuffer0 cb;
-        //ƒ[ƒ‹ƒhs—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’æ¸¡ã™
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
-        //ƒ[ƒ‹ƒhAƒJƒƒ‰AË‰es—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ã‚«ãƒ¡ãƒ©ã€å°„å½±è¡Œåˆ—ã‚’æ¸¡ã™
         cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
         cb.WVP.transpose();
-        //ƒ‰ƒCƒg‚Ì•ûŒü‚ğ“n‚·
-        cb.lightDir = Vector4(1.f, -1.f, 1.f, 0.f);
-        //‹“_ˆÊ’u‚ğ“n‚·
+        //ãƒ©ã‚¤ãƒˆã®æ–¹å‘ã‚’æ¸¡ã™
+        cb.lightDir = Vector4(1.f, 1.f, -1.f, 0.f);
+        //è¦–ç‚¹ä½ç½®ã‚’æ¸¡ã™
         cb.eye = Vector4(camera->getPosition(), 0.f);
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
         renderer->deviceContext()->Unmap(mShader->getConstantBuffer(0)->buffer(), 0);
     }
 
-    //ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+    //ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     VertexStreamDesc stream;
     stream.sharedBuffer = mVertexBuffer;
     stream.offset = 0;
     stream.stride = sizeof(MeshVertex);
     renderer->setVertexBuffer(&stream);
 
-    //‚±‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ğg‚¤ƒVƒF[ƒ_[‚Ì“o˜^
+    //ã“ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½¿ã†ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setVSConstantBuffers(1);
     mShader->setPSConstantBuffers(1);
 
-    //ƒ}ƒeƒŠƒAƒ‹‚Ì”‚¾‚¯A‚»‚ê‚¼‚ê‚Ìƒ}ƒeƒŠƒAƒ‹‚ÌƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@|‚ğ•`‰æ
-    for (unsigned i = 0; i < mNumMaterial; i++) {
-        //g—p‚³‚ê‚Ä‚¢‚È‚¢ƒ}ƒeƒŠƒAƒ‹‘Îô
-        if (mMaterials[i].numFace == 0) {
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ã®æ•°ã ã‘ã€ãã‚Œãã‚Œã®ãƒãƒ†ãƒªã‚¢ãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ï¼ã‚’æç”»
+    for (size_t i = 0; i < mMaterials.size(); i++) {
+        //ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„ãƒãƒ†ãƒªã‚¢ãƒ«å¯¾ç­–
+        if (mMaterials[i]->numFace == 0) {
             continue;
         }
-        //ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+        //ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
         renderer->setIndexBuffer(mIndexBuffers[i]);
 
-        //ƒ}ƒeƒŠƒAƒ‹‚ÌŠe—v‘f‚ğƒGƒtƒFƒNƒg(ƒVƒF[ƒ_[)‚É“n‚·
+        //ãƒãƒ†ãƒªã‚¢ãƒ«ã®å„è¦ç´ ã‚’ã‚¨ãƒ•ã‚§ã‚¯ãƒˆ(ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼)ã«æ¸¡ã™
         D3D11_MAPPED_SUBRESOURCE pData;
         if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer(1)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
             MeshShaderConstantBuffer1 cb;
-            cb.ambient = mMaterials[i].Ka; //ƒAƒ“ƒrƒGƒ“ƒg‚ğ‚ğƒVƒF[ƒ_[‚É“n‚·
-            cb.diffuse = mMaterials[i].Kd; //ƒfƒBƒtƒ…[ƒYƒJƒ‰[‚ğƒVƒF[ƒ_[‚É“n‚·
-            cb.diffuse.w = 1.f;
-            cb.specular = mMaterials[i].Ks; //ƒXƒyƒLƒ…ƒ‰[‚ğƒVƒF[ƒ_[‚É“n‚·
+            cb.ambient = mMaterials[i]->Ka; //ã‚¢ãƒ³ãƒ“ã‚¨ãƒ³ãƒˆã‚’ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
+            cb.diffuse = mMaterials[i]->Kd; //ãƒ‡ã‚£ãƒ•ãƒ¥ãƒ¼ã‚ºã‚«ãƒ©ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
+            cb.specular = mMaterials[i]->Ks; //ã‚¹ãƒšã‚­ãƒ¥ãƒ©ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
 
-            //ƒeƒNƒXƒ`ƒƒ[‚ğƒVƒF[ƒ_[‚É“n‚·
-            if (mMaterials[i].texture) {
-                renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i].texture);
-                renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i].sampleLinear);
+            //ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒ¼ã‚’ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã«æ¸¡ã™
+            if (mMaterials[i]->texture) {
+                renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
+                renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
                 cb.texture.x = 1;
             } else {
                 cb.texture.x = 0;
@@ -508,8 +483,8 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
             memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
             renderer->deviceContext()->Unmap(mShader->getConstantBuffer(1)->buffer(), 0);
         }
-        //ƒvƒŠƒ~ƒeƒBƒu‚ğƒŒƒ“ƒ_ƒŠƒ“ƒO
-        renderer->drawIndexed(mMaterials[i].numFace * 3);
+        //ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
+        renderer->drawIndexed(mMaterials[i]->numFace * 3);
     }
 }
 
