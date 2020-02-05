@@ -1,6 +1,7 @@
 ﻿#include "Mesh.h"
 #include "MeshManager.h"
 #include "../Actor/Transform3D.h"
+#include "../Actor/DirectionalLight.h"
 #include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
@@ -16,7 +17,7 @@
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mTransform(nullptr),
-    mShader(renderer->createShader("Mesh.hlsl")),
+    mShader(renderer->createShader("Mesh2.hlsl")),
     mMaterials(0),
     mNumVert(0),
     mNumNormal(0),
@@ -179,7 +180,7 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
     int v1 = 0, v2 = 0, v3 = 0;
     int vn1 = 0, vn2 = 0, vn3 = 0;
     int vt1 = 0, vt2 = 0, vt3 = 0;
-    unsigned fCount = 0;
+    int fCount = 0;
 
     for (unsigned i = 0; i < mMaterials.size(); i++) {
         ifs.clear();
@@ -432,9 +433,9 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
         cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
         cb.WVP.transpose();
         //ライトの方向を渡す
-        cb.lightDir = Vector4(1.f, 1.f, -1.f, 0.f);
+        cb.lightDir = DirectionalLight::dir;
         //視点位置を渡す
-        cb.eye = Vector4(camera->getPosition(), 0.f);
+        cb.eye = camera->getPosition();
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
         renderer->deviceContext()->Unmap(mShader->getConstantBuffer(0)->buffer(), 0);
@@ -472,9 +473,9 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
             if (mMaterials[i]->texture) {
                 renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
                 renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
-                cb.texture.x = 1;
+                cb.texture = 1;
             } else {
-                cb.texture.x = 0;
+                cb.texture = 0;
             }
 
             memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));

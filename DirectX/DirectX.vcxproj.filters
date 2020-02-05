@@ -3,6 +3,7 @@
   <ItemGroup>
     <FxCompile Include="Shader\Texture.hlsl" />
     <FxCompile Include="Shader\Mesh.hlsl" />
+    <FxCompile Include="Shader\Mesh2.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor\ActorManager.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
+    <ClCompile Include="Actor\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -98,5 +100,6 @@
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Actor\Field.h" />
+    <ClInclude Include="Actor\DirectionalLight.h" />
   </ItemGroup>
 </Project>

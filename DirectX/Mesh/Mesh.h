@@ -24,17 +24,17 @@ enum class MeshState {
 };
 
 struct MeshShaderConstantBuffer0 {
-    Matrix4 world; //ワールド行列
-    Matrix4 WVP; //ワールドから射影までの変換行列
-    Vector4 lightDir; //ライト方向
-    Vector4 eye; //カメラ位置
+    ALIGN16 Matrix4 world; //ワールド行列
+    ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
+    ALIGN16 Vector3 lightDir; //ライト方向
+    ALIGN16 Vector3 eye; //カメラ位置
 };
 
 struct MeshShaderConstantBuffer1 {
-    Vector4 ambient; //アンビエント光
-    Vector4 diffuse; //ディフューズ色
-    Vector4 specular; //鏡面反射
-    Vector4 texture; //テクスチャーが貼られているメッシュかどうかのフラグ
+    ALIGN16 Vector4 ambient; //アンビエント光
+    ALIGN16 Vector4 diffuse; //ディフューズ色
+    ALIGN16 Vector4 specular; //鏡面反射
+    ALIGN16 float texture; //テクスチャーが貼られているメッシュかどうかのフラグ
 };
 
 //頂点の構造体

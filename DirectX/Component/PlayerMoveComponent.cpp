@@ -14,7 +14,7 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
-    mOwner->transform()->translate(Vector3::up * 3.f);
+    mOwner->transform()->translate(Vector3::up * 0.5);
 
     mSound = mOwner->componentManager()->getComponent<SoundComponent>();
 }

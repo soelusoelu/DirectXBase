@@ -23,7 +23,6 @@ cbuffer global_1 : register(b1)
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float4 Color : COLOR0;
     float3 Light : TEXCOORD0;
     float3 Normal : TEXCOORD1;
     float3 EyeVector : TEXCOORD2;
@@ -35,28 +34,18 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-	//射影変換（ワールド→ビュー→プロジェクション）
-	//法線をワールド空間に
+    //射影変換（ワールド→ビュー→プロジェクション）
+    //法線をワールド空間に
+    output.Pos = mul(Pos, g_mWVP);
     Norm.w = 0; //移動成分を反映させない
     output.Normal = mul(Norm, g_mW);
-    output.Pos = mul(Pos, g_mWVP);
-	//ライト方向
-    output.Light = g_vLightDir;
-	//視線ベクトル
-    float3 PosWorld = mul(Pos, g_mW);
-    output.EyeVector = g_vEye - PosWorld;
-	
-    float3 Normal = normalize(output.Normal);
-    float3 LightDir = normalize(output.Light);
-    float3 ViewDir = normalize(output.EyeVector);
-    float NL = saturate(dot(Normal, LightDir));
-	
-    float3 Reflect = normalize(2 * NL * Normal - LightDir);
-    float4 specular = pow(saturate(dot(Reflect, ViewDir)), 4);
-
-    output.Color = g_Diffuse * NL + specular * g_Specular;
-	
-	//テクスチャー座標
+    //ライト方向
+    output.Light = normalize(g_vLightDir);
+    //視線ベクトル
+    float3 PosWorld = normalize(mul(Pos, g_mW));
+    output.EyeVector = normalize(g_vEye - PosWorld);
+    
+    //テクスチャー座標
     if (g_Texture == 1)
     {
         output.Tex = Tex;
@@ -70,13 +59,21 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 color = float4(0, 0, 0, 1);
+    //環境光
+    float4 ambient = g_Ambient;
+    //拡散反射光
+    float NL = saturate(dot(input.Normal, input.Light));
+    float4 tex = float4(0, 0, 0, 1);
     if (g_Texture == 1)
     {
-        color = g_texDecal.Sample(g_samLinear, input.Tex);
+        tex = g_texDecal.Sample(g_samLinear, input.Tex);
     }
-    color += input.Color;
-    color.a = g_Diffuse.a;
+    float4 diffuse = (g_Diffuse / 2 + tex / 2) * NL;
+    //鏡面反射光
+    float3 reflect = normalize(2 * NL * input.Normal - input.Light);
+    float4 specular = pow(saturate(dot(reflect, input.EyeVector)), 4) * g_Specular;
+    //フォンモデル最終色 3つの光の合計
+    float4 color = ambient + diffuse + specular;
 
     return color;
 }

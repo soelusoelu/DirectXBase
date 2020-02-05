@@ -161,6 +161,7 @@
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
+    <ClCompile Include="Actor\DirectionalLight.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Actor\Field.h" />
+    <ClInclude Include="Actor\DirectionalLight.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />
@@ -240,6 +242,10 @@
     <FxCompile Include="Shader\Mesh.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\Mesh2.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
     </FxCompile>
