@@ -7,8 +7,9 @@ cbuffer global_0 : register(b0)
 {
     matrix g_mW : packoffset(c0); //ワールド行列
     matrix g_mWVP : packoffset(c4); //ワールドから射影までの変換行列
-    float3 g_vLightDir : packoffset(c8); //ライトの方向ベクトル
-    float3 g_vEye : packoffset(c9); //カメラ位置
+    float3 g_vLightPos : packoffset(c8); //ライトの位置ベクトル
+    matrix g_vLightDir : packoffset(c9); //ライトの方向ベクトル
+    float3 g_vEye : packoffset(c13); //カメラ位置
 };
 
 cbuffer global_1 : register(b1)
@@ -23,6 +24,7 @@ cbuffer global_1 : register(b1)
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
+    float3 WorldPos : POSITION;
     float3 Light : TEXCOORD0;
     float3 Normal : TEXCOORD1;
     float3 EyeVector : TEXCOORD2;
@@ -40,10 +42,10 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
     Norm.w = 0; //移動成分を反映させない
     output.Normal = mul(Norm, g_mW);
     //ライト方向
-    output.Light = normalize(g_vLightDir);
+    output.WorldPos = mul(Pos, g_mW);
+    output.Light = normalize(g_vLightPos - output.WorldPos);
     //視線ベクトル
-    float3 PosWorld = normalize(mul(Pos, g_mW));
-    output.EyeVector = normalize(g_vEye - PosWorld);
+    output.EyeVector = normalize(g_vEye - output.WorldPos);
     
     //テクスチャー座標
     if (g_Texture == 1)
@@ -59,6 +61,11 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {
+    float4 lightBaseVector = float4(0, 1, 0, 1); //ライトの基準ベクトル
+
+    //ライトの基準ベクトルに現在のライトの回転を反映
+    lightBaseVector = mul(lightBaseVector, g_vLightDir);
+
     //環境光
     float4 ambient = g_Ambient;
     //拡散反射光
@@ -74,6 +81,20 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float4 specular = pow(saturate(dot(reflect, input.EyeVector)), 4) * g_Specular;
     //フォンモデル最終色 3つの光の合計
     float4 color = ambient + diffuse + specular;
+
+    //スポットの範囲外のとき
+    float cos = saturate(dot(lightBaseVector.xyz, input.Light));
+    if (cos < 0.9)
+    {
+        color.rgb *= pow(cos / 3, 12 * (0.9 - cos));
+    }
+
+    //距離減衰
+    float distance = length(g_vLightPos - input.WorldPos);
+    color.rgb *= 1.0 / (0 + 0 * distance + 0.2 * distance * distance); // att = 1.0 / (a+b*d+c*d^2) d:距離 a,b,c：定数
+
+    //ライトの強さ
+    color.rgb *= 5.f;
 
     return color;
 }

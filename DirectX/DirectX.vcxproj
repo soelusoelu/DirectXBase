@@ -165,11 +165,13 @@
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
+    <ClCompile Include="Actor\PointLight.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
+    <ClCompile Include="Actor\SpotLight.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
     <ClCompile Include="Sprite\Texture.cpp" />
@@ -211,11 +213,13 @@
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />
+    <ClInclude Include="Actor\PointLight.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Shader\Shader.h" />
+    <ClInclude Include="Actor\SpotLight.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />
     <ClInclude Include="Sprite\Texture.h" />

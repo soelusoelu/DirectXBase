@@ -11,6 +11,8 @@ enum class GameState {
 
 class ActorManager;
 class DirectionalLight;
+class PointLight;
+class SpotLight;
 class Physics;
 
 class GamePlay : public SceneBase, public std::enable_shared_from_this<GamePlay> {
@@ -26,6 +28,8 @@ public:
 private:
     ActorManager* mActorManager;
     std::shared_ptr<DirectionalLight> mDLight;
+    std::shared_ptr<PointLight> mPLight;
+    std::shared_ptr<SpotLight> mSLight;
     Physics* mPhysics;
     GameState mState;
 };

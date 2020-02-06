@@ -4,6 +4,8 @@
 #include "../Actor/DirectionalLight.h"
 #include "../Actor/Field.h"
 #include "../Actor/PlayerActor.h"
+#include "../Actor/PointLight.h"
+#include "../Actor/SpotLight.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
 #include "../Device/Physics.h"
@@ -15,6 +17,8 @@ GamePlay::GamePlay() :
     SceneBase(),
     mActorManager(new ActorManager()),
     mDLight(nullptr),
+    mPLight(nullptr),
+    mSLight(nullptr),
     mPhysics(new Physics()),
     mState(GameState::PLAY) {
     Actor::setActorManager(mActorManager);
@@ -31,7 +35,9 @@ GamePlay::~GamePlay() {
 void GamePlay::startScene() {
     new PlayerActor(mRenderer);
     new Field(mRenderer);
-    mDLight = std::make_shared<DirectionalLight>(mRenderer);
+    //mDLight = std::make_shared<DirectionalLight>(mRenderer);
+    //mPLight = std::make_shared<PointLight>(mRenderer);
+    mSLight = std::make_shared<SpotLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
 }
 
@@ -41,7 +47,10 @@ void GamePlay::updateScene() {
         mActorManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();
-        mDLight->update();
+        //ライト関連
+        //mPLight->update();
+        //mDLight->update();
+        mSLight->update();
     } else if (mState == GameState::PAUSED) {
 
     }

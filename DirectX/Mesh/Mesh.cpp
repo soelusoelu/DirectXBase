@@ -1,7 +1,9 @@
 ﻿#include "Mesh.h"
 #include "MeshManager.h"
-#include "../Actor/Transform3D.h"
 #include "../Actor/DirectionalLight.h"
+#include "../Actor/PointLight.h"
+#include "../Actor/SpotLight.h"
+#include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
@@ -433,7 +435,11 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
         cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
         cb.WVP.transpose();
         //ライトの方向を渡す
-        cb.lightDir = DirectionalLight::dir;
+        //cb.lightDir = DirectionalLight::direction;
+        //cb.lightDir = PointLight::position;
+        cb.lightPos = SpotLight::position;
+        cb.lightDir = SpotLight::rot;
+        cb.lightDir.transpose();
         //視点位置を渡す
         cb.eye = camera->getPosition();
 

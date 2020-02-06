@@ -3,7 +3,7 @@
 
 Field::Field(std::shared_ptr<Renderer> renderer, const char* tag) :
     Actor(renderer, tag) {
-    new MeshComponent(this, "sky_and_ground.obj");
+    new MeshComponent(this, "test.obj");
 }
 
 Field::~Field() = default;

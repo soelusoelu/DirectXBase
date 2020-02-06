@@ -7,16 +7,17 @@ class Mesh;
 class Renderer;
 class Transform3D;
 
-class DirectionalLight {
+class PointLight {
 public:
-    DirectionalLight(std::shared_ptr<Renderer> renderer);
-    ~DirectionalLight();
+    PointLight(std::shared_ptr<Renderer> renderer);
+    ~PointLight();
     void update();
 
 public:
-    static Vector3 direction;
+    static Vector3 position;
 
 private:
     std::shared_ptr<Mesh> mMesh;
     std::shared_ptr<Transform3D> mTransform;
 };
+

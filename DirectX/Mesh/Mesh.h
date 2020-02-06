@@ -26,7 +26,8 @@ enum class MeshState {
 struct MeshShaderConstantBuffer0 {
     ALIGN16 Matrix4 world; //ワールド行列
     ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
-    ALIGN16 Vector3 lightDir; //ライト方向
+    ALIGN16 Vector3 lightPos; //ライト位置
+    ALIGN16 Matrix4 lightDir; //ライト方向
     ALIGN16 Vector3 eye; //カメラ位置
 };
 
