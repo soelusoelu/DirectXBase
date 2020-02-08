@@ -8,6 +8,7 @@
 #include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
+#include "../System/ViewportDesc.h"
 #include "../Sprite/Texture.h"
 #include "../Sprite/Sprite.h"
 
@@ -47,6 +48,18 @@ std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const Sub
     return std::make_shared<Buffer>(mDevice, desc, data);
 }
 
+void Renderer::setViewport(const ViewportDesc& desc) {
+    //ビューポートの設定
+    D3D11_VIEWPORT vp;
+    vp.Width = desc.width;
+    vp.Height = desc.height;
+    vp.MinDepth = 0.f;
+    vp.MaxDepth = 1.f;
+    vp.TopLeftX = 0;
+    vp.TopLeftY = 0;
+    mDeviceContext->RSSetViewports(1, &vp);
+}
+
 void Renderer::setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream, unsigned start) {
     /* IASetVertexBuffers
         使い始めのスロット番号
@@ -62,7 +75,7 @@ void Renderer::setVertexBuffer(const VertexStreamDesc* stream, unsigned numStrea
         buffer = stream->sharedBuffer->buffer();
     }
     mDeviceContext->IASetVertexBuffers(start, numStream, &buffer, &stream->stride, &stream->offset);
-    //buffer->Release();
+    buffer->Release();
 }
 
 void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {

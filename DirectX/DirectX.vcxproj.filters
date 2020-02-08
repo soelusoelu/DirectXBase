@@ -52,6 +52,7 @@
     <ClCompile Include="Actor\DirectionalLight.cpp" />
     <ClCompile Include="Actor\PointLight.cpp" />
     <ClCompile Include="Actor\SpotLight.cpp" />
+    <ClCompile Include="System\GBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -105,5 +106,7 @@
     <ClInclude Include="Actor\DirectionalLight.h" />
     <ClInclude Include="Actor\PointLight.h" />
     <ClInclude Include="Actor\SpotLight.h" />
+    <ClInclude Include="System\GBuffer.h" />
+    <ClInclude Include="System\ViewportDesc.h" />
   </ItemGroup>
 </Project>

@@ -162,6 +162,7 @@
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Actor\DirectionalLight.cpp" />
+    <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Actor\DirectionalLight.h" />
+    <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />
@@ -230,6 +232,7 @@
     <ClInclude Include="System\SubResourceDesc.h" />
     <ClInclude Include="System\TextureDesc.h" />
     <ClInclude Include="System\VertexStreamDesc.h" />
+    <ClInclude Include="System\ViewportDesc.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />

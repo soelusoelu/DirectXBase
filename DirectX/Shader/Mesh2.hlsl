@@ -2,7 +2,6 @@
 Texture2D g_texDecal : register(t0);
 SamplerState g_samLinear : register(s0);
 
-//グローバル
 cbuffer global_0 : register(b0)
 {
     matrix g_mW : packoffset(c0); //ワールド行列
