@@ -78,7 +78,7 @@ void Sprite::draw(const Matrix4 & proj) {
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
-    if (SUCCEEDED(mRenderer->deviceContext()->Map(mShader->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+    if (mShader->map(&pData)) {
         TextureShaderConstantBuffer cb;
         //ワールド、射影行列を渡す
         cb.mWorld = mTransform->getWorldTransform();
@@ -87,14 +87,14 @@ void Sprite::draw(const Matrix4 & proj) {
         cb.mProjection.transpose();
         cb.mColor = mColor;
         cb.mUV = mUV;
+
         memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-        mRenderer->deviceContext()->Unmap(mShader->getConstantBuffer()->buffer(), 0);
+        mShader->unmap();
     }
     //テクスチャーをシェーダーに渡す
     mTexture->setPSTextures();
     //サンプラーのセット
-    auto sample = mTexture->getSampler();
-    mRenderer->deviceContext()->PSSetSamplers(0, 1, &sample);
+    mTexture->setPSSamplers();
     //プリミティブをレンダリング
     mRenderer->drawIndexed(6);
 }

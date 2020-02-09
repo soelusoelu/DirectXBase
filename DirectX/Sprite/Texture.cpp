@@ -85,6 +85,14 @@ void Texture::setPSTextures(unsigned start, unsigned numTextures) {
     mDeviceContext->PSSetShaderResources(start, numTextures, &mTexture);
 }
 
+void Texture::setVSSamplers(unsigned start, unsigned numSamplers) {
+    mDeviceContext->VSSetSamplers(start, numSamplers, &mSampleLinear);
+}
+
+void Texture::setPSSamplers(unsigned start, unsigned numSamplers) {
+    mDeviceContext->PSSetSamplers(start, numSamplers, &mSampleLinear);
+}
+
 void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     static const TextureVertex vertices[] = {
         Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上

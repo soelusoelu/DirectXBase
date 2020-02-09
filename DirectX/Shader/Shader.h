@@ -14,6 +14,9 @@ class Shader {
 public:
     Shader(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Shader();
+    //シェーダーとのやり取り
+    bool map(D3D11_MAPPED_SUBRESOURCE* data, unsigned index = 0, unsigned sub = 0, D3D11_MAP type = D3D11_MAP_WRITE_DISCARD, unsigned flag = 0);
+    void unmap(unsigned index = 0, unsigned sub = 0);
     //シェーダーをセット
     void setVertexShader(ID3D11VertexShader* vertex);
     void setPixelShader(ID3D11PixelShader* pixel);
@@ -23,8 +26,8 @@ public:
     //コンスタントバッファの作成
     void createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned bufferSize, unsigned index = 0);
     //使用するコンスタントバッファを登録
-    void setVSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
-    void setPSConstantBuffers(unsigned start = 0, unsigned numBuffers = 1);
+    void setVSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1);
+    void setPSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1);
     //シェーダの取得
     ID3D11VertexShader* getVertexShader() const;
     ID3D11PixelShader* getPixelShader() const;

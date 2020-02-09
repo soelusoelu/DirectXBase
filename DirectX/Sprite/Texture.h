@@ -37,6 +37,9 @@ public:
     //テクスチャの登録
     void setVSTextures(unsigned start = 0, unsigned numTextures = 1);
     void setPSTextures(unsigned start = 0, unsigned numTextures = 1);
+    //サンプラーの登録
+    void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1);
+    void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1);
 
 private:
     void createVertexBuffer(std::shared_ptr<Renderer> renderer);

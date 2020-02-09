@@ -431,7 +431,7 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
-    if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer(0)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+    if (mShader->map(&pData, 0)) {
         MeshShaderConstantBuffer0 cb;
         //ワールド行列を渡す
         cb.world = mTransform->getWorldTransform();
@@ -448,7 +448,7 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
         //cb.eye = camera->getPosition();
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-        renderer->deviceContext()->Unmap(mShader->getConstantBuffer(0)->buffer(), 0);
+        mShader->unmap(0);
     }
 
     //バーテックスバッファーをセット
@@ -533,7 +533,7 @@ void Mesh::renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr
     }
 
     D3D11_MAPPED_SUBRESOURCE pData;
-    if (SUCCEEDED(renderer->deviceContext()->Map(renderer->getGBuffer()->shader()->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+    if (renderer->getGBuffer()->shader()->map(&pData)) {
         GBufferShaderConstantBuffer cb;
         //ライトの方向を渡す
         cb.lightDir = DirectionalLight::direction;
@@ -541,7 +541,7 @@ void Mesh::renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr
         cb.eye = camera->getPosition();
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-        renderer->deviceContext()->Unmap(renderer->getGBuffer()->shader()->getConstantBuffer()->buffer(), 0);
+        renderer->getGBuffer()->shader()->unmap();
     }
     //スクリーンサイズのポリゴンをレンダー
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);

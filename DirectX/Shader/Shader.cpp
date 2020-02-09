@@ -25,6 +25,15 @@ Shader::~Shader() {
     SAFE_RELEASE(mPixelShader);
 }
 
+bool Shader::map(D3D11_MAPPED_SUBRESOURCE* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) {
+    auto res = mDeviceContext->Map(mConstantBuffers[index]->buffer(), sub, type, flag, data);
+    return (SUCCEEDED(res));
+}
+
+void Shader::unmap(unsigned index, unsigned sub) {
+    mDeviceContext->Unmap(mConstantBuffers[index]->buffer(), sub);
+}
+
 void Shader::setVertexShader(ID3D11VertexShader* vertex) {
     mVertexShader = vertex;
 }
@@ -55,14 +64,14 @@ void Shader::createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned b
     mConstantBuffers[index] = renderer->createBuffer(cb);
 }
 
-void Shader::setVSConstantBuffers(unsigned start, unsigned numBuffers) {
-    auto buf = mConstantBuffers[start]->buffer();
-   mDeviceContext->VSSetConstantBuffers(start, numBuffers, &buf);
+void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) {
+    auto buf = mConstantBuffers[index]->buffer();
+   mDeviceContext->VSSetConstantBuffers(index, numBuffers, &buf);
 }
 
-void Shader::setPSConstantBuffers(unsigned start, unsigned numBuffers) {
-    auto buf = mConstantBuffers[start]->buffer();
-   mDeviceContext->PSSetConstantBuffers(start, numBuffers, &buf);
+void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) {
+    auto buf = mConstantBuffers[index]->buffer();
+   mDeviceContext->PSSetConstantBuffers(index, numBuffers, &buf);
 }
 
 ID3D11VertexShader* Shader::getVertexShader() const {
