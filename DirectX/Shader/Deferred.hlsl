@@ -10,13 +10,6 @@ cbuffer global_0 : register(b0)
     float3 g_vEye : packoffset(c1); //カメラ位置
 };
 
-cbuffer global_1 : register(b1)
-{
-    float4 g_Ambient = float4(0, 0, 0, 0); //アンビエント光
-    float4 g_Diffuse = float4(1, 0, 0, 0); //拡散反射(色）
-    float4 g_Specular = float4(1, 1, 1, 1); //鏡面反射
-};
-
 //バーテックスバッファー出力
 struct VS_OUTPUT
 {
@@ -50,11 +43,11 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 vWorldPos = g_texPosition.Sample(g_samLinear, input.UV).xyz;
     //取り出した情報をもとにフォンシェーディングを計算
     float3 vLightDir = normalize(g_vLightDir - vWorldPos);
-    float3 vEyeVec = g_vEye.xyz;
+    float3 vEyeVec = normalize(g_vEye.xyz);
     float3 vDiffuseIntensity = dot(vLightDir, vWorldNormal);
     float3 vSpecularIntensity = pow(max(0, dot(vEyeVec, reflect(-vLightDir, vWorldNormal))), 4);
 
-    float4 FinalColor;
+    float4 FinalColor = float4(1, 1, 1, 1);
     FinalColor.rgb = vDiffuseIntensity * vDiffuse.rgb + vSpecularIntensity * 1.0;
 
     return FinalColor;

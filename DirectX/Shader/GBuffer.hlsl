@@ -12,7 +12,7 @@ struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
     float4 WorldPos : POSITION;
-    float3 WorldNormal : NORMAL;
+    float4 WorldNormal : NORMAL;
     float2 UV : TEXCOORD;
 };
 //ピクセルシェーダー出力
@@ -50,9 +50,10 @@ PS_OUTPUT PS(VS_OUTPUT input)
     Out.vColor = g_tex.Sample(g_samLinear, input.UV);
 
     //ワールド法線テクスチャーへ出力
-    float3 vNormal = input.WorldNormal;
+    float4 vNormal = input.WorldNormal;
     vNormal = vNormal * 0.5 + 0.5;
-    Out.vNormal = float4(vNormal, 0);
+    Out.vNormal = vNormal;
+    Out.vNormal.a = 1;
 
     //ワールド座標テクスチャーへ出力
     Out.vPosition = input.WorldPos;

@@ -12,7 +12,6 @@
 #include "../Scene/Title.h"
 #include "../System/Game.h"
 #include "../UI/Pause.h"
-#include "../Sprite/Sprite.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -40,8 +39,6 @@ void GamePlay::startScene() {
     //mPLight = std::make_shared<PointLight>(mRenderer);
     //mSLight = std::make_shared<SpotLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
-
-    new Sprite(mRenderer, "cat.png");
 }
 
 void GamePlay::updateScene() {
