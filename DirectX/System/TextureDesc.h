@@ -12,7 +12,8 @@ enum class TextureType {
 
 //テクスチャフォーマット
 enum class TextureFormat {
-    TEXTURE_FORMAT_RGBA8,
+    TEXTURE_FORMAT_RGBA32_FLOAT,
+    TEXTURE_FORMAT_RGBA8_UNORM
 };
 
 //テクスチャの使用方法
@@ -81,7 +82,7 @@ struct TextureDesc {
         bindFlags(TextureBind::TEXTURE_BIND_SHADER_RESOURCE),
         cpuAccessFlags(TextureCPUAccessFlag::CPU_ACCESS_NONE),
         miscFlags(0),
-        format(TextureFormat::TEXTURE_FORMAT_RGBA8),
+        format(TextureFormat::TEXTURE_FORMAT_RGBA8_UNORM),
         filter(TextureFilter::TEXTURE_FILTER_LINEAR),
         mipFilter(TextureFilter::TEXTURE_FILTER_LINEAR),
         srcInfo(0) {

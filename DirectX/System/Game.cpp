@@ -1,5 +1,4 @@
 ﻿#include "Game.h"
-#include "Direct3D11.h"
 #include "Window.h"
 #include "../Main.h"
 #include "../Device/Random.h"
@@ -51,14 +50,8 @@ HRESULT Game::init() {
     MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ウィンドウ作成失敗");
     mhWnd = mWindow->gethWnd();
 
-    mD3D11 = std::make_unique<Direct3D11>();
-    if (!mD3D11) {
-        MSG(L"Direct3Dの初期化失敗");
-        return E_FAIL;
-    }
-    MFALSE(mD3D11->init(mhWnd), L"Direct3D初期化失敗");
-
-    mRenderer = std::make_shared<Renderer>(mD3D11->device(), mD3D11->deviceContext(), mD3D11->rasterizerState(), mD3D11->rasterizerStateBack());
+    mRenderer = std::make_shared<Renderer>(mhWnd);
+    mRenderer->initialize();
     mMain = std::make_unique<Main>(mRenderer);
 
     Random::init();
@@ -68,7 +61,7 @@ HRESULT Game::init() {
 }
 
 void Game::mainLoop() {
-    mD3D11->clear();
+    mRenderer->clear();
 
     Input::update();
 
@@ -76,7 +69,7 @@ void Game::mainLoop() {
     mMain->draw();
 
     fixFPS60();
-    mD3D11->present();
+    mRenderer->present();
 }
 
 void Game::fixFPS60() {

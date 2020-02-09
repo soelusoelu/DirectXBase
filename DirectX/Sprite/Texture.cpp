@@ -86,7 +86,7 @@ void Texture::setPSTextures(unsigned start, unsigned numTextures) {
 }
 
 void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
-    TextureVertex vertices[] = {
+    static const TextureVertex vertices[] = {
         Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
         Vector3(1.f, 0.f, 0.f), Vector2(1.f, 0.f), //右上
         Vector3(0.f, 1.f, 0.f), Vector2(0.f, 1.f), //左下
@@ -190,7 +190,8 @@ unsigned Texture::toCPUAccess(TextureCPUAccessFlag flag) const {
 
 DXGI_FORMAT Texture::toFormat(TextureFormat format) const {
     const DXGI_FORMAT formats[] = {
-        DXGI_FORMAT_R8G8B8A8_UNORM,
+        DXGI_FORMAT_R32G32B32A32_FLOAT,
+        DXGI_FORMAT_R8G8B8A8_UNORM
     };
     return formats[static_cast<unsigned>(format)];
 }

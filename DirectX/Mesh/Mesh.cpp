@@ -9,7 +9,7 @@
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
-#include "../System/Direct3D11.h"
+#include "../System/GBuffer.h"
 #include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
@@ -19,7 +19,7 @@
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mTransform(nullptr),
-    mShader(renderer->createShader("Mesh2.hlsl")),
+    mShader(renderer->createShader("GBuffer.hlsl")),
     mMaterials(0),
     mNumVert(0),
     mNumNormal(0),
@@ -36,7 +36,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
 
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer0), 0);
-    mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer1), 1);
+    //mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer1), 1);
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {
@@ -70,16 +70,22 @@ void Mesh::drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Rend
     //プリミティブ・トポロジーをセット
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
 
+    //各テクスチャ上にレンダリング
+    renderToTexture(renderer);
+
     for (const auto& mesh : meshes) {
         if (!mesh->getActive() || mesh->isDead()) {
             continue;
         }
 
         renderer->deviceContext()->RSSetState(renderer->rasterizerState());
-        mesh->rendererMesh(renderer, camera);
+        mesh->renderMesh(renderer, camera);
         renderer->deviceContext()->RSSetState(renderer->rasterizerStateBack());
-        mesh->rendererMesh(renderer, camera);
+        mesh->renderMesh(renderer, camera);
     }
+
+    //各テクスチャを参照してレンダリング
+    renderFromTexture(renderer, camera);
 }
 
 void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {
@@ -102,7 +108,7 @@ bool Mesh::isDead() const {
     return mState == MeshState::DEAD;
 }
 
-void Mesh::setMeshManager(MeshManager * manager) {
+void Mesh::setMeshManager(MeshManager* manager) {
     mMeshManager = manager;
 }
 
@@ -324,7 +330,7 @@ bool Mesh::tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName) {
     return true;
 }
 
-bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>> * materials) {
+bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>>* materials) {
     //マテリアルファイルを開いて内容を読み込む
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
@@ -414,7 +420,7 @@ bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName
     return true;
 }
 
-void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -437,11 +443,11 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
         //ライトの方向を渡す
         //cb.lightDir = DirectionalLight::direction;
         //cb.lightDir = PointLight::position;
-        cb.lightPos = SpotLight::position;
-        cb.lightDir = SpotLight::rot;
-        cb.lightDir.transpose();
+        //cb.lightPos = SpotLight::position;
+        //cb.lightDir = SpotLight::rot;
+        //cb.lightDir.transpose();
         //視点位置を渡す
-        cb.eye = camera->getPosition();
+        //cb.eye = camera->getPosition();
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
         renderer->deviceContext()->Unmap(mShader->getConstantBuffer(0)->buffer(), 0);
@@ -455,8 +461,8 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
     renderer->setVertexBuffer(&stream);
 
     //このコンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers(1);
-    mShader->setPSConstantBuffers(1);
+    //mShader->setVSConstantBuffers(1);
+    //mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < mMaterials.size(); i++) {
@@ -468,31 +474,91 @@ void Mesh::rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Came
         renderer->setIndexBuffer(mIndexBuffers[i]);
 
         //マテリアルの各要素をエフェクト(シェーダー)に渡す
-        D3D11_MAPPED_SUBRESOURCE pData;
-        if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer(1)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-            MeshShaderConstantBuffer1 cb;
-            cb.ambient = mMaterials[i]->Ka; //アンビエントををシェーダーに渡す
-            cb.diffuse = mMaterials[i]->Kd; //ディフューズカラーをシェーダーに渡す
-            cb.specular = mMaterials[i]->Ks; //スペキュラーをシェーダーに渡す
+        //D3D11_MAPPED_SUBRESOURCE pData;
+        //if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer(1)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        //    MeshShaderConstantBuffer1 cb;
+        //    cb.ambient = mMaterials[i]->Ka; //アンビエントををシェーダーに渡す
+        //    cb.diffuse = mMaterials[i]->Kd; //ディフューズカラーをシェーダーに渡す
+        //    cb.specular = mMaterials[i]->Ks; //スペキュラーをシェーダーに渡す
 
-            //テクスチャーをシェーダーに渡す
-            if (mMaterials[i]->texture) {
-                renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
-                renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
-                cb.texture = 1;
-            } else {
-                cb.texture = 0;
-            }
+        //    //テクスチャーをシェーダーに渡す
+        //    if (mMaterials[i]->texture) {
+        //        renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
+        //        renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
+        //        cb.texture = 1;
+        //    } else {
+        //        cb.texture = 0;
+        //    }
 
-            memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-            renderer->deviceContext()->Unmap(mShader->getConstantBuffer(1)->buffer(), 0);
+        //    memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+        //    renderer->deviceContext()->Unmap(mShader->getConstantBuffer(1)->buffer(), 0);
+        //}
+
+        if (mMaterials[i]->texture) {
+            renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
+            renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
         }
         //プリミティブをレンダリング
         renderer->drawIndexed(mMaterials[i]->numFace * 3);
     }
 }
 
-std::string Mesh::stringStrip(const std::string & string, const char delimiter) {
+void Mesh::renderToTexture(std::shared_ptr<Renderer> renderer) {
+    //各テクスチャをレンダーターゲットに設定
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    ID3D11RenderTargetView* views[numGBuffer];
+    for (size_t i = 0; i < numGBuffer; i++) {
+        views[i] = renderer->getGBuffer()->getRenderTarget(i);
+    }
+    //renderer->setRenderTargets(views, numGBuffer);
+    renderer->deviceContext()->OMSetRenderTargets(numGBuffer, views, renderer->dsv());
+    //クリア
+    for (size_t i = 0; i < numGBuffer; i++) {
+        renderer->clearRenderTarget(views[i]);
+    }
+    renderer->clearDepthStencilView();
+}
+
+void Mesh::renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) {
+    //レンダーターゲットを通常に戻す
+    renderer->setDefaultRenderTarget();
+    //クリア
+    renderer->clear();
+
+    //使用するシェーダーは、テクスチャーを参照するシェーダー
+    renderer->getGBuffer()->shader()->setVSShader();
+    renderer->getGBuffer()->shader()->setPSShader();
+    //1パス目で作成したテクスチャー3枚をセット
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    for (size_t i = 0; i < numGBuffer; i++) {
+        auto sr = renderer->getGBuffer()->getShaderResource(i);
+        renderer->deviceContext()->PSSetShaderResources(i, 1, &sr);
+    }
+
+    D3D11_MAPPED_SUBRESOURCE pData;
+    if (SUCCEEDED(renderer->deviceContext()->Map(renderer->getGBuffer()->shader()->getConstantBuffer()->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
+        GBufferShaderConstantBuffer cb;
+        //ライトの方向を渡す
+        cb.lightDir = DirectionalLight::direction;
+        //視点位置を渡す
+        cb.eye = camera->getPosition();
+
+        memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+        renderer->deviceContext()->Unmap(renderer->getGBuffer()->shader()->getConstantBuffer()->buffer(), 0);
+    }
+    //スクリーンサイズのポリゴンをレンダー
+    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //バーテックスバッファーをセット
+    VertexStreamDesc stream;
+    stream.sharedBuffer = renderer->getGBuffer()->vertexBuffer();
+    stream.offset = 0;
+    stream.stride = sizeof(MeshVertex);
+    renderer->setVertexBuffer(&stream);
+
+    renderer->draw(4);
+}
+
+std::string Mesh::stringStrip(const std::string& string, const char delimiter) {
     std::string temp = "";
     for (const auto& s : string) {
         if (s != delimiter) {

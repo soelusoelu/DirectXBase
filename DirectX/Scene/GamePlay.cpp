@@ -12,6 +12,7 @@
 #include "../Scene/Title.h"
 #include "../System/Game.h"
 #include "../UI/Pause.h"
+#include "../Sprite/Sprite.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -35,10 +36,12 @@ GamePlay::~GamePlay() {
 void GamePlay::startScene() {
     new PlayerActor(mRenderer);
     new Field(mRenderer);
-    //mDLight = std::make_shared<DirectionalLight>(mRenderer);
+    mDLight = std::make_shared<DirectionalLight>(mRenderer);
     //mPLight = std::make_shared<PointLight>(mRenderer);
-    mSLight = std::make_shared<SpotLight>(mRenderer);
+    //mSLight = std::make_shared<SpotLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
+
+    new Sprite(mRenderer, "cat.png");
 }
 
 void GamePlay::updateScene() {
@@ -48,9 +51,9 @@ void GamePlay::updateScene() {
         //総当たり判定
         mPhysics->sweepAndPrune();
         //ライト関連
+        mDLight->update();
         //mPLight->update();
-        //mDLight->update();
-        mSLight->update();
+        //mSLight->update();
     } else if (mState == GameState::PAUSED) {
 
     }

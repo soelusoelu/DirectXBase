@@ -13,7 +13,6 @@
 #include "DirectXIncLib.h"
 #include <memory>
 
-class Direct3D11;
 class Main;
 class Renderer;
 class Window;
@@ -33,7 +32,6 @@ public:
 
 private:
     std::unique_ptr<Window> mWindow;
-    std::unique_ptr<Direct3D11> mD3D11;
     std::shared_ptr<Renderer> mRenderer;
     std::unique_ptr<Main> mMain;
     HINSTANCE mInstance;

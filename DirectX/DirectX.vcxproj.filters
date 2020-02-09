@@ -4,6 +4,8 @@
     <FxCompile Include="Shader\Texture.hlsl" />
     <FxCompile Include="Shader\Mesh.hlsl" />
     <FxCompile Include="Shader\Mesh2.hlsl" />
+    <FxCompile Include="Shader\Deferred.hlsl" />
+    <FxCompile Include="Shader\GBuffer.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Actor\ActorManager.cpp" />
@@ -31,7 +33,6 @@
     <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="Utility\Input.cpp" />
     <ClCompile Include="Utility\Math.cpp" />
-    <ClCompile Include="System\Direct3D11.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
@@ -86,7 +87,6 @@
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="System\Direct3D11.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />

@@ -26,17 +26,17 @@ enum class MeshState {
 struct MeshShaderConstantBuffer0 {
     ALIGN16 Matrix4 world; //ワールド行列
     ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
-    ALIGN16 Vector3 lightPos; //ライト位置
-    ALIGN16 Matrix4 lightDir; //ライト方向
-    ALIGN16 Vector3 eye; //カメラ位置
+    //ALIGN16 Vector3 lightPos; //ライト位置
+    //ALIGN16 Matrix4 lightDir; //ライト方向
+    //ALIGN16 Vector3 eye; //カメラ位置
 };
 
-struct MeshShaderConstantBuffer1 {
-    ALIGN16 Vector4 ambient; //アンビエント光
-    ALIGN16 Vector4 diffuse; //ディフューズ色
-    ALIGN16 Vector4 specular; //鏡面反射
-    ALIGN16 float texture; //テクスチャーが貼られているメッシュかどうかのフラグ
-};
+//struct MeshShaderConstantBuffer1 {
+//    ALIGN16 Vector4 ambient; //アンビエント光
+//    ALIGN16 Vector4 diffuse; //ディフューズ色
+//    ALIGN16 Vector4 specular; //鏡面反射
+//    ALIGN16 float texture; //テクスチャーが貼られているメッシュかどうかのフラグ
+//};
 
 //頂点の構造体
 struct MeshVertex {
@@ -81,7 +81,9 @@ private:
     bool loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName);
     bool tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName); //事前に頂点数などを調べる
     bool loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>>* materials);
-    void rendererMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
+    void renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
+    static void renderToTexture(std::shared_ptr<Renderer> renderer);
+    static void renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
     std::string stringStrip(const std::string& string, const char delimiter);
 
 private:

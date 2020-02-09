@@ -185,7 +185,6 @@
     <ClCompile Include="Utility\Input.cpp" />
     <ClCompile Include="Utility\Math.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="System\Direct3D11.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
@@ -240,12 +239,19 @@
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="Main.h" />
-    <ClInclude Include="System\Direct3D11.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Shader\Deferred.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Shader\GBuffer.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Shader\Mesh.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
