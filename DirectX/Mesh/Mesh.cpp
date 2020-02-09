@@ -1,7 +1,6 @@
 ﻿#include "Mesh.h"
 #include "MeshManager.h"
 #include "../Actor/DirectionalLight.h"
-#include "../Actor/PointLight.h"
 #include "../Actor/SpotLight.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
@@ -78,9 +77,9 @@ void Mesh::drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Rend
             continue;
         }
 
-        renderer->deviceContext()->RSSetState(renderer->rasterizerState());
+        renderer->setRasterizerStateFront();
         mesh->renderMesh(renderer, camera);
-        renderer->deviceContext()->RSSetState(renderer->rasterizerStateBack());
+        renderer->setRasterizerStateBack();
         mesh->renderMesh(renderer, camera);
     }
 
@@ -442,7 +441,6 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
         cb.WVP.transpose();
         //ライトの方向を渡す
         //cb.lightDir = DirectionalLight::direction;
-        //cb.lightDir = PointLight::position;
         //cb.lightPos = SpotLight::position;
         //cb.lightDir = SpotLight::rot;
         //cb.lightDir.transpose();
@@ -510,8 +508,7 @@ void Mesh::renderToTexture(std::shared_ptr<Renderer> renderer) {
     for (size_t i = 0; i < numGBuffer; i++) {
         views[i] = renderer->getGBuffer()->getRenderTarget(i);
     }
-    //renderer->setRenderTargets(views, numGBuffer);
-    renderer->deviceContext()->OMSetRenderTargets(numGBuffer, views, renderer->dsv());
+    renderer->setRenderTargets(views, numGBuffer);
     //クリア
     for (size_t i = 0; i < numGBuffer; i++) {
         renderer->clearRenderTarget(views[i]);

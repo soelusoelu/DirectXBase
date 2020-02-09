@@ -11,6 +11,7 @@
 #include "../System/ViewportDesc.h"
 #include "../Sprite/Texture.h"
 #include "../Sprite/Sprite.h"
+#include <algorithm>
 
 Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
@@ -66,14 +67,6 @@ ID3D11Device* Renderer::device() const {
 
 ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
-}
-
-ID3D11RasterizerState* Renderer::rasterizerState() const {
-    return mRasterizerState;
-}
-
-ID3D11RasterizerState* Renderer::rasterizerStateBack() const {
-    return mRasterizerStateBack;
 }
 
 std::shared_ptr<GBuffer> Renderer::getGBuffer() const {
@@ -137,6 +130,14 @@ void Renderer::setDefaultRenderTarget() {
     mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
 }
 
+void Renderer::setRasterizerStateFront() {
+    mDeviceContext->RSSetState(mRasterizerState);
+}
+
+void Renderer::setRasterizerStateBack() {
+    mDeviceContext->RSSetState(mRasterizerStateBack);
+}
+
 std::shared_ptr<Shader> Renderer::createShader(const char* fileName) {
     std::shared_ptr<Shader> shader;
     auto itr = mShaders.find(fileName);
@@ -192,6 +193,15 @@ std::shared_ptr<Mesh> Renderer::createMesh(const char* fileName) {
     return mesh;
 }
 
+void Renderer::addPointLight(PointLightComponent* light) {
+    mPointLigths.emplace_back(light);
+}
+
+void Renderer::removePointLight(PointLightComponent* light) {
+    auto itr = std::find(mPointLigths.begin(), mPointLigths.end(), light);
+    mPointLigths.erase(itr);
+}
+
 void Renderer::draw(unsigned numVertex, unsigned start) {
     mDeviceContext->Draw(numVertex, start);
 }
@@ -200,20 +210,25 @@ void Renderer::drawIndexed(unsigned numIndices, unsigned startIndex, int startVe
     mDeviceContext->DrawIndexed(numIndices, startIndex, startVertex);
 }
 
-void Renderer::clear() {
-    //画面クリア(実際は単色で画面を塗りつぶす処理)
-    static constexpr float clearColor[4] = { 1, 0, 1, 1 }; //クリア色作成 RGBAの順
-    mDeviceContext->ClearRenderTargetView(mRenderTargetView, clearColor); //画面クリア
-    mDeviceContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0); //深度バッファクリア
+void Renderer::clear(float r, float g, float b, float a, bool depth, bool stencil) {
+    clearRenderTarget(mRenderTargetView, r, g, b, a);
+    clearDepthStencilView(depth, stencil);
 }
 
-void Renderer::clearRenderTarget(ID3D11RenderTargetView* target) {
-    static constexpr float clearColor[4] = { 0, 1, 1, 1 }; //クリア色作成 RGBAの順
+void Renderer::clearRenderTarget(ID3D11RenderTargetView* target, float r, float g, float b, float a) {
+    const float clearColor[4] = { r, g, b, a }; //クリア色作成 RGBAの順
     mDeviceContext->ClearRenderTargetView(target, clearColor); //画面クリア
 }
 
-void Renderer::clearDepthStencilView() {
-    mDeviceContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0); //深度バッファクリア
+void Renderer::clearDepthStencilView(bool depth, bool stencil) {
+    unsigned mask = 0;
+    if (depth) {
+        mask |= D3D11_CLEAR_DEPTH;
+    }
+    if (stencil) {
+        mask |= D3D11_CLEAR_STENCIL;
+    }
+    mDeviceContext->ClearDepthStencilView(mDepthStencilView, mask, 1.f, 0); //深度バッファクリア
 }
 
 void Renderer::present() {

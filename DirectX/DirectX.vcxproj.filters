@@ -51,9 +51,9 @@
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Actor\DirectionalLight.cpp" />
-    <ClCompile Include="Actor\PointLight.cpp" />
     <ClCompile Include="Actor\SpotLight.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
+    <ClCompile Include="Component\PointLightComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -104,9 +104,9 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Actor\DirectionalLight.h" />
-    <ClInclude Include="Actor\PointLight.h" />
     <ClInclude Include="Actor\SpotLight.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="System\ViewportDesc.h" />
+    <ClInclude Include="Component\PointLightComponent.h" />
   </ItemGroup>
 </Project>

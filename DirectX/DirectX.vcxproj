@@ -162,11 +162,11 @@
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Actor\DirectionalLight.cpp" />
+    <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
-    <ClCompile Include="Actor\PointLight.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -210,11 +210,11 @@
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Actor\DirectionalLight.h" />
+    <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />
-    <ClInclude Include="Actor\PointLight.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />

@@ -4,6 +4,7 @@
 #include "../System/DirectXIncLib.h"
 #include <memory>
 #include <unordered_map>
+#include <list>
 
 enum class PrimitiveType {
     PRIMITIVE_TYPE_POINT_LIST,
@@ -19,6 +20,7 @@ class GBuffer;
 class InputElement;
 class InputElementDesc;
 class Mesh;
+class PointLightComponent;
 class Shader;
 class SoundBase;
 class Sound;
@@ -36,8 +38,6 @@ public:
 
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
-    ID3D11RasterizerState* rasterizerState() const;
-    ID3D11RasterizerState* rasterizerStateBack() const;
     std::shared_ptr<GBuffer> getGBuffer() const;
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
@@ -49,6 +49,8 @@ public:
     void setPrimitive(PrimitiveType primitive);
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
     void setDefaultRenderTarget();
+    void setRasterizerStateFront();
+    void setRasterizerStateBack();
 
     std::shared_ptr<Shader> createShader(const char* fileName);
     std::shared_ptr<Texture> createTexture(const char* fileName);
@@ -56,13 +58,15 @@ public:
     std::shared_ptr<Sound> createSE(const char* fileName);
     std::shared_ptr<Mesh> createMesh(const char* fileName);
 
+    void addPointLight(PointLightComponent* light);
+    void removePointLight(PointLightComponent* light);
+
     void draw(unsigned numVertex, unsigned start = 0);
     void drawIndexed(unsigned numIndices, unsigned startIndex = 0, int startVertex = 0);
-    void clear();
-    void clearRenderTarget(ID3D11RenderTargetView* target);
-    void clearDepthStencilView();
+    void clear(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f, bool depth = true, bool stencil = false);
+    void clearRenderTarget(ID3D11RenderTargetView* target, float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f);
+    void clearDepthStencilView(bool depth = true, bool stencil = false);
     void present();
-    ID3D11DepthStencilView* dsv() const { return mDepthStencilView; }
 
 private:
     void createDeviceAndSwapChain(const HWND& hWnd);
@@ -92,5 +96,6 @@ private:
     std::unordered_map<const char*, std::shared_ptr<Texture>> mTextures;
     std::unordered_map<const char*, std::shared_ptr<Sound>> mSounds;
     std::unordered_map<const char*, std::shared_ptr<Mesh>> mMeshes;
+    std::list<PointLightComponent*> mPointLigths;
 };
 
