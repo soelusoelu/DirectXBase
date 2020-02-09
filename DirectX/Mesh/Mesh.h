@@ -16,6 +16,7 @@ class Renderer;
 class Texture;
 class Transform3D;
 class Shader;
+class VertexArray;
 
 enum class MeshState {
     ACTIVE,
@@ -85,16 +86,7 @@ private:
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;
     std::vector<std::unique_ptr<Material>> mMaterials;
-
-    unsigned mNumVert; //頂点数
-    unsigned mNumNormal; //法線数
-    unsigned mNumTex; //テクスチャ座標数
-    unsigned mNumFace; //ポリゴン数
-
-    Vector3* mVertices; //頂点情報
-
-    std::shared_ptr<Buffer> mVertexBuffer;
-    std::vector<std::shared_ptr<Buffer>> mIndexBuffers;
+    std::unique_ptr<VertexArray> mVertexArray;
 
     MeshState mState;
 

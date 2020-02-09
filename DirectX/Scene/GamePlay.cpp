@@ -15,7 +15,6 @@ GamePlay::GamePlay() :
     SceneBase(),
     mActorManager(new ActorManager()),
     mDLight(nullptr),
-    mSLight(nullptr),
     mPhysics(new Physics()),
     mState(GameState::PLAY) {
     Actor::setActorManager(mActorManager);

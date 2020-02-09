@@ -188,6 +188,7 @@
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
+    <ClCompile Include="System\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
+    <ClInclude Include="System\VertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Deferred.hlsl">

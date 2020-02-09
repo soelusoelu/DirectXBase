@@ -12,6 +12,7 @@
 #include "../System/GBuffer.h"
 #include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
+#include "../System/VertexArray.h"
 #include "../System/VertexStreamDesc.h"
 #include <fstream>
 #include <string>
@@ -21,13 +22,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mTransform(nullptr),
     mShader(renderer->createShader("GBuffer.hlsl")),
     mMaterials(0),
-    mNumVert(0),
-    mNumNormal(0),
-    mNumTex(0),
-    mNumFace(0),
-    mVertices(nullptr),
-    mVertexBuffer(nullptr),
-    mIndexBuffers(0),
+    mVertexArray(std::make_unique<VertexArray>(renderer)),
     mState(MeshState::ACTIVE) {
     if (!loadMesh(renderer, fileName)) {
         MSG(L"メッシュ作成失敗");
@@ -52,9 +47,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
     }
 }
 
-Mesh::~Mesh() {
-    SAFE_DELETE_ARRAY(mVertices);
-}
+Mesh::~Mesh() = default;
 
 void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
     //バウンディングスフィア作成
@@ -120,9 +113,9 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
     }
 
     //サイズ変更
-    mVertices = new Vector3[mNumVert];
-    Vector3* mNormals = new Vector3[mNumNormal];
-    Vector2* mTextures = new Vector2[mNumTex];
+    Vector3* vertices = new Vector3[mVertexArray->getNumVerts()];
+    Vector3* normals = new Vector3[mVertexArray->getNumNormal()];
+    Vector2* textures = new Vector2[mVertexArray->getNumTex()];
 
     //OBJファイルを開いて内容を読み込む
     setOBJDirectory();
@@ -151,9 +144,9 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
         if (strip == "v") {
             auto sub = line.substr(2); //「v 」の文字数分
             sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
-            mVertices[vCount].x = -x;
-            mVertices[vCount].y = y;
-            mVertices[vCount].z = z;
+            vertices[vCount].x = -x;
+            vertices[vCount].y = y;
+            vertices[vCount].z = z;
             vCount++;
         }
 
@@ -161,9 +154,9 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
         if (strip == "vn") {
             auto sub = line.substr(3); //「vn 」の文字数分
             sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
-            mNormals[vnCount].x = -x;
-            mNormals[vnCount].y = y;
-            mNormals[vnCount].z = z;
+            normals[vnCount].x = -x;
+            normals[vnCount].y = y;
+            normals[vnCount].z = z;
             vnCount++;
         }
 
@@ -171,20 +164,22 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
         if (strip == "vt") {
             auto sub = line.substr(3); //「vt 」の文字数分
             sscanf_s(sub.c_str(), "%f %f", &x, &y);
-            mTextures[vtCount].x = x;
-            mTextures[vtCount].y = 1 - y; //OBJファイルはY成分が逆なので合わせる
+            textures[vtCount].x = x;
+            textures[vtCount].y = 1 - y; //OBJファイルはY成分が逆なので合わせる
             vtCount++;
         }
     }
 
     //マテリアルの数だけインデックスバッファーを作成
-    mIndexBuffers.resize(mMaterials.size());
+    mVertexArray->resizeIndexBuffer(mMaterials.size());
+    //頂点情報を記録
+    mVertexArray->setVertices(vertices);
 
     //フェイス読み込み バラバラに収録されている可能性があるので、マテリアル名を頼りにつなぎ合わせる
     bool matFlag = false;
-    int* faceBuffer = new int[mNumFace * 3]; //3頂点ポリゴンなので、1フェイス=3頂点(3インデックス)
+    int* faceBuffer = new int[mVertexArray->getNumFace() * 3]; //3頂点ポリゴンなので、1フェイス=3頂点(3インデックス)
 
-    auto* meshVertices = new MeshVertex[mNumVert];
+    auto* meshVertices = new MeshVertex[mVertexArray->getNumVerts()];
     int v1 = 0, v2 = 0, v3 = 0;
     int vn1 = 0, vn2 = 0, vn3 = 0;
     int vt1 = 0, vt2 = 0, vt3 = 0;
@@ -231,46 +226,33 @@ bool Mesh::loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName) {
                 faceBuffer[fCount * 3 + 2] = index3 - 1;
                 fCount++;
                 //頂点構造体に代入
-                meshVertices[index1 - 1].pos = mVertices[v1 - 1];
-                meshVertices[index1 - 1].norm = mNormals[vn1 - 1];
-                meshVertices[index1 - 1].tex = mTextures[vt1 - 1];
-                meshVertices[index2 - 1].pos = mVertices[v2 - 1];
-                meshVertices[index2 - 1].norm = mNormals[vn2 - 1];
-                meshVertices[index2 - 1].tex = mTextures[vt2 - 1];
-                meshVertices[index3 - 1].pos = mVertices[v3 - 1];
-                meshVertices[index3 - 1].norm = mNormals[vn3 - 1];
-                meshVertices[index3 - 1].tex = mTextures[vt3 - 1];
+                meshVertices[index1 - 1].pos = vertices[v1 - 1];
+                meshVertices[index1 - 1].norm = normals[vn1 - 1];
+                meshVertices[index1 - 1].tex = textures[vt1 - 1];
+                meshVertices[index2 - 1].pos = vertices[v2 - 1];
+                meshVertices[index2 - 1].norm = normals[vn2 - 1];
+                meshVertices[index2 - 1].tex = textures[vt2 - 1];
+                meshVertices[index3 - 1].pos = vertices[v3 - 1];
+                meshVertices[index3 - 1].norm = normals[vn3 - 1];
+                meshVertices[index3 - 1].tex = textures[vt3 - 1];
             }
         }
         if (fCount == 0) { //使用されていないマテリアル対策
-            mIndexBuffers[i] = nullptr;
             continue;
         }
 
         //インデックスバッファーを作成
-        BufferDesc bd;
-        bd.size = sizeof(int) * fCount * 3;
-        bd.usage = BufferUsage::BUFFER_USAGE_DEFAULT;
-        bd.type = BufferType::BUFFER_TYPE_INDEX;
-        SubResourceDesc sub;
-        sub.data = faceBuffer;
-
-        mIndexBuffers[i] = renderer->createBuffer(bd, &sub);
+        mVertexArray->createIndexBuffer(i, fCount, faceBuffer);
 
         mMaterials[i]->numFace = fCount;
     }
 
+    delete[] normals;
+    delete[] textures;
     delete[] faceBuffer;
 
     //バーテックスバッファーを作成
-    BufferDesc bd;
-    bd.size = sizeof(MeshVertex) * mNumVert;
-    bd.usage = BufferUsage::BUFFER_USAGE_DEFAULT;
-    bd.type = BufferType::BUFFER_TYPE_VERTEX;
-    SubResourceDesc sub;
-    sub.data = meshVertices;
-
-    mVertexBuffer = renderer->createBuffer(bd, &sub);
+    mVertexArray->createVertexBuffer(sizeof(MeshVertex), meshVertices);
 
     delete[] meshVertices;
 
@@ -286,6 +268,10 @@ bool Mesh::tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName) {
         return false;
     }
 
+    unsigned numVert = 0;
+    unsigned numNormal = 0;
+    unsigned numTex = 0;
+    unsigned numFace = 0;
     std::string line;
     std::string strip;
     //事前に頂点数、ポリゴン数を調べる
@@ -307,25 +293,30 @@ bool Mesh::tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName) {
         }
         //頂点
         if (strip == "v") {
-            mNumVert++;
+            numVert++;
         }
         //法線
         if (strip == "vn") {
-            mNumNormal++;
+            numNormal++;
         }
         //テクスチャー座標
         if (strip == "vt") {
-            mNumTex++;
+            numTex++;
         }
         //フェイス(ポリゴン)
         if (strip == "f") {
-            mNumFace++;
+            numFace++;
         }
     }
     //テクスチャー座標 > 頂点数がありえる。その場合、頂点を増やす必要がある
-    if (mNumTex > mNumVert) {
-        mNumVert = mNumTex;
+    if (numTex > numVert) {
+        numVert = numTex;
     }
+
+    mVertexArray->setNumVerts(numVert);
+    mVertexArray->setNumNormal(numNormal);
+    mVertexArray->setNumTex(numTex);
+    mVertexArray->setNumFace(numFace);
 
     return true;
 }
@@ -443,11 +434,7 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
     }
 
     //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.sharedBuffer = mVertexBuffer;
-    stream.offset = 0;
-    stream.stride = sizeof(MeshVertex);
-    renderer->setVertexBuffer(&stream);
+    mVertexArray->setVertexBuffer(sizeof(MeshVertex));
 
     //このコンスタントバッファーを使うシェーダーの登録
     //mShader->setVSConstantBuffers(1);
@@ -460,7 +447,7 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
             continue;
         }
         //インデックスバッファーをセット
-        renderer->setIndexBuffer(mIndexBuffers[i]);
+        mVertexArray->setIndexBuffer(i);
 
         //マテリアルの各要素をエフェクト(シェーダー)に渡す
         //D3D11_MAPPED_SUBRESOURCE pData;
