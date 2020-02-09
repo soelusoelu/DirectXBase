@@ -27,7 +27,7 @@ class Renderer;
 
 class Texture {
 public:
-    Texture(std::shared_ptr<Renderer> renderer, const char* fileName);
+    Texture(std::shared_ptr<Renderer> renderer, const char* fileName, bool isSprite);
     ~Texture();
     static void end();
     static void drawAll(std::vector<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer);
@@ -44,7 +44,7 @@ public:
 private:
     void createVertexBuffer(std::shared_ptr<Renderer> renderer);
     void createIndexBuffer(std::shared_ptr<Renderer> renderer);
-    void createTexture(std::shared_ptr<Renderer> renderer, const char* fileName);
+    void createTexture(std::shared_ptr<Renderer> renderer, const char* fileName, bool isSprite);
     void createSampler(std::shared_ptr<Renderer> renderer);
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;

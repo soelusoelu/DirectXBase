@@ -53,7 +53,7 @@ public:
     void setRasterizerStateBack();
 
     std::shared_ptr<Shader> createShader(const char* fileName);
-    std::shared_ptr<Texture> createTexture(const char* fileName);
+    std::shared_ptr<Texture> createTexture(const char* fileName, bool isSprite = true);
     std::shared_ptr<Sound> createSound(const char* fileName);
     std::shared_ptr<Sound> createSE(const char* fileName);
     std::shared_ptr<Mesh> createMesh(const char* fileName);

@@ -9,7 +9,7 @@
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
 
-Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
+Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName, bool isSprite) :
     mDeviceContext(renderer->deviceContext()),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
@@ -20,7 +20,7 @@ Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName) :
         createIndexBuffer(renderer);
     }
     //テクスチャー作成
-    createTexture(renderer, fileName);
+    createTexture(renderer, fileName, isSprite);
     //テクスチャー用サンプラー作成
     createSampler(renderer);
 }
@@ -126,8 +126,12 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
     mIndexBuffer = renderer->createRawBuffer(bd, &sub);
 }
 
-void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* fileName) {
-    setTextureDirectory();
+void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* fileName, bool isSprite) {
+    if (isSprite) {
+        setTextureDirectory();
+    } else {
+        setOBJDirectory();
+    }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;
     D3DX11GetImageInfoFromFileA(fileName, nullptr, &info, nullptr);

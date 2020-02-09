@@ -51,15 +51,10 @@ struct Material {
     Vector4 Kd; //ディフューズ
     Vector4 Ks; //スペキュラー
     std::string textureName; //テクスチャーファイル名
-    ID3D11ShaderResourceView* texture;
-    ID3D11SamplerState* sampleLinear;
+    std::shared_ptr<Texture> texture;
     unsigned numFace; //そのマテリアルであるポリゴン数
     Material() {
         ZeroMemory(this, sizeof(Material));
-    }
-    ~Material() {
-        SAFE_RELEASE(texture);
-        SAFE_RELEASE(sampleLinear);
     }
 };
 

@@ -6,6 +6,7 @@
 #include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
+#include "../Sprite/Texture.h"
 #include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
 #include "../System/GBuffer.h"
@@ -402,17 +403,7 @@ bool Mesh::loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName
         if (strip == "map_Kd") {
             (*materials)[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
             //テクスチャーを作成
-            if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), (*materials)[matCount]->textureName.c_str(), nullptr, nullptr, &(*materials)[matCount]->texture, nullptr))) {
-                MSG(L"Meshのテクスチャが存在しません");
-                return false;
-            }
-            D3D11_SAMPLER_DESC sd;
-            ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
-            sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-            sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-            sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-            sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-            renderer->device()->CreateSamplerState(&sd, &(*materials)[matCount]->sampleLinear);
+            (*materials)[matCount]->texture = renderer->createTexture((*materials)[matCount]->textureName.c_str(), false);
         }
     }
 
@@ -493,8 +484,8 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
         //}
 
         if (mMaterials[i]->texture) {
-            renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
-            renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
+            mMaterials[i]->texture->setPSTextures();
+            mMaterials[i]->texture->setPSSamplers();
         }
         //プリミティブをレンダリング
         renderer->drawIndexed(mMaterials[i]->numFace * 3);

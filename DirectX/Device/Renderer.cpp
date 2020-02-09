@@ -150,13 +150,13 @@ std::shared_ptr<Shader> Renderer::createShader(const char* fileName) {
     return shader;
 }
 
-std::shared_ptr<Texture> Renderer::createTexture(const char* fileName) {
+std::shared_ptr<Texture> Renderer::createTexture(const char* fileName, bool isSprite) {
     std::shared_ptr<Texture> texture;
     auto itr = mTextures.find(fileName);
     if (itr != mTextures.end()) { //既に読み込まれている
         texture = itr->second;
     } else { //初読み込み
-        texture = std::make_shared<Texture>(shared_from_this(), fileName);
+        texture = std::make_shared<Texture>(shared_from_this(), fileName, isSprite);
         mTextures.emplace(fileName, texture);
     }
     return texture;
