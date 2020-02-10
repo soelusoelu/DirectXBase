@@ -63,7 +63,7 @@ class Mesh {
 public:
     Mesh(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Mesh();
-    void createSphere(std::shared_ptr<Sphere> sphere) const;
+    void createSphere(std::shared_ptr<Sphere>* sphere) const;
     static void drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
     void setTransform(std::shared_ptr<Transform3D> transform);
     void destroy();

@@ -43,7 +43,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 vWorldPos = g_texPosition.Sample(g_samLinear, input.UV).xyz;
     //取り出した情報をもとにフォンシェーディングを計算
     float3 vLightDir = normalize(g_vLightDir - vWorldPos);
-    float3 vEyeVec = normalize(g_vEye.xyz);
+    float3 vEyeVec = normalize(g_vEye);
     float3 vDiffuseIntensity = dot(vLightDir, vWorldNormal);
     float3 vSpecularIntensity = pow(max(0, dot(vEyeVec, reflect(-vLightDir, vWorldNormal))), 4);
 

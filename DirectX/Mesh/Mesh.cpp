@@ -1,19 +1,15 @@
 ﻿#include "Mesh.h"
 #include "MeshManager.h"
 #include "../Actor/DirectionalLight.h"
-#include "../Actor/SpotLight.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../Sprite/Texture.h"
 #include "../System/Buffer.h"
-#include "../System/BufferDesc.h"
 #include "../System/GBuffer.h"
 #include "../System/InputElement.h"
-#include "../System/SubResourceDesc.h"
 #include "../System/VertexArray.h"
-#include "../System/VertexStreamDesc.h"
 #include <fstream>
 #include <string>
 #include <stdio.h>
@@ -49,14 +45,58 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const char* fileName) :
 
 Mesh::~Mesh() = default;
 
-void Mesh::createSphere(std::shared_ptr<Sphere> sphere) const {
+void Mesh::createSphere(std::shared_ptr<Sphere>* sphere) const {
     //バウンディングスフィア作成
-    //D3DXVECTOR3 center;
-    //D3DXVECTOR3 first(mVertices.front().x, mVertices.front().y, mVertices.front().z);
-    //D3DXComputeBoundingSphere(&first, mNumVert, sizeof(D3DXVECTOR3), &center, &sphere->radius);
-    //sphere->center.x = center.x;
-    //sphere->center.y = center.y;
-    //sphere->center.z = center.z;
+    auto verts = mVertexArray->getVertices();
+    float min = Math::infinity;
+    float max = Math::negInfinity;
+    Vector3 minVec3 = Vector3::one * Math::infinity;
+    Vector3 maxVec3 = Vector3::one * Math::negInfinity;
+    for (size_t i = 0; i < mVertexArray->getNumVerts(); i++) {
+        //以下半径
+        if (verts[i].x < min) {
+            min = verts[i].x;
+        }
+        if (verts[i].x > max) {
+            max = verts[i].x;
+        }
+        if (verts[i].y < min) {
+            min = verts[i].y;
+        }
+        if (verts[i].y > max) {
+            max = verts[i].y;
+        }
+        if (verts[i].z < min) {
+            min = verts[i].z;
+        }
+        if (verts[i].z > max) {
+            max = verts[i].z;
+        }
+
+        //以下中心
+        if (verts[i].x < minVec3.x) {
+            minVec3.x = verts[i].x;
+        }
+        if (verts[i].x > maxVec3.x) {
+            maxVec3.x = verts[i].x;
+        }
+        if (verts[i].y < minVec3.y) {
+            minVec3.y = verts[i].y;
+        }
+        if (verts[i].y > maxVec3.y) {
+            maxVec3.y = verts[i].y;
+        }
+        if (verts[i].z < minVec3.z) {
+            minVec3.z = verts[i].z;
+        }
+        if (verts[i].z > maxVec3.z) {
+            maxVec3.z = verts[i].z;
+        }
+    }
+    float r = (max - min) / 2.f;
+    (*sphere)->radius = r;
+    auto c = (maxVec3 + minVec3) / 2.f;
+    (*sphere)->center = c;
 }
 
 void Mesh::drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) {
@@ -514,6 +554,7 @@ void Mesh::renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr
     if (renderer->getGBuffer()->shader()->map(&pData)) {
         GBufferShaderConstantBuffer cb;
         //ライトの方向を渡す
+        //cb.lightDir = Vector3::up;
         cb.lightDir = DirectionalLight::direction;
         //視点位置を渡す
         cb.eye = camera->getPosition();

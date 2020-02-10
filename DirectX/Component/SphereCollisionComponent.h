@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Collider.h"
 #include "../Utility/Math.h"
@@ -6,7 +6,8 @@
 #include <memory>
 
 class Actor;
-class MeshComponent;
+class Mesh;
+class Transform3D;
 
 class SphereCollisionComponent : public Collider {
 public:
@@ -16,11 +17,12 @@ public:
     virtual void updateCollider() override;
     virtual void onUpdateWorldTransformCollider() override;
     void set(const Vector3& center, float radius);
-    void drawMesh(float alpha = 0.5f) const;
     std::shared_ptr<Sphere> getSphere() const;
 
 private:
     std::shared_ptr<Sphere> mSphere;
-    MeshComponent* mSphereMesh;
-    float mRadius;
+    Vector3 mDefaultCenter;
+    float mDefaultRadius;
+    Mesh* mSphereMesh;
+    std::shared_ptr<Transform3D> mTransform;
 };

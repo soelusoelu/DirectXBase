@@ -7,6 +7,7 @@
 class Renderer;
 class MeshComponent;
 class SoundComponent;
+class SphereCollisionComponent;
 class PlayerMoveComponent;
 
 class PlayerActor : public Actor {
@@ -18,6 +19,7 @@ public:
 private:
     MeshComponent* mMesh;
     SoundComponent* mSound;
+    SphereCollisionComponent* mSphere;
     PlayerMoveComponent* mMove;
 };
 

@@ -1,27 +1,36 @@
-#include "SphereCollisionComponent.h"
+﻿#include "SphereCollisionComponent.h"
 #include "MeshComponent.h"
 #include "../Mesh/Mesh.h"
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
-#include "../Device/Physics.h"
 
 SphereCollisionComponent::SphereCollisionComponent(Actor* owner) :
     Collider(owner),
-    mSphere(nullptr),
+    mSphere(std::make_shared<Sphere>(Vector3::zero, 0.f)),
+    mDefaultCenter(Vector3::zero),
+    mDefaultRadius(0.f),
     mSphereMesh(nullptr),
-    mRadius(0.f) {
+    mTransform(std::make_shared<Transform3D>()) {
 }
 
-SphereCollisionComponent::~SphereCollisionComponent() = default;
+SphereCollisionComponent::~SphereCollisionComponent() {
+    if (mSphereMesh) {
+        mSphereMesh->destroy();
+    }
+}
 
 void SphereCollisionComponent::startCollider() {
     auto mesh = mOwner->componentManager()->getComponent<MeshComponent>();
     if (mesh) {
-        //mesh->getMesh()->createSphere(&mSphere);
-        //mSphere.mCenter = mOwner->getTransform()->getPosition();
-        //mDefaultRadius = mSphere.mRadius;
-        //mSphereMesh = new MeshComponent(mOwner, "Sphere.obj");
+        mesh->getMesh()->createSphere(&mSphere);
+        mDefaultCenter = mSphere->center;
+        mDefaultRadius = mSphere->radius;
+#ifdef _DEBUG //デバッグ時のみ当たり判定表示
+        mSphereMesh = new Mesh(mOwner->renderer(), "Sphere.obj");
+        mTransform->setScale(mSphere->radius);
+        mSphereMesh->setTransform(mTransform);
+#endif // _DEBUG
     }
 }
 
@@ -29,26 +38,23 @@ void SphereCollisionComponent::updateCollider() {
 }
 
 void SphereCollisionComponent::onUpdateWorldTransformCollider() {
-    auto center = mOwner->transform()->getPosition();
-    auto radius = mRadius * mOwner->transform()->getScale().y;
-    center.y += radius;
+    auto center = mDefaultCenter + mOwner->transform()->getPosition();
+    auto radius = mDefaultRadius * mOwner->transform()->getScale().y;
 
     mSphere->set(center, radius);
+
+#ifdef _DEBUG
+    mTransform->setPosition(center);
+    mTransform->setScale(radius * 2.f);
+    mTransform->computeWorldTransform();
+#endif // _DEBUG
 }
 
-void SphereCollisionComponent::set(const Vector3& center, float radius) {
+void SphereCollisionComponent::set(const Vector3 & center, float radius) {
     mSphere->set(center, radius);
     if (mIsAutoUpdate) {
         mIsAutoUpdate = false;
     }
-}
-
-void SphereCollisionComponent::drawMesh(float alpha) const {
-    //Matrix4 w = Matrix4::createScale(mSphere.mRadius * 2);
-    //w *= Matrix4::createTranslation(mSphere.mCenter);
-    //if (mSphereMesh) {
-    //    mSphereMesh->draw(w, alpha);
-    //}
 }
 
 std::shared_ptr<Sphere> SphereCollisionComponent::getSphere() const {
