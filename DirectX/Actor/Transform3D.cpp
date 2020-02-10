@@ -8,8 +8,6 @@ Transform3D::Transform3D(Actor* owner) :
     mRotation(Quaternion::identity),
     mPivot(Vector3::zero),
     mScale(Vector3::one),
-    mParent(),
-    mChildren(0),
     mIsRecomputeTransform(true) {
 }
 

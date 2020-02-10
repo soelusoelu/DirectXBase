@@ -181,13 +181,14 @@ std::shared_ptr<Sound> Renderer::createSE(const char* fileName) {
     return sound;
 }
 
-std::shared_ptr<Mesh> Renderer::createMesh(const char* fileName) {
-    std::shared_ptr<Mesh> mesh;
+Mesh* Renderer::createMesh(const char* fileName) {
+    Mesh* mesh;
     auto itr = mMeshes.find(fileName);
     if (itr != mMeshes.end()) { //既に読み込まれている
         mesh = itr->second;
+        mesh->initialize(shared_from_this());
     } else { //初読み込み
-        mesh = std::make_shared<Mesh>(shared_from_this(), fileName);
+        mesh = new Mesh(shared_from_this(), fileName);
         mMeshes.emplace(fileName, mesh);
     }
     return mesh;

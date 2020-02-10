@@ -19,7 +19,7 @@ void MeshComponent::start() {
 void MeshComponent::update() {
 }
 
-std::shared_ptr<Mesh> MeshComponent::getMesh() const {
+Mesh* MeshComponent::getMesh() const {
     return mMesh;
 }
 

@@ -17,6 +17,6 @@ public:
     static Vector3 direction;
 
 private:
-    std::shared_ptr<Mesh> mMesh;
+    Mesh* mMesh;
     std::shared_ptr<Transform3D> mTransform;
 };

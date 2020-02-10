@@ -56,7 +56,7 @@ public:
     std::shared_ptr<Texture> createTexture(const char* fileName, bool isSprite = true);
     std::shared_ptr<Sound> createSound(const char* fileName);
     std::shared_ptr<Sound> createSE(const char* fileName);
-    std::shared_ptr<Mesh> createMesh(const char* fileName);
+    Mesh* createMesh(const char* fileName);
 
     void addPointLight(PointLightComponent* light);
     void removePointLight(PointLightComponent* light);
@@ -95,7 +95,7 @@ private:
     std::unordered_map<const char*, std::shared_ptr<Shader>> mShaders;
     std::unordered_map<const char*, std::shared_ptr<Texture>> mTextures;
     std::unordered_map<const char*, std::shared_ptr<Sound>> mSounds;
-    std::unordered_map<const char*, std::shared_ptr<Mesh>> mMeshes;
+    std::unordered_map<const char*, Mesh*> mMeshes;
     std::list<PointLightComponent*> mPointLigths;
 };
 

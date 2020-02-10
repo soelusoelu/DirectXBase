@@ -32,7 +32,7 @@ public:
     ID3D11VertexShader* getVertexShader() const;
     ID3D11PixelShader* getPixelShader() const;
     //インプットレイアウトの生成
-    void createInputLayout(const InputElementDesc* layout, unsigned numElements);
+    void createInputLayout(const InputElementDesc layout[], unsigned numElements);
     //自身を登録
     void setInputLayout();
     //コンスタントバッファの取得

@@ -4,6 +4,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
+#include "../Device/Renderer.h"
 
 SphereCollisionComponent::SphereCollisionComponent(Actor* owner) :
     Collider(owner),
@@ -27,7 +28,7 @@ void SphereCollisionComponent::startCollider() {
         mDefaultCenter = mSphere->center;
         mDefaultRadius = mSphere->radius;
 #ifdef _DEBUG //デバッグ時のみ当たり判定表示
-        mSphereMesh = new Mesh(mOwner->renderer(), "Sphere.obj");
+        mSphereMesh = mOwner->renderer()->createMesh("Sphere.obj");
         mTransform->setScale(mSphere->radius);
         mSphereMesh->setTransform(mTransform);
 #endif // _DEBUG

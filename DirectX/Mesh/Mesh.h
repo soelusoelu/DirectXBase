@@ -4,7 +4,6 @@
 #include "../System/Game.h"
 #include "../Utility/Collision.h"
 #include "../Utility/Math.h"
-#include <list>
 #include <memory>
 #include <string>
 #include <vector>
@@ -63,8 +62,11 @@ class Mesh {
 public:
     Mesh(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Mesh();
+    void initialize(std::shared_ptr<Renderer> renderer);
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
-    static void drawAll(std::list<std::shared_ptr<Mesh>> meshes, std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
+    void renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
+    static void renderToTexture(std::shared_ptr<Renderer> renderer);
+    static void renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
     void setTransform(std::shared_ptr<Transform3D> transform);
     void destroy();
     void setActive(bool value);
@@ -77,9 +79,6 @@ private:
     bool loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName);
     bool tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName); //事前に頂点数などを調べる
     bool loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>>* materials);
-    void renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
-    static void renderToTexture(std::shared_ptr<Renderer> renderer);
-    static void renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
     std::string stringStrip(const std::string& string, const char delimiter);
 
 private:

@@ -13,7 +13,7 @@ Shader::Shader(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mCompileShader(nullptr),
     mVertexShader(nullptr),
     mPixelShader(nullptr),
-    mConstantBuffers(0) {
+    mVertexLayout(nullptr) {
 
     createVertexShader(fileName);
     createPixelShader(fileName);
@@ -43,11 +43,11 @@ void Shader::setPixelShader(ID3D11PixelShader* pixel) {
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
-   mDeviceContext->VSSetShader(mVertexShader, &classInstances, numClassInstances);
+    mDeviceContext->VSSetShader(mVertexShader, &classInstances, numClassInstances);
 }
 
 void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
-   mDeviceContext->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+    mDeviceContext->PSSetShader(mPixelShader, &classInstances, numClassInstances);
 }
 
 void Shader::createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned bufferSize, unsigned index) {
@@ -66,12 +66,12 @@ void Shader::createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned b
 
 void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) {
     auto buf = mConstantBuffers[index]->buffer();
-   mDeviceContext->VSSetConstantBuffers(index, numBuffers, &buf);
+    mDeviceContext->VSSetConstantBuffers(index, numBuffers, &buf);
 }
 
 void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) {
     auto buf = mConstantBuffers[index]->buffer();
-   mDeviceContext->PSSetConstantBuffers(index, numBuffers, &buf);
+    mDeviceContext->PSSetConstantBuffers(index, numBuffers, &buf);
 }
 
 ID3D11VertexShader* Shader::getVertexShader() const {
@@ -82,12 +82,12 @@ ID3D11PixelShader* Shader::getPixelShader() const {
     return mPixelShader;
 }
 
-void Shader::createInputLayout(const InputElementDesc* layout, unsigned numElements) {
+void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElements) {
     mVertexLayout = std::make_shared<InputElement>(mDevice, layout, numElements, mCompileShader);
 }
 
 void Shader::setInputLayout() {
-   mDeviceContext->IASetInputLayout(mVertexLayout->layout());
+    mDeviceContext->IASetInputLayout(mVertexLayout->layout());
 }
 
 std::shared_ptr<Buffer> Shader::getConstantBuffer(unsigned index) const {

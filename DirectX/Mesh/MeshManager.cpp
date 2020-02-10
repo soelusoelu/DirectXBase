@@ -1,9 +1,8 @@
 ﻿#include "MeshManager.h"
 #include "Mesh.h"
+#include "../Device/Renderer.h"
 
-MeshManager::MeshManager() :
-    mMeshes(0) {
-}
+MeshManager::MeshManager() = default;
 
 MeshManager::~MeshManager() = default;
 
@@ -12,7 +11,25 @@ void MeshManager::update() {
 }
 
 void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
-    Mesh::drawAll(mMeshes, renderer, camera);
+    //プリミティブ・トポロジーをセット
+    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+
+    //各テクスチャ上にレンダリング
+    Mesh::renderToTexture(renderer);
+
+    for (const auto& mesh : mMeshes) {
+        if (!mesh->getActive() || mesh->isDead()) {
+            continue;
+        }
+
+        renderer->setRasterizerStateFront();
+        mesh->renderMesh(renderer, camera);
+        renderer->setRasterizerStateBack();
+        mesh->renderMesh(renderer, camera);
+    }
+
+    //各テクスチャを参照してレンダリング
+    Mesh::renderFromTexture(renderer, camera);
 }
 
 void MeshManager::add(Mesh* mesh) {
