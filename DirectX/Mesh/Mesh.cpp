@@ -534,15 +534,8 @@ void Mesh::renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr
 }
 
 std::string Mesh::stringStrip(const std::string& string, const char delimiter) {
-    std::string temp = "";
-    for (const auto& s : string) {
-        if (s != delimiter) {
-            temp += s;
-        } else {
-            break;
-        }
-    }
-    return temp;
+    //デリミタが見つかるまでの文字を返す
+    return string.substr(0, string.find_first_of(delimiter));
 }
 
 MeshManager* Mesh::mMeshManager = nullptr;
