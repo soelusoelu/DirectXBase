@@ -29,8 +29,8 @@ GamePlay::~GamePlay() {
 }
 
 void GamePlay::startScene() {
-    new PlayerActor(mRenderer);
-    //new Field(mRenderer);
+    //new PlayerActor(mRenderer);
+    new Field(mRenderer);
     //mDLight = std::make_shared<DirectionalLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
 }

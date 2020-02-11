@@ -163,6 +163,7 @@
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Actor\DirectionalLight.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
+    <ClCompile Include="Mesh\MeshLoader.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Actor\DirectionalLight.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
+    <ClInclude Include="Mesh\MeshLoader.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Mesh\Mesh.h" />

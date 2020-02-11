@@ -8,7 +8,7 @@ DirectionalLight::DirectionalLight(std::shared_ptr<Renderer> renderer) :
     mMesh(nullptr),
     mTransform(std::make_shared<Transform3D>()) {
 #ifdef _DEBUG //デバッグ時のみメッシュ描画
-    mMesh = renderer->createMesh("DLight.obj");
+    mMesh = new Mesh(renderer, "DLight.obj");
     mMesh->setTransform(mTransform);
     //位置やスケールは計算には関係ない
     mTransform->setPosition(Vector3(0.f, 5.f, 0.f));

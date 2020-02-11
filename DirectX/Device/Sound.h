@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "../Component/Component.h"
 #include <XAudio2.h>
 #include <memory>
+#include <string>
 
 class Sound;
 class Actor;
@@ -11,7 +11,7 @@ class SoundBase {
 public:
     SoundBase();
     ~SoundBase();
-    void load(const char* fileName, std::shared_ptr<Sound>* sound);
+    void load(const std::string& fileName, std::shared_ptr<Sound>* sound);
     void createSourceVoice(std::shared_ptr<Sound>* sound);
 
 private:

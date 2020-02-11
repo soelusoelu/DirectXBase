@@ -30,7 +30,7 @@ SoundBase::~SoundBase() {
     CoUninitialize();
 }
 
-void SoundBase::load(const char* fileName, std::shared_ptr<Sound>* sound) {
+void SoundBase::load(const std::string& fileName, std::shared_ptr<Sound>* sound) {
     HMMIO hMmio = NULL; //WindowsマルチメディアAPIのハンドル(WindowsマルチメディアAPIはWAVファイル関係の操作用のAPI)
     DWORD wavSize = 0; //WAVファイル内 WAVデータのサイズ(WAVファイルはWAVデータで占められているので、ほぼファイルサイズと同一)
     WAVEFORMATEX* pwfex; //WAVのフォーマット 例)16ビット、44100Hz、ステレオなど
@@ -39,7 +39,7 @@ void SoundBase::load(const char* fileName, std::shared_ptr<Sound>* sound) {
     PCMWAVEFORMAT pcmWaveForm;
     //WAVファイル内のヘッダー情報(音データ以外)の確認と読み込み
     setSoundDirectory();
-    char* fn = const_cast<char*>(fileName); //他にやり方思い浮かばない
+    char* fn = const_cast<char*>(fileName.c_str()); //他にやり方思い浮かばない
     hMmio = mmioOpenA(fn, NULL, MMIO_ALLOCBUF | MMIO_READ);
     //ファイルポインタをRIFFチャンクの先頭にセットする
     mmioDescend(hMmio, &riffckInfo, NULL, 0);

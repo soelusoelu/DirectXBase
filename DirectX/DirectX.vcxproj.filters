@@ -55,6 +55,7 @@
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="System\VertexArray.cpp" />
+    <ClCompile Include="Mesh\MeshLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -110,5 +111,6 @@
     <ClInclude Include="System\ViewportDesc.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="System\VertexArray.h" />
+    <ClInclude Include="Mesh\MeshLoader.h" />
   </ItemGroup>
 </Project>

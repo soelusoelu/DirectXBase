@@ -9,7 +9,7 @@
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
 
-Texture::Texture(std::shared_ptr<Renderer> renderer, const char* fileName, bool isSprite) :
+Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) :
     mDeviceContext(renderer->deviceContext()),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
@@ -126,7 +126,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
     mIndexBuffer = renderer->createRawBuffer(bd, &sub);
 }
 
-void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* fileName, bool isSprite) {
+void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) {
     if (isSprite) {
         setTextureDirectory();
     } else {
@@ -134,12 +134,12 @@ void Texture::createTexture(std::shared_ptr<Renderer> renderer, const char* file
     }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;
-    D3DX11GetImageInfoFromFileA(fileName, nullptr, &info, nullptr);
+    D3DX11GetImageInfoFromFileA(fileName.c_str(), nullptr, &info, nullptr);
 
     mDesc.width = info.Width;
     mDesc.height = info.Height;
 
-    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), fileName, &toImageLoadInfo(mDesc), nullptr, &mTexture, nullptr))) {
+    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &mTexture, nullptr))) {
         MSG(L"テクスチャ作成失敗");
     }
 }

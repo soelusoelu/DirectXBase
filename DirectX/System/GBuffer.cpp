@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "SubResourceDesc.h"
 #include "../Device/Renderer.h"
-#include "../Mesh/Mesh.h"
+#include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 
 GBuffer::GBuffer() :

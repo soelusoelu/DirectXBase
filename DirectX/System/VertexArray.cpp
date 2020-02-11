@@ -78,7 +78,9 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     sub.data = data;
 
     //mVertexBuffer = mRenderer->createBuffer(bd, &sub);
-    mVertexBuffer = std::make_shared<Buffer>(mRenderer->device(), bd, &sub);
+    if (auto r = mRenderer.lock()) {
+        mVertexBuffer = std::make_shared<Buffer>(r->device(), bd, &sub);
+    }
 }
 
 void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void* data) {
@@ -90,7 +92,9 @@ void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void
     sub.data = data;
 
     //mIndexBuffer[index] = mRenderer->createBuffer(bd, &sub);
-    mIndexBuffer[index] = std::make_shared<Buffer>(mRenderer->device(), bd, &sub);
+    if (auto r = mRenderer.lock()) {
+        mIndexBuffer[index] = std::make_shared<Buffer>(r->device(), bd, &sub);
+    }
 }
 
 std::shared_ptr<Buffer> VertexArray::getIndexBuffer(unsigned index) const {
@@ -107,9 +111,13 @@ void VertexArray::setVertexBuffer(unsigned vertexSize, unsigned numStream, unsig
     stream.offset = 0;
     stream.stride = vertexSize;
 
-    mRenderer->setVertexBuffer(&stream, numStream, start);
+    if (auto r = mRenderer.lock()) {
+        r->setVertexBuffer(&stream, numStream, start);
+    }
 }
 
 void VertexArray::setIndexBuffer(unsigned index, unsigned offset) {
-    mRenderer->setIndexBuffer(mIndexBuffer[index], offset);
+    if (auto r = mRenderer.lock()) {
+        r->setIndexBuffer(mIndexBuffer[index], offset);
+    }
 }

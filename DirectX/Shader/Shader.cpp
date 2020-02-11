@@ -7,7 +7,7 @@
 #include "../System/InputElement.h"
 #include "../System/InputElementDesc.h"
 
-Shader::Shader(std::shared_ptr<Renderer> renderer, const char* fileName) :
+Shader::Shader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mDevice(renderer->device()),
     mDeviceContext(renderer->deviceContext()),
     mCompileShader(nullptr),
@@ -94,10 +94,10 @@ std::shared_ptr<Buffer> Shader::getConstantBuffer(unsigned index) const {
     return mConstantBuffers[index];
 }
 
-void Shader::createVertexShader(const char* fileName) {
+void Shader::createVertexShader(const std::string& fileName) {
     setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
-    if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
+    if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }
@@ -108,11 +108,11 @@ void Shader::createVertexShader(const char* fileName) {
     }
 }
 
-void Shader::createPixelShader(const char* fileName) {
+void Shader::createPixelShader(const std::string& fileName) {
     ID3D10Blob* compiledShader;
     setShaderDirectory();
     //ブロブからピクセルシェーダー作成
-    if (FAILED(D3DX11CompileFromFileA(fileName, nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
+    if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }

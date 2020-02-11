@@ -2,13 +2,14 @@
 
 #include "Component.h"
 #include <memory>
+#include <string>
 
 class Actor;
 class Mesh;
 
 class MeshComponent : public Component {
 public:
-    MeshComponent(Actor* owner, const char* filename);
+    MeshComponent(Actor* owner, const std::string& filename);
     ~MeshComponent();
     virtual void start() override;
     virtual void update() override;

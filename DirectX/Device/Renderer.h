@@ -2,9 +2,10 @@
 
 #include "../Utility/Math.h"
 #include "../System/DirectXIncLib.h"
+#include <list>
 #include <memory>
 #include <unordered_map>
-#include <list>
+#include <string>
 
 enum class PrimitiveType {
     PRIMITIVE_TYPE_POINT_LIST,
@@ -19,7 +20,7 @@ class BufferDesc;
 class GBuffer;
 class InputElement;
 class InputElementDesc;
-class Mesh;
+class MeshLoader;
 class PointLightComponent;
 class Shader;
 class SoundBase;
@@ -52,11 +53,11 @@ public:
     void setRasterizerStateFront();
     void setRasterizerStateBack();
 
-    std::shared_ptr<Shader> createShader(const char* fileName);
-    std::shared_ptr<Texture> createTexture(const char* fileName, bool isSprite = true);
-    std::shared_ptr<Sound> createSound(const char* fileName);
-    std::shared_ptr<Sound> createSE(const char* fileName);
-    Mesh* createMesh(const char* fileName);
+    std::shared_ptr<Shader> createShader(const std::string& fileName);
+    std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
+    std::shared_ptr<Sound> createSound(const std::string& fileName);
+    std::shared_ptr<Sound> createSE(const std::string& fileName);
+    std::shared_ptr<MeshLoader> createMesh(const std::string& fileName);
 
     void addPointLight(PointLightComponent* light);
     void removePointLight(PointLightComponent* light);
@@ -92,10 +93,9 @@ private:
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<GBuffer> mGBuffer;
 
-    std::unordered_map<const char*, std::shared_ptr<Shader>> mShaders;
-    std::unordered_map<const char*, std::shared_ptr<Texture>> mTextures;
-    std::unordered_map<const char*, std::shared_ptr<Sound>> mSounds;
-    std::unordered_map<const char*, Mesh*> mMeshes;
+    std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
+    std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
+    std::unordered_map<std::string, std::shared_ptr<Sound>> mSounds;
+    std::unordered_map<std::string, std::shared_ptr<MeshLoader>> mMeshLoaders;
     std::list<PointLightComponent*> mPointLigths;
 };
-

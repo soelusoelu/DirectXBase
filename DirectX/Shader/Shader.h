@@ -2,6 +2,7 @@
 
 #include "../System/DirectXIncLib.h"
 #include <memory>
+#include <string>
 #include <vector>
 
 class Buffer;
@@ -12,7 +13,7 @@ class InputElementDesc;
 
 class Shader {
 public:
-    Shader(std::shared_ptr<Renderer> renderer, const char* fileName);
+    Shader(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Shader();
     //シェーダーとのやり取り
     bool map(D3D11_MAPPED_SUBRESOURCE* data, unsigned index = 0, unsigned sub = 0, D3D11_MAP type = D3D11_MAP_WRITE_DISCARD, unsigned flag = 0);
@@ -40,8 +41,8 @@ public:
 
 private:
     //シェーダの生成
-    void createVertexShader(const char* fileName);
-    void createPixelShader(const char* fileName);
+    void createVertexShader(const std::string& fileName);
+    void createPixelShader(const std::string& fileName);
 
 private:
     ID3D11Device* mDevice;

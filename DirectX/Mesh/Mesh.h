@@ -8,20 +8,12 @@
 #include <string>
 #include <vector>
 
-class Buffer;
 class Camera;
+class MeshLoader;
 class MeshManager;
 class Renderer;
-class Texture;
 class Transform3D;
 class Shader;
-class VertexArray;
-
-enum class MeshState {
-    ACTIVE,
-    NON_ACTIVE,
-    DEAD
-};
 
 struct MeshShaderConstantBuffer0 {
     ALIGN16 Matrix4 world; //ワールド行列
@@ -38,31 +30,17 @@ struct MeshShaderConstantBuffer0 {
 //    ALIGN16 float texture; //テクスチャーが貼られているメッシュかどうかのフラグ
 //};
 
-//頂点の構造体
-struct MeshVertex {
-    Vector3 pos;
-    Vector3 norm;
-    Vector2 tex;
-};
-
-struct Material {
-    std::string matName; //newmtl
-    Vector4 Ka; //アンビエント
-    Vector4 Kd; //ディフューズ
-    Vector4 Ks; //スペキュラー
-    std::string textureName; //テクスチャーファイル名
-    std::shared_ptr<Texture> texture;
-    unsigned numFace; //そのマテリアルであるポリゴン数
-    Material() {
-        ZeroMemory(this, sizeof(Material));
-    }
-};
 
 class Mesh {
 public:
-    Mesh(std::shared_ptr<Renderer> renderer, const char* fileName);
+    enum class State {
+        ACTIVE,
+        NON_ACTIVE,
+        DEAD
+    };
+
+    Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Mesh();
-    void initialize(std::shared_ptr<Renderer> renderer);
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
     void renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
     static void renderToTexture(std::shared_ptr<Renderer> renderer);
@@ -76,18 +54,10 @@ public:
     static void setMeshManager(MeshManager* manager);
 
 private:
-    bool loadMesh(std::shared_ptr<Renderer> renderer, const char* fileName);
-    bool tempLoad(std::shared_ptr<Renderer> renderer, const char* fileName); //事前に頂点数などを調べる
-    bool loadMaterial(std::shared_ptr<Renderer> renderer, const char* fileName, std::vector<std::unique_ptr<Material>>* materials);
-    std::string stringStrip(const std::string& string, const char delimiter);
-
-private:
+    std::shared_ptr<MeshLoader> mLoader;
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;
-    std::vector<std::unique_ptr<Material>> mMaterials;
-    std::unique_ptr<VertexArray> mVertexArray;
-
-    MeshState mState;
+    State mState;
 
     static MeshManager* mMeshManager;
 };

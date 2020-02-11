@@ -5,7 +5,7 @@
 #include "../Mesh/Mesh.h"
 
 SpotLight::SpotLight(std::shared_ptr<Renderer> renderer) :
-    mMesh(renderer->createMesh("SLight.obj")),
+    mMesh(new Mesh(renderer, "SLight.obj")),
     mTransform(std::make_shared<Transform3D>()) {
     mMesh->setTransform(mTransform);
     mTransform->setPosition(Vector3(0.f, 5.f, 0.f));

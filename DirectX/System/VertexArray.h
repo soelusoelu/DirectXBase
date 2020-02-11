@@ -38,7 +38,7 @@ public:
     void setIndexBuffer(unsigned index, unsigned offset = 0);
 
 private:
-    std::shared_ptr<Renderer> mRenderer;
+    std::weak_ptr<Renderer> mRenderer;
 
     unsigned mNumVerts; //’¸“_”
     unsigned mNumIndices;

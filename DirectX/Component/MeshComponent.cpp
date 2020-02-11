@@ -3,9 +3,9 @@
 #include "../Actor/Actor.h"
 #include "../Device/Renderer.h"
 
-MeshComponent::MeshComponent(Actor* owner, const char* filename) :
+MeshComponent::MeshComponent(Actor* owner, const std::string& filename) :
     Component(owner) {
-    mMesh = mOwner->renderer()->createMesh(filename);
+    mMesh = new Mesh(mOwner->renderer(), filename);
     mMesh->setTransform(mOwner->transform());
 }
 

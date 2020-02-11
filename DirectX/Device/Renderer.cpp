@@ -1,6 +1,6 @@
 ﻿#include "Renderer.h"
 #include "Sound.h"
-#include "../Mesh/Mesh.h"
+#include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/DirectXIncLib.h"
@@ -43,7 +43,7 @@ Renderer::~Renderer() {
     mShaders.clear();
     mTextures.clear();
     mSounds.clear();
-    mMeshes.clear();
+    mMeshLoaders.clear();
 
     SAFE_RELEASE(mBlendState);
     SAFE_RELEASE(mDepthStencilState);
@@ -138,7 +138,7 @@ void Renderer::setRasterizerStateBack() {
     mDeviceContext->RSSetState(mRasterizerStateBack);
 }
 
-std::shared_ptr<Shader> Renderer::createShader(const char* fileName) {
+std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
     std::shared_ptr<Shader> shader;
     auto itr = mShaders.find(fileName);
     if (itr != mShaders.end()) { //既に読み込まれている
@@ -150,7 +150,7 @@ std::shared_ptr<Shader> Renderer::createShader(const char* fileName) {
     return shader;
 }
 
-std::shared_ptr<Texture> Renderer::createTexture(const char* fileName, bool isSprite) {
+std::shared_ptr<Texture> Renderer::createTexture(const std::string& fileName, bool isSprite) {
     std::shared_ptr<Texture> texture;
     auto itr = mTextures.find(fileName);
     if (itr != mTextures.end()) { //既に読み込まれている
@@ -162,7 +162,7 @@ std::shared_ptr<Texture> Renderer::createTexture(const char* fileName, bool isSp
     return texture;
 }
 
-std::shared_ptr<Sound> Renderer::createSound(const char* fileName) {
+std::shared_ptr<Sound> Renderer::createSound(const std::string& fileName) {
     std::shared_ptr<Sound> sound;
     auto itr = mSounds.find(fileName);
     if (itr != mSounds.end()) { //既に読み込まれている
@@ -175,21 +175,20 @@ std::shared_ptr<Sound> Renderer::createSound(const char* fileName) {
     return sound;
 }
 
-std::shared_ptr<Sound> Renderer::createSE(const char* fileName) {
+std::shared_ptr<Sound> Renderer::createSE(const std::string& fileName) {
     auto sound = createSound(fileName);
     mSoundBase->createSourceVoice(&sound);
     return sound;
 }
 
-Mesh* Renderer::createMesh(const char* fileName) {
-    Mesh* mesh;
-    auto itr = mMeshes.find(fileName);
-    if (itr != mMeshes.end()) { //既に読み込まれている
+std::shared_ptr<MeshLoader> Renderer::createMesh(const std::string& fileName) {
+    std::shared_ptr<MeshLoader> mesh;
+    auto itr = mMeshLoaders.find(fileName);
+    if (itr != mMeshLoaders.end()) { //既に読み込まれている
         mesh = itr->second;
-        mesh->initialize(shared_from_this());
     } else { //初読み込み
-        mesh = new Mesh(shared_from_this(), fileName);
-        mMeshes.emplace(fileName, mesh);
+        mesh = std::make_shared<MeshLoader>(shared_from_this(), fileName);
+        mMeshLoaders.emplace(fileName, mesh);
     }
     return mesh;
 }
