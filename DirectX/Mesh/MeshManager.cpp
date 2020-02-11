@@ -11,25 +11,22 @@ void MeshManager::update() {
 }
 
 void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+    if (mMeshes.empty()) {
+        return;
+    }
+
     //プリミティブ・トポロジーをセット
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
-
-    //各テクスチャ上にレンダリング
-    Mesh::renderToTexture(renderer);
 
     for (const auto& mesh : mMeshes) {
         if (!mesh->getActive() || mesh->isDead()) {
             continue;
         }
-
         renderer->setRasterizerStateFront();
-        mesh->renderMesh(renderer, camera);
+        mesh->draw(renderer, camera);
         renderer->setRasterizerStateBack();
-        mesh->renderMesh(renderer, camera);
+        mesh->draw(renderer, camera);
     }
-
-    //各テクスチャを参照してレンダリング
-    Mesh::renderFromTexture(renderer, camera);
 }
 
 void MeshManager::add(Mesh* mesh) {

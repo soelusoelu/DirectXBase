@@ -8,7 +8,7 @@
 MeshLoader::MeshLoader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mMaterial(std::make_shared<Material>()),
     mVertexArray(std::make_unique<VertexArray>(renderer)) {
-    if (!load(renderer, fileName)) { //メモリリーク確定
+    if (!load(renderer, fileName)) {
         MSG(L"メッシュ作成失敗");
         return;
     }

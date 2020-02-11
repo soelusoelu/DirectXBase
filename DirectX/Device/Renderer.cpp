@@ -1,16 +1,16 @@
 ﻿#include "Renderer.h"
 #include "Sound.h"
+#include "../Actor/DirectionalLight.h"
+#include "../Camera/Camera.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/GBuffer.h"
-#include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
 #include "../System/ViewportDesc.h"
 #include "../Sprite/Texture.h"
-#include "../Sprite/Sprite.h"
 #include <algorithm>
 
 Renderer::Renderer(const HWND& hWnd) :
@@ -69,10 +69,6 @@ ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
 }
 
-std::shared_ptr<GBuffer> Renderer::getGBuffer() const {
-    return mGBuffer;
-}
-
 Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
     return new Buffer(mDevice, desc, data);
 }
@@ -120,14 +116,6 @@ void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
 
 void Renderer::setPrimitive(PrimitiveType primitive) {
     mDeviceContext->IASetPrimitiveTopology(toPrimitiveMode(primitive));
-}
-
-void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {
-    mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView);
-}
-
-void Renderer::setDefaultRenderTarget() {
-    mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
 }
 
 void Renderer::setRasterizerStateFront() {
@@ -202,6 +190,62 @@ void Renderer::removePointLight(PointLightComponent* light) {
     mPointLigths.erase(itr);
 }
 
+void Renderer::renderToTexture() {
+    //各テクスチャをレンダーターゲットに設定
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    ID3D11RenderTargetView* views[numGBuffer];
+    for (size_t i = 0; i < numGBuffer; i++) {
+        views[i] = mGBuffer->getRenderTarget(i);
+    }
+    setRenderTargets(views, numGBuffer);
+    //クリア
+    static constexpr float clearColor[4] = { 0.f, 0.f, 1.f, 1.f }; //クリア色作成 RGBAの順
+    for (size_t i = 0; i < numGBuffer; i++) {
+        mDeviceContext->ClearRenderTargetView(views[i], clearColor); //画面クリア
+    }
+    clearDepthStencilView();
+}
+
+void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
+    //レンダーターゲットを通常に戻す
+    setDefaultRenderTarget();
+    //クリア
+    clear();
+
+    //使用するシェーダーは、テクスチャーを参照するシェーダー
+    mGBuffer->shader()->setVSShader();
+    mGBuffer->shader()->setPSShader();
+    //1パス目で作成したテクスチャー3枚をセット
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    for (size_t i = 0; i < numGBuffer; i++) {
+        auto sr = mGBuffer->getShaderResource(i);
+        deviceContext()->PSSetShaderResources(i, 1, &sr);
+    }
+
+    D3D11_MAPPED_SUBRESOURCE pData;
+    if (mGBuffer->shader()->map(&pData)) {
+        GBufferShaderConstantBuffer cb;
+        //ライトの方向を渡す
+        //cb.lightDir = Vector3::up;
+        cb.lightDir = DirectionalLight::direction;
+        //視点位置を渡す
+        cb.eye = camera->getPosition();
+
+        memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+        mGBuffer->shader()->unmap();
+    }
+    //スクリーンサイズのポリゴンをレンダー
+    setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //バーテックスバッファーをセット
+    VertexStreamDesc stream;
+    stream.sharedBuffer = mGBuffer->vertexBuffer();
+    stream.offset = 0;
+    stream.stride = sizeof(MeshVertex);
+    setVertexBuffer(&stream);
+
+    draw(4);
+}
+
 void Renderer::draw(unsigned numVertex, unsigned start) {
     mDeviceContext->Draw(numVertex, start);
 }
@@ -211,13 +255,13 @@ void Renderer::drawIndexed(unsigned numIndices, unsigned startIndex, int startVe
 }
 
 void Renderer::clear(float r, float g, float b, float a, bool depth, bool stencil) {
-    clearRenderTarget(mRenderTargetView, r, g, b, a);
+    clearRenderTarget(r, g, b, a);
     clearDepthStencilView(depth, stencil);
 }
 
-void Renderer::clearRenderTarget(ID3D11RenderTargetView* target, float r, float g, float b, float a) {
+void Renderer::clearRenderTarget(float r, float g, float b, float a) {
     const float clearColor[4] = { r, g, b, a }; //クリア色作成 RGBAの順
-    mDeviceContext->ClearRenderTargetView(target, clearColor); //画面クリア
+    mDeviceContext->ClearRenderTargetView(mRenderTargetView, clearColor); //画面クリア
 }
 
 void Renderer::clearDepthStencilView(bool depth, bool stencil) {
@@ -331,6 +375,14 @@ void Renderer::createBlendState() {
 
     UINT mask = 0xffffffff;
     mDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
+}
+
+void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {
+    mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView);
+}
+
+void Renderer::setDefaultRenderTarget() {
+    mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
 }
 
 D3D11_PRIMITIVE_TOPOLOGY Renderer::toPrimitiveMode(PrimitiveType primitive) {

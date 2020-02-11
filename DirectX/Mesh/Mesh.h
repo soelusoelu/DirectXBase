@@ -42,9 +42,7 @@ public:
     Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Mesh();
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
-    void renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
-    static void renderToTexture(std::shared_ptr<Renderer> renderer);
-    static void renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
+    void draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
     void destroy();
     void setActive(bool value);

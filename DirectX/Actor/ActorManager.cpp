@@ -50,7 +50,7 @@ std::shared_ptr<PlayerActor> ActorManager::getPlayer() const {
 void ActorManager::remove() {
     auto itr = mActors.begin();
     while (itr != mActors.end()) {
-        if ((*itr)->getState() == ActorState::DEAD) {
+        if ((*itr)->isDead()) {
             itr = mActors.erase(itr);
         } else {
             ++itr;

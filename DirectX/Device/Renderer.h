@@ -17,9 +17,8 @@ enum class PrimitiveType {
 
 class Buffer;
 class BufferDesc;
+class Camera;
 class GBuffer;
-class InputElement;
-class InputElementDesc;
 class MeshLoader;
 class PointLightComponent;
 class Shader;
@@ -27,7 +26,6 @@ class SoundBase;
 class Sound;
 class SubResourceDesc;
 class Texture;
-class Transform3D;
 class VertexStreamDesc;
 class ViewportDesc;
 
@@ -39,7 +37,6 @@ public:
 
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
-    std::shared_ptr<GBuffer> getGBuffer() const;
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
@@ -48,8 +45,6 @@ public:
     void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
     void setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset = 0);
     void setPrimitive(PrimitiveType primitive);
-    void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
-    void setDefaultRenderTarget();
     void setRasterizerStateFront();
     void setRasterizerStateBack();
 
@@ -62,10 +57,13 @@ public:
     void addPointLight(PointLightComponent* light);
     void removePointLight(PointLightComponent* light);
 
+    void renderToTexture();
+    void renderFromTexture(std::shared_ptr<Camera> camera);
+
     void draw(unsigned numVertex, unsigned start = 0);
     void drawIndexed(unsigned numIndices, unsigned startIndex = 0, int startVertex = 0);
     void clear(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f, bool depth = true, bool stencil = false);
-    void clearRenderTarget(ID3D11RenderTargetView* target, float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f);
+    void clearRenderTarget(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f);
     void clearDepthStencilView(bool depth = true, bool stencil = false);
     void present();
 
@@ -76,6 +74,8 @@ private:
     void createDepthStencilState();
     void createRasterizerState();
     void createBlendState();
+    void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
+    void setDefaultRenderTarget();
     D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive);
 
 private:

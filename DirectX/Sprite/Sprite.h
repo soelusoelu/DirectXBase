@@ -3,12 +3,6 @@
 #include "../Utility/Math.h"
 #include <memory>
 
-enum class SpriteState {
-    ACTIVE,
-    NON_ACTIVE,
-    DEAD
-};
-
 class Transform2D;
 class SpriteManager;
 class Shader;
@@ -16,6 +10,12 @@ class Texture;
 class Renderer;
 
 class Sprite {
+    enum class State {
+        ACTIVE,
+        NON_ACTIVE,
+        DEAD
+    };
+
 public:
     Sprite(std::shared_ptr<Renderer> renderer, const char* fileName);
     ~Sprite();
@@ -62,7 +62,7 @@ private:
     Vector2 mTextureSize;
     Vector4 mColor;
     Vector4 mUV;
-    SpriteState mState;
+    State mState;
     const char* mFileName;
 
     static SpriteManager* mSpriteManager;

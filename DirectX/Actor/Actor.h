@@ -3,11 +3,6 @@
 #include "../Utility/Math.h"
 #include <memory>
 
-enum class ActorState {
-    ACTIVE,
-    DEAD
-};
-
 class ActorManager;
 class ComponentManager;
 class Renderer;
@@ -15,6 +10,11 @@ class Transform3D;
 class Time;
 
 class Actor {
+    enum class State {
+        ACTIVE,
+        DEAD
+    };
+
 protected:
     Actor(std::shared_ptr<Renderer> renderer, const char* tag = "");
 public:
@@ -36,7 +36,7 @@ public:
     std::shared_ptr<Renderer> renderer() const;
     std::shared_ptr<ComponentManager> componentManager() const;
     std::shared_ptr<Transform3D> transform() const;
-    ActorState getState() const;
+    bool isDead() const;
     const char* tag() const;
 
     //ActorManagerの登録
@@ -51,7 +51,7 @@ private:
     std::shared_ptr<ComponentManager> mComponentManager;
     std::shared_ptr<Transform3D> mTransform;
     std::unique_ptr<Time> mDestroyTimer;
-    ActorState mState;
+    State mState;
     const char* mTag;
 
     static ActorManager* mActorManager;

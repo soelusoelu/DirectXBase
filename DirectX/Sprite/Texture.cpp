@@ -13,7 +13,7 @@ Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName
     mDeviceContext(renderer->deviceContext()),
     mTexture(nullptr),
     mSampleLinear(nullptr) {
-    if (!mVertexBuffer || !mIndexBuffer) {
+    if (!vertexBuffer || !indexBuffer) {
         //バーテックスバッファー作成
         createVertexBuffer(renderer);
         //インデックスバッファの作成
@@ -31,50 +31,12 @@ Texture::~Texture() {
 }
 
 void Texture::end() {
-    SAFE_DELETE(mVertexBuffer);
-    SAFE_DELETE(mIndexBuffer);
-}
-
-void Texture::drawAll(std::vector<std::shared_ptr<Sprite>> sprites, std::shared_ptr<Renderer> renderer) {
-    if (sprites.empty()) {
-        return;
-    }
-    //スプライト共通作業
-    //プロジェクション
-    Matrix4 proj = Matrix4::identity;
-    //原点をスクリーン左上にするために平行移動
-    proj.m[3][0] = -1.f;
-    proj.m[3][1] = 1.f;
-    //ピクセル単位で扱うために
-    proj.m[0][0] = 2.f / Game::WINDOW_WIDTH;
-    proj.m[1][1] = -2.f / Game::WINDOW_HEIGHT;
-
-    //プリミティブ・トポロジーをセット
-    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
-    //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.buffer = mVertexBuffer;
-    stream.offset = 0;
-    stream.stride = sizeof(TextureVertex);
-    renderer->setVertexBuffer(&stream);
-    //インデックスバッファーをセット
-    renderer->setIndexBuffer(mIndexBuffer);
-
-    for (auto itr = sprites.begin(); itr != sprites.end(); ++itr) {
-        (*itr)->draw(proj);
-    }
+    SAFE_DELETE(vertexBuffer);
+    SAFE_DELETE(indexBuffer);
 }
 
 const TextureDesc& Texture::desc() const {
     return mDesc;
-}
-
-ID3D11ShaderResourceView* Texture::texture() const {
-    return mTexture;
-}
-
-ID3D11SamplerState* Texture::getSampler() const {
-    return mSampleLinear;
 }
 
 void Texture::setVSTextures(unsigned start, unsigned numTextures) {
@@ -108,7 +70,7 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = vertices;
-    mVertexBuffer = renderer->createRawBuffer(bd, &sub);
+    vertexBuffer = renderer->createRawBuffer(bd, &sub);
 }
 
 void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
@@ -123,7 +85,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = indices;
-    mIndexBuffer = renderer->createRawBuffer(bd, &sub);
+    indexBuffer = renderer->createRawBuffer(bd, &sub);
 }
 
 void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) {
@@ -217,5 +179,5 @@ unsigned Texture::toFilter(TextureFilter filter) const {
     return filters[static_cast<unsigned>(filter)];
 }
 
-Buffer* Texture::mVertexBuffer = nullptr;
-Buffer* Texture::mIndexBuffer = nullptr;
+Buffer* Texture::vertexBuffer = nullptr;
+Buffer* Texture::indexBuffer = nullptr;

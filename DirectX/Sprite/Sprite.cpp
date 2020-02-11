@@ -18,7 +18,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
-    mState(SpriteState::ACTIVE),
+    mState(State::ACTIVE),
     mFileName(fileName) {
 
     //デスクをもとにサイズ取得
@@ -52,7 +52,7 @@ Sprite::Sprite(const Sprite & sprite) :
     mShader(sprite.mShader),
     mColor(sprite.mColor),
     mUV(sprite.mUV),
-    mState(SpriteState::ACTIVE),
+    mState(State::ACTIVE),
     mFileName(sprite.mFileName) {
 }
 
@@ -158,19 +158,19 @@ const Vector2& Sprite::getTextureSize() const {
 }
 
 void Sprite::destroy() {
-    mState = SpriteState::DEAD;
+    mState = State::DEAD;
 }
 
 void Sprite::setActive(bool value) {
-    mState = (value) ? SpriteState::ACTIVE : SpriteState::NON_ACTIVE;
+    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
 }
 
 bool Sprite::getActive() const {
-    return mState == SpriteState::ACTIVE;
+    return mState == State::ACTIVE;
 }
 
 bool Sprite::isDead() const {
-    return mState == SpriteState::DEAD;
+    return mState == State::DEAD;
 }
 
 std::shared_ptr<Texture> Sprite::texture() const {

@@ -2,7 +2,6 @@
 #include "Material.h"
 #include "MeshLoader.h"
 #include "MeshManager.h"
-#include "../Actor/DirectionalLight.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
@@ -43,7 +42,7 @@ void Mesh::createSphere(std::shared_ptr<Sphere>* sphere) const {
     mLoader->createSphere(sphere);
 }
 
-void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -119,61 +118,6 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
         //プリミティブをレンダリング
         renderer->drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
     }
-}
-
-void Mesh::renderToTexture(std::shared_ptr<Renderer> renderer) {
-    //各テクスチャをレンダーターゲットに設定
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
-    ID3D11RenderTargetView* views[numGBuffer];
-    for (size_t i = 0; i < numGBuffer; i++) {
-        views[i] = renderer->getGBuffer()->getRenderTarget(i);
-    }
-    renderer->setRenderTargets(views, numGBuffer);
-    //クリア
-    for (size_t i = 0; i < numGBuffer; i++) {
-        renderer->clearRenderTarget(views[i]);
-    }
-    renderer->clearDepthStencilView();
-}
-
-void Mesh::renderFromTexture(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) {
-    //レンダーターゲットを通常に戻す
-    renderer->setDefaultRenderTarget();
-    //クリア
-    renderer->clear();
-
-    //使用するシェーダーは、テクスチャーを参照するシェーダー
-    renderer->getGBuffer()->shader()->setVSShader();
-    renderer->getGBuffer()->shader()->setPSShader();
-    //1パス目で作成したテクスチャー3枚をセット
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
-    for (size_t i = 0; i < numGBuffer; i++) {
-        auto sr = renderer->getGBuffer()->getShaderResource(i);
-        renderer->deviceContext()->PSSetShaderResources(i, 1, &sr);
-    }
-
-    D3D11_MAPPED_SUBRESOURCE pData;
-    if (renderer->getGBuffer()->shader()->map(&pData)) {
-        GBufferShaderConstantBuffer cb;
-        //ライトの方向を渡す
-        //cb.lightDir = Vector3::up;
-        cb.lightDir = DirectionalLight::direction;
-        //視点位置を渡す
-        cb.eye = camera->getPosition();
-
-        memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-        renderer->getGBuffer()->shader()->unmap();
-    }
-    //スクリーンサイズのポリゴンをレンダー
-    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
-    //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.sharedBuffer = renderer->getGBuffer()->vertexBuffer();
-    stream.offset = 0;
-    stream.stride = sizeof(MeshVertex);
-    renderer->setVertexBuffer(&stream);
-
-    renderer->draw(4);
 }
 
 void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {

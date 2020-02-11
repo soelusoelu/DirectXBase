@@ -1,5 +1,6 @@
 ﻿#include "SceneBase.h"
 #include "../Camera/Camera.h"
+#include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
@@ -40,7 +41,14 @@ void SceneBase::draw() {
     if (!mRenderer) {
         return;
     }
+
+    //各テクスチャ上にレンダリング
+    mRenderer->renderToTexture();
+    //メッシュの一括描画
     mMeshManager->draw(mRenderer, mCamera);
+    //各テクスチャを参照してレンダリング
+    mRenderer->renderFromTexture(mCamera);
+
     mSpriteManager->draw(mRenderer);
 }
 

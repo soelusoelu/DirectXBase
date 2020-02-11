@@ -11,6 +11,7 @@ public:
     ~PointLightComponent();
     virtual void start() override;
     virtual void update() override;
+    void draw() const;
 
     Vector3 mDiffuseColor; //F
     float mInnerRadius; //‚±‚Ì”¼ŒaˆÈ“à‚¾‚ÆŠ®‘S‚È‹P“x‚ÅÆ‚ç‚·
