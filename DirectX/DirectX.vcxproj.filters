@@ -56,6 +56,8 @@
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="System\VertexArray.cpp" />
     <ClCompile Include="Mesh\MeshLoader.cpp" />
+    <ClCompile Include="Mesh\Material.cpp" />
+    <ClCompile Include="Utility\StringUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -112,5 +114,7 @@
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="System\VertexArray.h" />
     <ClInclude Include="Mesh\MeshLoader.h" />
+    <ClInclude Include="Mesh\Material.h" />
+    <ClInclude Include="Utility\StringUtil.h" />
   </ItemGroup>
 </Project>

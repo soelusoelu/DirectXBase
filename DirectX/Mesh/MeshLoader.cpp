@@ -1,12 +1,14 @@
 ﻿#include "MeshLoader.h"
+#include "Material.h"
 #include "../Device/Renderer.h"
 #include "../System/Game.h"
 #include "../System/VertexArray.h"
+#include "../Utility/StringUtil.h"
 
 MeshLoader::MeshLoader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mVertexArray(std::make_unique<VertexArray>(renderer)),
-    mNumMaterials(0) {
-    if (!loadMesh(renderer, fileName)) { //メモリリーク確定
+    mMaterial(std::make_shared<Material>()),
+    mVertexArray(std::make_unique<VertexArray>(renderer)) {
+    if (!load(renderer, fileName)) { //メモリリーク確定
         MSG(L"メッシュ作成失敗");
         return;
     }
@@ -76,15 +78,15 @@ void MeshLoader::setIndexBuffer(unsigned index, unsigned offset) {
     mVertexArray->setIndexBuffer(index, offset);
 }
 
-size_t MeshLoader::getMaterialSize() const {
-    return mNumMaterials;
+unsigned MeshLoader::getMaterialSize() const {
+    return mMaterial->getNumMaterials();
 }
 
-std::shared_ptr<Material> MeshLoader::getMaterial(unsigned index) const {
-    return mMaterials[index];
+std::shared_ptr<MaterialData> MeshLoader::getMaterialData(unsigned index) const {
+    return mMaterial->getMaterialData(index);
 }
 
-bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
+bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
     //OBJファイルを開いて内容を読み込む
     setOBJDirectory();
     std::ifstream ifs(fileName, std::ios::in);
@@ -94,7 +96,7 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
     }
 
     //事前に頂点数などを調べる
-    if (!tempLoad(ifs, renderer, fileName)) {
+    if (!preload(ifs, renderer, fileName)) {
         MSG(L"Meshファイルの事前読み込み失敗");
         return false;
     }
@@ -123,7 +125,7 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
         }
 
         //空白が来るまで読み込み
-        strip = stringStrip(line, ' ');
+        strip = StringUtil::spritFirst(line, ' ');
 
         //頂点読み込み
         if (strip == "v") {
@@ -156,7 +158,7 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
     }
 
     //マテリアルの数だけインデックスバッファーを作成
-    mVertexArray->resizeIndexBuffer(mNumMaterials);
+    mVertexArray->resizeIndexBuffer(mMaterial->getNumMaterials());
     //頂点情報を記録
     mVertexArray->setVertices(vertices);
 
@@ -170,7 +172,7 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
     int vt1 = 0, vt2 = 0, vt3 = 0;
     int fCount = 0;
 
-    for (unsigned i = 0; i < mNumMaterials; i++) {
+    for (unsigned i = 0; i < mMaterial->getNumMaterials(); i++) {
         ifs.clear();
         ifs.seekg(0, std::ios_base::beg);
         fCount = 0;
@@ -184,17 +186,17 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
             }
 
             //空白が来るまで読み込み
-            strip = stringStrip(line, ' ');
+            strip = StringUtil::spritFirst(line, ' ');
 
             //フェイス 読み込み→頂点インデックスに
             if (strip == "usemtl") {
                 auto mat = line.substr(7); //「usemtl 」の文字数分
-                matFlag = (mMaterials[i]->matName == mat);
+                matFlag = (mMaterial->getMaterialData(i)->matName == mat);
             }
 
             if (strip == "f" && matFlag) {
                 auto sub = line.substr(2); //「f 」の文字数分
-                if (mMaterials[i]->texture) { //テクスチャーありサーフェイス
+                if (mMaterial->getMaterialData(i)->texture) { //テクスチャーありサーフェイス
                     sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
                 } else { //テクスチャー無しサーフェイス
                     sscanf_s(sub.c_str(), "%d//%d %d//%d %d//%d", &v1, &vn1, &v2, &vn2, &v3, &vn3);
@@ -229,7 +231,7 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
         //インデックスバッファーを作成
         mVertexArray->createIndexBuffer(i, fCount, faceBuffer);
 
-        mMaterials[i]->numFace = fCount;
+        mMaterial->getMaterialData(i)->numFace = fCount;
     }
 
     delete[] normals;
@@ -244,7 +246,7 @@ bool MeshLoader::loadMesh(std::shared_ptr<Renderer> renderer, const std::string 
     return true;
 }
 
-bool MeshLoader::tempLoad(std::ifstream & stream, std::shared_ptr<Renderer> renderer, const std::string & fileName) {
+bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<Renderer> renderer, const std::string & fileName) {
     //OBJファイルを開いて内容を読み込む
 
     unsigned numVert = 0;
@@ -263,12 +265,12 @@ bool MeshLoader::tempLoad(std::ifstream & stream, std::shared_ptr<Renderer> rend
         }
 
         //空白が来るまで読み込み
-        strip = stringStrip(line, ' ');
+        strip = StringUtil::spritFirst(line, ' ');
 
         //マテリアル読み込み
         if (strip == "mtllib") {
             auto mat = line.substr(7); //「mtllib 」の文字数分
-            if (!loadMaterial(renderer, mat, &mMaterials)) {
+            if (!mMaterial->load(renderer, mat)) {
                 return false;
             }
         }
@@ -300,105 +302,4 @@ bool MeshLoader::tempLoad(std::ifstream & stream, std::shared_ptr<Renderer> rend
     mVertexArray->setNumFace(numFace);
 
     return true;
-}
-
-bool MeshLoader::loadMaterial(std::shared_ptr<Renderer> renderer, const std::string & fileName, MaterialPtrArray* materials) {
-    std::ifstream ifs(fileName, std::ios::in);
-    if (ifs.fail()) {
-        MSG(L"mtlファイルが存在しません");
-        return false;
-    }
-
-    //マテリアルの事前読み込み
-    if (!tempLoadMaterial(ifs, fileName)) {
-        MSG(L"mtlファイルの事前読み込み失敗");
-        return false;
-    }
-
-    //本読み込み
-    ifs.clear();
-    ifs.seekg(0, std::ios_base::beg);
-    std::string line;
-    std::string strip;
-    Vector4 v(0.f, 0.f, 0.f, 1.f);
-    int matCount = -1;
-    MaterialPtr tempMat = std::make_shared<Material>();
-
-    while (!ifs.eof()) {
-        //キーワード読み込み
-        std::getline(ifs, line);
-
-        if (line.empty() || line[0] == '#') {
-            continue;
-        }
-
-        strip = stringStrip(line, ' ');
-
-        //マテリアル名
-        if (strip == "newmtl") {
-            matCount++;
-            tempMat->matName = line.substr(7); //「newmtl 」の文字数分
-        }
-        //Ka アンビエント
-        if (strip == "Ka") {
-            auto sub = line.substr(3); //「Ka 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            tempMat->Ka = v;
-        }
-        //Kd ディフューズ
-        if (strip == "Kd") {
-            auto sub = line.substr(3); //「Kd 」の文字数分
-            auto i = sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            tempMat->Kd = v;
-        }
-        //Ks スペキュラー
-        if (strip == "Ks") {
-            auto sub = line.substr(3); //「Ks 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            tempMat->Ks = v;
-        }
-        //map_Kd テクスチャー
-        if (strip == "map_Kd") {
-            tempMat->textureName = line.substr(7); //「map_Kd 」の文字数分
-            //テクスチャーを作成
-            tempMat->texture = renderer->createTexture(tempMat->textureName, false);
-
-            (*materials).emplace_back(tempMat);
-        }
-    }
-
-    return true;
-}
-
-bool MeshLoader::tempLoadMaterial(std::ifstream & stream, const std::string & fileName) {
-    //マテリアルファイルを開いて内容を読み込む
-    std::string line;
-    std::string strip;
-    while (!stream.eof()) {
-        //キーワード読み込み
-        std::getline(stream, line);
-
-        if (line.empty() || line[0] == '#') {
-            continue;
-        }
-
-        strip = stringStrip(line, ' ');
-
-        //マテリアル名
-        if (strip == "newmtl") {
-            mNumMaterials++;
-        }
-    }
-
-    if (mNumMaterials == 0) {
-        MSG(L"マテリアルが空です");
-        return false;
-    }
-
-    return true;
-}
-
-std::string MeshLoader::stringStrip(const std::string & string, const char delimiter) {
-    //デリミタが見つかるまでの文字を返す
-    return string.substr(0, string.find_first_of(delimiter));
 }

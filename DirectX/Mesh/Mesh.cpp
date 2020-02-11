@@ -1,4 +1,5 @@
 ﻿#include "Mesh.h"
+#include "Material.h"
 #include "MeshLoader.h"
 #include "MeshManager.h"
 #include "../Actor/DirectionalLight.h"
@@ -84,7 +85,7 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < mLoader->getMaterialSize(); i++) {
         //使用されていないマテリアル対策
-        if (mLoader->getMaterial(i)->numFace == 0) {
+        if (mLoader->getMaterialData(i)->numFace == 0) {
             continue;
         }
         //インデックスバッファーをセット
@@ -111,12 +112,12 @@ void Mesh::renderMesh(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera
         //    renderer->deviceContext()->Unmap(mShader->getConstantBuffer(1)->buffer(), 0);
         //}
 
-        if (auto t = mLoader->getMaterial(i)->texture) {
+        if (auto t = mLoader->getMaterialData(i)->texture) {
             t->setPSTextures();
             t->setPSSamplers();
         }
         //プリミティブをレンダリング
-        renderer->drawIndexed(mLoader->getMaterial(i)->numFace * 3);
+        renderer->drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
     }
 }
 
