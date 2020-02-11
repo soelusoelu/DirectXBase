@@ -1,13 +1,16 @@
-#include "PointLightComponent.h"
+﻿#include "PointLightComponent.h"
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
 #include "../Device/Renderer.h"
+#include "../Shader/Shader.h"
 
 PointLightComponent::PointLightComponent(Actor* owner) :
     Component(owner),
     mDiffuseColor(Vector3::one),
     mInnerRadius(1.f),
-    mOuterRadius(5.f) {
+    mOuterRadius(5.f),
+    mShader(owner->renderer()->createShader(""))
+{
     owner->renderer()->addPointLight(this);
 }
 

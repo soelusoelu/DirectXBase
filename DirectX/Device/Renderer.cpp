@@ -25,7 +25,8 @@ Renderer::Renderer(const HWND& hWnd) :
     mDepthStencilState(nullptr),
     mBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
-    mGBuffer(std::make_shared<GBuffer>()) {
+    mGBuffer(std::make_shared<GBuffer>()),
+    mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
     createDeviceAndSwapChain(hWnd);
     createRenderTargetView();
     createDepthStencilView();
@@ -225,11 +226,9 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     D3D11_MAPPED_SUBRESOURCE pData;
     if (mGBuffer->shader()->map(&pData)) {
         GBufferShaderConstantBuffer cb;
-        //ライトの方向を渡す
-        //cb.lightDir = Vector3::up;
         cb.lightDir = DirectionalLight::direction;
-        //視点位置を渡す
-        cb.eye = camera->getPosition();
+        cb.cameraPos = camera->getPosition();
+        cb.ambientLight = mAmbientLight;
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
         mGBuffer->shader()->unmap();

@@ -1,9 +1,11 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 #include "../Utility/Math.h"
+#include <memory>
 
 class Actor;
+class Shader;
 
 class PointLightComponent : public Component {
 public:
@@ -13,7 +15,8 @@ public:
     virtual void update() override;
     void draw() const;
 
-    Vector3 mDiffuseColor; //F
-    float mInnerRadius; //‚±‚Ì”¼ŒaˆÈ“à‚¾‚ÆŠ®‘S‚È‹P“x‚ÅÆ‚ç‚·
-    float mOuterRadius; //Œõ‚Ì“Í‚­”¼Œa
+    Vector3 mDiffuseColor; //è‰²
+    float mInnerRadius; //ã“ã®åŠå¾„ä»¥å†…ã ã¨å®Œå…¨ãªè¼åº¦ã§ç…§ã‚‰ã™
+    float mOuterRadius; //å…‰ã®å±ŠãåŠå¾„
+    std::shared_ptr<Shader> mShader;
 };

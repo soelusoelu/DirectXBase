@@ -92,6 +92,7 @@ private:
 
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<GBuffer> mGBuffer;
+    Vector3 mAmbientLight;
 
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
     std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
