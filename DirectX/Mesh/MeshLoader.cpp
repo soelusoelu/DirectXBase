@@ -248,7 +248,6 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
 
 bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<Renderer> renderer, const std::string & fileName) {
     //OBJファイルを開いて内容を読み込む
-
     unsigned numVert = 0;
     unsigned numNormal = 0;
     unsigned numTex = 0;

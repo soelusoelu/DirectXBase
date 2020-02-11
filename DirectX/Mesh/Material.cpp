@@ -2,9 +2,7 @@
 #include "../Device/Renderer.h"
 #include "../Utility/StringUtil.h"
 
-Material::Material() :
-    mNumMaterials(0) {
-}
+Material::Material() = default;
 
 Material::~Material() = default;
 
@@ -37,10 +35,6 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
     std::string strip;
     Vector4 v(0.f, 0.f, 0.f, 1.f);
     int matCount = -1;
-    MaterialPtrArray tempMat;
-    for (size_t i = 0; i < mNumMaterials; i++) {
-        tempMat.emplace_back(std::make_shared<MaterialData>());
-    }
 
     //本読み込み
     while (!ifs.eof()) {
@@ -56,35 +50,33 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
         //マテリアル名
         if (strip == "newmtl") {
             matCount++;
-            tempMat[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
+            mMaterials[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
         }
         //Ka アンビエント
         if (strip == "Ka") {
             auto sub = line.substr(3); //「Ka 」の文字数分
             sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            tempMat[matCount]->Ka = v;
+            mMaterials[matCount]->Ka = v;
         }
         //Kd ディフューズ
         if (strip == "Kd") {
             auto sub = line.substr(3); //「Kd 」の文字数分
             auto i = sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            tempMat[matCount]->Kd = v;
+            mMaterials[matCount]->Kd = v;
         }
         //Ks スペキュラー
         if (strip == "Ks") {
             auto sub = line.substr(3); //「Ks 」の文字数分
             sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
-            tempMat[matCount]->Ks = v;
+            mMaterials[matCount]->Ks = v;
         }
         //map_Kd テクスチャー
         if (strip == "map_Kd") {
-            tempMat[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
+            mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
             //テクスチャーを作成
-            tempMat[matCount]->texture = renderer->createTexture(tempMat[matCount]->textureName, false);
+            mMaterials[matCount]->texture = renderer->createTexture(mMaterials[matCount]->textureName, false);
         }
     }
-
-    mMaterials = tempMat;
 
     return true;
 }
@@ -105,11 +97,11 @@ bool Material::preload(std::ifstream & stream, const std::string & fileName) {
 
         //マテリアル名
         if (strip == "newmtl") {
-            mNumMaterials++;
+            mMaterials.emplace_back(std::make_shared<MaterialData>());
         }
     }
 
-    if (mNumMaterials == 0) {
+    if (mMaterials.empty()) {
         MSG(L"マテリアルが空です");
         return false;
     }

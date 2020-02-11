@@ -36,5 +36,4 @@ private:
 
 private:
     MaterialPtrArray mMaterials;
-    unsigned mNumMaterials;
 };
