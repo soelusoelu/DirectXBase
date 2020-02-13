@@ -349,7 +349,8 @@ void Renderer::createRasterizerState() {
 
     mDevice->CreateRasterizerState(&rdc, &mRasterizerState);
 
-    rdc.CullMode = D3D11_CULL_BACK;
+    rdc.CullMode = D3D11_CULL_NONE;
+    //rdc.CullMode = D3D11_CULL_BACK;
     mDevice->CreateRasterizerState(&rdc, &mRasterizerStateBack);
 
     mDeviceContext->RSSetState(mRasterizerStateBack);

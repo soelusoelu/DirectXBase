@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-#include "../Utility/Math.h"
 #include "../System/DirectXIncLib.h"
+#include "../Utility/Math.h"
 #include <list>
 #include <memory>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 enum class PrimitiveType {
     PRIMITIVE_TYPE_POINT_LIST,

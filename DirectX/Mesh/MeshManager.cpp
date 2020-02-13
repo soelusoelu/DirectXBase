@@ -22,9 +22,9 @@ void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camer
         if (!mesh->getActive() || mesh->isDead()) {
             continue;
         }
-        renderer->setRasterizerStateFront();
-        mesh->draw(renderer, camera);
-        renderer->setRasterizerStateBack();
+        //renderer->setRasterizerStateFront();
+        //mesh->draw(renderer, camera);
+        //renderer->setRasterizerStateBack();
         mesh->draw(renderer, camera);
     }
 }
