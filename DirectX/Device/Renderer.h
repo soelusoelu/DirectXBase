@@ -60,7 +60,7 @@ public:
 
     void addPointLight(PointLightComponent* light);
     void removePointLight(PointLightComponent* light);
-    void drawPointLights(std::shared_ptr<Camera> camera) const;
+    void drawPointLights(std::shared_ptr<Camera> camera);
 
     void renderToTexture();
     void renderFromTexture(std::shared_ptr<Camera> camera);
@@ -98,7 +98,7 @@ private:
 
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<GBuffer> mGBuffer;
-    std::unique_ptr<PointLight> mPointLight;
+    std::shared_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;
 
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;

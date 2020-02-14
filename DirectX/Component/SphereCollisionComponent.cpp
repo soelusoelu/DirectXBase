@@ -28,9 +28,9 @@ void SphereCollisionComponent::startCollider() {
         mDefaultCenter = mSphere->center;
         mDefaultRadius = mSphere->radius;
 #ifdef _DEBUG //デバッグ時のみ当たり判定表示
-        //mSphereMesh = new Mesh(mOwner->renderer(), "Sphere.obj");
-        //mTransform->setScale(mSphere->radius);
-        //mSphereMesh->setTransform(mTransform);
+        mSphereMesh = new Mesh(mOwner->renderer(), "Sphere.obj");
+        mTransform->setScale(mSphere->radius);
+        mSphereMesh->setTransform(mTransform);
 #endif // _DEBUG
     }
 }
@@ -45,9 +45,9 @@ void SphereCollisionComponent::onUpdateWorldTransformCollider() {
     mSphere->set(center, radius);
 
 #ifdef _DEBUG
-    //mTransform->setPosition(center);
-    //mTransform->setScale(radius * 2.f);
-    //mTransform->computeWorldTransform();
+    mTransform->setPosition(center);
+    mTransform->setScale(radius * 2.f);
+    mTransform->computeWorldTransform();
 #endif // _DEBUG
 }
 

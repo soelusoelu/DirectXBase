@@ -30,7 +30,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mGBuffer(std::make_shared<GBuffer>()),
-    //mPointLight(std::make_unique<PointLight>()),
+    mPointLight(std::make_shared<PointLight>()),
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
     createDeviceAndSwapChain(hWnd);
     createRenderTargetView();
@@ -66,7 +66,7 @@ Renderer::~Renderer() {
 
 void Renderer::initialize() {
     mGBuffer->create(shared_from_this());
-    //mPointLight->initialize(shared_from_this());
+    mPointLight->initialize(shared_from_this());
 }
 
 ID3D11Device* Renderer::device() const {
@@ -206,19 +206,20 @@ void Renderer::removePointLight(PointLightComponent* light) {
     mPointLigths.erase(itr);
 }
 
-void Renderer::drawPointLights(std::shared_ptr<Camera> camera) const {
+void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     if (mPointLigths.empty()) {
         return;
     }
 
+    auto shader = mPointLight->shader;
     //使用するシェーダーの登録
-    mPointLight->shader->setVSShader();
-    mPointLight->shader->setPSShader();
+    shader->setVSShader();
+    shader->setPSShader();
     //このコンスタントバッファーを使うシェーダーの登録
-    mPointLight->shader->setVSConstantBuffers();
-    mPointLight->shader->setPSConstantBuffers();
+    shader->setVSConstantBuffers();
+    shader->setPSConstantBuffers();
     //頂点インプットレイアウトをセット
-    mPointLight->shader->setInputLayout();
+    shader->setInputLayout();
     //バーテックスバッファーをセット
     mPointLight->mesh->getMeshData()->setVertexBuffer(sizeof(MeshVertex));
     //プリミティブ指定
@@ -231,9 +232,11 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) const {
     //サンプラーをセット
     auto s = mGBuffer->getSampler();
     mDeviceContext->PSSetSamplers(0, 1, &s);
+    //デプステスト有効化
+    enabledDepthTest();
 
     for (const auto& p : mPointLigths) {
-        p->draw(mPointLight->shader, mPointLight->mesh, camera);
+        p->draw(mPointLight, camera);
     }
 }
 
@@ -292,6 +295,8 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     stream.offset = 0;
     stream.stride = sizeof(MeshVertex);
     setVertexBuffer(&stream);
+    //デプステスト無効化
+    disabledDepthTest();
 
     draw(4);
 }

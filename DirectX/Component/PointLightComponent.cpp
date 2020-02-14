@@ -13,8 +13,8 @@
 PointLightComponent::PointLightComponent(Actor* owner) :
     Component(owner),
     mDiffuseColor(ColorPalette::red),
-    mInnerRadius(100.f),
-    mOuterRadius(500.f) {
+    mInnerRadius(0.1f),
+    mOuterRadius(0.5f) {
     owner->renderer()->addPointLight(this);
 }
 
@@ -28,16 +28,19 @@ void PointLightComponent::start() {
 void PointLightComponent::update() {
 }
 
-void PointLightComponent::draw(std::shared_ptr<Shader> shader, Mesh* mesh, std::shared_ptr<Camera> camera) const {
-    auto scale = Matrix4::createScale(mOwner->transform()->getScale() * mOuterRadius);
+void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const {
+    auto scale = Matrix4::createScale(mOwner->transform()->getScale() * mOuterRadius / pointLight->radius);
     auto trans = Matrix4::createTranslation(mOwner->transform()->getPosition());
     auto world = scale * trans;
+
+    auto mesh = pointLight->mesh;
+    auto shader = pointLight->shader;
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     D3D11_MAPPED_SUBRESOURCE pData;
     if (shader->map(&pData)) {
         PointLightConstantBuffer cb;
-        cb.wvp = mOwner->transform()->getWorldTransform() * camera->getView() * camera->getProjection();
+        cb.wvp = world * camera->getView() * camera->getProjection();
         cb.wvp.transpose();
         cb.worldPos = mOwner->transform()->getPosition();
         cb.diffuseColor = mDiffuseColor;

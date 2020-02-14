@@ -40,7 +40,6 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 gbufferDiffuse = g_texColor.Sample(g_samLinear, gbufferCoord).xyz;
     float3 gbufferWorldNormal = g_texNormal.Sample(g_samLinear, gbufferCoord).xyz;
     float3 gbufferWorldPos = g_texPosition.Sample(g_samLinear, gbufferCoord).xyz;
-    return float4(gbufferDiffuse, 1.0);
 
     float3 N = normalize(gbufferWorldNormal);
     float3 L = normalize(mWorldPos - gbufferWorldPos);

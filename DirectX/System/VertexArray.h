@@ -17,8 +17,6 @@ public:
 
     void setNumVerts(unsigned num);
     unsigned getNumVerts() const;
-    void setNumIndices(unsigned num);
-    unsigned getNumIndices() const;
     void setNumNormal(unsigned num);
     unsigned getNumNormal() const;
     void setNumTex(unsigned num);
@@ -41,7 +39,6 @@ private:
     std::weak_ptr<Renderer> mRenderer;
 
     unsigned mNumVerts; //頂点数
-    unsigned mNumIndices;
     unsigned mNumNormal; //法線数
     unsigned mNumTex; //テクスチャ座標数
     unsigned mNumFace; //ポリゴン数

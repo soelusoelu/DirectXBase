@@ -11,7 +11,7 @@ PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer, const char* tag) :
     mSound(new SoundComponent(this)),
     mSphere(new SphereCollisionComponent(this)),
     mMove(new PlayerMoveComponent(this)),
-    mPointLight(/*new PointLightComponent(this)*/nullptr) {
+    mPointLight(new PointLightComponent(this)) {
 }
 
 PlayerActor::~PlayerActor() = default;

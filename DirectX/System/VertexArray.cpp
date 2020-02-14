@@ -9,7 +9,6 @@
 VertexArray::VertexArray(std::shared_ptr<Renderer> renderer) :
     mRenderer(renderer),
     mNumVerts(0),
-    mNumIndices(0),
     mNumNormal(0),
     mNumTex(0),
     mNumFace(0),
@@ -27,14 +26,6 @@ void VertexArray::setNumVerts(unsigned num) {
 
 unsigned VertexArray::getNumVerts() const {
     return mNumVerts;
-}
-
-void VertexArray::setNumIndices(unsigned num) {
-    mNumIndices = num;
-}
-
-unsigned VertexArray::getNumIndices() const {
-    return mNumIndices;
 }
 
 void VertexArray::setNumNormal(unsigned num) {

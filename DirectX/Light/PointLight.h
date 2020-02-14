@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../System/Game.h"
 #include "../Utility/Math.h"
@@ -20,6 +20,7 @@ struct PointLightConstantBuffer {
 struct PointLight {
     Mesh* mesh;
     std::shared_ptr<Shader> shader;
+    float radius;
 
     PointLight();
     ~PointLight();

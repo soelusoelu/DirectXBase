@@ -1,24 +1,32 @@
-#include "PointLight.h"
+ï»¿#include "PointLight.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
 #include "../Shader/Shader.h"
 #include "../System/InputElement.h"
+#include "../Utility/Collision.h"
 
 PointLight::PointLight() :
     mesh(nullptr),
-    shader(nullptr) {
+    shader(nullptr),
+    radius(0.f) {
 }
 
-PointLight::~PointLight() = default;
+PointLight::~PointLight() {
+    SAFE_DELETE(mesh);
+}
 
 void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
+    //ãƒ¡ãƒƒã‚·ãƒ¥æç”»ã•ã‚Œã‚‹ã¨ã ã‚‹ã„ã‹ã‚‰è‡ªå·±ç®¡ç†
     mesh = new Mesh(renderer, "Sphere.obj");
-    shader = std::make_shared<Shader>(renderer, "PointLight.hlsl");
+    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3::zero, 0.f);
+    mesh->createSphere(&sphere);
+    radius = sphere->radius;
+    shader = renderer->createShader("PointLight.hlsl");
 
-    //ƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@¶¬
+    //ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ç”Ÿæˆ
     shader->createConstantBuffer(renderer, sizeof(PointLightConstantBuffer));
 
-    //ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚Ì¶¬
+    //ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ç”Ÿæˆ
     constexpr InputElementDesc layout[] = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
