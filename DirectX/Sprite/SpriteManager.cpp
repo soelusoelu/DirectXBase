@@ -7,9 +7,7 @@
 #include "../System/VertexStreamDesc.h"
 #include <algorithm>
 
-SpriteManager::SpriteManager() :
-    mSprites(0) {
-}
+SpriteManager::SpriteManager() = default;
 
 SpriteManager::~SpriteManager() = default;
 
@@ -18,7 +16,6 @@ void SpriteManager::update() {
         sprite->update();
     }
     remove();
-    sortByZ();
 }
 
 void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
@@ -59,14 +56,7 @@ void SpriteManager::add(Sprite * add) {
 }
 
 void SpriteManager::add(std::shared_ptr<Sprite> add) {
-    float z = add->transform()->getDepth();
-    auto itr = mSprites.begin();
-    for (; itr != mSprites.end(); ++itr) {
-        if (z > (*itr)->transform()->getDepth()) {
-            break;
-        }
-    }
-    mSprites.insert(itr, add);
+    mSprites.emplace_back(add);
 }
 
 void SpriteManager::clear() {
@@ -81,14 +71,5 @@ void SpriteManager::remove() {
         } else {
             ++itr;
         }
-    }
-}
-
-void SpriteManager::sortByZ() {
-    if (Transform2D::zSortFlag) { //z値を変更したやつがいればソート
-        Transform2D::zSortFlag = false;
-        std::sort(mSprites.begin(), mSprites.end(), [](std::shared_ptr<Sprite> a, std::shared_ptr<Sprite> b) {
-            return a->transform()->getDepth() > b->transform()->getDepth();
-        });
     }
 }

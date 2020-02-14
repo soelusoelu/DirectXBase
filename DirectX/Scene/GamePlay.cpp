@@ -9,7 +9,6 @@
 #include "../Device/Physics.h"
 #include "../Scene/Title.h"
 #include "../System/Game.h"
-#include "../UI/Pause.h"
 
 GamePlay::GamePlay() :
     SceneBase(),

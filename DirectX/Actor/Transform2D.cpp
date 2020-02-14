@@ -3,29 +3,23 @@
 
 Transform2D::Transform2D() :
     mWorldTransform(Matrix4::identity),
-    mPosition(Vector3::zero),
-    mRotation(Quaternion::identity),
+    mPosition(Vector2::zero),
+    mRotation(0.f),
     mPivot(Vector2::zero),
     mScale(Vector2::one),
     mSize(Vector2::zero),
     mIsRecomputeTransform(true) {
-    //setPrimary(50);
-    float c = static_cast<float>(mCount) / 50000.f;
-    mPosition.z = 0.5f - c;
-    mPosition.z = Math::clamp<float>(mPosition.z, 0.f, 1.f);
 }
 
-Transform2D::~Transform2D() {
-    mCount--;
-}
+Transform2D::~Transform2D() = default;
 
 bool Transform2D::computeWorldTransform() {
     if (mIsRecomputeTransform) {
         mWorldTransform = Matrix4::createScale(Vector3(mSize, 1.f)); //テクスチャサイズに
         mWorldTransform *= Matrix4::createTranslation(-Vector3(mSize / 2.f + mPivot, 0.f)); //中心 + ピボットを原点に
         mWorldTransform *= Matrix4::createScale(Vector3(getScale(), 1.f));
-        mWorldTransform *= Matrix4::createFromQuaternion(getRotation());
-        mWorldTransform *= Matrix4::createTranslation(Vector3(getPosition(), mPosition.z));
+        mWorldTransform *= Matrix4::createRotationZ(mRotation);
+        mWorldTransform *= Matrix4::createTranslation(Vector3(getPosition(), 1.f));
 
         mIsRecomputeTransform = false;
 
@@ -44,8 +38,8 @@ void Transform2D::setPosition(const Vector2& pos) {
     shouldRecomputeTransform();
 }
 
-Vector2 Transform2D::getPosition() const {
-    return Vector2(mPosition.x, mPosition.y);
+const Vector2& Transform2D::getPosition() const {
+    return mPosition;
 }
 
 void Transform2D::translate(const Vector2& translation) {
@@ -54,43 +48,22 @@ void Transform2D::translate(const Vector2& translation) {
     shouldRecomputeTransform();
 }
 
-void Transform2D::setPrimary(int primary) { //とりあえず
-    float p = static_cast<float>(primary) / 125.f;
-    float c = static_cast<float>(mCount) / 50000.f;
-    mPosition.z = p - c + 0.1f;
-    mPosition.z = Math::clamp<float>(mPosition.z, 0.f, 1.f);
-    shouldRecomputeTransform();
-    zSortFlag = true;
-}
-
-float Transform2D::getDepth() const {
-    return mPosition.z;
-}
-
 void Transform2D::setRotation(float angle) {
-    angle *= 0.5f;
-    float sinAngle = Math::sin(angle);
-
-    mRotation.z = sinAngle;
-    mRotation.w = Math::cos(angle);
-
+    mRotation = angle;
     shouldRecomputeTransform();
 }
 
-const Quaternion& Transform2D::getRotation() const {
+float Transform2D::getRotation() const {
     return mRotation;
 }
 
 void Transform2D::rotate(float angle) {
-    angle *= 0.5f;
-    float sinAngle = Math::sin(angle);
-
-    Quaternion inc;
-    inc.z = sinAngle;
-    inc.w = Math::cos(angle);
-
-    mRotation = Quaternion::concatenate(mRotation, inc);
-
+    mRotation += angle;
+    if (mRotation > 180.f) {
+        mRotation += -360.f;
+    } else if (mRotation < -180.f) {
+        mRotation += 360.f;
+    }
     shouldRecomputeTransform();
 }
 
@@ -131,6 +104,3 @@ const Vector2& Transform2D::getSize() const {
 void Transform2D::shouldRecomputeTransform() {
     mIsRecomputeTransform = true;
 }
-
-bool Transform2D::zSortFlag = false;
-int Transform2D::mCount = 0;

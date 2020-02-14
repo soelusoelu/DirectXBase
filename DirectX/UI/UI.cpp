@@ -37,7 +37,6 @@ void UI::close() {
 }
 
 void UI::addSprite(Sprite* sprite) {
-    sprite->transform()->setPrimary(0);
     mSprites.emplace_back(sprite);
 }
 
