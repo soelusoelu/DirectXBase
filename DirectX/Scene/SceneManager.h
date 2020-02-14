@@ -2,8 +2,12 @@
 
 #include <memory>
 
+class Camera;
+class MeshManager;
 class Renderer;
 class SceneBase;
+class SpriteManager;
+class UIManager;
 
 class SceneManager {
 public:
@@ -13,9 +17,13 @@ public:
     void draw() const;
 
 private:
-    void setRendererToScene();
+    void change();
 
 private:
     std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<SceneBase> mCurrentScene;
+    std::shared_ptr<Camera> mCamera;
+    MeshManager* mMeshManager;
+    SpriteManager* mSpriteManager;
+    UIManager* mUIManager;
 };

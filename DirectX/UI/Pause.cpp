@@ -7,14 +7,14 @@ Pause::Pause(std::shared_ptr<GamePlay> game, std::shared_ptr<Renderer> renderer)
     mGame(game),
     mCloseKey(KeyCode::Alpha2) {
     if (auto g = mGame.lock()) {
-        g->setState(GameState::PAUSED);
+        g->setPause();
     }
     addSprite(new Sprite(renderer, "cat.png"));
 }
 
 Pause::~Pause() {
     if (auto g = mGame.lock()) {
-        g->setState(GameState::PLAY);
+        g->setPlay();
     }
 }
 

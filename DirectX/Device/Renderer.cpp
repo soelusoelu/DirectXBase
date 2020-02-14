@@ -29,7 +29,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mGBuffer(std::make_shared<GBuffer>()),
-    mPointLight(std::make_unique<PointLight>()),
+    //mPointLight(std::make_unique<PointLight>()),
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
     createDeviceAndSwapChain(hWnd);
     createRenderTargetView();
@@ -64,7 +64,7 @@ Renderer::~Renderer() {
 
 void Renderer::initialize() {
     mGBuffer->create(shared_from_this());
-    mPointLight->initialize(shared_from_this());
+    //mPointLight->initialize(shared_from_this());
 }
 
 ID3D11Device* Renderer::device() const {

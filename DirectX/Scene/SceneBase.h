@@ -3,35 +3,27 @@
 #include <memory>
 
 class Renderer;
-class MeshManager;
-class SpriteManager;
-class UIManager;
 class Camera;
 
 class SceneBase {
+    friend class SceneManager;
 protected:
     SceneBase();
     virtual ~SceneBase();
 public:
-    virtual void startScene() = 0;
-    virtual void updateScene() = 0;
-    void update();
-    void draw();
+    virtual void start() = 0;
+    virtual void update() = 0;
     void nextScene(std::shared_ptr<SceneBase> next);
-    std::shared_ptr<SceneBase> getNextScene() const;
-    void setRenderer(std::shared_ptr<Renderer> renderer);
 
 private:
-    void start();
+    //SceneManagerがアクセスするよう
+    void set(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera);
+    std::shared_ptr<SceneBase> getNextScene() const;
 
 protected:
     std::shared_ptr<Renderer> mRenderer;
-    MeshManager* mMeshManager;
-    SpriteManager* mSpriteManager;
-    UIManager* mUIManager;
     std::shared_ptr<Camera> mCamera;
 
 private:
     std::shared_ptr<SceneBase> mNext;
-    bool mIsStarted;
 };

@@ -8,8 +8,8 @@ class Title : public SceneBase {
 public:
     Title();
     ~Title();
-    virtual void startScene() override;
-    virtual void updateScene() override;
+    virtual void start() override;
+    virtual void update() override;
 
 private:
     KeyCode mNextKey;

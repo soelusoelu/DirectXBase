@@ -4,28 +4,28 @@
 #include "../Utility/Input.h"
 #include <memory>
 
-enum class GameState {
-    PLAY,
-    PAUSED
-};
-
 class ActorManager;
 class DirectionalLight;
 class Physics;
 
 class GamePlay : public SceneBase, public std::enable_shared_from_this<GamePlay> {
+    enum class State {
+        PLAY,
+        PAUSED
+    };
+
 public:
     GamePlay();
     ~GamePlay();
-    virtual void startScene() override;
-    virtual void updateScene() override;
+    virtual void start() override;
+    virtual void update() override;
 
-    GameState getState() const;
-    void setState(GameState state);
+    void setPlay();
+    void setPause();
 
 private:
     ActorManager* mActorManager;
     std::shared_ptr<DirectionalLight> mDLight;
     Physics* mPhysics;
-    GameState mState;
+    State mState;
 };

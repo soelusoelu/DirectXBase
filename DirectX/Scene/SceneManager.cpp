@@ -1,30 +1,72 @@
 ﻿#include "SceneManager.h"
 #include "GamePlay.h"
 #include "Title.h"
+#include "../Camera/Camera.h"
+#include "../Device/Renderer.h"
+#include "../Mesh/Mesh.h"
+#include "../Mesh/MeshManager.h"
+#include "../Sprite/Sprite.h"
+#include "../Sprite/SpriteManager.h"
+#include "../System/Game.h"
+#include "../UI/UI.h"
+#include "../UI/UIManager.h"
 
 SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mRenderer(renderer),
-    mCurrentScene(std::make_shared<GamePlay>()) {
-    setRendererToScene();
+    mCurrentScene(std::make_shared<Title>()),
+    mCamera(std::make_shared<Camera>()),
+    mMeshManager(new MeshManager()),
+    mSpriteManager(new SpriteManager()),
+    mUIManager(new UIManager()) {
+
+    Mesh::setMeshManager(mMeshManager);
+    Sprite::setSpriteManager(mSpriteManager);
+    UI::setUIManager(mUIManager);
+    change();
 }
 
-SceneManager::~SceneManager() = default;
+SceneManager::~SceneManager() {
+    SAFE_DELETE(mMeshManager);
+    SAFE_DELETE(mSpriteManager);
+    SAFE_DELETE(mUIManager);
+}
 
 void SceneManager::update() {
+    //現在のシーンを更新
     mCurrentScene->update();
+    //カメラ更新
+    mCamera->update();
+    //各マネージャークラスを更新
+    mMeshManager->update();
+    mUIManager->update();
+    mSpriteManager->update();
 
     //nullptrじゃなければシーン移行
     auto next = mCurrentScene->getNextScene();
     if (next) {
         mCurrentScene = next;
-        setRendererToScene();
+        change();
     }
 }
 
 void SceneManager::draw() const {
-    mCurrentScene->draw();
+    //各テクスチャ上にレンダリング
+    mRenderer->renderToTexture();
+    //メッシュの一括描画
+    mMeshManager->draw(mRenderer, mCamera);
+    //各テクスチャを参照してレンダリング
+    mRenderer->renderFromTexture(mCamera);
+    //ポイントライトの一括描画
+    mRenderer->drawPointLights(mCamera);
+
+    //スプライトの一括描画
+    mSpriteManager->draw(mRenderer);
 }
 
-void SceneManager::setRendererToScene() {
-    mCurrentScene->setRenderer(mRenderer);
+void SceneManager::change() {
+    mMeshManager->clear();
+    mUIManager->clear();
+    mSpriteManager->clear();
+    mCurrentScene->set(mRenderer, mCamera);
+    mCurrentScene->start();
 }

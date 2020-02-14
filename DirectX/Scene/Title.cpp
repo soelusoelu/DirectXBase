@@ -12,12 +12,12 @@ Title::Title() :
 
 Title::~Title() = default;
 
-void Title::startScene() {
+void Title::start() {
     auto title = new Sprite(mRenderer, "12Title.png");
     title->transform()->setPosition(Vector2(Game::WINDOW_WIDTH / 2.f, Game::WINDOW_HEIGHT / 2.f));
 }
 
-void Title::updateScene() {
+void Title::update() {
     if (Input::getKeyDown(mNextKey) || Input::getJoyDown(mNextJoy)) {
         nextScene(std::make_shared<GamePlay>());
     }

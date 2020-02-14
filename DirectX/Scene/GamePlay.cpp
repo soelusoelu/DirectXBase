@@ -16,7 +16,7 @@ GamePlay::GamePlay() :
     mActorManager(new ActorManager()),
     mDLight(nullptr),
     mPhysics(new Physics()),
-    mState(GameState::PLAY) {
+    mState(State::PLAY) {
     Actor::setActorManager(mActorManager);
     Collider::setPhysics(mPhysics);
 }
@@ -28,30 +28,30 @@ GamePlay::~GamePlay() {
     Collider::setPhysics(nullptr);
 }
 
-void GamePlay::startScene() {
+void GamePlay::start() {
     new PlayerActor(mRenderer);
     new Field(mRenderer);
     mDLight = std::make_shared<DirectionalLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
 }
 
-void GamePlay::updateScene() {
-    if (mState == GameState::PLAY) {
+void GamePlay::update() {
+    if (mState == State::PLAY) {
         //総アクターアップデート
         mActorManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();
         //ライト関連
         mDLight->update();
-    } else if (mState == GameState::PAUSED) {
+    } else if (mState == State::PAUSED) {
 
     }
 }
 
-GameState GamePlay::getState() const {
-    return mState;
+void GamePlay::setPlay() {
+    mState = State::PLAY;
 }
 
-void GamePlay::setState(GameState state) {
-    mState = state;
+void GamePlay::setPause() {
+    mState = State::PAUSED;
 }

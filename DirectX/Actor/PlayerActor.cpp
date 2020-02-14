@@ -10,10 +10,8 @@ PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer, const char* tag) :
     mMesh(new MeshComponent(this, "Chips.obj")),
     mSound(new SoundComponent(this)),
     mSphere(new SphereCollisionComponent(this)),
-    mMove(new PlayerMoveComponent(this))
-    ,
-    mPointLight(new PointLightComponent(this))
-{
+    mMove(new PlayerMoveComponent(this)),
+    mPointLight(/*new PointLightComponent(this)*/nullptr) {
 }
 
 PlayerActor::~PlayerActor() = default;
