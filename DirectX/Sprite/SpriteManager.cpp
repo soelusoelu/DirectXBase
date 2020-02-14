@@ -45,6 +45,8 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     renderer->setVertexBuffer(&stream);
     //インデックスバッファーをセット
     renderer->setIndexBuffer(Texture::indexBuffer);
+    //デプステスト無効化
+    renderer->disabledDepthTest();
 
     for (const auto& sprite : mSprites) {
         sprite->draw(proj);

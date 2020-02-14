@@ -13,7 +13,7 @@
 
 SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mRenderer(renderer),
-    mCurrentScene(std::make_shared<Title>()),
+    mCurrentScene(std::make_shared<GamePlay>()),
     mCamera(std::make_shared<Camera>()),
     mMeshManager(new MeshManager()),
     mSpriteManager(new SpriteManager()),

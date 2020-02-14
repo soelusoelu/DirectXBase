@@ -49,6 +49,8 @@ public:
     void setPrimitive(PrimitiveType primitive) const;
     void setRasterizerStateFront();
     void setRasterizerStateBack();
+    void enabledDepthTest();
+    void disabledDepthTest();
 
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
@@ -90,7 +92,8 @@ private:
     ID3D11DepthStencilView* mDepthStencilView;
     ID3D11RasterizerState* mRasterizerState;
     ID3D11RasterizerState* mRasterizerStateBack;
-    ID3D11DepthStencilState* mDepthStencilState;
+    ID3D11DepthStencilState* mEnableDepthStencilState;
+    ID3D11DepthStencilState* mDisableDepthStencilState;
     ID3D11BlendState* mBlendState;
 
     std::unique_ptr<SoundBase> mSoundBase;

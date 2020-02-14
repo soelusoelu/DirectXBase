@@ -25,7 +25,8 @@ Renderer::Renderer(const HWND& hWnd) :
     mDepthStencilView(nullptr),
     mRasterizerState(nullptr),
     mRasterizerStateBack(nullptr),
-    mDepthStencilState(nullptr),
+    mEnableDepthStencilState(nullptr),
+    mDisableDepthStencilState(nullptr),
     mBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mGBuffer(std::make_shared<GBuffer>()),
@@ -51,7 +52,8 @@ Renderer::~Renderer() {
     mMeshLoaders.clear();
 
     SAFE_RELEASE(mBlendState);
-    SAFE_RELEASE(mDepthStencilState);
+    SAFE_RELEASE(mDisableDepthStencilState);
+    SAFE_RELEASE(mEnableDepthStencilState);
     SAFE_RELEASE(mRasterizerStateBack);
     SAFE_RELEASE(mRasterizerState);
     SAFE_RELEASE(mDepthStencilView);
@@ -130,6 +132,14 @@ void Renderer::setRasterizerStateFront() {
 
 void Renderer::setRasterizerStateBack() {
     mDeviceContext->RSSetState(mRasterizerStateBack);
+}
+
+void Renderer::enabledDepthTest() {
+    mDeviceContext->OMSetDepthStencilState(mEnableDepthStencilState, 0);
+}
+
+void Renderer::disabledDepthTest() {
+    mDeviceContext->OMSetDepthStencilState(mDisableDepthStencilState, 0);
 }
 
 std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
@@ -241,6 +251,8 @@ void Renderer::renderToTexture() {
         mDeviceContext->ClearRenderTargetView(views[i], clearColor); //画面クリア
     }
     clearDepthStencilView();
+    //デプステスト有効化
+    enabledDepthTest();
 }
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
@@ -374,9 +386,13 @@ void Renderer::createDepthStencilState() {
     dc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
     dc.DepthFunc = D3D11_COMPARISON_LESS;
     dc.StencilEnable = false;
-    mDevice->CreateDepthStencilState(&dc, &mDepthStencilState);
+    mDevice->CreateDepthStencilState(&dc, &mEnableDepthStencilState);
     //深度ステンシルステートを適用
-    mDeviceContext->OMSetDepthStencilState(mDepthStencilState, 0);
+    mDeviceContext->OMSetDepthStencilState(mEnableDepthStencilState, 0);
+
+    //2D用も
+    dc.DepthEnable = false;
+    mDevice->CreateDepthStencilState(&dc, &mDisableDepthStencilState);
 }
 
 void Renderer::createRasterizerState() {
