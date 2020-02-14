@@ -28,6 +28,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mEnableDepthStencilState(nullptr),
     mDisableDepthStencilState(nullptr),
     mBlendState(nullptr),
+    mAddBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
@@ -51,6 +52,7 @@ Renderer::~Renderer() {
     mSounds.clear();
     mMeshLoaders.clear();
 
+    SAFE_RELEASE(mAddBlendState);
     SAFE_RELEASE(mBlendState);
     SAFE_RELEASE(mDisableDepthStencilState);
     SAFE_RELEASE(mEnableDepthStencilState);
@@ -140,6 +142,16 @@ void Renderer::enabledDepthTest() {
 
 void Renderer::disabledDepthTest() {
     mDeviceContext->OMSetDepthStencilState(mDisableDepthStencilState, 0);
+}
+
+void Renderer::setDefaultBlendState() {
+    UINT mask = 0xffffffff;
+    mDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
+}
+
+void Renderer::setAddBlendState() {
+    UINT mask = 0xffffffff;
+    mDeviceContext->OMSetBlendState(mAddBlendState, NULL, mask);
 }
 
 std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
@@ -234,6 +246,8 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     mDeviceContext->PSSetSamplers(0, 1, &s);
     //デプステスト有効化
     enabledDepthTest();
+    //加算合成
+    setAddBlendState();
 
     for (const auto& p : mPointLigths) {
         p->draw(mPointLight, camera);
@@ -256,6 +270,8 @@ void Renderer::renderToTexture() {
     clearDepthStencilView();
     //デプステスト有効化
     enabledDepthTest();
+    //通常合成
+    setDefaultBlendState();
 }
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
@@ -435,6 +451,14 @@ void Renderer::createBlendState() {
 
     UINT mask = 0xffffffff;
     mDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
+
+    //加算合成
+    bd.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+    bd.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+    bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+    mDevice->CreateBlendState(&bd, &mAddBlendState);
+
+    mDeviceContext->OMSetBlendState(mAddBlendState, NULL, mask);
 }
 
 void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {

@@ -12,9 +12,9 @@
 
 PointLightComponent::PointLightComponent(Actor* owner) :
     Component(owner),
-    mDiffuseColor(ColorPalette::red),
-    mInnerRadius(0.1f),
-    mOuterRadius(0.5f) {
+    mDiffuseColor(ColorPalette::white),
+    mInnerRadius(10.f),
+    mOuterRadius(30.f) {
     owner->renderer()->addPointLight(this);
 }
 

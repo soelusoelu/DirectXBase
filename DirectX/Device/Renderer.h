@@ -51,6 +51,8 @@ public:
     void setRasterizerStateBack();
     void enabledDepthTest();
     void disabledDepthTest();
+    void setDefaultBlendState();
+    void setAddBlendState();
 
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
@@ -95,6 +97,7 @@ private:
     ID3D11DepthStencilState* mEnableDepthStencilState;
     ID3D11DepthStencilState* mDisableDepthStencilState;
     ID3D11BlendState* mBlendState;
+    ID3D11BlendState* mAddBlendState;
 
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<GBuffer> mGBuffer;

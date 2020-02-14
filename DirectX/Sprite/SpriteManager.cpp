@@ -44,6 +44,8 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     renderer->setIndexBuffer(Texture::indexBuffer);
     //デプステスト無効化
     renderer->disabledDepthTest();
+    //通常合成
+    renderer->setDefaultBlendState();
 
     for (const auto& sprite : mSprites) {
         sprite->draw(proj);

@@ -4,10 +4,12 @@
 #include "../Actor/DirectionalLight.h"
 #include "../Actor/Field.h"
 #include "../Actor/PlayerActor.h"
+#include "../Actor/Transform2D.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
 #include "../Device/Physics.h"
 #include "../Scene/Title.h"
+#include "../Sprite/Sprite.h"
 #include "../System/Game.h"
 
 GamePlay::GamePlay() :
@@ -32,6 +34,8 @@ void GamePlay::start() {
     new Field(mRenderer);
     mDLight = std::make_shared<DirectionalLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
+    auto cat = new Sprite(mRenderer, "cat.png");
+    cat->transform()->setPosition(Vector2(1080.f, 720.f));
 }
 
 void GamePlay::update() {
