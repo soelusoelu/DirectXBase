@@ -18,17 +18,11 @@ class Shader;
 struct MeshShaderConstantBuffer0 {
     ALIGN16 Matrix4 world; //ワールド行列
     ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
-    //ALIGN16 Vector3 lightPos; //ライト位置
-    //ALIGN16 Matrix4 lightDir; //ライト方向
-    //ALIGN16 Vector3 eye; //カメラ位置
 };
 
-//struct MeshShaderConstantBuffer1 {
-//    ALIGN16 Vector4 ambient; //アンビエント光
-//    ALIGN16 Vector4 diffuse; //ディフューズ色
-//    ALIGN16 Vector4 specular; //鏡面反射
-//    ALIGN16 float texture; //テクスチャーが貼られているメッシュかどうかのフラグ
-//};
+struct MeshShaderConstantBuffer1 {
+    ALIGN16 bool textureFlag; //テクスチャーが貼られているメッシュかどうかのフラグ
+};
 
 
 class Mesh {
@@ -44,6 +38,7 @@ public:
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
     void draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
+    std::shared_ptr<MeshLoader> getMeshData() const;
     void destroy();
     void setActive(bool value);
     bool getActive() const;

@@ -15,8 +15,8 @@ void Field::updateActor() {
     if (Input::getKey(KeyCode::Q)) {
         transform()->rotate(Vector3::up, -60.f * Time::deltaTime);
     }
-    if (Input::getKey(KeyCode::W)) {
+    if (Input::getKey(KeyCode::E)) {
         transform()->rotate(Vector3::up, 60.f * Time::deltaTime);
     }
-    transform()->rotate(Vector3::up, 60.f * Time::deltaTime);
+    //transform()->rotate(Vector3::up, 60.f * Time::deltaTime);
 }

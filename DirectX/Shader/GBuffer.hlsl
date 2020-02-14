@@ -6,6 +6,10 @@ cbuffer global_0 : register(b0)
     matrix g_mW; //ワールド行列
     matrix g_mWVP; //ワールドから射影までの変換行列
 };
+cbuffer global_1 : register(b1)
+{
+    bool g_TextureFlag : packoffset(c0) = false; //テクスチャーが貼られているメッシュかどうかのフラグ
+}
 
 //バーテックスバッファー出力
 struct VS_OUTPUT
@@ -32,9 +36,13 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 
     output.Pos = mul(Pos, g_mWVP);
     output.WorldPos = mul(Pos, g_mW);
-    Norm.w = 0;
+    //Norm.w = 0;
     output.WorldNormal = mul(Norm, g_mW);
-    output.UV = UV;
+    
+    if (g_TextureFlag == true)
+    {
+        output.UV = UV;
+    }
 
     return output;
 }
@@ -46,8 +54,11 @@ PS_OUTPUT PS(VS_OUTPUT input)
 {
     PS_OUTPUT Out = (PS_OUTPUT) 0;
 
-    //カラーテクスチャーへ出力 
-    Out.vColor = g_tex.Sample(g_samLinear, input.UV);
+    //カラーテクスチャーへ出力
+    if (g_TextureFlag == true)
+    {
+        Out.vColor = g_tex.Sample(g_samLinear, input.UV);
+    }
 
     //ワールド法線テクスチャーへ出力
     float4 vNormal = input.WorldNormal;

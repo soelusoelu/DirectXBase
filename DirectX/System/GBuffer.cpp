@@ -22,6 +22,7 @@ GBuffer::~GBuffer() {
     for (auto&& sr : mShaderResources) {
         SAFE_RELEASE(sr);
     }
+    SAFE_RELEASE(mSampler);
 }
 
 void GBuffer::create(std::shared_ptr<Renderer> renderer) {
@@ -86,6 +87,15 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     renderer->device()->CreateShaderResourceView(texture, &SRVDesc, &shaderResource);
     mShaderResources.emplace_back(shaderResource);
 
+    //サンプラー作成
+    D3D11_SAMPLER_DESC sd;
+    ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
+    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+    sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+    sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+    renderer->device()->CreateSamplerState(&sd, &mSampler);
+
     //シェーダー生成
     mShader = renderer->createShader("Deferred.hlsl");
     mShader->createConstantBuffer(renderer, sizeof(GBufferShaderConstantBuffer));
@@ -118,6 +128,10 @@ ID3D11RenderTargetView* GBuffer::getRenderTarget(unsigned index) const {
 
 ID3D11ShaderResourceView* GBuffer::getShaderResource(unsigned index) const {
     return mShaderResources[index];
+}
+
+ID3D11SamplerState* GBuffer::getSampler() const {
+    return mSampler;
 }
 
 std::shared_ptr<Shader> GBuffer::shader() const {

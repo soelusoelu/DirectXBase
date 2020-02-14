@@ -41,6 +41,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     //テクスチャーから情報を取り出す
     float3 gbufferDiffuse = g_texColor.Sample(g_samLinear, input.UV).xyz;
     float3 gbufferWorldNormal = g_texNormal.Sample(g_samLinear, input.UV).xyz;
+    //gbufferWorldNormal = gbufferWorldNormal * 2.0 - 1.0; //デコード
     float3 gbufferWorldPos = g_texPosition.Sample(g_samLinear, input.UV).xyz;
 
     float3 N = normalize(gbufferWorldNormal);
@@ -62,7 +63,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     return float4(gbufferDiffuse * Phong, 1.0);
 
     //取り出した情報をもとにフォンシェーディングを計算
-    //float3 L = normalize(mLightDir - gbufferWorldPos);
+    //float3 L = normalize(normalize(mLightDir) - gbufferWorldPos);
     //float3 E = normalize(mCameraPos);
     //float3 DiffuseIntensity = dot(L, gbufferWorldNormal);
     //float3 SpecularIntensity = pow(max(0, dot(E, reflect(-L, gbufferWorldNormal))), 4);

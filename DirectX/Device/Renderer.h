@@ -19,7 +19,9 @@ class Buffer;
 class BufferDesc;
 class Camera;
 class GBuffer;
+class Mesh;
 class MeshLoader;
+struct PointLight;
 class PointLightComponent;
 class Shader;
 class SoundBase;
@@ -44,7 +46,7 @@ public:
     void setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream = 1, unsigned start = 0);
     void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
     void setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset = 0);
-    void setPrimitive(PrimitiveType primitive);
+    void setPrimitive(PrimitiveType primitive) const;
     void setRasterizerStateFront();
     void setRasterizerStateBack();
 
@@ -56,6 +58,7 @@ public:
 
     void addPointLight(PointLightComponent* light);
     void removePointLight(PointLightComponent* light);
+    void drawPointLights(std::shared_ptr<Camera> camera) const;
 
     void renderToTexture();
     void renderFromTexture(std::shared_ptr<Camera> camera);
@@ -76,7 +79,7 @@ private:
     void createBlendState();
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
     void setDefaultRenderTarget();
-    D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive);
+    D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive) const;
 
 private:
     ID3D11Device* mDevice;
@@ -92,6 +95,7 @@ private:
 
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<GBuffer> mGBuffer;
+    std::unique_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;
 
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;

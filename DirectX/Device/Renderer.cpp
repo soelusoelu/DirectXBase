@@ -2,6 +2,9 @@
 #include "Sound.h"
 #include "../Actor/DirectionalLight.h"
 #include "../Camera/Camera.h"
+#include "../Component/PointLightComponent.h"
+#include "../Light/PointLight.h"
+#include "../Mesh/Mesh.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
@@ -26,6 +29,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mGBuffer(std::make_shared<GBuffer>()),
+    mPointLight(std::make_unique<PointLight>()),
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
     createDeviceAndSwapChain(hWnd);
     createRenderTargetView();
@@ -60,6 +64,7 @@ Renderer::~Renderer() {
 
 void Renderer::initialize() {
     mGBuffer->create(shared_from_this());
+    mPointLight->initialize(shared_from_this());
 }
 
 ID3D11Device* Renderer::device() const {
@@ -115,7 +120,7 @@ void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
     mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R32_UINT, offset);
 }
 
-void Renderer::setPrimitive(PrimitiveType primitive) {
+void Renderer::setPrimitive(PrimitiveType primitive) const {
     mDeviceContext->IASetPrimitiveTopology(toPrimitiveMode(primitive));
 }
 
@@ -191,6 +196,37 @@ void Renderer::removePointLight(PointLightComponent* light) {
     mPointLigths.erase(itr);
 }
 
+void Renderer::drawPointLights(std::shared_ptr<Camera> camera) const {
+    if (mPointLigths.empty()) {
+        return;
+    }
+
+    //使用するシェーダーの登録
+    mPointLight->shader->setVSShader();
+    mPointLight->shader->setPSShader();
+    //このコンスタントバッファーを使うシェーダーの登録
+    mPointLight->shader->setVSConstantBuffers();
+    mPointLight->shader->setPSConstantBuffers();
+    //頂点インプットレイアウトをセット
+    mPointLight->shader->setInputLayout();
+    //バーテックスバッファーをセット
+    mPointLight->mesh->getMeshData()->setVertexBuffer(sizeof(MeshVertex));
+    //プリミティブ指定
+    setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    for (size_t i = 0; i < numGBuffer; i++) {
+        auto sr = mGBuffer->getShaderResource(i);
+        mDeviceContext->PSSetShaderResources(i, 1, &sr);
+    }
+    //サンプラーをセット
+    auto s = mGBuffer->getSampler();
+    mDeviceContext->PSSetSamplers(0, 1, &s);
+
+    for (const auto& p : mPointLigths) {
+        p->draw(mPointLight->shader, mPointLight->mesh, camera);
+    }
+}
+
 void Renderer::renderToTexture() {
     //各テクスチャをレンダーターゲットに設定
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
@@ -220,8 +256,11 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
         auto sr = mGBuffer->getShaderResource(i);
-        deviceContext()->PSSetShaderResources(i, 1, &sr);
+        mDeviceContext->PSSetShaderResources(i, 1, &sr);
     }
+    //サンプラーをセット
+    auto s = mGBuffer->getSampler();
+    mDeviceContext->PSSetSamplers(0, 1, &s);
 
     D3D11_MAPPED_SUBRESOURCE pData;
     if (mGBuffer->shader()->map(&pData)) {
@@ -385,7 +424,7 @@ void Renderer::setDefaultRenderTarget() {
     mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
 }
 
-D3D11_PRIMITIVE_TOPOLOGY Renderer::toPrimitiveMode(PrimitiveType primitive) {
+D3D11_PRIMITIVE_TOPOLOGY Renderer::toPrimitiveMode(PrimitiveType primitive) const {
     static const D3D11_PRIMITIVE_TOPOLOGY primitiveModes[] = {
         D3D11_PRIMITIVE_TOPOLOGY_POINTLIST, //PRIMITIVE_TYPE_POINTLIST = 0
         D3D11_PRIMITIVE_TOPOLOGY_LINELIST, //PRIMITIVE_TYPE_LINELIST = 1

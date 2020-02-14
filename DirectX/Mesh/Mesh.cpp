@@ -20,7 +20,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
 
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer0), 0);
-    //mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer1), 1);
+    mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer1), 1);
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {
@@ -62,13 +62,6 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         //ワールド、カメラ、射影行列を渡す
         cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
         cb.WVP.transpose();
-        //ライトの方向を渡す
-        //cb.lightDir = DirectionalLight::direction;
-        //cb.lightPos = SpotLight::position;
-        //cb.lightDir = SpotLight::rot;
-        //cb.lightDir.transpose();
-        //視点位置を渡す
-        //cb.eye = camera->getPosition();
 
         memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
         mShader->unmap(0);
@@ -78,8 +71,8 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
     mLoader->setVertexBuffer(sizeof(MeshVertex));
 
     //このコンスタントバッファーを使うシェーダーの登録
-    //mShader->setVSConstantBuffers(1);
-    //mShader->setPSConstantBuffers(1);
+    mShader->setVSConstantBuffers(1);
+    mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < mLoader->getMaterialSize(); i++) {
@@ -91,29 +84,19 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         mLoader->setIndexBuffer(i);
 
         //マテリアルの各要素をエフェクト(シェーダー)に渡す
-        //D3D11_MAPPED_SUBRESOURCE pData;
-        //if (SUCCEEDED(renderer->deviceContext()->Map(mShader->getConstantBuffer(1)->buffer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData))) {
-        //    MeshShaderConstantBuffer1 cb;
-        //    cb.ambient = mMaterials[i]->Ka; //アンビエントををシェーダーに渡す
-        //    cb.diffuse = mMaterials[i]->Kd; //ディフューズカラーをシェーダーに渡す
-        //    cb.specular = mMaterials[i]->Ks; //スペキュラーをシェーダーに渡す
+        D3D11_MAPPED_SUBRESOURCE pData;
+        if (mShader->map(&pData, 1)) {
+            MeshShaderConstantBuffer1 cb;
+            if (auto t = mLoader->getMaterialData(i)->texture) {
+                t->setPSTextures();
+                t->setPSSamplers();
+                cb.textureFlag = true;
+            } else {
+                cb.textureFlag = false;
+            }
 
-        //    //テクスチャーをシェーダーに渡す
-        //    if (mMaterials[i]->texture) {
-        //        renderer->deviceContext()->PSSetShaderResources(0, 1, &mMaterials[i]->texture);
-        //        renderer->deviceContext()->PSSetSamplers(0, 1, &mMaterials[i]->sampleLinear);
-        //        cb.texture = 1;
-        //    } else {
-        //        cb.texture = 0;
-        //    }
-
-        //    memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
-        //    renderer->deviceContext()->Unmap(mShader->getConstantBuffer(1)->buffer(), 0);
-        //}
-
-        if (auto t = mLoader->getMaterialData(i)->texture) {
-            t->setPSTextures();
-            t->setPSSamplers();
+            memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+            mShader->unmap(1);
         }
         //プリミティブをレンダリング
         renderer->drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
@@ -122,6 +105,10 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
 
 void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {
     mTransform = transform;
+}
+
+std::shared_ptr<MeshLoader> Mesh::getMeshData() const {
+    return mLoader;
 }
 
 void Mesh::destroy() {

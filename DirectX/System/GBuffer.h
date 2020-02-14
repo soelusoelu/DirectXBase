@@ -34,6 +34,7 @@ public:
     ID3D11Texture2D* getTexture(unsigned index) const;
     ID3D11RenderTargetView* getRenderTarget(unsigned index) const;
     ID3D11ShaderResourceView* getShaderResource(unsigned index) const;
+    ID3D11SamplerState* getSampler() const;
     std::shared_ptr<Shader> shader() const;
     std::shared_ptr<Buffer> vertexBuffer() const;
 
@@ -42,6 +43,7 @@ private:
     std::vector<ID3D11Texture2D*> mTextures;
     std::vector<ID3D11RenderTargetView*> mRenderTargets;
     std::vector<ID3D11ShaderResourceView*> mShaderResources;
+    ID3D11SamplerState* mSampler;
     std::shared_ptr<Shader> mShader;
     std::shared_ptr<Buffer> mVertexBuffer;
 };

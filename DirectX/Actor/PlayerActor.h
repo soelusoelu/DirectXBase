@@ -9,6 +9,7 @@ class MeshComponent;
 class SoundComponent;
 class SphereCollisionComponent;
 class PlayerMoveComponent;
+class PointLightComponent;
 
 class PlayerActor : public Actor {
 public:
@@ -21,5 +22,6 @@ private:
     SoundComponent* mSound;
     SphereCollisionComponent* mSphere;
     PlayerMoveComponent* mMove;
+    PointLightComponent* mPointLight;
 };
 

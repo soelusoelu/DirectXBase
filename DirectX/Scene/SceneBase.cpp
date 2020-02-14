@@ -48,6 +48,8 @@ void SceneBase::draw() {
     mMeshManager->draw(mRenderer, mCamera);
     //各テクスチャを参照してレンダリング
     mRenderer->renderFromTexture(mCamera);
+    //ポイントライトの一括描画
+    mRenderer->drawPointLights(mCamera);
 
     mSpriteManager->draw(mRenderer);
 }
