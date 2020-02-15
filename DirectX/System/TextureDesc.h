@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "Format.h"
 
 //テクスチャの種類
 enum class TextureType {
@@ -8,12 +8,6 @@ enum class TextureType {
     TEXTURE_TYPE_2D,
     TEXTURE_TYPE_3D,
     TEXTURE_TYPE_CUBE
-};
-
-//テクスチャフォーマット
-enum class TextureFormat {
-    TEXTURE_FORMAT_RGBA32_FLOAT,
-    TEXTURE_FORMAT_RGBA8_UNORM
 };
 
 //テクスチャの使用方法
@@ -64,7 +58,7 @@ struct TextureDesc {
     //オプション 基本0
     unsigned miscFlags;
     //フォーマット
-    TextureFormat format;
+    Format format;
     //テクスチャのフィルタリング
     TextureFilter filter;
     //ミップマップのフィルタリング
@@ -82,7 +76,7 @@ struct TextureDesc {
         bindFlags(static_cast<unsigned>(TextureBind::TEXTURE_BIND_SHADER_RESOURCE)),
         cpuAccessFlags(0),
         miscFlags(0),
-        format(TextureFormat::TEXTURE_FORMAT_RGBA8_UNORM),
+        format(Format::FORMAT_RGBA8_UNORM),
         filter(TextureFilter::TEXTURE_FILTER_LINEAR),
         mipFilter(TextureFilter::TEXTURE_FILTER_LINEAR),
         srcInfo(0) {

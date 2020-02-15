@@ -3,6 +3,7 @@
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
+#include "../System/Format.h"
 #include "../System/Game.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
@@ -141,14 +142,6 @@ D3D11_USAGE Texture::toUsage(TextureUsage usage) const {
         D3D11_USAGE_STAGING
     };
     return usages[static_cast<unsigned>(usage)];
-}
-
-DXGI_FORMAT Texture::toFormat(TextureFormat format) const {
-    const DXGI_FORMAT formats[] = {
-        DXGI_FORMAT_R32G32B32A32_FLOAT,
-        DXGI_FORMAT_R8G8B8A8_UNORM
-    };
-    return formats[static_cast<unsigned>(format)];
 }
 
 unsigned Texture::toFilter(TextureFilter filter) const {

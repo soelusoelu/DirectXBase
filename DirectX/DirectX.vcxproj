@@ -162,6 +162,7 @@
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
+    <ClCompile Include="System\Format.cpp" />
     <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh\Material.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="System\DepthStencilState.cpp" />
     <ClCompile Include="System\RasterizerState.cpp" />
     <ClCompile Include="System\Texture.cpp" />
+    <ClCompile Include="System\Texture2D.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -226,10 +228,13 @@
     <ClInclude Include="System\BlendState.h" />
     <ClInclude Include="System\DepthStencilDesc.h" />
     <ClInclude Include="System\DepthStencilState.h" />
+    <ClInclude Include="System\Format.h" />
     <ClInclude Include="System\RasterizerDesc.h" />
     <ClInclude Include="System\RasterizerState.h" />
     <ClInclude Include="System\ShaderResourceViewDesc.h" />
     <ClInclude Include="System\Texture.h" />
+    <ClInclude Include="System\Texture2DDesc.h" />
+    <ClInclude Include="System\Texture2D.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />

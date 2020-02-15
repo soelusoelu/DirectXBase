@@ -63,6 +63,8 @@
     <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="System\RasterizerState.cpp" />
     <ClCompile Include="System\Texture.cpp" />
+    <ClCompile Include="System\Texture2D.cpp" />
+    <ClCompile Include="System\Format.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -129,5 +131,8 @@
     <ClInclude Include="System\RasterizerDesc.h" />
     <ClInclude Include="System\Texture.h" />
     <ClInclude Include="System\ShaderResourceViewDesc.h" />
+    <ClInclude Include="System\Texture2DDesc.h" />
+    <ClInclude Include="System\Format.h" />
+    <ClInclude Include="System\Texture2D.h" />
   </ItemGroup>
 </Project>

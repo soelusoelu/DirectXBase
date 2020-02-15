@@ -11,9 +11,11 @@
 #include "../System/Buffer.h"
 #include "../System/DepthStencilState.h"
 #include "../System/DirectXIncLib.h"
+#include "../System/Format.h"
 #include "../System/GBuffer.h"
 #include "../System/RasterizerState.h"
 #include "../System/Texture.h"
+#include "../System/Texture2D.h"
 
 Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
@@ -22,6 +24,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mRenderTargetView(nullptr),
     mDepthStencilView(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
+    mTexture2D(nullptr),
     mBlendState(nullptr),
     mDepthStencilState(nullptr),
     mRasterizerState(nullptr),
@@ -30,7 +33,6 @@ Renderer::Renderer(const HWND& hWnd) :
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
     createDeviceAndSwapChain(hWnd);
     createRenderTargetView();
-    createDepthStencilView();
     setDefaultRenderTarget();
     ViewportDesc desc;
     desc.width = Game::WINDOW_WIDTH;
@@ -52,11 +54,14 @@ Renderer::~Renderer() {
 }
 
 void Renderer::initialize() {
+    mTexture2D = std::make_shared<Texture2D>(shared_from_this());
     mBlendState = std::make_shared<BlendState>(shared_from_this());
     mDepthStencilState = std::make_shared<DepthStencilState>(shared_from_this());
     mRasterizerState = std::make_shared<RasterizerState>(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
+
+    createDepthStencilView();
 }
 
 ID3D11Device* Renderer::device() const {
@@ -65,6 +70,10 @@ ID3D11Device* Renderer::device() const {
 
 ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
+}
+
+std::shared_ptr<Texture2D> Renderer::texture2D() const {
+    return mTexture2D;
 }
 
 std::shared_ptr<BlendState> Renderer::blendState() const {
@@ -361,25 +370,16 @@ void Renderer::createRenderTargetView() {
 }
 
 void Renderer::createDepthStencilView() {
-    //深度ステンシルビューの作成
-    D3D11_TEXTURE2D_DESC descDepth;
-    ZeroMemory(&descDepth, sizeof(descDepth));
-    descDepth.Width = Game::WINDOW_WIDTH;
-    descDepth.Height = Game::WINDOW_HEIGHT;
-    descDepth.MipLevels = 1;
-    descDepth.ArraySize = 1;
-    descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-    descDepth.SampleDesc.Count = 1;
-    descDepth.SampleDesc.Quality = 0;
-    descDepth.Usage = D3D11_USAGE_DEFAULT;
-    descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-    descDepth.CPUAccessFlags = 0;
-    descDepth.MiscFlags = 0;
-    ID3D11Texture2D* depthStencil;
-    mDevice->CreateTexture2D(&descDepth, NULL, &depthStencil);
-    mDevice->CreateDepthStencilView(depthStencil, NULL, &mDepthStencilView);
+    Texture2DDesc desc;
+    desc.width = Game::WINDOW_WIDTH;
+    desc.height = Game::WINDOW_HEIGHT;
+    desc.format = Format::FORMAT_D32_FLOAT;
+    desc.bindFlags = static_cast<unsigned>(TextureBind::TEXTURE_BIND_DEPTH_STENCIL);
 
-    SAFE_RELEASE(depthStencil);
+    auto tex = mTexture2D->createTexture2D(desc);
+    mDevice->CreateDepthStencilView(tex, nullptr, &mDepthStencilView);
+
+    SAFE_RELEASE(tex);
 }
 
 void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {
