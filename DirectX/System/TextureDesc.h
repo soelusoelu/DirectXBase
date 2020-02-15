@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Format.h"
+#include "Usage.h"
 
 //テクスチャの種類
 enum class TextureType {
@@ -8,14 +9,6 @@ enum class TextureType {
     TEXTURE_TYPE_2D,
     TEXTURE_TYPE_3D,
     TEXTURE_TYPE_CUBE
-};
-
-//テクスチャの使用方法
-enum class TextureUsage {
-    TEXTURE_USAGE_DEFAULT, //GPUによる読み書き
-    TEXTURE_USAGE_IMMUTABLE, //GPUの読み込みのみ可能
-    TEXTURE_USAGE_DYNAMIC, //GPUの読み込みとCPUの書き込みが可能
-    TEXTURE_USAGE_STAGING //GPUからCPUへのデータ転送をサポート
 };
 
 //リソースの使用方法
@@ -50,7 +43,7 @@ struct TextureDesc {
     //ミップマップ数
     unsigned mipLevels;
     //テクスチャの使用方法
-    TextureUsage usage;
+    Usage usage;
     //リソースの使用方法
     unsigned bindFlags;
     //cpuアクセス権限
@@ -72,7 +65,7 @@ struct TextureDesc {
         depth(0),
         firstMipLevel(0),
         mipLevels(1),
-        usage(TextureUsage::TEXTURE_USAGE_DEFAULT),
+        usage(Usage::USAGE_DEFAULT),
         bindFlags(static_cast<unsigned>(TextureBind::TEXTURE_BIND_SHADER_RESOURCE)),
         cpuAccessFlags(0),
         miscFlags(0),

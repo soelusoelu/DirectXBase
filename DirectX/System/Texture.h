@@ -49,7 +49,6 @@ private:
     void createSampler(std::shared_ptr<Renderer> renderer);
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
-    D3D11_USAGE toUsage(TextureUsage usage) const;
     unsigned toFilter(TextureFilter filter) const;
 
 private:

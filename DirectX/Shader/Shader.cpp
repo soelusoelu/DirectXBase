@@ -6,6 +6,7 @@
 #include "../System/InputElement.h"
 #include "../System/InputElementDesc.h"
 #include "../System/Texture.h"
+#include "../System/Usage.h"
 
 Shader::Shader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mDevice(renderer->device()),
@@ -58,7 +59,7 @@ void Shader::createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned b
 
     BufferDesc cb;
     cb.size = bufferSize;
-    cb.usage = BufferUsage::BUFFER_USAGE_DYNAMIC;
+    cb.usage = Usage::USAGE_DYNAMIC;
     cb.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_CONSTANT_BUFFER);
     cb.cpuAccessFlags = static_cast<unsigned>(BufferCPUAccessFlag::CPU_ACCESS_WRITE);
     mConstantBuffers[index] = renderer->createBuffer(cb);

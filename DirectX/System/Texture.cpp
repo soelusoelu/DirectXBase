@@ -6,6 +6,7 @@
 #include "../System/Format.h"
 #include "../System/Game.h"
 #include "../System/SubResourceDesc.h"
+#include "../System/Usage.h"
 #include "../System/VertexStreamDesc.h"
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) :
@@ -64,7 +65,7 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
 
     BufferDesc bd;
     bd.size = sizeof(TextureVertex) * 4;
-    bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
+    bd.usage = Usage::USAGE_IMMUTABLE;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
 
     SubResourceDesc sub;
@@ -79,7 +80,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
     };
     BufferDesc bd;
     bd.size = sizeof(indices);
-    bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
+    bd.usage = Usage::USAGE_IMMUTABLE;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
 
     SubResourceDesc sub;
@@ -132,16 +133,6 @@ D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc& desc) const {
     info.pSrcInfo = desc.srcInfo;
 
     return info;
-}
-
-D3D11_USAGE Texture::toUsage(TextureUsage usage) const {
-    const D3D11_USAGE usages[] = {
-        D3D11_USAGE_DEFAULT,
-        D3D11_USAGE_IMMUTABLE,
-        D3D11_USAGE_DYNAMIC,
-        D3D11_USAGE_STAGING
-    };
-    return usages[static_cast<unsigned>(usage)];
 }
 
 unsigned Texture::toFilter(TextureFilter filter) const {

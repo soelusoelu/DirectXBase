@@ -1,4 +1,5 @@
 ﻿#include "Texture2D.h"
+#include "Usage.h"
 #include "../Device/Renderer.h"
 
 Texture2D::Texture2D(std::shared_ptr<Renderer> renderer) :
@@ -45,15 +46,4 @@ D3D11_SUBRESOURCE_DATA* Texture2D::toSubResourceData(SubResourceDesc * data) con
     srd->SysMemSlicePitch = data->slicePitch;
 
     return srd;
-}
-
-D3D11_USAGE Texture2D::toUsage(Texture2DUsage usage) const {
-    static constexpr D3D11_USAGE usages[] {
-        D3D11_USAGE_DEFAULT,
-        D3D11_USAGE_IMMUTABLE,
-        D3D11_USAGE_DYNAMIC,
-        D3D11_USAGE_STAGING
-    };
-
-    return usages[static_cast<unsigned>(usage)];
 }

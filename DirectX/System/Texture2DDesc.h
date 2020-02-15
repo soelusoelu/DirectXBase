@@ -1,14 +1,7 @@
 ﻿#pragma once
 
 #include "Format.h"
-
-//テクスチャの使用方法
-enum class Texture2DUsage {
-    TEXTURE_USAGE_DEFAULT, //GPUによる読み書き
-    TEXTURE_USAGE_IMMUTABLE, //GPUの読み込みのみ可能
-    TEXTURE_USAGE_DYNAMIC, //GPUの読み込みとCPUの書き込みが可能
-    TEXTURE_USAGE_STAGING //GPUからCPUへのデータ転送をサポート
-};
+#include "Usage.h"
 
 //リソースの使用方法
 enum class Texture2DBind {
@@ -49,7 +42,7 @@ struct Texture2DDesc {
     //サンプリングパラメータ指定
     TextureSampleDesc sampleDesc;
     //テクスチャの使用方法
-    Texture2DUsage usage;
+    Usage usage;
     //リソースの使用方法
     unsigned bindFlags;
     //cpuアクセス権限
@@ -64,7 +57,7 @@ struct Texture2DDesc {
         arraySize(1),
         format(Format::FORMAT_RGBA8_UNORM),
         sampleDesc(),
-        usage(Texture2DUsage::TEXTURE_USAGE_DEFAULT),
+        usage(Usage::USAGE_DEFAULT),
         bindFlags(static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE)),
         cpuAccessFlags(0),
         miscFlags(0) {

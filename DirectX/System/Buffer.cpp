@@ -1,6 +1,7 @@
 ﻿#include "Buffer.h"
 #include "Game.h"
 #include "SubResourceDesc.h"
+#include "Usage.h"
 
 Buffer::Buffer(ID3D11Device* device, const BufferDesc& desc, const SubResourceDesc* data) :
     mDesc(desc) {
@@ -35,16 +36,6 @@ D3D11_BUFFER_DESC Buffer::toBufferDesc(const BufferDesc& desc) const {
     bd.StructureByteStride = desc.structureByteStride;
 
     return bd;
-}
-
-D3D11_USAGE Buffer::toUsage(BufferUsage usage) const {
-    const D3D11_USAGE usages[] = {
-        D3D11_USAGE_DEFAULT,
-        D3D11_USAGE_IMMUTABLE,
-        D3D11_USAGE_DYNAMIC,
-        D3D11_USAGE_STAGING
-    };
-    return usages[static_cast<unsigned>(usage)];
 }
 
 D3D11_SUBRESOURCE_DATA Buffer::toSubResource(const SubResourceDesc* data) const {

@@ -65,6 +65,7 @@
     <ClCompile Include="System\Texture.cpp" />
     <ClCompile Include="System\Texture2D.cpp" />
     <ClCompile Include="System\Format.cpp" />
+    <ClCompile Include="System\Usage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -134,5 +135,6 @@
     <ClInclude Include="System\Texture2DDesc.h" />
     <ClInclude Include="System\Format.h" />
     <ClInclude Include="System\Texture2D.h" />
+    <ClInclude Include="System\Usage.h" />
   </ItemGroup>
 </Project>

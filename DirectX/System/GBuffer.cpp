@@ -3,6 +3,7 @@
 #include "BufferDesc.h"
 #include "Game.h"
 #include "SubResourceDesc.h"
+#include "Usage.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
@@ -109,7 +110,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     };
     BufferDesc bd;
     bd.size = sizeof(MeshVertex) * 4;
-    bd.usage = BufferUsage::BUFFER_USAGE_DEFAULT;
+    bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
     SubResourceDesc sub;
     sub.data = vertices;

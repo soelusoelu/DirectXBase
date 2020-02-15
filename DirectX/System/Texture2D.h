@@ -16,7 +16,6 @@ public:
 private:
     D3D11_TEXTURE2D_DESC toTexture2DDesc(const Texture2DDesc& desc) const;
     D3D11_SUBRESOURCE_DATA* toSubResourceData(SubResourceDesc* data) const;
-    D3D11_USAGE toUsage(Texture2DUsage usage) const;
 
 private:
     std::weak_ptr<Renderer> mRenderer;

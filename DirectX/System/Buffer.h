@@ -18,8 +18,6 @@ public:
 private:
     //自作バッファーデスクリプタを変換
     D3D11_BUFFER_DESC toBufferDesc(const BufferDesc& desc) const;
-    //バッファの使用方法を変換
-    D3D11_USAGE toUsage(BufferUsage usage) const;
     //サブリソースを変換
     D3D11_SUBRESOURCE_DATA toSubResource(const SubResourceDesc* data) const;
 
