@@ -5,6 +5,7 @@
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/InputElementDesc.h"
+#include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
 #include "../System/TextureDesc.h"
 #include "../System/VertexStreamDesc.h"
@@ -77,8 +78,8 @@ void Sprite::draw(const Matrix4 & proj) {
     mShader->setInputLayout();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    D3D11_MAPPED_SUBRESOURCE pData;
-    if (mShader->map(&pData)) {
+    MappedSubResourceDesc msrd;
+    if (mShader->map(&msrd)) {
         TextureShaderConstantBuffer cb;
         //ワールド、射影行列を渡す
         cb.mWorld = mTransform->getWorldTransform();
@@ -88,7 +89,7 @@ void Sprite::draw(const Matrix4 & proj) {
         cb.mColor = mColor;
         cb.mUV = mUV;
 
-        memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+        memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
         mShader->unmap();
     }
     //テクスチャーをシェーダーに渡す

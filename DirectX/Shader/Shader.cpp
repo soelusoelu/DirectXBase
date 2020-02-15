@@ -26,8 +26,14 @@ Shader::~Shader() {
     SAFE_RELEASE(mPixelShader);
 }
 
-bool Shader::map(D3D11_MAPPED_SUBRESOURCE* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) {
-    auto res = mDeviceContext->Map(mConstantBuffers[index]->buffer(), sub, type, flag, data);
+bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) {
+    auto msr = toMappedSubResource(data);
+    auto res = mDeviceContext->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
+
+    data->data = msr.pData;
+    data->rowPitch = msr.RowPitch;
+    data->depthPitch = msr.DepthPitch;
+
     return (SUCCEEDED(res));
 }
 
@@ -123,4 +129,13 @@ void Shader::createPixelShader(const std::string& fileName) {
         return;
     }
     SAFE_RELEASE(compiledShader);
+}
+
+D3D11_MAPPED_SUBRESOURCE Shader::toMappedSubResource(const MappedSubResourceDesc* desc) const {
+    D3D11_MAPPED_SUBRESOURCE msr;
+    msr.pData = desc->data;
+    msr.RowPitch = desc->rowPitch;
+    msr.DepthPitch = desc->depthPitch;
+
+    return msr;
 }

@@ -8,6 +8,7 @@
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
+#include "../System/SubResourceDesc.h"
 #include "../System/VertexArray.h"
 
 PointLightComponent::PointLightComponent(Actor* owner) :
@@ -37,8 +38,8 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
     auto shader = pointLight->shader;
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    D3D11_MAPPED_SUBRESOURCE pData;
-    if (shader->map(&pData)) {
+    MappedSubResourceDesc msrd;
+    if (shader->map(&msrd)) {
         PointLightConstantBuffer cb;
         cb.wvp = world * camera->getView() * camera->getProjection();
         cb.wvp.transpose();
@@ -48,7 +49,7 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
         cb.outerRadius = mOuterRadius;
         cb.windowSize = Vector2(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
 
-        memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         shader->unmap();
     }
 

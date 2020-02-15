@@ -13,6 +13,7 @@
 #include "../System/DirectXIncLib.h"
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
+#include "../System/SubResourceDesc.h"
 #include "../System/RasterizerState.h"
 #include "../System/Texture.h"
 #include "../System/Texture2D.h"
@@ -282,14 +283,14 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     auto s = mGBuffer->getSampler();
     mDeviceContext->PSSetSamplers(0, 1, &s);
 
-    D3D11_MAPPED_SUBRESOURCE pData;
-    if (mGBuffer->shader()->map(&pData)) {
+    MappedSubResourceDesc msrd;
+    if (mGBuffer->shader()->map(&msrd)) {
         GBufferShaderConstantBuffer cb;
         cb.lightDir = DirectionalLight::direction;
         cb.cameraPos = camera->getPosition();
         cb.ambientLight = mAmbientLight;
 
-        memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mGBuffer->shader()->unmap();
     }
     //スクリーンサイズのポリゴンをレンダー

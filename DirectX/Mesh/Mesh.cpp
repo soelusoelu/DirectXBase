@@ -9,6 +9,7 @@
 #include "../System/Buffer.h"
 #include "../System/GBuffer.h"
 #include "../System/InputElement.h"
+#include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
 #include "../System/VertexArray.h"
 
@@ -53,8 +54,8 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
     mShader->setInputLayout();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
-    D3D11_MAPPED_SUBRESOURCE pData;
-    if (mShader->map(&pData, 0)) {
+    MappedSubResourceDesc msrd;
+    if (mShader->map(&msrd, 0)) {
         MeshShaderConstantBuffer0 cb;
         //ワールド行列を渡す
         cb.world = mTransform->getWorldTransform();
@@ -63,7 +64,7 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
         cb.WVP.transpose();
 
-        memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShader->unmap(0);
     }
 
@@ -84,8 +85,7 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         mLoader->setIndexBuffer(i);
 
         //マテリアルの各要素をエフェクト(シェーダー)に渡す
-        D3D11_MAPPED_SUBRESOURCE pData;
-        if (mShader->map(&pData, 1)) {
+        if (mShader->map(&msrd, 1)) {
             MeshShaderConstantBuffer1 cb;
             if (auto t = mLoader->getMaterialData(i)->texture) {
                 t->setPSTextures();
@@ -95,7 +95,7 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
                 cb.textureFlag = false;
             }
 
-            memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
+            memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
             mShader->unmap(1);
         }
         //プリミティブをレンダリング
