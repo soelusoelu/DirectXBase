@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DirectXIncLib.h"
+#include "Format.h"
 
 enum class SRVDimension {
     SRV_DIMENSION_TEXTURE2D
@@ -17,12 +17,12 @@ struct Texture2DShaderResourceView {
 };
 
 struct ShaderResourceViewDesc {
-    DXGI_FORMAT format;
+    Format format;
     SRVDimension viewDimension;
     Texture2DShaderResourceView texture2D;
 
     ShaderResourceViewDesc() :
-        format(DXGI_FORMAT_R8G8B8A8_UNORM),
+        format(Format::FORMAT_RGBA8_UNORM),
         viewDimension(SRVDimension::SRV_DIMENSION_TEXTURE2D),
         texture2D() {
     }

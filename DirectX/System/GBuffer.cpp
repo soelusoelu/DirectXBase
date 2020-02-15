@@ -3,20 +3,20 @@
 #include "BufferDesc.h"
 #include "Game.h"
 #include "SubResourceDesc.h"
+#include "Texture2D.h"
+#include "Texture2DDesc.h"
 #include "Usage.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 
 GBuffer::GBuffer() :
+    mSampler(nullptr),
     mShader(nullptr),
     mVertexBuffer(nullptr) {
 }
 
 GBuffer::~GBuffer() {
-    for (auto&& t : mTextures) {
-        SAFE_RELEASE(t);
-    }
     for (auto&& rt : mRenderTargets) {
         SAFE_RELEASE(rt);
     }
@@ -30,63 +30,60 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     //Deferred 関連 なおそれぞれ深度ステンシルを作るわけではない。サイズが同じなので通常のものを使い回せる。
     D3D11_SHADER_RESOURCE_VIEW_DESC SRVDesc;
     D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
-    D3D11_TEXTURE2D_DESC desc;
-    ZeroMemory(&desc, sizeof(desc));
+    Texture2DDesc desc;
     ZeroMemory(&SRVDesc, sizeof(SRVDesc));
     ZeroMemory(&RTVDesc, sizeof(RTVDesc));
 
     //カラーマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
-    desc.Width = Game::WINDOW_WIDTH;
-    desc.Height = Game::WINDOW_HEIGHT;
-    desc.MipLevels = 1;
-    desc.ArraySize = 1;
-    desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-    desc.SampleDesc.Count = 1;
-    desc.SampleDesc.Quality = 0;
-    desc.Usage = D3D11_USAGE_DEFAULT;
-    desc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
-    desc.CPUAccessFlags = 0;
-    desc.MiscFlags = 0;
-    ID3D11Texture2D* texture;
-    renderer->device()->CreateTexture2D(&desc, NULL, &texture);
-    mTextures.emplace_back(texture);
+    desc.width = Game::WINDOW_WIDTH;
+    desc.height = Game::WINDOW_HEIGHT;
+    desc.format = Format::FORMAT_RGBA8_UNORM;
+    desc.usage = Usage::USAGE_DEFAULT;
+    desc.bindFlags = 
+        static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
+        static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);
+    auto texture = renderer->texture2D()->createTexture2D(desc, nullptr);
 
-    RTVDesc.Format = desc.Format;
+    RTVDesc.Format = toFormat(desc.format);
     RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
     RTVDesc.Texture2D.MipSlice = 0;
     ID3D11RenderTargetView* renderTarget;
     renderer->device()->CreateRenderTargetView(texture, &RTVDesc, &renderTarget);
     mRenderTargets.emplace_back(renderTarget);
 
-    SRVDesc.Format = desc.Format;
+    SRVDesc.Format = toFormat(desc.format);
     SRVDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
     SRVDesc.Texture2D.MipLevels = 1;
     ID3D11ShaderResourceView* shaderResource;
     renderer->device()->CreateShaderResourceView(texture, &SRVDesc, &shaderResource);
     mShaderResources.emplace_back(shaderResource);
 
-    //ノーマルマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
-    desc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-    renderer->device()->CreateTexture2D(&desc, NULL, &texture);
-    mTextures.emplace_back(texture);
+    SAFE_RELEASE(texture);
 
-    RTVDesc.Format = desc.Format;
+    //ノーマルマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
+    desc.format = Format::FORMAT_RGBA32_FLOAT;
+    texture = renderer->texture2D()->createTexture2D(desc, nullptr);
+
+    RTVDesc.Format = toFormat(desc.format);
     renderer->device()->CreateRenderTargetView(texture, &RTVDesc, &renderTarget);
     mRenderTargets.emplace_back(renderTarget);
 
-    SRVDesc.Format = desc.Format;
+    SRVDesc.Format = toFormat(desc.format);
     renderer->device()->CreateShaderResourceView(texture, &SRVDesc, &shaderResource);
     mShaderResources.emplace_back(shaderResource);
+
+    SAFE_RELEASE(texture);
 
     //ポジションマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
-    renderer->device()->CreateTexture2D(&desc, NULL, &texture);
-    mTextures.emplace_back(texture);
+    texture = renderer->texture2D()->createTexture2D(desc, nullptr);
 
     renderer->device()->CreateRenderTargetView(texture, &RTVDesc, &renderTarget);
     mRenderTargets.emplace_back(renderTarget);
 
     renderer->device()->CreateShaderResourceView(texture, &SRVDesc, &shaderResource);
     mShaderResources.emplace_back(shaderResource);
+
+    SAFE_RELEASE(texture);
 
     //サンプラー作成
     D3D11_SAMPLER_DESC sd;
@@ -116,10 +113,6 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     sub.data = vertices;
 
     mVertexBuffer = renderer->createBuffer(bd, &sub);
-}
-
-ID3D11Texture2D* GBuffer::getTexture(unsigned index) const {
-    return mTextures[index];
 }
 
 ID3D11RenderTargetView* GBuffer::getRenderTarget(unsigned index) const {

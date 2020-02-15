@@ -31,7 +31,6 @@ public:
     //Gバッファの生成
     void create(std::shared_ptr<Renderer> renderer);
 
-    ID3D11Texture2D* getTexture(unsigned index) const;
     ID3D11RenderTargetView* getRenderTarget(unsigned index) const;
     ID3D11ShaderResourceView* getShaderResource(unsigned index) const;
     ID3D11SamplerState* getSampler() const;
@@ -40,7 +39,6 @@ public:
 
 private:
     //Gバッファに割り当てられたテクスチャ
-    std::vector<ID3D11Texture2D*> mTextures;
     std::vector<ID3D11RenderTargetView*> mRenderTargets;
     std::vector<ID3D11ShaderResourceView*> mShaderResources;
     ID3D11SamplerState* mSampler;
