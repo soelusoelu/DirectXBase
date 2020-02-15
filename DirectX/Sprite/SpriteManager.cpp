@@ -3,6 +3,8 @@
 #include "Texture.h"
 #include "../Actor/Transform2D.h"
 #include "../Device/Renderer.h"
+#include "../System/BlendDesc.h"
+#include "../System/BlendState.h"
 #include "../System/Game.h"
 #include "../System/VertexStreamDesc.h"
 #include <algorithm>
@@ -45,7 +47,10 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     //デプステスト無効化
     renderer->disabledDepthTest();
     //通常合成
-    renderer->setDefaultBlendState();
+    BlendDesc bd;
+    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
+    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
+    renderer->blendState()->setBlendState(bd);
 
     for (const auto& sprite : mSprites) {
         sprite->draw(proj);

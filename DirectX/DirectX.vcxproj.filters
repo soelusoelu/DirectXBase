@@ -60,6 +60,7 @@
     <ClCompile Include="Mesh\Material.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
+    <ClCompile Include="System\BlendState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -119,5 +120,7 @@
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="Light\PointLight.h" />
+    <ClInclude Include="System\BlendState.h" />
+    <ClInclude Include="System\BlendDesc.h" />
   </ItemGroup>
 </Project>

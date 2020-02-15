@@ -7,6 +7,8 @@
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
+#include "../System/BlendDesc.h"
+#include "../System/BlendState.h"
 #include "../System/Buffer.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/GBuffer.h"
@@ -28,7 +30,6 @@ Renderer::Renderer(const HWND& hWnd) :
     mEnableDepthStencilState(nullptr),
     mDisableDepthStencilState(nullptr),
     mBlendState(nullptr),
-    mAddBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
@@ -43,7 +44,6 @@ Renderer::Renderer(const HWND& hWnd) :
     desc.height = Game::WINDOW_HEIGHT;
     setViewport(desc);
     createRasterizerState();
-    createBlendState();
 }
 
 Renderer::~Renderer() {
@@ -52,8 +52,6 @@ Renderer::~Renderer() {
     mSounds.clear();
     mMeshLoaders.clear();
 
-    SAFE_RELEASE(mAddBlendState);
-    SAFE_RELEASE(mBlendState);
     SAFE_RELEASE(mDisableDepthStencilState);
     SAFE_RELEASE(mEnableDepthStencilState);
     SAFE_RELEASE(mRasterizerStateBack);
@@ -67,6 +65,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::initialize() {
+    mBlendState = std::make_shared<BlendState>(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 }
@@ -77,6 +76,10 @@ ID3D11Device* Renderer::device() const {
 
 ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
+}
+
+std::shared_ptr<BlendState> Renderer::blendState() const {
+    return mBlendState;
 }
 
 Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
@@ -142,16 +145,6 @@ void Renderer::enabledDepthTest() {
 
 void Renderer::disabledDepthTest() {
     mDeviceContext->OMSetDepthStencilState(mDisableDepthStencilState, 0);
-}
-
-void Renderer::setDefaultBlendState() {
-    UINT mask = 0xffffffff;
-    mDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
-}
-
-void Renderer::setAddBlendState() {
-    UINT mask = 0xffffffff;
-    mDeviceContext->OMSetBlendState(mAddBlendState, NULL, mask);
 }
 
 std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
@@ -247,7 +240,10 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     //デプステスト有効化
     enabledDepthTest();
     //加算合成
-    setAddBlendState();
+    BlendDesc bd;
+    bd.renderTarget.srcBlend = Blend::ONE;
+    bd.renderTarget.destBlend = Blend::ONE;
+    mBlendState->setBlendState(bd);
 
     for (const auto& p : mPointLigths) {
         p->draw(mPointLight, camera);
@@ -271,7 +267,10 @@ void Renderer::renderToTexture() {
     //デプステスト有効化
     enabledDepthTest();
     //通常合成
-    setDefaultBlendState();
+    BlendDesc bd;
+    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
+    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
+    mBlendState->setBlendState(bd);
 }
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
@@ -430,35 +429,6 @@ void Renderer::createRasterizerState() {
     mDevice->CreateRasterizerState(&rdc, &mRasterizerStateBack);
 
     mDeviceContext->RSSetState(mRasterizerStateBack);
-}
-
-void Renderer::createBlendState() {
-    //アルファブレンド用ブレンドステート作成
-    D3D11_BLEND_DESC bd;
-    ZeroMemory(&bd, sizeof(D3D11_BLEND_DESC));
-    bd.IndependentBlendEnable = false;
-    bd.AlphaToCoverageEnable = false;
-    bd.RenderTarget[0].BlendEnable = true;
-    bd.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-    bd.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-    bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    bd.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-    bd.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-    bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-    bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-
-    mDevice->CreateBlendState(&bd, &mBlendState);
-
-    UINT mask = 0xffffffff;
-    mDeviceContext->OMSetBlendState(mBlendState, NULL, mask);
-
-    //加算合成
-    bd.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-    bd.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-    bd.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-    mDevice->CreateBlendState(&bd, &mAddBlendState);
-
-    mDeviceContext->OMSetBlendState(mAddBlendState, NULL, mask);
 }
 
 void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {

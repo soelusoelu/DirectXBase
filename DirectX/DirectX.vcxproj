@@ -166,6 +166,7 @@
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh\Material.cpp" />
     <ClCompile Include="Mesh\MeshLoader.cpp" />
+    <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -219,6 +220,8 @@
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Mesh\MeshLoader.h" />
+    <ClInclude Include="System\BlendDesc.h" />
+    <ClInclude Include="System\BlendState.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />

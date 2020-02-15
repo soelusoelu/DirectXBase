@@ -15,8 +15,10 @@ enum class PrimitiveType {
     PRIMITIVE_TYPE_TRIANGLE_STRIP
 };
 
+class BlendState;
+struct BlendDesc;
 class Buffer;
-class BufferDesc;
+struct BufferDesc;
 class Camera;
 class GBuffer;
 class Mesh;
@@ -29,7 +31,7 @@ class Sound;
 class SubResourceDesc;
 class Texture;
 class VertexStreamDesc;
-class ViewportDesc;
+struct ViewportDesc;
 
 class Renderer : public std::enable_shared_from_this<Renderer> {
 public:
@@ -39,6 +41,7 @@ public:
 
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
+    std::shared_ptr<BlendState> blendState() const;
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
@@ -51,8 +54,6 @@ public:
     void setRasterizerStateBack();
     void enabledDepthTest();
     void disabledDepthTest();
-    void setDefaultBlendState();
-    void setAddBlendState();
 
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
@@ -80,7 +81,6 @@ private:
     void createDepthStencilView();
     void createDepthStencilState();
     void createRasterizerState();
-    void createBlendState();
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
     void setDefaultRenderTarget();
     D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive) const;
@@ -96,10 +96,9 @@ private:
     ID3D11RasterizerState* mRasterizerStateBack;
     ID3D11DepthStencilState* mEnableDepthStencilState;
     ID3D11DepthStencilState* mDisableDepthStencilState;
-    ID3D11BlendState* mBlendState;
-    ID3D11BlendState* mAddBlendState;
 
     std::unique_ptr<SoundBase> mSoundBase;
+    std::shared_ptr<BlendState> mBlendState;
     std::shared_ptr<GBuffer> mGBuffer;
     std::shared_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;
