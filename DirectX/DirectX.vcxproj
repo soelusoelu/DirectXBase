@@ -161,8 +161,8 @@
     <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
-    <ClCompile Include="Actor\DirectionalLight.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
+    <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh\Material.cpp" />
     <ClCompile Include="Mesh\MeshLoader.cpp" />
@@ -216,8 +216,8 @@
     <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Actor\Field.h" />
-    <ClInclude Include="Actor\DirectionalLight.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
+    <ClInclude Include="Light\DirectionalLight.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Mesh\MeshLoader.h" />

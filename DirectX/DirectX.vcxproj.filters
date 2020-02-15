@@ -51,7 +51,6 @@
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
-    <ClCompile Include="Actor\DirectionalLight.cpp" />
     <ClCompile Include="Actor\SpotLight.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
@@ -62,6 +61,7 @@
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
+    <ClCompile Include="Light\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -111,7 +111,6 @@
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Actor\Field.h" />
-    <ClInclude Include="Actor\DirectionalLight.h" />
     <ClInclude Include="Actor\SpotLight.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="System\ViewportDesc.h" />
@@ -125,5 +124,6 @@
     <ClInclude Include="System\BlendDesc.h" />
     <ClInclude Include="System\DepthStencilState.h" />
     <ClInclude Include="System\DepthStencilDesc.h" />
+    <ClInclude Include="Light\DirectionalLight.h" />
   </ItemGroup>
 </Project>

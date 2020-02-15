@@ -1,8 +1,8 @@
 ﻿#include "Renderer.h"
 #include "Sound.h"
-#include "../Actor/DirectionalLight.h"
 #include "../Camera/Camera.h"
 #include "../Component/PointLightComponent.h"
+#include "../Light/DirectionalLight.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshLoader.h"
@@ -16,7 +16,6 @@
 #include "../System/VertexStreamDesc.h"
 #include "../System/ViewportDesc.h"
 #include "../Sprite/Texture.h"
-#include <algorithm>
 
 Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
