@@ -168,6 +168,7 @@
     <ClCompile Include="Mesh\MeshLoader.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
+    <ClCompile Include="System\RasterizerState.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -225,6 +226,8 @@
     <ClInclude Include="System\BlendState.h" />
     <ClInclude Include="System\DepthStencilDesc.h" />
     <ClInclude Include="System\DepthStencilState.h" />
+    <ClInclude Include="System\RasterizerDesc.h" />
+    <ClInclude Include="System\RasterizerState.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />

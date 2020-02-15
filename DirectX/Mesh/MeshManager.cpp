@@ -1,6 +1,8 @@
 ﻿#include "MeshManager.h"
 #include "Mesh.h"
 #include "../Device/Renderer.h"
+#include "../System/RasterizerDesc.h"
+#include "../System/RasterizerState.h"
 
 MeshManager::MeshManager() = default;
 
@@ -22,9 +24,13 @@ void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camer
         if (!mesh->getActive() || mesh->isDead()) {
             continue;
         }
-        //renderer->setRasterizerStateFront();
-        //mesh->draw(renderer, camera);
-        //renderer->setRasterizerStateBack();
+
+        RasterizerDesc rd;
+        rd.cullMode = CullMode::FRONT;
+        renderer->rasterizerState()->setRasterizerState(rd);
+        mesh->draw(renderer, camera);
+        rd.cullMode = CullMode::BACK;
+        renderer->rasterizerState()->setRasterizerState(rd);
         mesh->draw(renderer, camera);
     }
 }

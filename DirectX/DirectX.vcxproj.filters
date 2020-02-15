@@ -62,6 +62,7 @@
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
     <ClCompile Include="Light\DirectionalLight.cpp" />
+    <ClCompile Include="System\RasterizerState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -125,5 +126,7 @@
     <ClInclude Include="System\DepthStencilState.h" />
     <ClInclude Include="System\DepthStencilDesc.h" />
     <ClInclude Include="Light\DirectionalLight.h" />
+    <ClInclude Include="System\RasterizerState.h" />
+    <ClInclude Include="System\RasterizerDesc.h" />
   </ItemGroup>
 </Project>

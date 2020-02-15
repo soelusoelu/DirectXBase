@@ -25,6 +25,7 @@ class Mesh;
 class MeshLoader;
 struct PointLight;
 class PointLightComponent;
+class RasterizerState;
 class Shader;
 class SoundBase;
 class Sound;
@@ -43,6 +44,7 @@ public:
     ID3D11DeviceContext* deviceContext() const;
     std::shared_ptr<BlendState> blendState() const;
     std::shared_ptr<DepthStencilState> depthStencilState() const;
+    std::shared_ptr<RasterizerState> rasterizerState() const;
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
@@ -51,8 +53,6 @@ public:
     void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
     void setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset = 0);
     void setPrimitive(PrimitiveType primitive) const;
-    void setRasterizerStateFront();
-    void setRasterizerStateBack();
 
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
@@ -78,7 +78,6 @@ private:
     void createDeviceAndSwapChain(const HWND& hWnd);
     void createRenderTargetView();
     void createDepthStencilView();
-    void createRasterizerState();
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
     void setDefaultRenderTarget();
     D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive) const;
@@ -89,12 +88,11 @@ private:
     IDXGISwapChain* mSwapChain;
     ID3D11RenderTargetView* mRenderTargetView;
     ID3D11DepthStencilView* mDepthStencilView;
-    ID3D11RasterizerState* mRasterizerState;
-    ID3D11RasterizerState* mRasterizerStateBack;
 
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<BlendState> mBlendState;
     std::shared_ptr<DepthStencilState> mDepthStencilState;
+    std::shared_ptr<RasterizerState> mRasterizerState;
     std::shared_ptr<GBuffer> mGBuffer;
     std::shared_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;

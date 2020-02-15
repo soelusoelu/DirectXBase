@@ -12,6 +12,7 @@
 #include "../System/DepthStencilState.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/GBuffer.h"
+#include "../System/RasterizerState.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
 #include "../System/ViewportDesc.h"
@@ -23,11 +24,10 @@ Renderer::Renderer(const HWND& hWnd) :
     mSwapChain(nullptr),
     mRenderTargetView(nullptr),
     mDepthStencilView(nullptr),
-    mRasterizerState(nullptr),
-    mRasterizerStateBack(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
     mBlendState(nullptr),
     mDepthStencilState(nullptr),
+    mRasterizerState(nullptr),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
@@ -39,7 +39,6 @@ Renderer::Renderer(const HWND& hWnd) :
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
     setViewport(desc);
-    createRasterizerState();
 }
 
 Renderer::~Renderer() {
@@ -48,8 +47,6 @@ Renderer::~Renderer() {
     mSounds.clear();
     mMeshLoaders.clear();
 
-    SAFE_RELEASE(mRasterizerStateBack);
-    SAFE_RELEASE(mRasterizerState);
     SAFE_RELEASE(mDepthStencilView);
     SAFE_RELEASE(mRenderTargetView);
     SAFE_RELEASE(mSwapChain);
@@ -60,6 +57,7 @@ Renderer::~Renderer() {
 void Renderer::initialize() {
     mBlendState = std::make_shared<BlendState>(shared_from_this());
     mDepthStencilState = std::make_shared<DepthStencilState>(shared_from_this());
+    mRasterizerState = std::make_shared<RasterizerState>(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 }
@@ -78,6 +76,10 @@ std::shared_ptr<BlendState> Renderer::blendState() const {
 
 std::shared_ptr<DepthStencilState> Renderer::depthStencilState() const {
     return mDepthStencilState;
+}
+
+std::shared_ptr<RasterizerState> Renderer::rasterizerState() const {
+    return mRasterizerState;
 }
 
 Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
@@ -127,14 +129,6 @@ void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
 
 void Renderer::setPrimitive(PrimitiveType primitive) const {
     mDeviceContext->IASetPrimitiveTopology(toPrimitiveMode(primitive));
-}
-
-void Renderer::setRasterizerStateFront() {
-    mDeviceContext->RSSetState(mRasterizerState);
-}
-
-void Renderer::setRasterizerStateBack() {
-    mDeviceContext->RSSetState(mRasterizerStateBack);
 }
 
 std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
@@ -389,22 +383,6 @@ void Renderer::createDepthStencilView() {
     mDevice->CreateDepthStencilView(depthStencil, NULL, &mDepthStencilView);
 
     SAFE_RELEASE(depthStencil);
-}
-
-void Renderer::createRasterizerState() {
-    //ラスタライズ設定
-    D3D11_RASTERIZER_DESC rdc;
-    ZeroMemory(&rdc, sizeof(rdc));
-    rdc.CullMode = D3D11_CULL_FRONT;
-    rdc.FillMode = D3D11_FILL_SOLID;
-
-    mDevice->CreateRasterizerState(&rdc, &mRasterizerState);
-
-    rdc.CullMode = D3D11_CULL_NONE;
-    //rdc.CullMode = D3D11_CULL_BACK;
-    mDevice->CreateRasterizerState(&rdc, &mRasterizerStateBack);
-
-    mDeviceContext->RSSetState(mRasterizerStateBack);
 }
 
 void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {
