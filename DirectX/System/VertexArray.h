@@ -5,10 +5,7 @@
 #include <vector>
 
 class Buffer;
-class BufferDesc;
 class Renderer;
-class SubResourceDesc;
-class VertexStreamDesc;
 
 class VertexArray {
 public:

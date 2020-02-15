@@ -114,8 +114,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     SubResourceDesc sub;
     sub.data = vertices;
 
-    //mVertexBuffer = renderer->createBuffer(bd, &sub);
-    mVertexBuffer = std::make_shared<Buffer>(renderer->device(), bd, &sub);
+    mVertexBuffer = renderer->createBuffer(bd, &sub);
 }
 
 ID3D11Texture2D* GBuffer::getTexture(unsigned index) const {

@@ -68,9 +68,8 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     SubResourceDesc sub;
     sub.data = data;
 
-    //mVertexBuffer = mRenderer->createBuffer(bd, &sub);
     if (auto r = mRenderer.lock()) {
-        mVertexBuffer = std::make_shared<Buffer>(r->device(), bd, &sub);
+        mVertexBuffer = r->createBuffer(bd, &sub);
     }
 }
 
@@ -82,9 +81,8 @@ void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void
     SubResourceDesc sub;
     sub.data = data;
 
-    //mIndexBuffer[index] = mRenderer->createBuffer(bd, &sub);
     if (auto r = mRenderer.lock()) {
-        mIndexBuffer[index] = std::make_shared<Buffer>(r->device(), bd, &sub);
+        mIndexBuffer[index] = r->createBuffer(bd, &sub);
     }
 }
 

@@ -1,6 +1,10 @@
 ﻿#pragma once
 
+#include "../System/BufferDesc.h"
 #include "../System/DirectXIncLib.h"
+#include "../System/SubResourceDesc.h"
+#include "../System/VertexStreamDesc.h"
+#include "../System/ViewportDesc.h"
 #include "../Utility/Math.h"
 #include <list>
 #include <memory>
@@ -17,7 +21,6 @@ enum class PrimitiveType {
 
 class BlendState;
 class Buffer;
-struct BufferDesc;
 class Camera;
 class DepthStencilState;
 class GBuffer;
@@ -29,10 +32,7 @@ class RasterizerState;
 class Shader;
 class SoundBase;
 class Sound;
-class SubResourceDesc;
 class Texture;
-class VertexStreamDesc;
-struct ViewportDesc;
 
 class Renderer : public std::enable_shared_from_this<Renderer> {
 public:
