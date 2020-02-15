@@ -1,11 +1,9 @@
 ﻿#include "Texture.h"
-#include "Sprite.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
 #include "../System/Game.h"
-#include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/VertexStreamDesc.h"
 

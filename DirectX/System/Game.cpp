@@ -1,10 +1,10 @@
 ﻿#include "Game.h"
+#include "Texture.h"
 #include "Window.h"
 #include "../Main.h"
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
-#include "../Sprite/Texture.h"
 #include "../Utility/Input.h"
 
 WCHAR szRootPath[1024] = { 0 };

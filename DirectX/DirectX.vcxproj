@@ -169,6 +169,7 @@
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
     <ClCompile Include="System\RasterizerState.cpp" />
+    <ClCompile Include="System\Texture.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -182,7 +183,6 @@
     <ClCompile Include="Actor\SpotLight.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
-    <ClCompile Include="Sprite\Texture.cpp" />
     <ClCompile Include="System\Buffer.cpp" />
     <ClCompile Include="System\InputElement.cpp" />
     <ClCompile Include="UI\Pause.cpp" />
@@ -228,6 +228,7 @@
     <ClInclude Include="System\DepthStencilState.h" />
     <ClInclude Include="System\RasterizerDesc.h" />
     <ClInclude Include="System\RasterizerState.h" />
+    <ClInclude Include="System\Texture.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
@@ -241,7 +242,6 @@
     <ClInclude Include="Actor\SpotLight.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />
-    <ClInclude Include="Sprite\Texture.h" />
     <ClInclude Include="System\Buffer.h" />
     <ClInclude Include="System\BufferDesc.h" />
     <ClInclude Include="System\InputElement.h" />

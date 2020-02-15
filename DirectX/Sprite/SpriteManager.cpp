@@ -1,12 +1,12 @@
 ﻿#include "SpriteManager.h"
 #include "Sprite.h"
-#include "Texture.h"
 #include "../Actor/Transform2D.h"
 #include "../Device/Renderer.h"
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
 #include "../System/DepthStencilState.h"
 #include "../System/Game.h"
+#include "../System/Texture.h"
 #include "../System/VertexStreamDesc.h"
 #include <algorithm>
 

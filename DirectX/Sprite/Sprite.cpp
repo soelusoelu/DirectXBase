@@ -1,11 +1,11 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
-#include "Texture.h"
 #include "../Actor/Transform2D.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/InputElementDesc.h"
+#include "../System/Texture.h"
 #include "../System/TextureDesc.h"
 #include "../System/VertexStreamDesc.h"
 #include <cassert>

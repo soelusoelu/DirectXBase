@@ -1,11 +1,11 @@
 ﻿#include "Shader.h"
 #include "../Device/Renderer.h"
-#include "../Sprite/Texture.h"
 #include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
 #include "../System/Game.h"
 #include "../System/InputElement.h"
 #include "../System/InputElementDesc.h"
+#include "../System/Texture.h"
 
 Shader::Shader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mDevice(renderer->device()),

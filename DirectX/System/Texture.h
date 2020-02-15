@@ -6,7 +6,6 @@
 #include "../Utility/Math.h"
 #include <memory>
 #include <string>
-#include <vector>
 
 //頂点の構造体
 struct TextureVertex {

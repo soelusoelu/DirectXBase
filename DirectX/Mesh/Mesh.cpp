@@ -6,10 +6,10 @@
 #include "../Camera/Camera.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
-#include "../Sprite/Texture.h"
 #include "../System/Buffer.h"
 #include "../System/GBuffer.h"
 #include "../System/InputElement.h"
+#include "../System/Texture.h"
 #include "../System/VertexArray.h"
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :

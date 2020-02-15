@@ -14,9 +14,9 @@
 #include "../System/GBuffer.h"
 #include "../System/RasterizerState.h"
 #include "../System/SubResourceDesc.h"
+#include "../System/Texture.h"
 #include "../System/VertexStreamDesc.h"
 #include "../System/ViewportDesc.h"
-#include "../Sprite/Texture.h"
 
 Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
