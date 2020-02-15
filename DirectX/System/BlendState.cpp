@@ -11,9 +11,9 @@ BlendState::BlendState(std::shared_ptr<Renderer> renderer) :
 BlendState::~BlendState() = default;
 
 void BlendState::setBlendState(const BlendDesc& desc, unsigned renderTarget) {
-    mDesc = desc;
-
     if (auto r = mRenderer.lock()) {
+        mDesc = desc;
+
         ID3D11BlendState* blend;
 
         r->device()->CreateBlendState(&toBlendDesc(desc, renderTarget), &blend);

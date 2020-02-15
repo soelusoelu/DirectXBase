@@ -61,6 +61,7 @@
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
+    <ClCompile Include="System\DepthStencilState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -122,5 +123,7 @@
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="System\BlendState.h" />
     <ClInclude Include="System\BlendDesc.h" />
+    <ClInclude Include="System\DepthStencilState.h" />
+    <ClInclude Include="System\DepthStencilDesc.h" />
   </ItemGroup>
 </Project>

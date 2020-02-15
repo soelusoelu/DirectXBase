@@ -5,6 +5,7 @@
 #include "../Device/Renderer.h"
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
+#include "../System/DepthStencilState.h"
 #include "../System/Game.h"
 #include "../System/VertexStreamDesc.h"
 #include <algorithm>
@@ -45,7 +46,7 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     //インデックスバッファーをセット
     renderer->setIndexBuffer(Texture::indexBuffer);
     //デプステスト無効化
-    renderer->disabledDepthTest();
+    renderer->depthStencilState()->depthTest(false);
     //通常合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;

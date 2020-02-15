@@ -16,10 +16,10 @@ enum class PrimitiveType {
 };
 
 class BlendState;
-struct BlendDesc;
 class Buffer;
 struct BufferDesc;
 class Camera;
+class DepthStencilState;
 class GBuffer;
 class Mesh;
 class MeshLoader;
@@ -42,6 +42,7 @@ public:
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
     std::shared_ptr<BlendState> blendState() const;
+    std::shared_ptr<DepthStencilState> depthStencilState() const;
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
@@ -52,8 +53,6 @@ public:
     void setPrimitive(PrimitiveType primitive) const;
     void setRasterizerStateFront();
     void setRasterizerStateBack();
-    void enabledDepthTest();
-    void disabledDepthTest();
 
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
@@ -79,7 +78,6 @@ private:
     void createDeviceAndSwapChain(const HWND& hWnd);
     void createRenderTargetView();
     void createDepthStencilView();
-    void createDepthStencilState();
     void createRasterizerState();
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
     void setDefaultRenderTarget();
@@ -90,15 +88,13 @@ private:
     ID3D11DeviceContext* mDeviceContext;
     IDXGISwapChain* mSwapChain;
     ID3D11RenderTargetView* mRenderTargetView;
-    ID3D11Texture2D* mDepthStencil;
     ID3D11DepthStencilView* mDepthStencilView;
     ID3D11RasterizerState* mRasterizerState;
     ID3D11RasterizerState* mRasterizerStateBack;
-    ID3D11DepthStencilState* mEnableDepthStencilState;
-    ID3D11DepthStencilState* mDisableDepthStencilState;
 
     std::unique_ptr<SoundBase> mSoundBase;
     std::shared_ptr<BlendState> mBlendState;
+    std::shared_ptr<DepthStencilState> mDepthStencilState;
     std::shared_ptr<GBuffer> mGBuffer;
     std::shared_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;

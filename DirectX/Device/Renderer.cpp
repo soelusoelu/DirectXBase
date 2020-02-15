@@ -7,9 +7,9 @@
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
-#include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
 #include "../System/Buffer.h"
+#include "../System/DepthStencilState.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/GBuffer.h"
 #include "../System/SubResourceDesc.h"
@@ -23,14 +23,12 @@ Renderer::Renderer(const HWND& hWnd) :
     mDeviceContext(nullptr),
     mSwapChain(nullptr),
     mRenderTargetView(nullptr),
-    mDepthStencil(nullptr),
     mDepthStencilView(nullptr),
     mRasterizerState(nullptr),
     mRasterizerStateBack(nullptr),
-    mEnableDepthStencilState(nullptr),
-    mDisableDepthStencilState(nullptr),
-    mBlendState(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
+    mBlendState(nullptr),
+    mDepthStencilState(nullptr),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
@@ -38,7 +36,6 @@ Renderer::Renderer(const HWND& hWnd) :
     createRenderTargetView();
     createDepthStencilView();
     setDefaultRenderTarget();
-    createDepthStencilState();
     ViewportDesc desc;
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
@@ -52,12 +49,9 @@ Renderer::~Renderer() {
     mSounds.clear();
     mMeshLoaders.clear();
 
-    SAFE_RELEASE(mDisableDepthStencilState);
-    SAFE_RELEASE(mEnableDepthStencilState);
     SAFE_RELEASE(mRasterizerStateBack);
     SAFE_RELEASE(mRasterizerState);
     SAFE_RELEASE(mDepthStencilView);
-    SAFE_RELEASE(mDepthStencil);
     SAFE_RELEASE(mRenderTargetView);
     SAFE_RELEASE(mSwapChain);
     SAFE_RELEASE(mDeviceContext);
@@ -66,6 +60,7 @@ Renderer::~Renderer() {
 
 void Renderer::initialize() {
     mBlendState = std::make_shared<BlendState>(shared_from_this());
+    mDepthStencilState = std::make_shared<DepthStencilState>(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 }
@@ -80,6 +75,10 @@ ID3D11DeviceContext* Renderer::deviceContext() const {
 
 std::shared_ptr<BlendState> Renderer::blendState() const {
     return mBlendState;
+}
+
+std::shared_ptr<DepthStencilState> Renderer::depthStencilState() const {
+    return mDepthStencilState;
 }
 
 Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
@@ -137,14 +136,6 @@ void Renderer::setRasterizerStateFront() {
 
 void Renderer::setRasterizerStateBack() {
     mDeviceContext->RSSetState(mRasterizerStateBack);
-}
-
-void Renderer::enabledDepthTest() {
-    mDeviceContext->OMSetDepthStencilState(mEnableDepthStencilState, 0);
-}
-
-void Renderer::disabledDepthTest() {
-    mDeviceContext->OMSetDepthStencilState(mDisableDepthStencilState, 0);
 }
 
 std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
@@ -238,7 +229,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     auto s = mGBuffer->getSampler();
     mDeviceContext->PSSetSamplers(0, 1, &s);
     //デプステスト有効化
-    enabledDepthTest();
+    mDepthStencilState->depthTest(true);
     //加算合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::ONE;
@@ -265,7 +256,7 @@ void Renderer::renderToTexture() {
     }
     clearDepthStencilView();
     //デプステスト有効化
-    enabledDepthTest();
+    mDepthStencilState->depthTest(true);
     //通常合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
@@ -311,7 +302,7 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     stream.stride = sizeof(MeshVertex);
     setVertexBuffer(&stream);
     //デプステスト無効化
-    disabledDepthTest();
+    mDepthStencilState->depthTest(false);
 
     draw(4);
 }
@@ -394,25 +385,11 @@ void Renderer::createDepthStencilView() {
     descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
     descDepth.CPUAccessFlags = 0;
     descDepth.MiscFlags = 0;
-    mDevice->CreateTexture2D(&descDepth, NULL, &mDepthStencil);
-    mDevice->CreateDepthStencilView(mDepthStencil, NULL, &mDepthStencilView);
-}
+    ID3D11Texture2D* depthStencil;
+    mDevice->CreateTexture2D(&descDepth, NULL, &depthStencil);
+    mDevice->CreateDepthStencilView(depthStencil, NULL, &mDepthStencilView);
 
-void Renderer::createDepthStencilState() {
-    //震度ステンシルステートを作成
-    D3D11_DEPTH_STENCIL_DESC dc;
-    ZeroMemory(&dc, sizeof(dc));
-    dc.DepthEnable = true;
-    dc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-    dc.DepthFunc = D3D11_COMPARISON_LESS;
-    dc.StencilEnable = false;
-    mDevice->CreateDepthStencilState(&dc, &mEnableDepthStencilState);
-    //深度ステンシルステートを適用
-    mDeviceContext->OMSetDepthStencilState(mEnableDepthStencilState, 0);
-
-    //2D用も
-    dc.DepthEnable = false;
-    mDevice->CreateDepthStencilState(&dc, &mDisableDepthStencilState);
+    SAFE_RELEASE(depthStencil);
 }
 
 void Renderer::createRasterizerState() {
