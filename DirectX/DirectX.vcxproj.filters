@@ -66,6 +66,7 @@
     <ClCompile Include="System\Texture2D.cpp" />
     <ClCompile Include="System\Format.cpp" />
     <ClCompile Include="System\Usage.cpp" />
+    <ClCompile Include="System\SubResourceDesc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />

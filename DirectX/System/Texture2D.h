@@ -11,11 +11,10 @@ class Texture2D {
 public:
     Texture2D(std::shared_ptr<Renderer> renderer);
     ~Texture2D();
-    ID3D11Texture2D* createTexture2D(const Texture2DDesc& desc, SubResourceDesc* data = nullptr) const;
+    ID3D11Texture2D* createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data = nullptr) const;
 
 private:
     D3D11_TEXTURE2D_DESC toTexture2DDesc(const Texture2DDesc& desc) const;
-    D3D11_SUBRESOURCE_DATA* toSubResourceData(SubResourceDesc* data) const;
 
 private:
     std::weak_ptr<Renderer> mRenderer;

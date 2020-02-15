@@ -170,6 +170,7 @@
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
     <ClCompile Include="System\RasterizerState.cpp" />
+    <ClCompile Include="System\SubResourceDesc.cpp" />
     <ClCompile Include="System\Texture.cpp" />
     <ClCompile Include="System\Texture2D.cpp" />
     <ClCompile Include="System\Usage.cpp" />

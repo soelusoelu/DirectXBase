@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "DirectXIncLib.h"
+
 struct SubResourceDesc {
     //初期化データへのポインタ
     const void* data;
@@ -16,6 +18,8 @@ struct SubResourceDesc {
         slicePitch(0) {
     }
 };
+
+D3D11_SUBRESOURCE_DATA toSubResource(const SubResourceDesc* data);
 
 struct MappedSubResourceDesc {
     //データへのポインタ
