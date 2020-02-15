@@ -50,8 +50,6 @@ private:
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
     D3D11_USAGE toUsage(TextureUsage usage) const;
-    unsigned toBind(TextureBind bind) const;
-    unsigned toCPUAccess(TextureCPUAccessFlag flag) const;
     DXGI_FORMAT toFormat(TextureFormat format) const;
     unsigned toFilter(TextureFilter filter) const;
 

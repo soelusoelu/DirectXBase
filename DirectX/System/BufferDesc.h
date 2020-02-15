@@ -2,16 +2,9 @@
 
 //バッファタイプ
 enum class BufferType {
-    BUFFER_TYPE_VERTEX, //頂点バッファ
-    BUFFER_TYPE_INDEX, //インデックスバッファ
-    BUFFER_TYPE_CONSTANT_BUFFER,
-    BUFFER_TYPE_SHADER_RESOURCE,
-    BUFFER_TYPE_STREAM_OUTPUT,
-    BUFFER_TYPE_RENDER_TARGET,
-    BUFFER_TYPE_DEPTH_STENCIL,
-    BUFFER_TYPE_UNORDERED_ACCESS,
-    //BUFFER_TYPE_DECODER,
-    //BUFFER_TYPE_VIDEO_ENCODER
+    BUFFER_TYPE_VERTEX = 0x1L, //頂点バッファ
+    BUFFER_TYPE_INDEX = 0x2L, //インデックスバッファ
+    BUFFER_TYPE_CONSTANT_BUFFER = 0x4L,
 };
 
 enum class BufferUsage {
@@ -22,9 +15,8 @@ enum class BufferUsage {
 };
 
 enum class BufferCPUAccessFlag {
-    CPU_ACCESS_NONE,
-    CPU_ACCESS_WRITE,
-    CPU_ACCESS_READ
+    CPU_ACCESS_WRITE = 0x10000L,
+    CPU_ACCESS_READ = 0x20000L
 };
 
 struct BufferDesc {
@@ -33,9 +25,9 @@ struct BufferDesc {
     //バッファの使用方法
     BufferUsage usage;
     //バッファタイプ(BindFlags)
-    BufferType type;
+    unsigned type;
     //cpuアクセス権限
-    BufferCPUAccessFlag cpuAccessFlags;
+    unsigned cpuAccessFlags;
     //オプション 基本0
     unsigned miscFlags;
     //コンピュートシェーダを使うなら 基本0
@@ -45,8 +37,8 @@ struct BufferDesc {
     BufferDesc() :
         size(0),
         usage(BufferUsage::BUFFER_USAGE_DEFAULT),
-        type(BufferType::BUFFER_TYPE_VERTEX),
-        cpuAccessFlags(BufferCPUAccessFlag::CPU_ACCESS_NONE),
+        type(static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX)),
+        cpuAccessFlags(0),
         miscFlags(0),
         structureByteStride(0) {
     }

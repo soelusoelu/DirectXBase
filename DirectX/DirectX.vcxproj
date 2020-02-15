@@ -228,6 +228,7 @@
     <ClInclude Include="System\DepthStencilState.h" />
     <ClInclude Include="System\RasterizerDesc.h" />
     <ClInclude Include="System\RasterizerState.h" />
+    <ClInclude Include="System\ShaderResourceViewDesc.h" />
     <ClInclude Include="System\Texture.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />

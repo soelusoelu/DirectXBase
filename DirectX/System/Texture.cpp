@@ -64,7 +64,7 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     BufferDesc bd;
     bd.size = sizeof(TextureVertex) * 4;
     bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
-    bd.type = BufferType::BUFFER_TYPE_VERTEX;
+    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
 
     SubResourceDesc sub;
     sub.data = vertices;
@@ -79,7 +79,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
     BufferDesc bd;
     bd.size = sizeof(indices);
     bd.usage = BufferUsage::BUFFER_USAGE_IMMUTABLE;
-    bd.type = BufferType::BUFFER_TYPE_INDEX;
+    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
 
     SubResourceDesc sub;
     sub.data = indices;
@@ -122,8 +122,8 @@ D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc& desc) const {
     info.FirstMipLevel = desc.firstMipLevel;
     info.MipLevels = desc.mipLevels;
     info.Usage = toUsage(desc.usage);
-    info.BindFlags = toBind(desc.bindFlags);
-    info.CpuAccessFlags = toCPUAccess(desc.cpuAccessFlags);
+    info.BindFlags = desc.bindFlags;
+    info.CpuAccessFlags = desc.cpuAccessFlags;
     info.MiscFlags = desc.miscFlags;
     info.Format = toFormat(desc.format);
     info.Filter = toFilter(desc.filter);
@@ -141,23 +141,6 @@ D3D11_USAGE Texture::toUsage(TextureUsage usage) const {
         D3D11_USAGE_STAGING
     };
     return usages[static_cast<unsigned>(usage)];
-}
-
-unsigned Texture::toBind(TextureBind bind) const {
-    const unsigned binds[] = {
-        D3D11_BIND_SHADER_RESOURCE,
-        D3D11_BIND_RENDER_TARGET,
-    };
-    return binds[static_cast<unsigned>(bind)];
-}
-
-unsigned Texture::toCPUAccess(TextureCPUAccessFlag flag) const {
-    const unsigned accesses[] = {
-        0,
-        D3D11_CPU_ACCESS_WRITE,
-        D3D11_CPU_ACCESS_READ
-    };
-    return accesses[static_cast<unsigned>(flag)];
 }
 
 DXGI_FORMAT Texture::toFormat(TextureFormat format) const {

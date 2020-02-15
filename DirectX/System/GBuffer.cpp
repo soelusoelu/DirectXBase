@@ -110,7 +110,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     BufferDesc bd;
     bd.size = sizeof(MeshVertex) * 4;
     bd.usage = BufferUsage::BUFFER_USAGE_DEFAULT;
-    bd.type = BufferType::BUFFER_TYPE_VERTEX;
+    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
     SubResourceDesc sub;
     sub.data = vertices;
 

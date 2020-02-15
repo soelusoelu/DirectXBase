@@ -26,15 +26,15 @@ enum class TextureUsage {
 
 //リソースの使用方法
 enum class TextureBind {
-    TEXTURE_BIND_SHADER_RESOURCE,
-    TEXTURE_BIND_RENDER_TARGET
+    TEXTURE_BIND_SHADER_RESOURCE = 0x8L,
+    TEXTURE_BIND_RENDER_TARGET = 0x20L,
+    TEXTURE_BIND_DEPTH_STENCIL = 0x40L
 };
 
 //cpuアクセス権限
 enum class TextureCPUAccessFlag {
-    CPU_ACCESS_NONE,
-    CPU_ACCESS_WRITE,
-    CPU_ACCESS_READ
+    CPU_ACCESS_WRITE = 0x10000L,
+    CPU_ACCESS_READ = 0x20000L
 };
 
 //テクスチャ補間
@@ -58,9 +58,9 @@ struct TextureDesc {
     //テクスチャの使用方法
     TextureUsage usage;
     //リソースの使用方法
-    TextureBind bindFlags;
+    unsigned bindFlags;
     //cpuアクセス権限
-    TextureCPUAccessFlag cpuAccessFlags;
+    unsigned cpuAccessFlags;
     //オプション 基本0
     unsigned miscFlags;
     //フォーマット
@@ -79,8 +79,8 @@ struct TextureDesc {
         firstMipLevel(0),
         mipLevels(1),
         usage(TextureUsage::TEXTURE_USAGE_DEFAULT),
-        bindFlags(TextureBind::TEXTURE_BIND_SHADER_RESOURCE),
-        cpuAccessFlags(TextureCPUAccessFlag::CPU_ACCESS_NONE),
+        bindFlags(static_cast<unsigned>(TextureBind::TEXTURE_BIND_SHADER_RESOURCE)),
+        cpuAccessFlags(0),
         miscFlags(0),
         format(TextureFormat::TEXTURE_FORMAT_RGBA8_UNORM),
         filter(TextureFilter::TEXTURE_FILTER_LINEAR),
