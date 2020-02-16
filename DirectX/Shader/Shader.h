@@ -19,9 +19,6 @@ public:
     //シェーダーとのやり取り
     bool map(MappedSubResourceDesc* data, unsigned index = 0, unsigned sub = 0, D3D11_MAP type = D3D11_MAP_WRITE_DISCARD, unsigned flag = 0);
     void unmap(unsigned index = 0, unsigned sub = 0);
-    //シェーダーをセット
-    void setVertexShader(ID3D11VertexShader* vertex);
-    void setPixelShader(ID3D11PixelShader* pixel);
     //自身をシェーダーとして登録
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
@@ -30,9 +27,6 @@ public:
     //使用するコンスタントバッファを登録
     void setVSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1);
     void setPSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1);
-    //シェーダの取得
-    ID3D11VertexShader* getVertexShader() const;
-    ID3D11PixelShader* getPixelShader() const;
     //インプットレイアウトの生成
     void createInputLayout(const InputElementDesc layout[], unsigned numElements);
     //自身を登録

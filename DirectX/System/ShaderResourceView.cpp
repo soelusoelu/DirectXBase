@@ -14,17 +14,22 @@ ShaderResourceView::ShaderResourceView(std::shared_ptr<Renderer> renderer, std::
     }
 }
 
+ShaderResourceView::ShaderResourceView(std::shared_ptr<Renderer> renderer, ID3D11ShaderResourceView* view) :
+    mRenderer(renderer),
+    mShaderResourceView(view) {
+}
+
 ShaderResourceView::~ShaderResourceView() {
     SAFE_RELEASE(mShaderResourceView);
 }
 
-void ShaderResourceView::setVSShaderResourceView(unsigned start, unsigned numViews) {
+void ShaderResourceView::setVSShaderResources(unsigned start, unsigned numViews) {
     if (auto r = mRenderer.lock()) {
         r->deviceContext()->VSSetShaderResources(start, numViews, &mShaderResourceView);
     }
 }
 
-void ShaderResourceView::setPSShaderResourceView(unsigned start, unsigned numViews) {
+void ShaderResourceView::setPSShaderResources(unsigned start, unsigned numViews) {
     if (auto r = mRenderer.lock()) {
         r->deviceContext()->PSSetShaderResources(start, numViews, &mShaderResourceView);
     }

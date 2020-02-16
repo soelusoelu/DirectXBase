@@ -221,7 +221,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
-        mGBuffer->getShaderResourceView(i)->setPSShaderResourceView(i);
+        mGBuffer->getShaderResourceView(i)->setPSShaderResources(i);
     }
     //サンプラーをセット
     auto s = mGBuffer->getSampler();
@@ -274,7 +274,7 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //1パス目で作成したテクスチャー3枚をセット
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
-        mGBuffer->getShaderResourceView(i)->setPSShaderResourceView(i);
+        mGBuffer->getShaderResourceView(i)->setPSShaderResources(i);
     }
     //サンプラーをセット
     auto s = mGBuffer->getSampler();

@@ -5,13 +5,14 @@
 #include "../System/BufferDesc.h"
 #include "../System/Format.h"
 #include "../System/Game.h"
+#include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Usage.h"
 #include "../System/VertexStreamDesc.h"
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) :
     mDeviceContext(renderer->deviceContext()),
-    mTexture(nullptr),
+    mShaderResourceView(nullptr),
     mSampleLinear(nullptr) {
     if (!vertexBuffer || !indexBuffer) {
         //バーテックスバッファー作成
@@ -26,7 +27,6 @@ Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName
 }
 
 Texture::~Texture() {
-    SAFE_RELEASE(mTexture);
     SAFE_RELEASE(mSampleLinear);
 }
 
@@ -40,11 +40,11 @@ const TextureDesc& Texture::desc() const {
 }
 
 void Texture::setVSTextures(unsigned start, unsigned numTextures) {
-    mDeviceContext->VSSetShaderResources(start, numTextures, &mTexture);
+    mShaderResourceView->setVSShaderResources(start, numTextures);
 }
 
 void Texture::setPSTextures(unsigned start, unsigned numTextures) {
-    mDeviceContext->PSSetShaderResources(start, numTextures, &mTexture);
+    mShaderResourceView->setPSShaderResources(start, numTextures);
 }
 
 void Texture::setVSSamplers(unsigned start, unsigned numSamplers) {
@@ -101,9 +101,13 @@ void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::strin
     mDesc.width = info.Width;
     mDesc.height = info.Height;
 
-    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &mTexture, nullptr))) {
+    ID3D11ShaderResourceView* srv;
+
+    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
         MSG(L"テクスチャ作成失敗");
     }
+
+    mShaderResourceView = std::make_shared<ShaderResourceView>(renderer, srv);
 }
 
 void Texture::createSampler(std::shared_ptr<Renderer> renderer) {

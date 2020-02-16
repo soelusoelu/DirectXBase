@@ -22,6 +22,7 @@ struct TextureShaderConstantBuffer {
 
 class Buffer;
 class InputElement;
+class ShaderResourceView;
 class Sprite;
 class Renderer;
 
@@ -53,7 +54,7 @@ private:
 
 private:
     ID3D11DeviceContext* mDeviceContext;
-    ID3D11ShaderResourceView* mTexture;
+    std::shared_ptr<ShaderResourceView> mShaderResourceView;
     ID3D11SamplerState* mSampleLinear;
     TextureDesc mDesc;
 };

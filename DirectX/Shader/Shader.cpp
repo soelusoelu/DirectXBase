@@ -41,14 +41,6 @@ void Shader::unmap(unsigned index, unsigned sub) {
     mDeviceContext->Unmap(mConstantBuffers[index]->buffer(), sub);
 }
 
-void Shader::setVertexShader(ID3D11VertexShader* vertex) {
-    mVertexShader = vertex;
-}
-
-void Shader::setPixelShader(ID3D11PixelShader* pixel) {
-    mPixelShader = pixel;
-}
-
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
     mDeviceContext->VSSetShader(mVertexShader, &classInstances, numClassInstances);
 }
@@ -79,14 +71,6 @@ void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) {
 void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) {
     auto buf = mConstantBuffers[index]->buffer();
     mDeviceContext->PSSetConstantBuffers(index, numBuffers, &buf);
-}
-
-ID3D11VertexShader* Shader::getVertexShader() const {
-    return mVertexShader;
-}
-
-ID3D11PixelShader* Shader::getPixelShader() const {
-    return mPixelShader;
 }
 
 void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElements) {
