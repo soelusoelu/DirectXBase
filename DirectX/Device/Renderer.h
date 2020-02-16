@@ -44,13 +44,13 @@ public:
 
     ID3D11Device* device() const;
     ID3D11DeviceContext* deviceContext() const;
-    std::shared_ptr<Texture2D> texture2D() const;
     std::shared_ptr<BlendState> blendState() const;
     std::shared_ptr<DepthStencilState> depthStencilState() const;
     std::shared_ptr<RasterizerState> rasterizerState() const;
 
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
+    std::shared_ptr<Texture2D> createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data = nullptr) const;
     void setViewport(const ViewportDesc& desc);
     void setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream = 1, unsigned start = 0);
     void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
@@ -93,7 +93,6 @@ private:
     ID3D11DepthStencilView* mDepthStencilView;
 
     std::unique_ptr<SoundBase> mSoundBase;
-    std::shared_ptr<Texture2D> mTexture2D;
     std::shared_ptr<BlendState> mBlendState;
     std::shared_ptr<DepthStencilState> mDepthStencilState;
     std::shared_ptr<RasterizerState> mRasterizerState;

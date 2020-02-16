@@ -67,6 +67,7 @@
     <ClCompile Include="System\Format.cpp" />
     <ClCompile Include="System\Usage.cpp" />
     <ClCompile Include="System\SubResourceDesc.cpp" />
+    <ClCompile Include="System\ShaderResourceView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -137,5 +138,6 @@
     <ClInclude Include="System\Format.h" />
     <ClInclude Include="System\Texture2D.h" />
     <ClInclude Include="System\Usage.h" />
+    <ClInclude Include="System\ShaderResourceView.h" />
   </ItemGroup>
 </Project>

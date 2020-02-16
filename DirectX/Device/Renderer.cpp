@@ -13,6 +13,7 @@
 #include "../System/DirectXIncLib.h"
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
+#include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/RasterizerState.h"
 #include "../System/Texture.h"
@@ -25,7 +26,6 @@ Renderer::Renderer(const HWND& hWnd) :
     mRenderTargetView(nullptr),
     mDepthStencilView(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
-    mTexture2D(nullptr),
     mBlendState(nullptr),
     mDepthStencilState(nullptr),
     mRasterizerState(nullptr),
@@ -55,7 +55,6 @@ Renderer::~Renderer() {
 }
 
 void Renderer::initialize() {
-    mTexture2D = std::make_shared<Texture2D>(shared_from_this());
     mBlendState = std::make_shared<BlendState>(shared_from_this());
     mDepthStencilState = std::make_shared<DepthStencilState>(shared_from_this());
     mRasterizerState = std::make_shared<RasterizerState>(shared_from_this());
@@ -71,10 +70,6 @@ ID3D11Device* Renderer::device() const {
 
 ID3D11DeviceContext* Renderer::deviceContext() const {
     return mDeviceContext;
-}
-
-std::shared_ptr<Texture2D> Renderer::texture2D() const {
-    return mTexture2D;
 }
 
 std::shared_ptr<BlendState> Renderer::blendState() const {
@@ -95,6 +90,10 @@ Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc*
 
 std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
     return std::make_shared<Buffer>(mDevice, desc, data);
+}
+
+std::shared_ptr<Texture2D> Renderer::createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data) const {
+    return std::make_shared<Texture2D>(mDevice, desc, data);
 }
 
 void Renderer::setViewport(const ViewportDesc& desc) {
@@ -222,8 +221,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
-        auto sr = mGBuffer->getShaderResource(i);
-        mDeviceContext->PSSetShaderResources(i, 1, &sr);
+        mGBuffer->getShaderResourceView(i)->setPSShaderResourceView(i);
     }
     //サンプラーをセット
     auto s = mGBuffer->getSampler();
@@ -276,8 +274,7 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //1パス目で作成したテクスチャー3枚をセット
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
-        auto sr = mGBuffer->getShaderResource(i);
-        mDeviceContext->PSSetShaderResources(i, 1, &sr);
+        mGBuffer->getShaderResourceView(i)->setPSShaderResourceView(i);
     }
     //サンプラーをセット
     auto s = mGBuffer->getSampler();
@@ -375,12 +372,10 @@ void Renderer::createDepthStencilView() {
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
     desc.format = Format::FORMAT_D32_FLOAT;
-    desc.bindFlags = static_cast<unsigned>(TextureBind::TEXTURE_BIND_DEPTH_STENCIL);
+    desc.bindFlags = static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_DEPTH_STENCIL);
 
-    auto tex = mTexture2D->createTexture2D(desc);
-    mDevice->CreateDepthStencilView(tex, nullptr, &mDepthStencilView);
-
-    SAFE_RELEASE(tex);
+    auto tex = createTexture2D(desc);
+    mDevice->CreateDepthStencilView(tex->texture2D(), nullptr, &mDepthStencilView);
 }
 
 void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {

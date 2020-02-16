@@ -162,6 +162,7 @@
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
+    <ClCompile Include="System\ShaderResourceView.cpp" />
     <ClCompile Include="System\Format.cpp" />
     <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Mesh\MeshLoader.h" />
+    <ClInclude Include="System\ShaderResourceView.h" />
     <ClInclude Include="System\BlendDesc.h" />
     <ClInclude Include="System\BlendState.h" />
     <ClInclude Include="System\DepthStencilDesc.h" />

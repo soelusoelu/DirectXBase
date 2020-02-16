@@ -9,6 +9,7 @@
 class Buffer;
 class Renderer;
 class Shader;
+class ShaderResourceView;
 
 struct GBufferShaderConstantBuffer {
     ALIGN16 Vector3 lightDir; //ライト方向
@@ -17,6 +18,8 @@ struct GBufferShaderConstantBuffer {
 };
 
 class GBuffer {
+    using SRVPtr = std::shared_ptr<ShaderResourceView>;
+    using SRVPtrArray = std::vector<SRVPtr>;
 public:
     enum class Type {
         DIFFUSE,
@@ -32,7 +35,7 @@ public:
     void create(std::shared_ptr<Renderer> renderer);
 
     ID3D11RenderTargetView* getRenderTarget(unsigned index) const;
-    ID3D11ShaderResourceView* getShaderResource(unsigned index) const;
+    SRVPtr getShaderResourceView(unsigned index) const;
     ID3D11SamplerState* getSampler() const;
     std::shared_ptr<Shader> shader() const;
     std::shared_ptr<Buffer> vertexBuffer() const;
@@ -40,7 +43,7 @@ public:
 private:
     //Gバッファに割り当てられたテクスチャ
     std::vector<ID3D11RenderTargetView*> mRenderTargets;
-    std::vector<ID3D11ShaderResourceView*> mShaderResources;
+    SRVPtrArray mShaderResourceViews;
     ID3D11SamplerState* mSampler;
     std::shared_ptr<Shader> mShader;
     std::shared_ptr<Buffer> mVertexBuffer;
