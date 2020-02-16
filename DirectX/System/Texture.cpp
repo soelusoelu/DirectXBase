@@ -1,10 +1,10 @@
 ﻿#include "Texture.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
-#include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
 #include "../System/Format.h"
 #include "../System/Game.h"
+#include "../System/IndexBuffer.h"
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Usage.h"
@@ -87,7 +87,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = indices;
-    indexBuffer = renderer->createRawBuffer(bd, &sub);
+    indexBuffer = new IndexBuffer(renderer, bd, &sub);
 }
 
 void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) {
@@ -151,4 +151,4 @@ unsigned Texture::toFilter(TextureFilter filter) const {
 }
 
 VertexBuffer* Texture::vertexBuffer = nullptr;
-Buffer* Texture::indexBuffer = nullptr;
+IndexBuffer* Texture::indexBuffer = nullptr;

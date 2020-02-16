@@ -13,6 +13,7 @@
 #include "../System/DirectXIncLib.h"
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
+#include "../System/IndexBuffer.h"
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/RasterizerState.h"
@@ -97,6 +98,10 @@ std::shared_ptr<VertexBuffer> Renderer::createVertexBuffer(const BufferDesc& des
     return std::make_shared<VertexBuffer>(shared_from_this(), desc, data);
 }
 
+std::shared_ptr<IndexBuffer> Renderer::createIndexBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
+    return std::make_shared<IndexBuffer>(shared_from_this(), desc, data);
+}
+
 std::shared_ptr<Texture2D> Renderer::createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data) const {
     return std::make_shared<Texture2D>(mDevice, desc, data);
 }
@@ -111,14 +116,6 @@ void Renderer::setViewport(const ViewportDesc& desc) {
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     mDeviceContext->RSSetViewports(1, &vp);
-}
-
-void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {
-    mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R16_UINT, offset);
-}
-
-void Renderer::setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset) {
-    mDeviceContext->IASetIndexBuffer(buffer->buffer(), DXGI_FORMAT_R32_UINT, offset);
 }
 
 void Renderer::setPrimitive(PrimitiveType primitive) const {

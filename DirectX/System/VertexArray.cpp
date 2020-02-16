@@ -1,7 +1,7 @@
 #include "VertexArray.h"
-#include "Buffer.h"
 #include "BufferDesc.h"
 #include "Game.h"
+#include "IndexBuffer.h"
 #include "SubResourceDesc.h"
 #include "Usage.h"
 #include "VertexBuffer.h"
@@ -84,11 +84,11 @@ void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void
     sub.data = data;
 
     if (auto r = mRenderer.lock()) {
-        mIndexBuffer[index] = r->createBuffer(bd, &sub);
+        mIndexBuffer[index] = r->createIndexBuffer(bd, &sub);
     }
 }
 
-std::shared_ptr<Buffer> VertexArray::getIndexBuffer(unsigned index) const {
+std::shared_ptr<IndexBuffer> VertexArray::getIndexBuffer(unsigned index) const {
     return mIndexBuffer[index];
 }
 
@@ -101,7 +101,5 @@ void VertexArray::setVertexBuffer(unsigned numStream, unsigned start, unsigned o
 }
 
 void VertexArray::setIndexBuffer(unsigned index, unsigned offset) {
-    if (auto r = mRenderer.lock()) {
-        r->setIndexBuffer(mIndexBuffer[index], offset);
-    }
+    mIndexBuffer[index]->setIndexBuffer(Format::FORMAT_R32_UINT, offset);
 }

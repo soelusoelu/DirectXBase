@@ -5,7 +5,9 @@
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
 #include "../System/DepthStencilState.h"
+#include "../System/Format.h"
 #include "../System/Game.h"
+#include "../System/IndexBuffer.h"
 #include "../System/Texture.h"
 #include "../System/VertexBuffer.h"
 
@@ -39,7 +41,7 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
     //インデックスバッファーをセット
-    renderer->setIndexBuffer(Texture::indexBuffer);
+    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //デプステスト無効化
     renderer->depthStencilState()->depthTest(false);
     //通常合成

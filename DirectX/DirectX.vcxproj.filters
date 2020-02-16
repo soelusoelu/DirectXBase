@@ -69,6 +69,7 @@
     <ClCompile Include="System\SubResourceDesc.cpp" />
     <ClCompile Include="System\ShaderResourceView.cpp" />
     <ClCompile Include="System\VertexBuffer.cpp" />
+    <ClCompile Include="System\IndexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -140,5 +141,6 @@
     <ClInclude Include="System\Usage.h" />
     <ClInclude Include="System\ShaderResourceView.h" />
     <ClInclude Include="System\VertexBuffer.h" />
+    <ClInclude Include="System\IndexBuffer.h" />
   </ItemGroup>
 </Project>

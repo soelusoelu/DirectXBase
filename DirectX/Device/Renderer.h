@@ -24,6 +24,7 @@ class Buffer;
 class Camera;
 class DepthStencilState;
 class GBuffer;
+class IndexBuffer;
 class Mesh;
 class MeshLoader;
 struct PointLight;
@@ -51,10 +52,9 @@ public:
     Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<VertexBuffer> createVertexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
+    std::shared_ptr<IndexBuffer> createIndexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<Texture2D> createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data = nullptr) const;
     void setViewport(const ViewportDesc& desc);
-    void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
-    void setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset = 0);
     void setPrimitive(PrimitiveType primitive) const;
 
     std::shared_ptr<Shader> createShader(const std::string& fileName);

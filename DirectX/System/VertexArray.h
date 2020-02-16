@@ -4,11 +4,14 @@
 #include <memory>
 #include <vector>
 
-class Buffer;
+class IndexBuffer;
 class Renderer;
 class VertexBuffer;
 
 class VertexArray {
+    using IndexBufferPtr = std::shared_ptr<IndexBuffer>;
+    using IndexBufferPtrArray = std::vector<IndexBufferPtr>;
+
 public:
     VertexArray(std::shared_ptr<Renderer> renderer);
     ~VertexArray();
@@ -27,7 +30,7 @@ public:
 
     void createVertexBuffer(unsigned vertexSize, const void* data);
     void createIndexBuffer(unsigned index, unsigned numFace, const void* data);
-    std::shared_ptr<Buffer> getIndexBuffer(unsigned index) const;
+    IndexBufferPtr getIndexBuffer(unsigned index) const;
     void resizeIndexBuffer(size_t size);
 
     void setVertexBuffer(unsigned numStream = 1, unsigned start = 0, unsigned offset = 0);
@@ -44,5 +47,5 @@ private:
     Vector3* mVertices; //í∏ì_èÓïÒ
 
     std::shared_ptr<VertexBuffer> mVertexBuffer;
-    std::vector<std::shared_ptr<Buffer>> mIndexBuffer;
+    IndexBufferPtrArray mIndexBuffer;
 };

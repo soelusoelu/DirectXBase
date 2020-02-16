@@ -20,7 +20,7 @@ struct TextureShaderConstantBuffer {
     ALIGN16 Vector4 mUV;
 };
 
-class Buffer;
+class IndexBuffer;
 class InputElement;
 class Renderer;
 class ShaderResourceView;
@@ -51,7 +51,7 @@ private:
 
 public:
     static VertexBuffer* vertexBuffer;
-    static Buffer* indexBuffer;
+    static IndexBuffer* indexBuffer;
 
 private:
     ID3D11DeviceContext* mDeviceContext;
