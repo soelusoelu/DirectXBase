@@ -9,15 +9,14 @@
 #include "../System/Usage.h"
 
 Shader::Shader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mDevice(renderer->device()),
-    mDeviceContext(renderer->deviceContext()),
+    mRenderer(renderer),
     mCompileShader(nullptr),
     mVertexShader(nullptr),
     mPixelShader(nullptr),
     mVertexLayout(nullptr) {
 
-    createVertexShader(fileName);
-    createPixelShader(fileName);
+    createVertexShader(renderer, fileName);
+    createPixelShader(renderer, fileName);
 }
 
 Shader::~Shader() {
@@ -27,29 +26,38 @@ Shader::~Shader() {
 }
 
 bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) {
-    auto msr = toMappedSubResource(data);
-    auto res = mDeviceContext->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
+    if (auto r = mRenderer.lock()) {
+        auto msr = toMappedSubResource(data);
+        auto res = r->deviceContext()->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
 
-    data->data = msr.pData;
-    data->rowPitch = msr.RowPitch;
-    data->depthPitch = msr.DepthPitch;
+        data->data = msr.pData;
+        data->rowPitch = msr.RowPitch;
+        data->depthPitch = msr.DepthPitch;
 
-    return (SUCCEEDED(res));
+        return (SUCCEEDED(res));
+    }
+    return false;
 }
 
 void Shader::unmap(unsigned index, unsigned sub) {
-    mDeviceContext->Unmap(mConstantBuffers[index]->buffer(), sub);
+    if (auto r = mRenderer.lock()) {
+        r->deviceContext()->Unmap(mConstantBuffers[index]->buffer(), sub);
+    }
 }
 
 void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
-    mDeviceContext->VSSetShader(mVertexShader, &classInstances, numClassInstances);
+    if (auto r = mRenderer.lock()) {
+        r->deviceContext()->VSSetShader(mVertexShader, &classInstances, numClassInstances);
+    }
 }
 
 void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
-    mDeviceContext->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+    if (auto r = mRenderer.lock()) {
+        r->deviceContext()->PSSetShader(mPixelShader, &classInstances, numClassInstances);
+    }
 }
 
-void Shader::createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned bufferSize, unsigned index) {
+void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
     auto num = mConstantBuffers.size();
     if (index >= num) {
         mConstantBuffers.resize(num + 1);
@@ -60,46 +68,56 @@ void Shader::createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned b
     cb.usage = Usage::USAGE_DYNAMIC;
     cb.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_CONSTANT_BUFFER);
     cb.cpuAccessFlags = static_cast<unsigned>(BufferCPUAccessFlag::CPU_ACCESS_WRITE);
-    mConstantBuffers[index] = renderer->createBuffer(cb);
+    if (auto r = mRenderer.lock()) {
+        mConstantBuffers[index] = r->createBuffer(cb);
+    }
 }
 
 void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) {
-    auto buf = mConstantBuffers[index]->buffer();
-    mDeviceContext->VSSetConstantBuffers(index, numBuffers, &buf);
+    if (auto r = mRenderer.lock()) {
+        auto buf = mConstantBuffers[index]->buffer();
+        r->deviceContext()->VSSetConstantBuffers(index, numBuffers, &buf);
+    }
 }
 
 void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) {
-    auto buf = mConstantBuffers[index]->buffer();
-    mDeviceContext->PSSetConstantBuffers(index, numBuffers, &buf);
+    if (auto r = mRenderer.lock()) {
+        auto buf = mConstantBuffers[index]->buffer();
+        r->deviceContext()->PSSetConstantBuffers(index, numBuffers, &buf);
+    }
 }
 
 void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElements) {
-    mVertexLayout = std::make_shared<InputElement>(mDevice, layout, numElements, mCompileShader);
+    if (auto r = mRenderer.lock()) {
+        mVertexLayout = std::make_shared<InputElement>(r->device(), layout, numElements, mCompileShader);
+    }
 }
 
 void Shader::setInputLayout() {
-    mDeviceContext->IASetInputLayout(mVertexLayout->layout());
+    if (auto r = mRenderer.lock()) {
+        r->deviceContext()->IASetInputLayout(mVertexLayout->layout());
+    }
 }
 
 std::shared_ptr<Buffer> Shader::getConstantBuffer(unsigned index) const {
     return mConstantBuffers[index];
 }
 
-void Shader::createVertexShader(const std::string& fileName) {
+void Shader::createVertexShader(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
     setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }
-    if (FAILED(mDevice->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
+    if (FAILED(renderer->device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
         SAFE_RELEASE(mCompileShader);
         MessageBox(0, L"バーテックスシェーダー作成失敗", nullptr, MB_OK);
         return;
     }
 }
 
-void Shader::createPixelShader(const std::string& fileName) {
+void Shader::createPixelShader(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
     ID3D10Blob* compiledShader;
     setShaderDirectory();
     //ブロブからピクセルシェーダー作成
@@ -107,7 +125,7 @@ void Shader::createPixelShader(const std::string& fileName) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
         return;
     }
-    if (FAILED(mDevice->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
+    if (FAILED(renderer->device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
         SAFE_RELEASE(compiledShader);
         MessageBox(0, L"ピクセルシェーダー作成失敗", nullptr, MB_OK);
         return;

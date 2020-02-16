@@ -24,7 +24,7 @@ void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
     shader = renderer->createShader("PointLight.hlsl");
 
     //コンスタントバッファ生成
-    shader->createConstantBuffer(renderer, sizeof(PointLightConstantBuffer));
+    shader->createConstantBuffer(sizeof(PointLightConstantBuffer));
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {

@@ -23,7 +23,7 @@ public:
     void setVSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     void setPSShader(ID3D11ClassInstance* classInstances = nullptr, unsigned numClassInstances = 0);
     //コンスタントバッファの作成
-    void createConstantBuffer(std::shared_ptr<Renderer> renderer, unsigned bufferSize, unsigned index = 0);
+    void createConstantBuffer(unsigned bufferSize, unsigned index = 0);
     //使用するコンスタントバッファを登録
     void setVSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1);
     void setPSConstantBuffers(unsigned index = 0, unsigned numBuffers = 1);
@@ -36,13 +36,12 @@ public:
 
 private:
     //シェーダの生成
-    void createVertexShader(const std::string& fileName);
-    void createPixelShader(const std::string& fileName);
+    void createVertexShader(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    void createPixelShader(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     D3D11_MAPPED_SUBRESOURCE toMappedSubResource(const MappedSubResourceDesc* desc) const;
 
 private:
-    ID3D11Device* mDevice;
-    ID3D11DeviceContext* mDeviceContext;
+    std::weak_ptr<Renderer> mRenderer;
     ID3D10Blob* mCompileShader;
     ID3D11VertexShader* mVertexShader;
     ID3D11PixelShader* mPixelShader;

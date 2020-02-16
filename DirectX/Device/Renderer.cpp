@@ -35,8 +35,6 @@ Renderer::Renderer(const HWND& hWnd) :
     mPointLight(std::make_shared<PointLight>()),
     mAmbientLight(Vector3(0.4f, 0.4f, 0.4f)) {
     createDeviceAndSwapChain(hWnd);
-    createRenderTargetView();
-    setDefaultRenderTarget();
     ViewportDesc desc;
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
@@ -64,6 +62,8 @@ void Renderer::initialize() {
     mPointLight->initialize(shared_from_this());
 
     createDepthStencilView();
+    createRenderTargetView();
+    setRenderTargets(&mRenderTargetView, 1);
 }
 
 ID3D11Device* Renderer::device() const {
@@ -84,10 +84,6 @@ std::shared_ptr<DepthStencilState> Renderer::depthStencilState() const {
 
 std::shared_ptr<RasterizerState> Renderer::rasterizerState() const {
     return mRasterizerState;
-}
-
-Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
-    return new Buffer(shared_from_this(), desc, data);
 }
 
 std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
@@ -249,7 +245,7 @@ void Renderer::renderToTexture() {
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //レンダーターゲットを通常に戻す
-    setDefaultRenderTarget();
+    setRenderTargets(&mRenderTargetView, 1);
     //クリア
     clear();
 
@@ -278,11 +274,13 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //スクリーンサイズのポリゴンをレンダー
     setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
     //バーテックスバッファーをセット
-    mGBuffer->vertexBuffer()->setVertexBuffer();
+    mGBuffer->getVertexBuffer()->setVertexBuffer();
+    //インデックスバッファをセット
+    mGBuffer->getIndexBuffer()->setIndexBuffer(Format::FORMAT_R16_UINT);
     //デプステスト無効化
     mDepthStencilState->depthTest(false);
 
-    draw(4);
+    drawIndexed(6);
 }
 
 void Renderer::draw(unsigned numVertex, unsigned start) {
@@ -361,10 +359,6 @@ void Renderer::createDepthStencilView() {
 
 void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {
     mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView);
-}
-
-void Renderer::setDefaultRenderTarget() {
-    mDeviceContext->OMSetRenderTargets(1, &mRenderTargetView, mDepthStencilView);
 }
 
 D3D11_PRIMITIVE_TOPOLOGY Renderer::toPrimitiveMode(PrimitiveType primitive) const {

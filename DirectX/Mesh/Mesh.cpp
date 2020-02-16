@@ -20,8 +20,8 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mState(State::ACTIVE) {
 
     //メッシュ用コンスタントバッファの作成
-    mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer0), 0);
-    mShader->createConstantBuffer(renderer, sizeof(MeshShaderConstantBuffer1), 1);
+    mShader->createConstantBuffer(sizeof(MeshShaderConstantBuffer0), 0);
+    mShader->createConstantBuffer(sizeof(MeshShaderConstantBuffer1), 1);
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {

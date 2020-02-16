@@ -49,7 +49,6 @@ public:
     std::shared_ptr<DepthStencilState> depthStencilState() const;
     std::shared_ptr<RasterizerState> rasterizerState() const;
 
-    Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<VertexBuffer> createVertexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<IndexBuffer> createIndexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
@@ -82,7 +81,6 @@ private:
     void createRenderTargetView();
     void createDepthStencilView();
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
-    void setDefaultRenderTarget();
     D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive) const;
 
 private:

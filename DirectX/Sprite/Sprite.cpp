@@ -28,10 +28,10 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
     //Transformに通知
     mTransform->setSize(mTextureSize);
 
-    mShader->createConstantBuffer(mRenderer, sizeof(TextureShaderConstantBuffer), 0);
+    mShader->createConstantBuffer(sizeof(TextureShaderConstantBuffer));
 
     //インプットレイアウトの生成
-    constexpr InputElementDesc layout[] = {
+    static constexpr InputElementDesc layout[] = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
     };

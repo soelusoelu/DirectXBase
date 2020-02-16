@@ -2,6 +2,7 @@
 #include "Buffer.h"
 #include "BufferDesc.h"
 #include "Game.h"
+#include "IndexBuffer.h"
 #include "ShaderResourceView.h"
 #include "ShaderResourceViewDesc.h"
 #include "SubResourceDesc.h"
@@ -15,7 +16,8 @@
 GBuffer::GBuffer() :
     mSampler(nullptr),
     mShader(nullptr),
-    mVertexBuffer(nullptr) {
+    mVertexBuffer(nullptr),
+    mIndexBuffer(nullptr) {
 }
 
 GBuffer::~GBuffer() {
@@ -37,7 +39,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     desc.height = Game::WINDOW_HEIGHT;
     desc.format = Format::FORMAT_RGBA8_UNORM;
     desc.usage = Usage::USAGE_DEFAULT;
-    desc.bindFlags = 
+    desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);
     auto texture = renderer->createTexture2D(desc);
@@ -80,26 +82,10 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
     renderer->device()->CreateSamplerState(&sd, &mSampler);
 
-    //シェーダー生成
-    mShader = renderer->createShader("Deferred.hlsl");
-    mShader->createConstantBuffer(renderer, sizeof(GBufferShaderConstantBuffer));
-
-    //バーテックスバッファ生成
-    static const MeshVertex vertices[] = {
-        Vector3(-1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 1.f),
-        Vector3(-1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 0.f),
-        Vector3(1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 1.f),
-        Vector3(1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 0.f)
-    };
-    BufferDesc bd;
-    bd.oneSize = sizeof(MeshVertex);
-    bd.size = bd.oneSize * 4;
-    bd.usage = Usage::USAGE_DEFAULT;
-    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
-    SubResourceDesc sub;
-    sub.data = vertices;
-
-    mVertexBuffer = renderer->createVertexBuffer(bd, &sub);
+    //各種生成
+    createShader(renderer);
+    createVertexBuffer(renderer);
+    createIndexBuffer(renderer);
 }
 
 ID3D11RenderTargetView* GBuffer::getRenderTarget(unsigned index) const {
@@ -118,6 +104,51 @@ std::shared_ptr<Shader> GBuffer::shader() const {
     return mShader;
 }
 
-std::shared_ptr<VertexBuffer> GBuffer::vertexBuffer() const {
+std::shared_ptr<VertexBuffer> GBuffer::getVertexBuffer() const {
     return mVertexBuffer;
+}
+
+std::shared_ptr<IndexBuffer> GBuffer::getIndexBuffer() const {
+    return mIndexBuffer;
+}
+
+void GBuffer::createShader(std::shared_ptr<Renderer> renderer) {
+    //シェーダー生成
+    mShader = renderer->createShader("Deferred.hlsl");
+    mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
+}
+
+void GBuffer::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
+    //バーテックスバッファ生成
+    static const MeshVertex vertices[] = {
+        Vector3(-1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 1.f),
+        Vector3(-1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 0.f),
+        Vector3(1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 1.f),
+        Vector3(1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 0.f)
+    };
+    BufferDesc bd;
+    bd.oneSize = sizeof(MeshVertex);
+    bd.size = bd.oneSize * 4;
+    bd.usage = Usage::USAGE_DEFAULT;
+    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
+    SubResourceDesc sub;
+    sub.data = vertices;
+
+    mVertexBuffer = renderer->createVertexBuffer(bd, &sub);
+}
+
+void GBuffer::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
+    //インデックスバッファ作成
+    static constexpr unsigned short indices[] = {
+        0, 1, 2,
+        1, 3, 2
+    };
+    BufferDesc bd;
+    bd.size = sizeof(indices);
+    bd.usage = Usage::USAGE_IMMUTABLE;
+    bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
+
+    SubResourceDesc sub;
+    sub.data = indices;
+    mIndexBuffer = renderer->createIndexBuffer(bd, &sub);
 }
