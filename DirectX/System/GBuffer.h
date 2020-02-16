@@ -6,10 +6,10 @@
 #include <memory>
 #include <vector>
 
-class Buffer;
 class Renderer;
 class Shader;
 class ShaderResourceView;
+class VertexBuffer;
 
 struct GBufferShaderConstantBuffer {
     ALIGN16 Vector3 lightDir; //ライト方向
@@ -38,7 +38,7 @@ public:
     SRVPtr getShaderResourceView(unsigned index) const;
     ID3D11SamplerState* getSampler() const;
     std::shared_ptr<Shader> shader() const;
-    std::shared_ptr<Buffer> vertexBuffer() const;
+    std::shared_ptr<VertexBuffer> vertexBuffer() const;
 
 private:
     //Gバッファに割り当てられたテクスチャ
@@ -46,5 +46,5 @@ private:
     SRVPtrArray mShaderResourceViews;
     ID3D11SamplerState* mSampler;
     std::shared_ptr<Shader> mShader;
-    std::shared_ptr<Buffer> mVertexBuffer;
+    std::shared_ptr<VertexBuffer> mVertexBuffer;
 };

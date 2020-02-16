@@ -24,7 +24,7 @@ public:
     MeshLoader(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~MeshLoader();
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
-    void setVertexBuffer(unsigned vertexSize, unsigned numStream = 1, unsigned start = 0);
+    void setVertexBuffer(unsigned numStream = 1, unsigned start = 0, unsigned offset = 0);
     void setIndexBuffer(unsigned index, unsigned offset = 0);
     unsigned getMaterialSize() const;
     std::shared_ptr<MaterialData> getMaterialData(unsigned index) const;

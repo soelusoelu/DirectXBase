@@ -8,7 +8,6 @@
 #include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
 #include "../System/TextureDesc.h"
-#include "../System/VertexStreamDesc.h"
 #include <cassert>
 
 Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :

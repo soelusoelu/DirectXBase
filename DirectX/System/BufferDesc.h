@@ -15,6 +15,8 @@ enum class BufferCPUAccessFlag {
 };
 
 struct BufferDesc {
+    //データの一個分のバイト数(本家には無い)
+    unsigned oneSize;
     //データのバイト数
     unsigned size;
     //バッファの使用方法
@@ -30,6 +32,7 @@ struct BufferDesc {
 
     //コンストラクタ
     BufferDesc() :
+        oneSize(0),
         size(0),
         usage(Usage::USAGE_DEFAULT),
         type(static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX)),

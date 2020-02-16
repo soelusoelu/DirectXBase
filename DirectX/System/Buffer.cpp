@@ -1,15 +1,15 @@
 ﻿#include "Buffer.h"
 #include "Game.h"
 #include "Usage.h"
+#include "../Device/Renderer.h"
 
-Buffer::Buffer(ID3D11Device* device, const BufferDesc& desc, const SubResourceDesc* data) :
+Buffer::Buffer(std::shared_ptr<Renderer> renderer, const BufferDesc& desc, const SubResourceDesc* data) :
     mDesc(desc) {
     //バッファの作成
-
     if (data) {
-        device->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
+        renderer->device()->CreateBuffer(&toBufferDesc(desc), &toSubResource(data), &mBuffer);
     } else {
-        device->CreateBuffer(&toBufferDesc(desc), nullptr, &mBuffer);
+        renderer->device()->CreateBuffer(&toBufferDesc(desc), nullptr, &mBuffer);
     }
 }
 

@@ -6,6 +6,7 @@
 
 class Buffer;
 class Renderer;
+class VertexBuffer;
 
 class VertexArray {
 public:
@@ -29,7 +30,7 @@ public:
     std::shared_ptr<Buffer> getIndexBuffer(unsigned index) const;
     void resizeIndexBuffer(size_t size);
 
-    void setVertexBuffer(unsigned vertexSize, unsigned numStream = 1, unsigned start = 0);
+    void setVertexBuffer(unsigned numStream = 1, unsigned start = 0, unsigned offset = 0);
     void setIndexBuffer(unsigned index, unsigned offset = 0);
 
 private:
@@ -42,6 +43,6 @@ private:
 
     Vector3* mVertices; //í∏ì_èÓïÒ
 
-    std::shared_ptr<Buffer> mVertexBuffer;
+    std::shared_ptr<VertexBuffer> mVertexBuffer;
     std::vector<std::shared_ptr<Buffer>> mIndexBuffer;
 };

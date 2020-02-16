@@ -2,7 +2,6 @@
 
 #include "DirectXIncLib.h"
 #include "InputElementDesc.h"
-#include "VertexStreamDesc.h"
 #include <vector>
 
 class InputElement {

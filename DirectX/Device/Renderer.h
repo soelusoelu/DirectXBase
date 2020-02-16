@@ -4,7 +4,6 @@
 #include "../System/DirectXIncLib.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Texture2DDesc.h"
-#include "../System/VertexStreamDesc.h"
 #include "../System/ViewportDesc.h"
 #include "../Utility/Math.h"
 #include <list>
@@ -35,6 +34,7 @@ class SoundBase;
 class Sound;
 class Texture;
 class Texture2D;
+class VertexBuffer;
 
 class Renderer : public std::enable_shared_from_this<Renderer> {
 public:
@@ -48,11 +48,11 @@ public:
     std::shared_ptr<DepthStencilState> depthStencilState() const;
     std::shared_ptr<RasterizerState> rasterizerState() const;
 
-    Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
-    std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr) const;
+    Buffer* createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
+    std::shared_ptr<Buffer> createBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
+    std::shared_ptr<VertexBuffer> createVertexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<Texture2D> createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data = nullptr) const;
     void setViewport(const ViewportDesc& desc);
-    void setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream = 1, unsigned start = 0);
     void setIndexBuffer(Buffer* buffer, unsigned offset = 0);
     void setIndexBuffer(std::shared_ptr<Buffer> buffer, unsigned offset = 0);
     void setPrimitive(PrimitiveType primitive) const;

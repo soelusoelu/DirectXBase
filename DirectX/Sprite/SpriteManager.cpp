@@ -7,8 +7,7 @@
 #include "../System/DepthStencilState.h"
 #include "../System/Game.h"
 #include "../System/Texture.h"
-#include "../System/VertexStreamDesc.h"
-#include <algorithm>
+#include "../System/VertexBuffer.h"
 
 SpriteManager::SpriteManager() = default;
 
@@ -38,11 +37,7 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     //プリミティブ・トポロジーをセット
     renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
     //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.buffer = Texture::vertexBuffer;
-    stream.offset = 0;
-    stream.stride = sizeof(TextureVertex);
-    renderer->setVertexBuffer(&stream);
+    Texture::vertexBuffer->setVertexBuffer();
     //インデックスバッファーをセット
     renderer->setIndexBuffer(Texture::indexBuffer);
     //デプステスト無効化

@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "SubResourceDesc.h"
 #include "Usage.h"
-#include "VertexStreamDesc.h"
+#include "VertexBuffer.h"
 #include "../Device/Renderer.h"
 
 VertexArray::VertexArray(std::shared_ptr<Renderer> renderer) :
@@ -63,6 +63,7 @@ Vector3* VertexArray::getVertices() const {
 
 void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     BufferDesc bd;
+    bd.oneSize = vertexSize;
     bd.size = vertexSize * mNumVerts;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
@@ -70,7 +71,7 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     sub.data = data;
 
     if (auto r = mRenderer.lock()) {
-        mVertexBuffer = r->createBuffer(bd, &sub);
+        mVertexBuffer = r->createVertexBuffer(bd, &sub);
     }
 }
 
@@ -95,15 +96,8 @@ void VertexArray::resizeIndexBuffer(size_t size) {
     mIndexBuffer.resize(size);
 }
 
-void VertexArray::setVertexBuffer(unsigned vertexSize, unsigned numStream, unsigned start) {
-    VertexStreamDesc stream;
-    stream.sharedBuffer = mVertexBuffer;
-    stream.offset = 0;
-    stream.stride = vertexSize;
-
-    if (auto r = mRenderer.lock()) {
-        r->setVertexBuffer(&stream, numStream, start);
-    }
+void VertexArray::setVertexBuffer(unsigned numStream, unsigned start, unsigned offset) {
+    mVertexBuffer->setVertexBuffer(start, numStream, offset);
 }
 
 void VertexArray::setIndexBuffer(unsigned index, unsigned offset) {

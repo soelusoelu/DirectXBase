@@ -69,7 +69,7 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
     }
 
     //バーテックスバッファーをセット
-    mLoader->setVertexBuffer(sizeof(MeshVertex));
+    mLoader->setVertexBuffer();
 
     //このコンスタントバッファーを使うシェーダーの登録
     mShader->setVSConstantBuffers(1);

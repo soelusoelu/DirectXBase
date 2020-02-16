@@ -8,7 +8,7 @@
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Usage.h"
-#include "../System/VertexStreamDesc.h"
+#include "../System/VertexBuffer.h"
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) :
     mDeviceContext(renderer->deviceContext()),
@@ -64,13 +64,15 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     };
 
     BufferDesc bd;
-    bd.size = sizeof(TextureVertex) * 4;
+    bd.oneSize = sizeof(TextureVertex);
+    bd.size = bd.oneSize * 4; //頂点が4つだから
     bd.usage = Usage::USAGE_IMMUTABLE;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
 
     SubResourceDesc sub;
     sub.data = vertices;
-    vertexBuffer = renderer->createRawBuffer(bd, &sub);
+
+    vertexBuffer = new VertexBuffer(renderer, bd, &sub);
 }
 
 void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
@@ -148,5 +150,5 @@ unsigned Texture::toFilter(TextureFilter filter) const {
     return filters[static_cast<unsigned>(filter)];
 }
 
-Buffer* Texture::vertexBuffer = nullptr;
+VertexBuffer* Texture::vertexBuffer = nullptr;
 Buffer* Texture::indexBuffer = nullptr;

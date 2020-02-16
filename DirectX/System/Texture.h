@@ -22,9 +22,10 @@ struct TextureShaderConstantBuffer {
 
 class Buffer;
 class InputElement;
+class Renderer;
 class ShaderResourceView;
 class Sprite;
-class Renderer;
+class VertexBuffer;
 
 class Texture {
 public:
@@ -39,10 +40,6 @@ public:
     void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1);
     void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1);
 
-public:
-    static Buffer* vertexBuffer;
-    static Buffer* indexBuffer;
-
 private:
     void createVertexBuffer(std::shared_ptr<Renderer> renderer);
     void createIndexBuffer(std::shared_ptr<Renderer> renderer);
@@ -51,6 +48,10 @@ private:
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
     unsigned toFilter(TextureFilter filter) const;
+
+public:
+    static VertexBuffer* vertexBuffer;
+    static Buffer* indexBuffer;
 
 private:
     ID3D11DeviceContext* mDeviceContext;

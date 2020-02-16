@@ -70,8 +70,8 @@ void MeshLoader::createSphere(std::shared_ptr<Sphere> * sphere) const {
     (*sphere)->center = c;
 }
 
-void MeshLoader::setVertexBuffer(unsigned vertexSize, unsigned numStream, unsigned start) {
-    mVertexArray->setVertexBuffer(vertexSize, numStream, start);
+void MeshLoader::setVertexBuffer(unsigned numStream, unsigned start, unsigned offset) {
+    mVertexArray->setVertexBuffer(numStream, start, offset);
 }
 
 void MeshLoader::setIndexBuffer(unsigned index, unsigned offset) {

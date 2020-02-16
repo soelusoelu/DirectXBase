@@ -18,6 +18,7 @@
 #include "../System/RasterizerState.h"
 #include "../System/Texture.h"
 #include "../System/Texture2D.h"
+#include "../System/VertexBuffer.h"
 
 Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
@@ -84,12 +85,16 @@ std::shared_ptr<RasterizerState> Renderer::rasterizerState() const {
     return mRasterizerState;
 }
 
-Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
-    return new Buffer(mDevice, desc, data);
+Buffer* Renderer::createRawBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
+    return new Buffer(shared_from_this(), desc, data);
 }
 
-std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const SubResourceDesc* data) const {
-    return std::make_shared<Buffer>(mDevice, desc, data);
+std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
+    return std::make_shared<Buffer>(shared_from_this(), desc, data);
+}
+
+std::shared_ptr<VertexBuffer> Renderer::createVertexBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
+    return std::make_shared<VertexBuffer>(shared_from_this(), desc, data);
 }
 
 std::shared_ptr<Texture2D> Renderer::createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data) const {
@@ -106,23 +111,6 @@ void Renderer::setViewport(const ViewportDesc& desc) {
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     mDeviceContext->RSSetViewports(1, &vp);
-}
-
-void Renderer::setVertexBuffer(const VertexStreamDesc* stream, unsigned numStream, unsigned start) {
-    /* IASetVertexBuffers
-        使い始めのスロット番号
-        頂点バッファ配列の要素数
-        頂点バッファ配列の先頭ポインタ
-        INPUT_ELEMENT_DESC構造体のサイズが入った配列への先頭ポインタ(stride(読み込み単位)として扱うため)
-        頂点バッファ配列の各頂点バッファの頭出しをするオフセット値の配列
-    */
-    ID3D11Buffer* buffer;
-    if (stream->buffer) {
-        buffer = stream->buffer->buffer();
-    } else {
-        buffer = stream->sharedBuffer->buffer();
-    }
-    mDeviceContext->IASetVertexBuffers(start, numStream, &buffer, &stream->stride, &stream->offset);
 }
 
 void Renderer::setIndexBuffer(Buffer* buffer, unsigned offset) {
@@ -216,7 +204,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     //頂点インプットレイアウトをセット
     shader->setInputLayout();
     //バーテックスバッファーをセット
-    mPointLight->mesh->getMeshData()->setVertexBuffer(sizeof(MeshVertex));
+    mPointLight->mesh->getMeshData()->setVertexBuffer();
     //プリミティブ指定
     setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
@@ -293,11 +281,7 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //スクリーンサイズのポリゴンをレンダー
     setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
     //バーテックスバッファーをセット
-    VertexStreamDesc stream;
-    stream.sharedBuffer = mGBuffer->vertexBuffer();
-    stream.offset = 0;
-    stream.stride = sizeof(MeshVertex);
-    setVertexBuffer(&stream);
+    mGBuffer->vertexBuffer()->setVertexBuffer();
     //デプステスト無効化
     mDepthStencilState->depthTest(false);
 

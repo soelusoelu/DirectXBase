@@ -201,6 +201,7 @@
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="System\VertexArray.cpp" />
+    <ClCompile Include="System\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -259,7 +260,6 @@
     <ClInclude Include="System\InputElementDesc.h" />
     <ClInclude Include="System\SubResourceDesc.h" />
     <ClInclude Include="System\TextureDesc.h" />
-    <ClInclude Include="System\VertexStreamDesc.h" />
     <ClInclude Include="System\ViewportDesc.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\UI.h" />
@@ -272,6 +272,7 @@
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="System\VertexArray.h" />
+    <ClInclude Include="System\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Deferred.hlsl">

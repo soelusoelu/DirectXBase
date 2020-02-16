@@ -92,13 +92,14 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
         Vector3(1.f, 1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(1.f, 0.f)
     };
     BufferDesc bd;
-    bd.size = sizeof(MeshVertex) * 4;
+    bd.oneSize = sizeof(MeshVertex);
+    bd.size = bd.oneSize * 4;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
     SubResourceDesc sub;
     sub.data = vertices;
 
-    mVertexBuffer = renderer->createBuffer(bd, &sub);
+    mVertexBuffer = renderer->createVertexBuffer(bd, &sub);
 }
 
 ID3D11RenderTargetView* GBuffer::getRenderTarget(unsigned index) const {
@@ -117,6 +118,6 @@ std::shared_ptr<Shader> GBuffer::shader() const {
     return mShader;
 }
 
-std::shared_ptr<Buffer> GBuffer::vertexBuffer() const {
+std::shared_ptr<VertexBuffer> GBuffer::vertexBuffer() const {
     return mVertexBuffer;
 }
