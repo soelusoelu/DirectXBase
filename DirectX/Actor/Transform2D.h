@@ -37,6 +37,7 @@ public:
 
     //ピボット位置
     void setPivot(Pivot pivot);
+    const Vector2& getPivot() const;
 
     //倍率で拡縮
     void setScale(const Vector2& scale);

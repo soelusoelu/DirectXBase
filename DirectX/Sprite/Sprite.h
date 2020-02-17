@@ -50,6 +50,7 @@ public:
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
     std::shared_ptr<Shader> shader() const;
+    std::shared_ptr<Renderer> renderer() const;
 
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);

@@ -190,6 +190,10 @@ std::shared_ptr<Shader> Sprite::shader() const {
     return mShader;
 }
 
+std::shared_ptr<Renderer> Sprite::renderer() const {
+    return mRenderer;
+}
+
 void Sprite::setSpriteManager(SpriteManager * manager) {
     mSpriteManager = manager;
 }

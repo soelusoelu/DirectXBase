@@ -162,7 +162,7 @@
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
-    <ClCompile Include="Device\DrawNumber.cpp" />
+    <ClCompile Include="Device\DrawString.cpp" />
     <ClCompile Include="System\IndexBuffer.cpp" />
     <ClCompile Include="System\ShaderResourceView.cpp" />
     <ClCompile Include="System\Format.cpp" />
@@ -226,7 +226,7 @@
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
-    <ClInclude Include="Device\DrawNumber.h" />
+    <ClInclude Include="Device\DrawString.h" />
     <ClInclude Include="System\IndexBuffer.h" />
     <ClInclude Include="Light\DirectionalLight.h" />
     <ClInclude Include="Light\PointLight.h" />

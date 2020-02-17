@@ -6,13 +6,13 @@
 #include "../Actor/Transform2D.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
+#include "../Device/DrawString.h"
 #include "../Device/Physics.h"
 #include "../Device/Time.h"
 #include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
-#include "../Device/DrawNumber.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -54,7 +54,8 @@ void GamePlay::update() {
 
         static float time = 0;
         time += Time::deltaTime;
-        DrawNumber::drawNumber(mRenderer, static_cast<int>(time), Vector2::zero);
+        DrawString::drawNumber(time, Vector2::zero, 2);
+        DrawString::drawNumberRightJustified(static_cast<int>(time), Vector2(Game::WINDOW_WIDTH, 0.f));
     } else if (mState == State::PAUSED) {
 
     }

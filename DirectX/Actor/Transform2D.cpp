@@ -102,6 +102,10 @@ void Transform2D::setPivot(Pivot pivot) {
     shouldRecomputeTransform();
 }
 
+const Vector2& Transform2D::getPivot() const {
+    return mPivot;
+}
+
 void Transform2D::setScale(const Vector2& scale) {
     mScale = scale;
     shouldRecomputeTransform();
