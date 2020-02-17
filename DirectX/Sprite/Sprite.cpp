@@ -19,6 +19,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) 
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
     mState(State::ACTIVE),
+    mFileName(fileName),
     mIsOnceDraw(false) {
 
     //デスクをもとにサイズ取得
@@ -54,6 +55,7 @@ Sprite::Sprite(const Sprite & sprite) :
     mColor(sprite.mColor),
     mUV(sprite.mUV),
     mState(State::ACTIVE),
+    mFileName(sprite.mFileName),
     mIsOnceDraw(sprite.mIsOnceDraw) {
 }
 
@@ -188,6 +190,10 @@ std::shared_ptr<Texture> Sprite::texture() const {
 
 std::shared_ptr<Shader> Sprite::shader() const {
     return mShader;
+}
+
+const std::string& Sprite::fileName() const {
+    return mFileName;
 }
 
 std::shared_ptr<Renderer> Sprite::renderer() const {

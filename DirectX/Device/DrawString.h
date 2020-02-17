@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Actor/Transform2D.h"
 #include "../Utility/Math.h"
@@ -15,14 +15,22 @@ public:
     static void drawNumber(int number, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
     static void drawNumberRightJustified(int number, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
     static void drawNumber(float number, const Vector2& position, int decimalDigits = 1, Pivot pivot = Pivot::LEFT_TOP);
+    //æŒ™å‹•æ€ªã—ã„
     static void drawNumberRightJustified(float number, const Vector2& position, int decimalDigits = 1);
+    static void drawString(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
+    static void drawStringRightJustified(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
 
 private:
     static Sprite* mSprite;
-    static constexpr int WIDTH = 32; //‰æ‘œ1•¶š‚Ì‰¡•
-    static constexpr int HEIGHT = 64; //‰æ‘œ1•¶š‚Ìc•
-    static constexpr int SPRITE_WIDTH = 512; //‰æ‘œ‰¡•
-    static constexpr float WIDTH_RATE = static_cast<float>(WIDTH) / static_cast<float>(SPRITE_WIDTH); //‰æ‘œ‰¡•‚É‘Î‚·‚é1•¶š‚Ì”ä—¦
-    static constexpr int PERIOD_WIDTH = WIDTH / 2.f; //ƒsƒŠƒIƒh‚Ì‰¡•
-    static constexpr float PERIOD_RATE = static_cast<float>(PERIOD_WIDTH) / static_cast<float>(SPRITE_WIDTH); //‰æ‘œ‰¡•‚É‘Î‚·‚é1•¶š‚Ì”ä—¦
+    static constexpr int WIDTH = 32; //ç”»åƒ1æ–‡å­—ã®æ¨ªå¹…
+    static constexpr int HEIGHT = 64; //ç”»åƒ1æ–‡å­—ã®ç¸¦å¹…
+    static constexpr int SPRITE_WIDTH = 512; //ç”»åƒæ¨ªå¹…
+    static constexpr float WIDTH_RATE = static_cast<float>(WIDTH) / static_cast<float>(SPRITE_WIDTH); //ç”»åƒæ¨ªå¹…ã«å¯¾ã™ã‚‹1æ–‡å­—ã®æ¯”ç‡
+    static constexpr int PERIOD_WIDTH = WIDTH / 2.f; //ãƒ”ãƒªã‚ªãƒ‰ã®æ¨ªå¹…
+    static constexpr float PERIOD_RATE = static_cast<float>(PERIOD_WIDTH) / static_cast<float>(SPRITE_WIDTH); //ç”»åƒæ¨ªå¹…ã«å¯¾ã™ã‚‹1æ–‡å­—ã®æ¯”ç‡
+
+    static constexpr int FONT_HEIGHT = 384; //ãƒ•ã‚©ãƒ³ãƒˆç”»åƒã®ç¸¦å¹…
+    static constexpr int WIDTH_CHAR_COUNT = SPRITE_WIDTH / WIDTH; //ãƒ•ã‚©ãƒ³ãƒˆç”»åƒã®ç”»åƒæ¨ªã®æ–‡å­—æ•°
+    static constexpr int HEIGHT_CHAR_COUNT = FONT_HEIGHT / HEIGHT;
+    static constexpr float FONT_HEIGHT_RATE = static_cast<float>(HEIGHT) / static_cast<float>(FONT_HEIGHT);
 };

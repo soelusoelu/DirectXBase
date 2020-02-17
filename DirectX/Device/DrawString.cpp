@@ -1,4 +1,4 @@
-#include "DrawString.h"
+ï»¿#include "DrawString.h"
 #include "../Device/Renderer.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
@@ -15,32 +15,32 @@ void DrawString::end() {
 }
 
 void DrawString::drawNumber(int number, const Vector2& position, Pivot pivot) {
-    //ƒ}ƒCƒiƒX‚Íˆµ‚í‚È‚¢
+    //ãƒã‚¤ãƒŠã‚¹ã¯æ‰±ã‚ãªã„
     if (number < 0) {
         number = 0;
     }
 
     mSprite->transform()->setPosition(position);
 
-    //”š‚ğ•¶š—ñ‰»‚µA1•¶š‚¸‚Âæ‚èo‚·
+    //æ•°å­—ã‚’æ–‡å­—åˆ—åŒ–ã—ã€1æ–‡å­—ãšã¤å–ã‚Šå‡ºã™
     for (auto n : std::to_string(number)) {
-        auto copy = new Sprite(mSprite->renderer(), "number.png");
+        auto copy = new Sprite(mSprite->renderer(), mSprite->fileName());
         copy->setOnceDraw();
         copy->transform()->setPosition(mSprite->transform()->getPosition());
-        //”š‚ÌƒeƒNƒXƒ`ƒƒ‚ª”š1‚Â‚É‚Â‚«•32‚‚³64
-        //•¶š‚Æ•¶š‚ğˆø‚«Z‚µA®”’l‚ğæ“¾‚µ‚Ä‚¢‚é
+        //æ•°å­—ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒæ•°å­—1ã¤ã«ã¤ãå¹…32é«˜ã•64
+        //æ–‡å­—ã¨æ–‡å­—ã‚’å¼•ãç®—ã—ã€æ•´æ•°å€¤ã‚’å–å¾—ã—ã¦ã„ã‚‹
         float num = (n - '0') * WIDTH;
         num /= SPRITE_WIDTH;
         copy->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
         copy->transform()->setPivot(pivot);
 
-        //1•¶š•`‰æ‚µ‚½‚ç1Œ…•ª‰E‚É‚¸‚ç‚·
+        //1æ–‡å­—æç”»ã—ãŸã‚‰1æ¡åˆ†å³ã«ãšã‚‰ã™
         mSprite->transform()->translate(Vector2(WIDTH, 0.f));
     }
 }
 
 void DrawString::drawNumberRightJustified(int number, const Vector2& position, Pivot pivot) {
-    //Œ…”ŒvZ(–{“–‚Í=1)
+    //æ¡æ•°è¨ˆç®—(æœ¬å½“ã¯=1)
     int digit = 0;
     for (int i = number; i >= 10; i /= 10) {
         digit++;
@@ -52,37 +52,37 @@ void DrawString::drawNumberRightJustified(int number, const Vector2& position, P
 }
 
 void DrawString::drawNumber(float number, const Vector2& position, int decimalDigits, Pivot pivot) {
-    //ƒ}ƒCƒiƒX‚Íˆµ‚í‚È‚¢
+    //ãƒã‚¤ãƒŠã‚¹ã¯æ‰±ã‚ãªã„
     if (number < 0) {
         number = 0;
     }
 
     mSprite->transform()->setPosition(position);
 
-    //¬”•”•ª‚ÌŒ…”w’è
+    //å°æ•°éƒ¨åˆ†ã®æ¡æ•°æŒ‡å®š
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(decimalDigits) << number;
     std::string num = oss.str();
 
-    //”š‚ğ•¶š—ñ‰»‚µA1•¶š‚¸‚Âæ‚èo‚·
+    //æ•°å­—ã‚’æ–‡å­—åˆ—åŒ–ã—ã€1æ–‡å­—ãšã¤å–ã‚Šå‡ºã™
     for (auto n : num) {
-        auto copy = new Sprite(mSprite->renderer(), "number.png");
+        auto copy = new Sprite(mSprite->renderer(), mSprite->fileName());
         copy->setOnceDraw();
         copy->transform()->setPosition(mSprite->transform()->getPosition());
-        //”š‚ÌƒeƒNƒXƒ`ƒƒ‚ª”š1‚Â‚É‚Â‚«•32‚‚³64
-        //•¶š‚Æ•¶š‚ğˆø‚«Z‚µA®”’l‚ğæ“¾‚µ‚Ä‚¢‚é
+        //æ•°å­—ã®ãƒ†ã‚¯ã‚¹ãƒãƒ£ãŒæ•°å­—1ã¤ã«ã¤ãå¹…32é«˜ã•64
+        //æ–‡å­—ã¨æ–‡å­—ã‚’å¼•ãç®—ã—ã€æ•´æ•°å€¤ã‚’å–å¾—ã—ã¦ã„ã‚‹
         if (n == '.') {
-            constexpr float num = 10 * WIDTH_RATE; //ƒsƒŠƒIƒh‚Í‰æ‘œ‚Ì10”Ô–Ú
+            constexpr float num = 10 * WIDTH_RATE; //ãƒ”ãƒªã‚ªãƒ‰ã¯ç”»åƒã®10ç•ªç›®
             copy->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
 
-            //u.v‚Ì‚Æ‚«‚Í1•¶š‚Ì”¼•ª‚¸‚ç‚·
+            //ã€Œ.ã€ã®ã¨ãã¯1æ–‡å­—ã®åŠåˆ†ãšã‚‰ã™
             mSprite->transform()->translate(Vector2(PERIOD_WIDTH, 0.f));
         } else {
             float num = (n - '0') * WIDTH;
             num /= SPRITE_WIDTH;
             copy->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
 
-            //1•¶š•`‰æ‚µ‚½‚ç1Œ…•ª‰E‚É‚¸‚ç‚·
+            //1æ–‡å­—æç”»ã—ãŸã‚‰1æ¡åˆ†å³ã«ãšã‚‰ã™
             mSprite->transform()->translate(Vector2(WIDTH, 0.f));
         }
         copy->transform()->setPivot(pivot);
@@ -97,8 +97,37 @@ void DrawString::drawNumberRightJustified(float number, const Vector2& position,
 
     auto pos = position;
     pos.x -= WIDTH * digit + WIDTH * decimalDigits;
-    pos.x -= PERIOD_WIDTH; //ƒsƒŠƒIƒh‚Ì•ª
+    pos.x -= PERIOD_WIDTH; //ãƒ”ãƒªã‚ªãƒ‰ã®åˆ†
     drawNumber(number, pos, decimalDigits, Pivot::LEFT_TOP);
+}
+
+void DrawString::drawString(const std::string& alphabet, const Vector2& position, Pivot pivot) {
+    mSprite->transform()->setPosition(position);
+
+    for (const auto& c : alphabet) {
+        auto copy = new Sprite(mSprite->renderer(), "font.png");
+        copy->setOnceDraw();
+        copy->transform()->setPosition(mSprite->transform()->getPosition());
+
+        int t = c;
+        t = Math::clamp<int>(t, 32, 127);
+        t -= 32;
+
+        float left = t % WIDTH_CHAR_COUNT;
+        left /= WIDTH_CHAR_COUNT;
+        float top = t / WIDTH_CHAR_COUNT;
+        top /= HEIGHT_CHAR_COUNT;
+        copy->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
+        copy->transform()->setPivot(pivot);
+
+        mSprite->transform()->translate(Vector2(WIDTH, 0.f));
+    }
+}
+
+void DrawString::drawStringRightJustified(const std::string& alphabet, const Vector2& position, Pivot pivot) {
+    auto pos = position;
+    pos.x -= alphabet.length() * WIDTH;
+    drawString(alphabet, pos, Pivot::LEFT_TOP);
 }
 
 Sprite* DrawString::mSprite = nullptr;

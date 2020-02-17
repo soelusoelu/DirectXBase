@@ -50,6 +50,8 @@ public:
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
     std::shared_ptr<Shader> shader() const;
+    //ファイル名の取得
+    const std::string& fileName() const;
     std::shared_ptr<Renderer> renderer() const;
 
     //SpriteManagerの登録
@@ -64,6 +66,7 @@ private:
     Vector4 mColor;
     Vector4 mUV;
     State mState;
+    std::string mFileName;
     bool mIsOnceDraw; //一回描画したら削除
 
     static SpriteManager* mSpriteManager;
