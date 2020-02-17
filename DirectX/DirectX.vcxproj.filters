@@ -70,6 +70,7 @@
     <ClCompile Include="System\ShaderResourceView.cpp" />
     <ClCompile Include="System\VertexBuffer.cpp" />
     <ClCompile Include="System\IndexBuffer.cpp" />
+    <ClCompile Include="Device\DrawNumber.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -142,5 +143,6 @@
     <ClInclude Include="System\ShaderResourceView.h" />
     <ClInclude Include="System\VertexBuffer.h" />
     <ClInclude Include="System\IndexBuffer.h" />
+    <ClInclude Include="Device\DrawNumber.h" />
   </ItemGroup>
 </Project>

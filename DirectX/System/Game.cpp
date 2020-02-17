@@ -2,6 +2,7 @@
 #include "Texture.h"
 #include "Window.h"
 #include "../Main.h"
+#include "../Device/DrawNumber.h"
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
@@ -14,6 +15,7 @@ Game::Game() {
 }
 
 Game::~Game() {
+    DrawNumber::end();
     Input::end();
     Texture::end();
 }
@@ -52,10 +54,12 @@ HRESULT Game::init() {
 
     mRenderer = std::make_shared<Renderer>(mhWnd);
     mRenderer->initialize();
-    mMain = std::make_unique<Main>(mRenderer);
 
     Random::init();
     Input::init(mhWnd);
+    DrawNumber::initialize(mRenderer);
+
+    mMain = std::make_unique<Main>(mRenderer);
 
     return S_OK;
 }

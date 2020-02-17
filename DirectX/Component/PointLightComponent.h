@@ -16,7 +16,11 @@ public:
     virtual void start() override;
     virtual void update() override;
     void draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const;
+    void setColor(const Vector3& color);
+    void setInnerRadius(float radius);
+    void setOuterRadius(float radius);
 
+private:
     Vector3 mDiffuseColor; //色
     float mInnerRadius; //この半径以内だと完全な輝度で照らす
     float mOuterRadius; //光の届く半径

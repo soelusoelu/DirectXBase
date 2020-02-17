@@ -50,7 +50,7 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
     renderer->blendState()->setBlendState(bd);
 
-    for (const auto& sprite : mSprites) {
+    for (auto&& sprite : mSprites) {
         sprite->draw(proj);
     }
 }

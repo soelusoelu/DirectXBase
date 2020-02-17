@@ -67,13 +67,39 @@ void Transform2D::rotate(float angle) {
     shouldRecomputeTransform();
 }
 
-void Transform2D::setPivot(const Vector2& pivot) {
-    mPivot = pivot;
+void Transform2D::setPivot(Pivot pivot) {
+    switch (pivot) {
+    case Pivot::LEFT_TOP:
+        mPivot = -mSize / 2.f;
+        break;
+    case Pivot::CENTER_TOP:
+        mPivot.y = -mSize.y / 2.f;
+        break;
+    case Pivot::RIGHT_TOP:
+        mPivot = Vector2(mSize.x, -mSize.y) / 2.f;
+        break;
+    case Pivot::CENTER_LEFT:
+        mPivot.x = -mSize.x / 2.f;
+        break;
+    case Pivot::CENTER:
+        mPivot = Vector2::zero;
+        break;
+    case Pivot::CENTER_RIGHT:
+        mPivot.x = mSize.x / 2.f;
+        break;
+    case Pivot::LEFT_BOTTOM:
+        mPivot = Vector2(-mSize.x, mSize.y) / 2.f;
+        break;
+    case Pivot::CETNER_BOTTOM:
+        mPivot.y = mSize.y / 2.f;
+        break;
+    case Pivot::RIGHT_BOTTOM:
+        mPivot = mSize / 2.f;
+        break;
+    default:
+        break;
+    }
     shouldRecomputeTransform();
-}
-
-const Vector2& Transform2D::getPivot() const {
-    return mPivot;
 }
 
 void Transform2D::setScale(const Vector2& scale) {

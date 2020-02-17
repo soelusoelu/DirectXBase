@@ -14,8 +14,8 @@
 PointLightComponent::PointLightComponent(Actor* owner) :
     Component(owner),
     mDiffuseColor(ColorPalette::white),
-    mInnerRadius(10.f),
-    mOuterRadius(30.f) {
+    mInnerRadius(0.25f),
+    mOuterRadius(1.f) {
     owner->renderer()->addPointLight(this);
 }
 
@@ -65,4 +65,16 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
         //プリミティブをレンダリング
         mOwner->renderer()->drawIndexed(mesh->getMeshData()->getMaterialData(i)->numFace * 3);
     }
+}
+
+void PointLightComponent::setColor(const Vector3& color) {
+    mDiffuseColor = color;
+}
+
+void PointLightComponent::setInnerRadius(float radius) {
+    mInnerRadius = radius;
+}
+
+void PointLightComponent::setOuterRadius(float radius) {
+    mOuterRadius = radius;
 }

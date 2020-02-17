@@ -10,7 +10,7 @@
 #include "../System/TextureDesc.h"
 #include <cassert>
 
-Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
+Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mRenderer(renderer),
     mTransform(std::make_shared<Transform2D>()),
     mTexture(mRenderer->createTexture(fileName)),
@@ -19,7 +19,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
     mState(State::ACTIVE),
-    mFileName(fileName) {
+    mIsOnceDraw(false) {
 
     //デスクをもとにサイズ取得
     auto desc = mTexture->desc();
@@ -46,6 +46,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const char* fileName) :
 Sprite::~Sprite() = default;
 
 Sprite::Sprite(const Sprite & sprite) :
+    mRenderer(sprite.mRenderer),
     mTransform(sprite.mTransform),
     mTextureSize(sprite.mTextureSize),
     mTexture(sprite.mTexture),
@@ -53,7 +54,7 @@ Sprite::Sprite(const Sprite & sprite) :
     mColor(sprite.mColor),
     mUV(sprite.mUV),
     mState(State::ACTIVE),
-    mFileName(sprite.mFileName) {
+    mIsOnceDraw(sprite.mIsOnceDraw) {
 }
 
 void Sprite::update() {
@@ -97,6 +98,10 @@ void Sprite::draw(const Matrix4 & proj) {
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
     mRenderer->drawIndexed(6);
+
+    if (mIsOnceDraw) {
+        destroy();
+    }
 }
 
 std::shared_ptr<Sprite> Sprite::copy() const {
@@ -169,6 +174,10 @@ bool Sprite::getActive() const {
     return mState == State::ACTIVE;
 }
 
+void Sprite::setOnceDraw() {
+    mIsOnceDraw = true;
+}
+
 bool Sprite::isDead() const {
     return mState == State::DEAD;
 }
@@ -179,10 +188,6 @@ std::shared_ptr<Texture> Sprite::texture() const {
 
 std::shared_ptr<Shader> Sprite::shader() const {
     return mShader;
-}
-
-const char* Sprite::fileName() const {
-    return mFileName;
 }
 
 void Sprite::setSpriteManager(SpriteManager * manager) {

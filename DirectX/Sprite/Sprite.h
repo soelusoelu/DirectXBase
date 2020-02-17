@@ -2,6 +2,7 @@
 
 #include "../Utility/Math.h"
 #include <memory>
+#include <string>
 
 class Transform2D;
 class SpriteManager;
@@ -17,7 +18,7 @@ class Sprite {
     };
 
 public:
-    Sprite(std::shared_ptr<Renderer> renderer, const char* fileName);
+    Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Sprite();
     Sprite(const Sprite& sprite);
     //SpriteManagerにて毎フレーム実行
@@ -44,12 +45,11 @@ public:
     void setActive(bool value);
     bool getActive() const;
     bool isDead() const;
+    void setOnceDraw();
     //テクスチャの取得
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
     std::shared_ptr<Shader> shader() const;
-    //ファイル名の取得
-    const char* fileName() const;
 
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);
@@ -63,7 +63,7 @@ private:
     Vector4 mColor;
     Vector4 mUV;
     State mState;
-    const char* mFileName;
+    bool mIsOnceDraw; //一回描画したら削除
 
     static SpriteManager* mSpriteManager;
 };

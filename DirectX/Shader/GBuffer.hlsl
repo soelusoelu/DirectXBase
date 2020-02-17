@@ -38,11 +38,8 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
     output.WorldPos = mul(Pos, g_mW);
     //Norm.w = 0;
     output.WorldNormal = mul(Norm, g_mW);
-    
-    if (g_TextureFlag == true)
-    {
-        output.UV = UV;
-    }
+
+    output.UV = UV;
 
     return output;
 }
@@ -55,10 +52,7 @@ PS_OUTPUT PS(VS_OUTPUT input)
     PS_OUTPUT Out = (PS_OUTPUT) 0;
 
     //カラーテクスチャーへ出力
-    if (g_TextureFlag == true)
-    {
-        Out.vColor = g_tex.Sample(g_samLinear, input.UV);
-    }
+    Out.vColor = g_tex.Sample(g_samLinear, input.UV);
 
     //ワールド法線テクスチャーへ出力
     float4 vNormal = input.WorldNormal;

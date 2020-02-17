@@ -7,10 +7,12 @@
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
 #include "../Device/Physics.h"
+#include "../Device/Time.h"
 #include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
+#include "../Device/DrawNumber.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -37,8 +39,7 @@ void GamePlay::start() {
 
     auto kotori = new Sprite(mRenderer, "kotori.png");
     kotori->transform()->setScale(0.5f);
-    auto size = kotori->transform()->getSize();
-    kotori->transform()->setPivot(Vector2(-size.x / 2.f, size.y / 2.f));
+    kotori->transform()->setPivot(Pivot::LEFT_BOTTOM);
     kotori->transform()->setPosition(Vector2(0.f, Game::WINDOW_HEIGHT));
 }
 
@@ -50,6 +51,10 @@ void GamePlay::update() {
         mPhysics->sweepAndPrune();
         //ライト関連
         mDLight->update();
+
+        static float time = 0;
+        time += Time::deltaTime;
+        DrawNumber::drawNumber(mRenderer, static_cast<int>(time), Vector2::zero);
     } else if (mState == State::PAUSED) {
 
     }

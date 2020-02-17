@@ -4,7 +4,19 @@
 #include <memory>
 #include <list>
 
-class Transform2D : public std::enable_shared_from_this<Transform2D> {
+enum class Pivot {
+    LEFT_TOP,
+    CENTER_TOP,
+    RIGHT_TOP,
+    CENTER_LEFT,
+    CENTER,
+    CENTER_RIGHT,
+    LEFT_BOTTOM,
+    CETNER_BOTTOM,
+    RIGHT_BOTTOM
+};
+
+class Transform2D {
 public:
     Transform2D();
     ~Transform2D();
@@ -23,9 +35,8 @@ public:
     float getRotation() const;
     void rotate(float angle);
 
-    //回転縮小ピボット位置
-    void setPivot(const Vector2& pivot);
-    const Vector2& getPivot() const;
+    //ピボット位置
+    void setPivot(Pivot pivot);
 
     //倍率で拡縮
     void setScale(const Vector2& scale);
