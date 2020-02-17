@@ -50,7 +50,6 @@
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Actor\Field.cpp" />
-    <ClCompile Include="Actor\SpotLight.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="System\VertexArray.cpp" />
@@ -71,6 +70,8 @@
     <ClCompile Include="System\VertexBuffer.cpp" />
     <ClCompile Include="System\IndexBuffer.cpp" />
     <ClCompile Include="Device\DrawString.cpp" />
+    <ClCompile Include="System\Sampler.cpp" />
+    <ClCompile Include="System\ComparisonFunc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -118,7 +119,6 @@
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Actor\Field.h" />
-    <ClInclude Include="Actor\SpotLight.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="System\ViewportDesc.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
@@ -144,5 +144,8 @@
     <ClInclude Include="System\VertexBuffer.h" />
     <ClInclude Include="System\IndexBuffer.h" />
     <ClInclude Include="Device\DrawString.h" />
+    <ClInclude Include="System\SamplerDesc.h" />
+    <ClInclude Include="System\Sampler.h" />
+    <ClInclude Include="System\ComparisonFunc.h" />
   </ItemGroup>
 </Project>

@@ -8,6 +8,7 @@
 
 class IndexBuffer;
 class Renderer;
+class Sampler;
 class Shader;
 class ShaderResourceView;
 class VertexBuffer;
@@ -37,7 +38,7 @@ public:
 
     ID3D11RenderTargetView* getRenderTarget(unsigned index) const;
     SRVPtr getShaderResourceView(unsigned index) const;
-    ID3D11SamplerState* getSampler() const;
+    std::shared_ptr<Sampler> getSampler() const;
     std::shared_ptr<Shader> shader() const;
     std::shared_ptr<VertexBuffer> getVertexBuffer() const;
     std::shared_ptr<IndexBuffer> getIndexBuffer() const;
@@ -51,7 +52,7 @@ private:
     //Gバッファに割り当てられたテクスチャ
     std::vector<ID3D11RenderTargetView*> mRenderTargets;
     SRVPtrArray mShaderResourceViews;
-    ID3D11SamplerState* mSampler;
+    std::shared_ptr<Sampler> mSampler;
     std::shared_ptr<Shader> mShader;
     std::shared_ptr<VertexBuffer> mVertexBuffer;
     std::shared_ptr<IndexBuffer> mIndexBuffer;

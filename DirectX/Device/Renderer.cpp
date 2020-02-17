@@ -14,6 +14,7 @@
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
 #include "../System/IndexBuffer.h"
+#include "../System/Sampler.h"
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/RasterizerState.h"
@@ -100,6 +101,10 @@ std::shared_ptr<IndexBuffer> Renderer::createIndexBuffer(const BufferDesc& desc,
 
 std::shared_ptr<Texture2D> Renderer::createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data) const {
     return std::make_shared<Texture2D>(mDevice, desc, data);
+}
+
+std::shared_ptr<Sampler> Renderer::createSamplerState(const SamplerDesc& desc) {
+    return std::make_shared<Sampler>(shared_from_this(), desc);
 }
 
 void Renderer::setViewport(const ViewportDesc& desc) {
@@ -205,8 +210,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
         mGBuffer->getShaderResourceView(i)->setPSShaderResources(i);
     }
     //サンプラーをセット
-    auto s = mGBuffer->getSampler();
-    mDeviceContext->PSSetSamplers(0, 1, &s);
+    mGBuffer->getSampler()->setPSSamplers();
     //デプステスト有効化
     mDepthStencilState->depthTest(true);
     //加算合成
@@ -258,8 +262,7 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
         mGBuffer->getShaderResourceView(i)->setPSShaderResources(i);
     }
     //サンプラーをセット
-    auto s = mGBuffer->getSampler();
-    mDeviceContext->PSSetSamplers(0, 1, &s);
+    mGBuffer->getSampler()->setPSSamplers();
 
     MappedSubResourceDesc msrd;
     if (mGBuffer->shader()->map(&msrd)) {

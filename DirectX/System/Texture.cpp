@@ -5,15 +5,17 @@
 #include "../System/Format.h"
 #include "../System/Game.h"
 #include "../System/IndexBuffer.h"
+#include "../System/Sampler.h"
+#include "../System/SamplerDesc.h"
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Usage.h"
 #include "../System/VertexBuffer.h"
 
 Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) :
-    mDeviceContext(renderer->deviceContext()),
     mShaderResourceView(nullptr),
-    mSampleLinear(nullptr) {
+    mSampler(nullptr),
+    mDesc() {
     if (!vertexBuffer || !indexBuffer) {
         //バーテックスバッファー作成
         createVertexBuffer(renderer);
@@ -26,9 +28,7 @@ Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName
     createSampler(renderer);
 }
 
-Texture::~Texture() {
-    SAFE_RELEASE(mSampleLinear);
-}
+Texture::~Texture() = default;
 
 void Texture::end() {
     SAFE_DELETE(vertexBuffer);
@@ -48,11 +48,11 @@ void Texture::setPSTextures(unsigned start, unsigned numTextures) {
 }
 
 void Texture::setVSSamplers(unsigned start, unsigned numSamplers) {
-    mDeviceContext->VSSetSamplers(start, numSamplers, &mSampleLinear);
+    mSampler->setVSSamplers(start, numSamplers);
 }
 
 void Texture::setPSSamplers(unsigned start, unsigned numSamplers) {
-    mDeviceContext->PSSetSamplers(start, numSamplers, &mSampleLinear);
+    mSampler->setPSSamplers(start, numSamplers);
 }
 
 void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
@@ -90,7 +90,7 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
     indexBuffer = new IndexBuffer(renderer, bd, &sub);
 }
 
-void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) {
+void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::string & fileName, bool isSprite) {
     if (isSprite) {
         setTextureDirectory();
     } else {
@@ -113,16 +113,11 @@ void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::strin
 }
 
 void Texture::createSampler(std::shared_ptr<Renderer> renderer) {
-    D3D11_SAMPLER_DESC sd;
-    ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
-    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    renderer->device()->CreateSamplerState(&sd, &mSampleLinear);
+    SamplerDesc sd;
+    mSampler = renderer->createSamplerState(sd);
 }
 
-D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc& desc) const {
+D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc & desc) const {
     D3DX11_IMAGE_LOAD_INFO info;
     info.Width = desc.width;
     info.Height = desc.height;

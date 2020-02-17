@@ -146,6 +146,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="System\ComparisonFunc.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
@@ -163,6 +164,7 @@
     <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="Device\DrawString.cpp" />
+    <ClCompile Include="System\Sampler.cpp" />
     <ClCompile Include="System\IndexBuffer.cpp" />
     <ClCompile Include="System\ShaderResourceView.cpp" />
     <ClCompile Include="System\Format.cpp" />
@@ -187,7 +189,6 @@
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
-    <ClCompile Include="Actor\SpotLight.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
     <ClCompile Include="System\Buffer.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="System\ComparisonFunc.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\SoundComponent.h" />
@@ -227,11 +229,13 @@
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="Device\DrawString.h" />
+    <ClInclude Include="System\Sampler.h" />
     <ClInclude Include="System\IndexBuffer.h" />
     <ClInclude Include="Light\DirectionalLight.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Mesh\MeshLoader.h" />
+    <ClInclude Include="System\SamplerDesc.h" />
     <ClInclude Include="System\ShaderResourceView.h" />
     <ClInclude Include="System\BlendDesc.h" />
     <ClInclude Include="System\BlendState.h" />
@@ -255,7 +259,6 @@
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Shader\Shader.h" />
-    <ClInclude Include="Actor\SpotLight.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />
     <ClInclude Include="System\Buffer.h" />

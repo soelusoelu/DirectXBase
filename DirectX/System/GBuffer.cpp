@@ -3,6 +3,8 @@
 #include "BufferDesc.h"
 #include "Game.h"
 #include "IndexBuffer.h"
+#include "Sampler.h"
+#include "SamplerDesc.h"
 #include "ShaderResourceView.h"
 #include "ShaderResourceViewDesc.h"
 #include "SubResourceDesc.h"
@@ -24,7 +26,6 @@ GBuffer::~GBuffer() {
     for (auto&& rt : mRenderTargets) {
         SAFE_RELEASE(rt);
     }
-    SAFE_RELEASE(mSampler);
 }
 
 void GBuffer::create(std::shared_ptr<Renderer> renderer) {
@@ -74,13 +75,8 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture3, &srvDesc));
 
     //サンプラー作成
-    D3D11_SAMPLER_DESC sd;
-    ZeroMemory(&sd, sizeof(D3D11_SAMPLER_DESC));
-    sd.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-    sd.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sd.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-    sd.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-    renderer->device()->CreateSamplerState(&sd, &mSampler);
+    SamplerDesc sd;
+    mSampler = renderer->createSamplerState(sd);
 
     //各種生成
     createShader(renderer);
@@ -96,7 +92,7 @@ std::shared_ptr<ShaderResourceView> GBuffer::getShaderResourceView(unsigned inde
     return mShaderResourceViews[index];
 }
 
-ID3D11SamplerState* GBuffer::getSampler() const {
+std::shared_ptr<Sampler> GBuffer::getSampler() const {
     return mSampler;
 }
 

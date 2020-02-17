@@ -15,15 +15,10 @@ class Renderer;
 class Transform3D;
 class Shader;
 
-struct MeshShaderConstantBuffer0 {
+struct MeshShaderConstantBuffer {
     ALIGN16 Matrix4 world; //ワールド行列
     ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
 };
-
-struct MeshShaderConstantBuffer1 {
-    ALIGN16 bool textureFlag; //テクスチャーが貼られているメッシュかどうかのフラグ
-};
-
 
 class Mesh {
 public:

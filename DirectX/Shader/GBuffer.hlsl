@@ -6,10 +6,6 @@ cbuffer global_0 : register(b0)
     matrix g_mW; //ワールド行列
     matrix g_mWVP; //ワールドから射影までの変換行列
 };
-cbuffer global_1 : register(b1)
-{
-    bool g_TextureFlag : packoffset(c0) = false; //テクスチャーが貼られているメッシュかどうかのフラグ
-}
 
 //バーテックスバッファー出力
 struct VS_OUTPUT

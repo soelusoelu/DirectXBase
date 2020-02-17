@@ -20,8 +20,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mState(State::ACTIVE) {
 
     //メッシュ用コンスタントバッファの作成
-    mShader->createConstantBuffer(sizeof(MeshShaderConstantBuffer0), 0);
-    mShader->createConstantBuffer(sizeof(MeshShaderConstantBuffer1), 1);
+    mShader->createConstantBuffer(sizeof(MeshShaderConstantBuffer));
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {
@@ -39,7 +38,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
 
 Mesh::~Mesh() = default;
 
-void Mesh::createSphere(std::shared_ptr<Sphere>* sphere) const {
+void Mesh::createSphere(std::shared_ptr<Sphere> * sphere) const {
     mLoader->createSphere(sphere);
 }
 
@@ -48,15 +47,15 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
     mShader->setVSShader();
     mShader->setPSShader();
     //このコンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers(0);
-    mShader->setPSConstantBuffers(0);
+    mShader->setVSConstantBuffers();
+    mShader->setPSConstantBuffers();
     //頂点インプットレイアウトをセット
     mShader->setInputLayout();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd, 0)) {
-        MeshShaderConstantBuffer0 cb;
+    if (mShader->map(&msrd)) {
+        MeshShaderConstantBuffer cb;
         //ワールド行列を渡す
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
@@ -65,15 +64,11 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         cb.WVP.transpose();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-        mShader->unmap(0);
+        mShader->unmap();
     }
 
     //バーテックスバッファーをセット
     mLoader->setVertexBuffer();
-
-    //このコンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers(1);
-    mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < mLoader->getMaterialSize(); i++) {
@@ -84,20 +79,12 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         //インデックスバッファーをセット
         mLoader->setIndexBuffer(i);
 
-        //マテリアルの各要素をエフェクト(シェーダー)に渡す
-        if (mShader->map(&msrd, 1)) {
-            MeshShaderConstantBuffer1 cb;
-            if (auto t = mLoader->getMaterialData(i)->texture) {
-                t->setPSTextures();
-                t->setPSSamplers();
-                cb.textureFlag = true;
-            } else {
-                cb.textureFlag = false;
-            }
-
-            memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-            mShader->unmap(1);
+        //テクスチャをセット
+        if (auto t = mLoader->getMaterialData(i)->texture) {
+            t->setPSTextures();
+            t->setPSSamplers();
         }
+
         //プリミティブをレンダリング
         renderer->drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
     }
@@ -127,7 +114,7 @@ bool Mesh::isDead() const {
     return mState == State::DEAD;
 }
 
-void Mesh::setMeshManager(MeshManager* manager) {
+void Mesh::setMeshManager(MeshManager * manager) {
     mMeshManager = manager;
 }
 

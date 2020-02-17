@@ -23,6 +23,7 @@ struct TextureShaderConstantBuffer {
 class IndexBuffer;
 class InputElement;
 class Renderer;
+class Sampler;
 class ShaderResourceView;
 class Sprite;
 class VertexBuffer;
@@ -54,8 +55,7 @@ public:
     static IndexBuffer* indexBuffer;
 
 private:
-    ID3D11DeviceContext* mDeviceContext;
     std::shared_ptr<ShaderResourceView> mShaderResourceView;
-    ID3D11SamplerState* mSampleLinear;
+    std::shared_ptr<Sampler> mSampler;
     TextureDesc mDesc;
 };

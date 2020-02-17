@@ -2,6 +2,7 @@
 
 #include "../System/BufferDesc.h"
 #include "../System/DirectXIncLib.h"
+#include "../System/SamplerDesc.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Texture2DDesc.h"
 #include "../System/ViewportDesc.h"
@@ -30,6 +31,7 @@ class MeshLoader;
 struct PointLight;
 class PointLightComponent;
 class RasterizerState;
+class Sampler;
 class Shader;
 class SoundBase;
 class Sound;
@@ -53,6 +55,7 @@ public:
     std::shared_ptr<VertexBuffer> createVertexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<IndexBuffer> createIndexBuffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     std::shared_ptr<Texture2D> createTexture2D(const Texture2DDesc& desc, const SubResourceDesc* data = nullptr) const;
+    std::shared_ptr<Sampler> createSamplerState(const SamplerDesc& desc);
     void setViewport(const ViewportDesc& desc);
     void setPrimitive(PrimitiveType primitive) const;
 

@@ -1,4 +1,5 @@
 ﻿#include "DepthStencilState.h"
+#include "ComparisonFunc.h"
 #include "Game.h"
 #include "../Device/Renderer.h"
 
@@ -48,7 +49,7 @@ D3D11_DEPTH_STENCIL_DESC DepthStencilState::toDepthStencilDesc(const DepthStenci
     return dsd;
 }
 
-D3D11_DEPTH_WRITE_MASK DepthStencilState::toDepthWriteMask(const DepthWriteMask& mask) const {
+D3D11_DEPTH_WRITE_MASK DepthStencilState::toDepthWriteMask(DepthWriteMask mask) const {
     static constexpr D3D11_DEPTH_WRITE_MASK masks[]{
         D3D11_DEPTH_WRITE_MASK_ZERO,
         D3D11_DEPTH_WRITE_MASK_ALL
@@ -56,21 +57,7 @@ D3D11_DEPTH_WRITE_MASK DepthStencilState::toDepthWriteMask(const DepthWriteMask&
     return masks[static_cast<unsigned>(mask)];
 }
 
-D3D11_COMPARISON_FUNC DepthStencilState::toComparisonFunc(const ComparisonFunc& func) const {
-    static constexpr D3D11_COMPARISON_FUNC funcs[]{
-        D3D11_COMPARISON_NEVER,
-        D3D11_COMPARISON_LESS,
-        D3D11_COMPARISON_EQUAL,
-        D3D11_COMPARISON_LESS_EQUAL,
-        D3D11_COMPARISON_GREATER,
-        D3D11_COMPARISON_NOT_EQUAL,
-        D3D11_COMPARISON_GREATER_EQUAL,
-        D3D11_COMPARISON_ALWAYS
-    };
-    return funcs[static_cast<unsigned>(func)];
-}
-
-D3D11_STENCIL_OP DepthStencilState::toStencilOP(const StencilOP& stencilOp) const {
+D3D11_STENCIL_OP DepthStencilState::toStencilOP(StencilOP stencilOp) const {
     static constexpr D3D11_STENCIL_OP stencilOps[]{
         D3D11_STENCIL_OP_KEEP,
         D3D11_STENCIL_OP_ZERO,
