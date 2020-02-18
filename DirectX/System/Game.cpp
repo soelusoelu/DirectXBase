@@ -65,7 +65,8 @@ HRESULT Game::init() {
 }
 
 void Game::mainLoop() {
-    mRenderer->clear();
+    mRenderer->clearRenderTarget();
+    mRenderer->clearDepthStencilView();
 
     Input::update();
 

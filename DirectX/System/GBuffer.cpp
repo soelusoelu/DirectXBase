@@ -35,10 +35,11 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
     ZeroMemory(&RTVDesc, sizeof(RTVDesc));
 
-    //カラーマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
+    //カラー
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
-    desc.format = Format::FORMAT_RGBA8_UNORM;
+    desc.format = Format::FORMAT_RGBA32_FLOAT;
+    //desc.format = Format::FORMAT_RGBA8_UNORM;
     desc.usage = Usage::USAGE_DEFAULT;
     desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
@@ -55,7 +56,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     srvDesc.format = desc.format;
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture, &srvDesc));
 
-    //ノーマルマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
+    //ノーマル
     desc.format = Format::FORMAT_RGBA32_FLOAT;
     auto texture2 = renderer->createTexture2D(desc);
 
@@ -66,7 +67,8 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     srvDesc.format = desc.format;
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture2, &srvDesc));
 
-    //ポジションマップ用テクスチャーとそのレンダーターゲットビュー、シェーダーリソースビューの作成
+    //ポジション
+    desc.format = Format::FORMAT_RGBA32_FLOAT;
     auto texture3 = renderer->createTexture2D(desc);
 
     renderer->device()->CreateRenderTargetView(texture3->texture2D(), &RTVDesc, &renderTarget);

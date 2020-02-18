@@ -11,6 +11,7 @@ public:
     DepthStencilState(std::shared_ptr<Renderer> renderer);
     ~DepthStencilState();
     void depthTest(bool value);
+    void stencilTest(bool value);
     const DepthStencilDesc& desc() const;
 
 private:

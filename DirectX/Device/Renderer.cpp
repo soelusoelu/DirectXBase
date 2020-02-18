@@ -251,7 +251,8 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //レンダーターゲットを通常に戻す
     setRenderTargets(&mRenderTargetView, 1);
     //クリア
-    clear();
+    clearRenderTarget();
+    clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
     mGBuffer->shader()->setVSShader();
@@ -292,11 +293,6 @@ void Renderer::draw(unsigned numVertex, unsigned start) {
 
 void Renderer::drawIndexed(unsigned numIndices, unsigned startIndex, int startVertex) {
     mDeviceContext->DrawIndexed(numIndices, startIndex, startVertex);
-}
-
-void Renderer::clear(float r, float g, float b, float a, bool depth, bool stencil) {
-    clearRenderTarget(r, g, b, a);
-    clearDepthStencilView(depth, stencil);
 }
 
 void Renderer::clearRenderTarget(float r, float g, float b, float a) {

@@ -41,10 +41,10 @@ float4 PS(VS_OUTPUT input) : SV_Target
     //テクスチャーから情報を取り出す
     float3 gbufferDiffuse = g_texColor.Sample(g_samLinear, input.UV).xyz;
     float3 gbufferWorldNormal = g_texNormal.Sample(g_samLinear, input.UV).xyz;
-    //gbufferWorldNormal = gbufferWorldNormal * 2.0 - 1.0; //デコード
+    float3 worldNormal = gbufferWorldNormal * 2.0 - 1.0; //デコード
     float3 gbufferWorldPos = g_texPosition.Sample(g_samLinear, input.UV).xyz;
 
-    float3 N = normalize(gbufferWorldNormal);
+    float3 N = normalize(worldNormal);
     float3 L = normalize(mLightDir);
     float3 V = normalize(mCameraPos - gbufferWorldPos);
     float3 R = normalize(reflect(-L, N));

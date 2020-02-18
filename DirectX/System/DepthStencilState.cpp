@@ -25,6 +25,20 @@ void DepthStencilState::depthTest(bool value) {
     }
 }
 
+void DepthStencilState::stencilTest(bool value) {
+    if (auto r = mRenderer.lock()) {
+        mDesc.stencilEnable = value;
+
+        ID3D11DepthStencilState* depthStencilState;
+
+        r->device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
+
+        r->deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
+
+        SAFE_RELEASE(depthStencilState);
+    }
+}
+
 const DepthStencilDesc& DepthStencilState::desc() const {
     return mDesc;
 }

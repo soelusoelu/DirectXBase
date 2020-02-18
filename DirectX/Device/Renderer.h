@@ -74,7 +74,6 @@ public:
 
     void draw(unsigned numVertex, unsigned start = 0);
     void drawIndexed(unsigned numIndices, unsigned startIndex = 0, int startVertex = 0);
-    void clear(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f, bool depth = true, bool stencil = false);
     void clearRenderTarget(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f);
     void clearDepthStencilView(bool depth = true, bool stencil = false);
     void present();

@@ -18,9 +18,9 @@ struct VS_OUTPUT
 //ピクセルシェーダー出力
 struct PS_OUTPUT
 {
-    float4 vColor : SV_Target0;
-    float4 vNormal : SV_Target1;
-    float4 vPosition : SV_Target2;
+    float4 Color : SV_Target0;
+    float4 Normal : SV_Target1;
+    float4 Position : SV_Target2;
 };
 
 //
@@ -48,17 +48,14 @@ PS_OUTPUT PS(VS_OUTPUT input)
     PS_OUTPUT Out = (PS_OUTPUT) 0;
 
     //カラーテクスチャーへ出力
-    Out.vColor = g_tex.Sample(g_samLinear, input.UV);
+    Out.Color = g_tex.Sample(g_samLinear, input.UV);
 
     //ワールド法線テクスチャーへ出力
-    float4 vNormal = input.WorldNormal;
-    vNormal = vNormal * 0.5 + 0.5;
-    Out.vNormal = vNormal;
-    Out.vNormal.a = 1;
+    float3 normal = input.WorldNormal.xyz;
+    Out.Normal = float4(normal * 0.5 + 0.5, 1.0);
 
     //ワールド座標テクスチャーへ出力
-    Out.vPosition = input.WorldPos;
-    Out.vPosition.a = 1;
+    Out.Position = float4(input.WorldPos.xyz, 1.0);
 
     return Out;
 }
