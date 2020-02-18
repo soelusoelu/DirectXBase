@@ -10,6 +10,7 @@ class Renderer;
 class Texture2D {
 public:
     Texture2D(ID3D11Device* device, const Texture2DDesc& desc, const SubResourceDesc* data);
+    Texture2D(ID3D11Texture2D* texture2D);
     ~Texture2D();
     ID3D11Texture2D* texture2D() const;
     const Texture2DDesc& desc() const;

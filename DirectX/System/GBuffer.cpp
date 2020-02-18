@@ -3,6 +3,8 @@
 #include "BufferDesc.h"
 #include "Game.h"
 #include "IndexBuffer.h"
+#include "RenderTargetView.h"
+#include "RenderTargetViewDesc.h"
 #include "Sampler.h"
 #include "SamplerDesc.h"
 #include "ShaderResourceView.h"
@@ -22,18 +24,13 @@ GBuffer::GBuffer() :
     mIndexBuffer(nullptr) {
 }
 
-GBuffer::~GBuffer() {
-    for (auto&& rt : mRenderTargets) {
-        SAFE_RELEASE(rt);
-    }
-}
+GBuffer::~GBuffer() = default;
 
 void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     //Deferred 関連 なおそれぞれ深度ステンシルを作るわけではない。サイズが同じなので通常のものを使い回せる。
     Texture2DDesc desc;
     ShaderResourceViewDesc srvDesc;
-    D3D11_RENDER_TARGET_VIEW_DESC RTVDesc;
-    ZeroMemory(&RTVDesc, sizeof(RTVDesc));
+    RenderTargetViewDesc rtvDesc;
 
     //カラー
     desc.width = Game::WINDOW_WIDTH;
@@ -46,12 +43,8 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);
     auto texture = renderer->createTexture2D(desc);
 
-    RTVDesc.Format = toFormat(desc.format);
-    RTVDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
-    RTVDesc.Texture2D.MipSlice = 0;
-    ID3D11RenderTargetView* renderTarget;
-    renderer->device()->CreateRenderTargetView(texture->texture2D(), &RTVDesc, &renderTarget);
-    mRenderTargets.emplace_back(renderTarget);
+    rtvDesc.format = desc.format;
+    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture, &rtvDesc));
 
     srvDesc.format = desc.format;
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture, &srvDesc));
@@ -60,9 +53,8 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     desc.format = Format::FORMAT_RGBA32_FLOAT;
     auto texture2 = renderer->createTexture2D(desc);
 
-    RTVDesc.Format = toFormat(desc.format);
-    renderer->device()->CreateRenderTargetView(texture2->texture2D(), &RTVDesc, &renderTarget);
-    mRenderTargets.emplace_back(renderTarget);
+    rtvDesc.format = desc.format;
+    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture2, &rtvDesc));
 
     srvDesc.format = desc.format;
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture2, &srvDesc));
@@ -71,8 +63,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     desc.format = Format::FORMAT_RGBA32_FLOAT;
     auto texture3 = renderer->createTexture2D(desc);
 
-    renderer->device()->CreateRenderTargetView(texture3->texture2D(), &RTVDesc, &renderTarget);
-    mRenderTargets.emplace_back(renderTarget);
+    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture2, &rtvDesc));
 
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture3, &srvDesc));
 
@@ -86,7 +77,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     createIndexBuffer(renderer);
 }
 
-ID3D11RenderTargetView* GBuffer::getRenderTarget(unsigned index) const {
+std::shared_ptr<RenderTargetView> GBuffer::getRenderTarget(unsigned index) const {
     return mRenderTargets[index];
 }
 

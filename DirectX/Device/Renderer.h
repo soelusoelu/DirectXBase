@@ -11,6 +11,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 enum class PrimitiveType {
     PRIMITIVE_TYPE_POINT_LIST,
@@ -31,6 +32,7 @@ class MeshLoader;
 struct PointLight;
 class PointLightComponent;
 class RasterizerState;
+class RenderTargetView;
 class Sampler;
 class Shader;
 class SoundBase;
@@ -74,7 +76,7 @@ public:
 
     void draw(unsigned numVertex, unsigned start = 0);
     void drawIndexed(unsigned numIndices, unsigned startIndex = 0, int startVertex = 0);
-    void clearRenderTarget(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f);
+    void clearRenderTarget(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f) const;
     void clearDepthStencilView(bool depth = true, bool stencil = false);
     void present();
 
@@ -82,17 +84,18 @@ private:
     void createDeviceAndSwapChain(const HWND& hWnd);
     void createRenderTargetView();
     void createDepthStencilView();
-    void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets);
+    void setGBufferRenderTargets() const;
+    void setRenderTarget() const;
     D3D11_PRIMITIVE_TOPOLOGY toPrimitiveMode(PrimitiveType primitive) const;
 
 private:
     ID3D11Device* mDevice;
     ID3D11DeviceContext* mDeviceContext;
     IDXGISwapChain* mSwapChain;
-    ID3D11RenderTargetView* mRenderTargetView;
     ID3D11DepthStencilView* mDepthStencilView;
 
     std::unique_ptr<SoundBase> mSoundBase;
+    std::unique_ptr<RenderTargetView> mRenderTargetView;
     std::shared_ptr<BlendState> mBlendState;
     std::shared_ptr<DepthStencilState> mDepthStencilState;
     std::shared_ptr<RasterizerState> mRasterizerState;

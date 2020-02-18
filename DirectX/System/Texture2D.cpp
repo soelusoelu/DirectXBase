@@ -14,6 +14,11 @@ Texture2D::Texture2D(ID3D11Device* device, const Texture2DDesc& desc, const SubR
     }
 }
 
+Texture2D::Texture2D(ID3D11Texture2D* texture2D) :
+    mTexture2D(texture2D),
+    mDesc() {
+}
+
 Texture2D::~Texture2D() {
     SAFE_RELEASE(mTexture2D);
 }

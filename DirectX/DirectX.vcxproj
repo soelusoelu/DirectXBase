@@ -146,6 +146,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="System\RenderTargetView.cpp" />
     <ClCompile Include="System\ComparisonFunc.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="System\RenderTargetView.h" />
     <ClInclude Include="System\ComparisonFunc.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Device\Sound.h" />
@@ -229,6 +231,7 @@
     <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="Device\DrawString.h" />
+    <ClInclude Include="System\RenderTargetViewDesc.h" />
     <ClInclude Include="System\Sampler.h" />
     <ClInclude Include="System\IndexBuffer.h" />
     <ClInclude Include="Light\DirectionalLight.h" />

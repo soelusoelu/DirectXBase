@@ -14,6 +14,8 @@
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
 #include "../System/IndexBuffer.h"
+#include "../System/RenderTargetView.h"
+#include "../System/RenderTargetViewDesc.h"
 #include "../System/Sampler.h"
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
@@ -26,9 +28,9 @@ Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
     mDeviceContext(nullptr),
     mSwapChain(nullptr),
-    mRenderTargetView(nullptr),
     mDepthStencilView(nullptr),
     mSoundBase(std::make_unique<SoundBase>()),
+    mRenderTargetView(nullptr),
     mBlendState(nullptr),
     mDepthStencilState(nullptr),
     mRasterizerState(nullptr),
@@ -49,7 +51,6 @@ Renderer::~Renderer() {
     mMeshLoaders.clear();
 
     SAFE_RELEASE(mDepthStencilView);
-    SAFE_RELEASE(mRenderTargetView);
     SAFE_RELEASE(mSwapChain);
     SAFE_RELEASE(mDeviceContext);
     SAFE_RELEASE(mDevice);
@@ -64,7 +65,7 @@ void Renderer::initialize() {
 
     createDepthStencilView();
     createRenderTargetView();
-    setRenderTargets(&mRenderTargetView, 1);
+    setRenderTarget();
 }
 
 ID3D11Device* Renderer::device() const {
@@ -226,16 +227,12 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
 
 void Renderer::renderToTexture() {
     //各テクスチャをレンダーターゲットに設定
-    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
-    ID3D11RenderTargetView* views[numGBuffer];
-    for (size_t i = 0; i < numGBuffer; i++) {
-        views[i] = mGBuffer->getRenderTarget(i);
-    }
-    setRenderTargets(views, numGBuffer);
+    setGBufferRenderTargets();
     //クリア
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     static constexpr float clearColor[4] = { 0.f, 0.f, 1.f, 1.f }; //クリア色作成 RGBAの順
     for (size_t i = 0; i < numGBuffer; i++) {
-        mDeviceContext->ClearRenderTargetView(views[i], clearColor); //画面クリア
+        mDeviceContext->ClearRenderTargetView(mGBuffer->getRenderTarget(i)->getRenderTaget(), clearColor); //画面クリア
     }
     clearDepthStencilView();
     //デプステスト有効化
@@ -249,9 +246,9 @@ void Renderer::renderToTexture() {
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //レンダーターゲットを通常に戻す
-    setRenderTargets(&mRenderTargetView, 1);
+    setRenderTarget();
     //クリア
-    clearRenderTarget();
+    mRenderTargetView->clearRenderTarget();
     clearDepthStencilView();
 
     //使用するシェーダーは、テクスチャーを参照するシェーダー
@@ -295,9 +292,8 @@ void Renderer::drawIndexed(unsigned numIndices, unsigned startIndex, int startVe
     mDeviceContext->DrawIndexed(numIndices, startIndex, startVertex);
 }
 
-void Renderer::clearRenderTarget(float r, float g, float b, float a) {
-    const float clearColor[4] = { r, g, b, a }; //クリア色作成 RGBAの順
-    mDeviceContext->ClearRenderTargetView(mRenderTargetView, clearColor); //画面クリア
+void Renderer::clearRenderTarget(float r, float g, float b, float a) const {
+    mRenderTargetView->clearRenderTarget(r, g, b, a);
 }
 
 void Renderer::clearDepthStencilView(bool depth, bool stencil) {
@@ -338,11 +334,10 @@ void Renderer::createDeviceAndSwapChain(const HWND& hWnd) {
 }
 
 void Renderer::createRenderTargetView() {
-    //レンダーターゲットビューの作成
     ID3D11Texture2D* backBuffer;
     mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
-    mDevice->CreateRenderTargetView(backBuffer, NULL, &mRenderTargetView);
-    SAFE_RELEASE(backBuffer);
+    auto tex = std::make_shared<Texture2D>(backBuffer);
+    mRenderTargetView = std::make_unique<RenderTargetView>(shared_from_this(), tex);
 }
 
 void Renderer::createDepthStencilView() {
@@ -356,8 +351,19 @@ void Renderer::createDepthStencilView() {
     mDevice->CreateDepthStencilView(tex->texture2D(), nullptr, &mDepthStencilView);
 }
 
-void Renderer::setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) {
-    mDeviceContext->OMSetRenderTargets(numTargets, targets, mDepthStencilView);
+void Renderer::setGBufferRenderTargets() const {
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    ID3D11RenderTargetView* views[numGBuffer];
+    for (size_t i = 0; i < numGBuffer; i++) {
+        views[i] = mGBuffer->getRenderTarget(i)->getRenderTaget();
+    }
+
+    mDeviceContext->OMSetRenderTargets(numGBuffer, views, mDepthStencilView);
+}
+
+void Renderer::setRenderTarget() const {
+    auto rt = mRenderTargetView->getRenderTaget();
+    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView);
 }
 
 D3D11_PRIMITIVE_TOPOLOGY Renderer::toPrimitiveMode(PrimitiveType primitive) const {

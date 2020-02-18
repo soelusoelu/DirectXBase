@@ -8,6 +8,7 @@
 
 class IndexBuffer;
 class Renderer;
+class RenderTargetView;
 class Sampler;
 class Shader;
 class ShaderResourceView;
@@ -22,6 +23,8 @@ struct GBufferShaderConstantBuffer {
 class GBuffer {
     using SRVPtr = std::shared_ptr<ShaderResourceView>;
     using SRVPtrArray = std::vector<SRVPtr>;
+    using RTVPtr = std::shared_ptr<RenderTargetView>;
+    using RTVPtrArray = std::vector<RTVPtr>;
 public:
     enum class Type {
         DIFFUSE,
@@ -36,7 +39,7 @@ public:
     //Gバッファの生成
     void create(std::shared_ptr<Renderer> renderer);
 
-    ID3D11RenderTargetView* getRenderTarget(unsigned index) const;
+    RTVPtr getRenderTarget(unsigned index) const;
     SRVPtr getShaderResourceView(unsigned index) const;
     std::shared_ptr<Sampler> getSampler() const;
     std::shared_ptr<Shader> shader() const;
@@ -50,7 +53,7 @@ private:
 
 private:
     //Gバッファに割り当てられたテクスチャ
-    std::vector<ID3D11RenderTargetView*> mRenderTargets;
+    RTVPtrArray mRenderTargets;
     SRVPtrArray mShaderResourceViews;
     std::shared_ptr<Sampler> mSampler;
     std::shared_ptr<Shader> mShader;

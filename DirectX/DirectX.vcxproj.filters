@@ -72,6 +72,7 @@
     <ClCompile Include="Device\DrawString.cpp" />
     <ClCompile Include="System\Sampler.cpp" />
     <ClCompile Include="System\ComparisonFunc.cpp" />
+    <ClCompile Include="System\RenderTargetView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -147,5 +148,7 @@
     <ClInclude Include="System\SamplerDesc.h" />
     <ClInclude Include="System\Sampler.h" />
     <ClInclude Include="System\ComparisonFunc.h" />
+    <ClInclude Include="System\RenderTargetViewDesc.h" />
+    <ClInclude Include="System\RenderTargetView.h" />
   </ItemGroup>
 </Project>
