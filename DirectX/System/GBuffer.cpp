@@ -63,7 +63,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     desc.format = Format::FORMAT_RGBA32_FLOAT;
     auto texture3 = renderer->createTexture2D(desc);
 
-    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture2, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture3, &rtvDesc));
 
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture3, &srvDesc));
 
