@@ -35,8 +35,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     //カラー
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
-    desc.format = Format::FORMAT_RGBA32_FLOAT;
-    //desc.format = Format::FORMAT_RGBA8_UNORM;
+    desc.format = Format::FORMAT_RGBA16_FLOAT;
     desc.usage = Usage::USAGE_DEFAULT;
     desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
@@ -50,7 +49,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture, &srvDesc));
 
     //ノーマル
-    desc.format = Format::FORMAT_RGBA32_FLOAT;
+    desc.format = Format::FORMAT_R10G10B10A2_UNORM;
     auto texture2 = renderer->createTexture2D(desc);
 
     rtvDesc.format = desc.format;
@@ -60,7 +59,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture2, &srvDesc));
 
     //ポジション
-    desc.format = Format::FORMAT_RGBA32_FLOAT;
+    desc.format = Format::FORMAT_RGBA16_FLOAT;
     auto texture3 = renderer->createTexture2D(desc);
 
     rtvDesc.format = desc.format;
@@ -70,7 +69,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture3, &srvDesc));
 
     //スペキュラ
-    desc.format = Format::FORMAT_RGBA32_FLOAT;
+    desc.format = Format::FORMAT_RGBA16_FLOAT;
     auto texture4 = renderer->createTexture2D(desc);
 
     rtvDesc.format = desc.format;

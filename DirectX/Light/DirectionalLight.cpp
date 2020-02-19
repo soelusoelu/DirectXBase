@@ -13,7 +13,7 @@ DirectionalLight::DirectionalLight(std::shared_ptr<Renderer> renderer) :
     mMesh->setTransform(mTransform);
     //位置やスケールは計算には関係ない
     mTransform->setPosition(Vector3(0.f, 5.f, 0.f));
-    mTransform->setScale(0.5f);
+    mTransform->setScale(0.25f);
     mTransform->computeWorldTransform();
 #endif // _DEBUG
 }

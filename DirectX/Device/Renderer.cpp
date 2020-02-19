@@ -36,7 +36,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mRasterizerState(nullptr),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
-    mAmbientLight(Vector3(0.2f, 0.2f, 0.2f)) {
+    mAmbientLight(Vector3(0.1f, 0.1f, 0.1f)) {
     createDeviceAndSwapChain(hWnd);
     ViewportDesc desc;
     desc.width = Game::WINDOW_WIDTH;
@@ -345,7 +345,7 @@ void Renderer::createDepthStencilView() {
     Texture2DDesc desc;
     desc.width = Game::WINDOW_WIDTH;
     desc.height = Game::WINDOW_HEIGHT;
-    desc.format = Format::FORMAT_D32_FLOAT;
+    desc.format = Format::FORMAT_D24_UNORM_S8_UINT;
     desc.bindFlags = static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_DEPTH_STENCIL);
 
     auto tex = createTexture2D(desc);
