@@ -36,7 +36,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mRasterizerState(nullptr),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
-    mAmbientLight(Vector3(0.f, 0.f, 0.f)) {
+    mAmbientLight(Vector3(0.2f, 0.2f, 0.2f)) {
     createDeviceAndSwapChain(hWnd);
     ViewportDesc desc;
     desc.width = Game::WINDOW_WIDTH;
