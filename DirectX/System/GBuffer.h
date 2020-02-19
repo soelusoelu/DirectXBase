@@ -30,6 +30,7 @@ public:
         DIFFUSE,
         NORMAL,
         WORLD_POS,
+        SPECULAR,
         NUM_GBUFFER_TEXTURES
     };
 

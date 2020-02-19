@@ -7,6 +7,11 @@ cbuffer global_0 : register(b0)
     matrix mWVP; //ワールドから射影までの変換行列
 };
 
+cbuffer global_1 : register(b1)
+{
+    float4 mSpecular;
+}
+
 //バーテックスバッファー出力
 struct VS_OUTPUT
 {
@@ -21,6 +26,7 @@ struct PS_OUTPUT
     float4 Color : SV_Target0;
     float4 Normal : SV_Target1;
     float4 Position : SV_Target2;
+    float4 Specular : SV_Target3;
 };
 
 //
@@ -56,6 +62,9 @@ PS_OUTPUT PS(VS_OUTPUT input)
 
     //ワールド座標テクスチャーへ出力
     Out.Position = float4(input.WorldPos.xyz, 1.0);
+
+    //スペキュラテクスチャへ出力
+    Out.Specular = float4(mSpecular.xyz, 1.0);
 
     return Out;
 }

@@ -1,6 +1,7 @@
 Texture2D g_texColor : register(t0);
 Texture2D g_texNormal : register(t1);
 Texture2D g_texPosition : register(t2);
+Texture2D g_texSpecular : register(t3);
 
 SamplerState g_samLinear : register(s0);
 
@@ -43,6 +44,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float3 gbufferWorldNormal = g_texNormal.Sample(g_samLinear, input.UV).xyz;
     float3 worldNormal = gbufferWorldNormal * 2.0 - 1.0; //デコード
     float3 gbufferWorldPos = g_texPosition.Sample(g_samLinear, input.UV).xyz;
+    float3 gbufferSpecular = g_texSpecular.Sample(g_samLinear, input.UV).xyz;
 
     //取り出した情報をもとにフォンシェーディングを計算
     float3 N = normalize(worldNormal);
@@ -55,7 +57,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     if (NdotL > 0)
     {
         float3 Diffuse = NdotL;
-        float3 Specular = pow(max(0.0, dot(R, V)), 1.0);
+        float3 Specular = pow(max(0.0, dot(R, V)), 4.0) * gbufferSpecular;
         Phong += Diffuse + Specular;
     }
 

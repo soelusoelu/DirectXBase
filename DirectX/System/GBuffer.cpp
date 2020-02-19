@@ -63,9 +63,21 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     desc.format = Format::FORMAT_RGBA32_FLOAT;
     auto texture3 = renderer->createTexture2D(desc);
 
+    rtvDesc.format = desc.format;
     mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture3, &rtvDesc));
 
+    srvDesc.format = desc.format;
     mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture3, &srvDesc));
+
+    //スペキュラ
+    desc.format = Format::FORMAT_RGBA32_FLOAT;
+    auto texture4 = renderer->createTexture2D(desc);
+
+    rtvDesc.format = desc.format;
+    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture4, &rtvDesc));
+
+    srvDesc.format = desc.format;
+    mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture4, &srvDesc));
 
     //サンプラー作成
     SamplerDesc sd;

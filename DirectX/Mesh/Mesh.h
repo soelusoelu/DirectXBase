@@ -15,9 +15,13 @@ class Renderer;
 class Transform3D;
 class Shader;
 
-struct MeshShaderConstantBuffer {
+struct MeshConstantBuffer {
     ALIGN16 Matrix4 world; //ワールド行列
     ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
+};
+
+struct MaterialConstantBuffer {
+    ALIGN16 Vector4 specular;
 };
 
 class Mesh {

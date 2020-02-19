@@ -20,7 +20,8 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mState(State::ACTIVE) {
 
     //メッシュ用コンスタントバッファの作成
-    mShader->createConstantBuffer(sizeof(MeshShaderConstantBuffer));
+    mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);
+    mShader->createConstantBuffer(sizeof(MaterialConstantBuffer), 1);
 
     //インプットレイアウトの生成
     constexpr InputElementDesc layout[] = {
@@ -47,15 +48,15 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
     mShader->setVSShader();
     mShader->setPSShader();
     //このコンスタントバッファーを使うシェーダーの登録
-    mShader->setVSConstantBuffers();
-    mShader->setPSConstantBuffers();
+    mShader->setVSConstantBuffers(0);
+    mShader->setPSConstantBuffers(0);
     //頂点インプットレイアウトをセット
     mShader->setInputLayout();
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     MappedSubResourceDesc msrd;
-    if (mShader->map(&msrd)) {
-        MeshShaderConstantBuffer cb;
+    if (mShader->map(&msrd, 0)) {
+        MeshConstantBuffer cb;
         //ワールド行列を渡す
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
@@ -64,11 +65,14 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         cb.WVP.transpose();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
-        mShader->unmap();
+        mShader->unmap(0);
     }
 
     //バーテックスバッファーをセット
     mLoader->setVertexBuffer();
+
+    //このコンスタントバッファーを使うシェーダーの登録
+    mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     for (size_t i = 0; i < mLoader->getMaterialSize(); i++) {
@@ -83,6 +87,14 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         if (auto t = mLoader->getMaterialData(i)->texture) {
             t->setPSTextures();
             t->setPSSamplers();
+        }
+
+        if (mShader->map(&msrd, 1)) {
+            MaterialConstantBuffer cb;
+            cb.specular = mLoader->getMaterialData(i)->Ks;
+
+            memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
+            mShader->unmap(1);
         }
 
         //プリミティブをレンダリング

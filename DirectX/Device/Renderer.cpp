@@ -230,9 +230,8 @@ void Renderer::renderToTexture() {
     setGBufferRenderTargets();
     //クリア
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
-    static constexpr float clearColor[4] = { 0.f, 0.f, 1.f, 1.f }; //クリア色作成 RGBAの順
     for (size_t i = 0; i < numGBuffer; i++) {
-        mDeviceContext->ClearRenderTargetView(mGBuffer->getRenderTarget(i)->getRenderTaget(), clearColor); //画面クリア
+        mGBuffer->getRenderTarget(i)->clearRenderTarget();
     }
     clearDepthStencilView();
     //デプステスト有効化
@@ -255,7 +254,6 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     mGBuffer->shader()->setVSShader();
     mGBuffer->shader()->setPSShader();
     //コンスタントバッファの登録
-    mGBuffer->shader()->setVSConstantBuffers();
     mGBuffer->shader()->setPSConstantBuffers();
     //1パス目で作成したテクスチャー3枚をセット
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
