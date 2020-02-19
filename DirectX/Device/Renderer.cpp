@@ -254,6 +254,9 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     //使用するシェーダーは、テクスチャーを参照するシェーダー
     mGBuffer->shader()->setVSShader();
     mGBuffer->shader()->setPSShader();
+    //コンスタントバッファの登録
+    mGBuffer->shader()->setVSConstantBuffers();
+    mGBuffer->shader()->setPSConstantBuffers();
     //1パス目で作成したテクスチャー3枚をセット
     static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
     for (size_t i = 0; i < numGBuffer; i++) {
