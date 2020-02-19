@@ -51,13 +51,6 @@ void GamePlay::update() {
         mPhysics->sweepAndPrune();
         //ライト関連
         mDLight->update();
-
-        static float time = 0;
-        time += Time::deltaTime;
-        DrawString::drawNumber(time, Vector2::zero, 2);
-        DrawString::drawNumberRightJustified(static_cast<int>(time), Vector2(Game::WINDOW_WIDTH, 0.f));
-        DrawString::drawString("abcd", Vector2(0.f, 64.f));
-        DrawString::drawStringRightJustified("efgh", Vector2(Game::WINDOW_WIDTH, 64.f));
     } else if (mState == State::PAUSED) {
 
     }

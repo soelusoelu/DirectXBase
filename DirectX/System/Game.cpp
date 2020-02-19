@@ -95,6 +95,9 @@ void Game::fixFPS60() {
     }
     Time::deltaTime = deltaTime;
     previousTime = currentTime;
+
+    DrawString::drawString("fps", Vector2::zero);
+    DrawString::drawNumber(static_cast<float>(1000.f / time), Vector2(32.f * 4, 0.f), 2);
 }
 
 

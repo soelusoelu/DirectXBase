@@ -3,8 +3,8 @@ SamplerState g_samLinear : register(s0);
 
 cbuffer global_0 : register(b0)
 {
-    matrix g_mW; //ワールド行列
-    matrix g_mWVP; //ワールドから射影までの変換行列
+    matrix mWorld; //ワールド行列
+    matrix mWVP; //ワールドから射影までの変換行列
 };
 
 //バーテックスバッファー出力
@@ -30,10 +30,10 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
 
-    output.Pos = mul(Pos, g_mWVP);
-    output.WorldPos = mul(Pos, g_mW);
-    //Norm.w = 0;
-    output.WorldNormal = mul(Norm, g_mW);
+    output.Pos = mul(Pos, mWVP);
+    output.WorldPos = mul(Pos, mWorld);
+    Norm.w = 0;
+    output.WorldNormal = mul(Norm, mWorld);
 
     output.UV = UV;
 

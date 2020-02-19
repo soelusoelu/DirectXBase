@@ -65,8 +65,8 @@ float4 PS(VS_OUTPUT input) : SV_Target
     //取り出した情報をもとにフォンシェーディングを計算
     //float3 L = normalize(normalize(mLightDir) - gbufferWorldPos);
     //float3 E = normalize(mCameraPos);
-    //float3 DiffuseIntensity = dot(L, gbufferWorldNormal);
-    //float3 SpecularIntensity = pow(max(0, dot(E, reflect(-L, gbufferWorldNormal))), 4);
+    //float3 DiffuseIntensity = dot(L, worldNormal);
+    //float3 SpecularIntensity = pow(max(0, dot(E, reflect(-L, worldNormal))), 4);
 
     //float4 FinalColor = float4(1, 1, 1, 1);
     //FinalColor.rgb = DiffuseIntensity * gbufferDiffuse + SpecularIntensity * 1.0;
