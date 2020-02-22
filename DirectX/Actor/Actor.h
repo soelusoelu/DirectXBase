@@ -1,12 +1,13 @@
 ﻿#pragma once
 
+#include "Transform3D.h"
 #include "../Utility/Math.h"
 #include <memory>
+#include <rapidjson/document.h>
 
 class ActorManager;
 class ComponentManager;
 class Renderer;
-class Transform3D;
 class Time;
 
 class Actor {
@@ -38,6 +39,19 @@ public:
     std::shared_ptr<Transform3D> transform() const;
     bool isDead() const;
     const char* tag() const;
+
+    //ロード/セーブ
+    virtual void loadProperties(const rapidjson::Value& inObj) {};
+    //virtual void SaveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+
+    //指定されたプロパティでアクターを生成
+    template <typename T>
+    static Actor* create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
+        T* t = new T(renderer);
+        t->mTransform->loadProperties(inObj);
+        t->loadProperties(inObj);
+        return t;
+    }
 
     //ActorManagerの登録
     static void setActorManager(ActorManager* manager);

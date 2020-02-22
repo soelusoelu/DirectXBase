@@ -13,6 +13,7 @@
 #include "../Scene/Title.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
+#include "../Utility/LevelLoader.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -32,8 +33,9 @@ GamePlay::~GamePlay() {
 }
 
 void GamePlay::start() {
-    new PlayerActor(mRenderer);
-    new Field(mRenderer);
+    //ファイルからアクターを読み込む
+    LevelLoader::loadActors(mRenderer, "Actors.json");
+
     mDLight = std::make_shared<DirectionalLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());
 

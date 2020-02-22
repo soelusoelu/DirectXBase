@@ -1,8 +1,9 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../Utility/Math.h"
-#include <memory>
 #include <list>
+#include <memory>
+#include <rapidjson/document.h>
 
 class Actor;
 
@@ -11,41 +12,42 @@ public:
     Transform3D(Actor* owner = nullptr);
     ~Transform3D();
 
-    //ƒAƒ^ƒbƒ`Œ³‚ÌƒAƒNƒ^[‚ğ•Ô‚·
+    //ã‚¢ã‚¿ãƒƒãƒå…ƒã®ã‚¢ã‚¯ã‚¿ãƒ¼ã‚’è¿”ã™
     Actor* getOwner() const;
 
-    //ƒ[ƒ‹ƒhs—ñXV
+    //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—æ›´æ–°
     bool computeWorldTransform();
     const Matrix4& getWorldTransform() const;
 
-    //ƒsƒNƒZƒ‹’PˆÊ‚ÅˆÊ’uw’è
+    //ãƒ”ã‚¯ã‚»ãƒ«å˜ä½ã§ä½ç½®æŒ‡å®š
     void setPosition(const Vector3& pos);
     Vector3 getPosition() const;
     const Vector3& getLocalPosition() const;
     void translate(const Vector3& translation);
 
-    //‰ñ“]
+    //å›è»¢
     void setRotation(const Quaternion& rot);
     void setRotation(const Vector3& axis, float angle);
     Quaternion getRotation() const;
     const Quaternion& getLocalRotation() const;
     void rotate(const Vector3& axis, float angle);
+    void rotate(const Vector3& eulers);
 
-    //‰ñ“]k¬ƒsƒ{ƒbƒgˆÊ’u
+    //å›è»¢ç¸®å°ãƒ”ãƒœãƒƒãƒˆä½ç½®
     void setPivot(const Vector3& pivot);
     const Vector3& getPivot() const;
 
-    //”{—¦‚ÅŠgk
+    //å€ç‡ã§æ‹¡ç¸®
     void setScale(const Vector3& scale);
     void setScale(float scale);
     Vector3 getScale() const;
     const Vector3& getLocalScale() const;
 
-    //Œü‚«
+    //å‘ã
     Vector3 forward() const;
     Vector3 right() const;
 
-    //eqŠÖŒW
+    //è¦ªå­é–¢ä¿‚
     void addChild(std::shared_ptr<Transform3D> child);
     void removeChild(std::shared_ptr<Transform3D> child);
     void removeChild(const char* tag);
@@ -53,6 +55,10 @@ public:
     std::shared_ptr<Transform3D> parent() const;
     std::shared_ptr<Transform3D> root() const;
     size_t getChildCount() const;
+
+    //ãƒ­ãƒ¼ãƒ‰/ã‚»ãƒ¼ãƒ–
+    void loadProperties(const rapidjson::Value& inObj);
+    //virtual void SaveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
 
 private:
     void setParent(std::shared_ptr<Transform3D> parent);

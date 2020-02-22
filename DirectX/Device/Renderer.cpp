@@ -65,7 +65,7 @@ void Renderer::initialize() {
     setRenderTarget();
 
     //ディレクショナルライトと環境光の読み込み
-    LevelLoader::loadLevel(shared_from_this(), "globalLight.json");
+    LevelLoader::loadGlobal(shared_from_this(), "GlobalLight.json");
 }
 
 ID3D11Device* Renderer::device() const {

@@ -3,6 +3,7 @@
 #include "Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Device/Time.h"
+#include "../Utility/LevelLoader.h"
 
 Actor::Actor(std::shared_ptr<Renderer> renderer, const char* tag) :
     mRenderer(renderer),

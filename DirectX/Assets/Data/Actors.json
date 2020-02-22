@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "actors": [
+    {
+      "type": "PlayerActor",
+      "properties": {
+        "position": [ 0.0, 0.0, 0.0 ]
+      }
+    },
+    {
+      "type": "Field",
+      "properties": {
+        "position": [ 0.0, 0.0, 0.0 ]
+      }
+    }
+  ]
+}

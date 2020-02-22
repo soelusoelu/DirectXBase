@@ -1,5 +1,6 @@
-#include "Transform3D.h"
+ï»¿#include "Transform3D.h"
 #include "Actor.h"
+#include "../Utility/LevelLoader.h"
 
 Transform3D::Transform3D(Actor* owner) :
     mOwner(owner),
@@ -23,7 +24,7 @@ Actor* Transform3D::getOwner() const {
 
 bool Transform3D::computeWorldTransform() {
     if (mIsRecomputeTransform) {
-        mWorldTransform = Matrix4::createTranslation(-mPivot); //’†S + ƒsƒ{ƒbƒg‚ğŒ´“_‚É
+        mWorldTransform = Matrix4::createTranslation(-mPivot); //ä¸­å¿ƒ + ãƒ”ãƒœãƒƒãƒˆã‚’åŸç‚¹ã«
         mWorldTransform *= Matrix4::createScale(getScale());
         mWorldTransform *= Matrix4::createFromQuaternion(getRotation());
         mWorldTransform *= Matrix4::createTranslation(getPosition());
@@ -107,6 +108,12 @@ void Transform3D::rotate(const Vector3& axis, float angle) {
     mRotation = Quaternion::concatenate(mRotation, inc);
 
     shouldRecomputeTransform();
+}
+
+void Transform3D::rotate(const Vector3& eulers) {
+    rotate(Vector3::right, eulers.x);
+    rotate(Vector3::up, eulers.y);
+    rotate(Vector3::forward, eulers.z);
 }
 
 void Transform3D::setPivot(const Vector3& pivot) {
@@ -201,6 +208,16 @@ std::shared_ptr<Transform3D> Transform3D::root() const {
 
 size_t Transform3D::getChildCount() const {
     return mChildren.size();
+}
+
+void Transform3D::loadProperties(const rapidjson::Value& inObj) {
+    //ä½ç½®ã€å›è»¢ã€ã‚¹ã‚±ãƒ¼ãƒ«ã‚’èª­ã¿è¾¼ã‚€
+    JsonHelper::getVector3(inObj, "position", &mPosition);
+    Vector3 rot;
+    JsonHelper::getVector3(inObj, "rotation", &rot);
+    rotate(rot);
+    JsonHelper::getVector3(inObj, "scale", &mScale);
+    computeWorldTransform();
 }
 
 void Transform3D::setParent(std::shared_ptr<Transform3D> parent) {

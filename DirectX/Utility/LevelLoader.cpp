@@ -1,34 +1,45 @@
 ﻿#include "LevelLoader.h"
+#include "../Actor/Field.h"
+#include "../Actor/PlayerActor.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
 #include <fstream>
 #include <vector>
 
-bool LevelLoader::loadLevel(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
+bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         MSG(L"レベルファイルのロードに失敗しました");
         return false;
     }
 
-    int version = 0;
-    if (!JsonHelper::getInt(doc, "version", &version) || version != LEVEL_VERSION) {
-        MSG(L"レベルファイルのバージョンが違います");
-        return false;
-    }
+    //int version = 0;
+    //if (!JsonHelper::getInt(doc, "version", &version) || version != LEVEL_VERSION) {
+    //    MSG(L"レベルファイルのバージョンが違います");
+    //    return false;
+    //}
 
-    // Handle any global properties
     const rapidjson::Value& globals = doc["globalProperties"];
     if (globals.IsObject()) {
         loadGlobalProperties(renderer, globals);
     }
 
-    //// Handle any actors
-    //const rapidjson::Value& actors = doc["actors"];
-    //if (actors.IsArray()) {
-    //    LoadActors(game, actors);
-    //}
+    return true;
+}
+
+bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
+    rapidjson::Document doc;
+    if (!loadJSON(fileName, &doc)) {
+        MSG(L"レベルファイルのロードに失敗しました");
+        return false;
+    }
+
+    const rapidjson::Value& actors = doc["actors"];
+    if (actors.IsArray()) {
+        loadActors(renderer, actors);
+    }
+
     return true;
 }
 
@@ -76,6 +87,33 @@ void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const
         //向きと色を設定
         JsonHelper::getVector3(dirObj, "direction", &DirectionalLight::direction);
         JsonHelper::getVector3(dirObj, "color", &DirectionalLight::color);
+    }
+}
+
+void LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray) {
+    //アクターの配列をループ
+    for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
+        const rapidjson::Value& actorObj = inArray[i];
+        if (actorObj.IsObject()) {
+            //型名を取得
+            std::string type;
+            if (JsonHelper::getString(actorObj, "type", &type)) {
+                auto iter = mActors.find(type);
+                if (iter != mActors.end()) {
+                    //mapからアクターを生成
+                    Actor* actor = iter->second(renderer, actorObj["properties"]);
+                    // Get the actor's components
+                    //if (actorObj.HasMember("components")) {
+                    //    const rapidjson::Value& components = actorObj["components"];
+                    //    if (components.IsArray()) {
+                    //        LoadComponents(actor, components);
+                    //    }
+                    //}
+                } else {
+                    MSG(L"このアクターは存在しません");
+                }
+            }
+        }
     }
 }
 
@@ -187,3 +225,8 @@ bool JsonHelper::getQuaternion(const rapidjson::Value& inObject, const char* inP
 
     return true;
 }
+
+std::unordered_map<std::string, ActorFunc> LevelLoader::mActors {
+    { "PlayerActor", &Actor::create<PlayerActor> },
+    { "Field", &Actor::create<Field> }
+};
