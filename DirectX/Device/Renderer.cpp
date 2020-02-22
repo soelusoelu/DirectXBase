@@ -1,4 +1,5 @@
 ﻿#include "Renderer.h"
+#include "AssetsManager.h"
 #include "Sound.h"
 #include "../Camera/Camera.h"
 #include "../Component/PointLightComponent.h"
@@ -10,7 +11,6 @@
 #include "../System/BlendState.h"
 #include "../System/Buffer.h"
 #include "../System/DepthStencilState.h"
-#include "../System/DirectXIncLib.h"
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
 #include "../System/IndexBuffer.h"
@@ -29,11 +29,11 @@ Renderer::Renderer(const HWND& hWnd) :
     mDeviceContext(nullptr),
     mSwapChain(nullptr),
     mDepthStencilView(nullptr),
-    mSoundBase(std::make_unique<SoundBase>()),
     mRenderTargetView(nullptr),
     mBlendState(nullptr),
     mDepthStencilState(nullptr),
     mRasterizerState(nullptr),
+    mAssetsManager(nullptr),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
     mAmbientLight(Vector3(0.1f, 0.1f, 0.1f)) {
@@ -45,11 +45,6 @@ Renderer::Renderer(const HWND& hWnd) :
 }
 
 Renderer::~Renderer() {
-    mShaders.clear();
-    mTextures.clear();
-    mSounds.clear();
-    mMeshLoaders.clear();
-
     SAFE_RELEASE(mDepthStencilView);
     SAFE_RELEASE(mSwapChain);
     SAFE_RELEASE(mDeviceContext);
@@ -60,6 +55,7 @@ void Renderer::initialize() {
     mBlendState = std::make_shared<BlendState>(shared_from_this());
     mDepthStencilState = std::make_shared<DepthStencilState>(shared_from_this());
     mRasterizerState = std::make_shared<RasterizerState>(shared_from_this());
+    mAssetsManager = std::make_shared<AssetsManager>(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 
@@ -86,6 +82,10 @@ std::shared_ptr<DepthStencilState> Renderer::depthStencilState() const {
 
 std::shared_ptr<RasterizerState> Renderer::rasterizerState() const {
     return mRasterizerState;
+}
+
+std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
+    return mAssetsManager;
 }
 
 std::shared_ptr<Buffer> Renderer::createBuffer(const BufferDesc& desc, const SubResourceDesc* data) {
@@ -122,61 +122,6 @@ void Renderer::setViewport(const ViewportDesc& desc) {
 
 void Renderer::setPrimitive(PrimitiveType primitive) const {
     mDeviceContext->IASetPrimitiveTopology(toPrimitiveMode(primitive));
-}
-
-std::shared_ptr<Shader> Renderer::createShader(const std::string& fileName) {
-    std::shared_ptr<Shader> shader;
-    auto itr = mShaders.find(fileName);
-    if (itr != mShaders.end()) { //既に読み込まれている
-        shader = itr->second;
-    } else { //初読み込み
-        shader = std::make_shared<Shader>(shared_from_this(), fileName);
-        mShaders.emplace(fileName, shader);
-    }
-    return shader;
-}
-
-std::shared_ptr<Texture> Renderer::createTexture(const std::string& fileName, bool isSprite) {
-    std::shared_ptr<Texture> texture;
-    auto itr = mTextures.find(fileName);
-    if (itr != mTextures.end()) { //既に読み込まれている
-        texture = itr->second;
-    } else { //初読み込み
-        texture = std::make_shared<Texture>(shared_from_this(), fileName, isSprite);
-        mTextures.emplace(fileName, texture);
-    }
-    return texture;
-}
-
-std::shared_ptr<Sound> Renderer::createSound(const std::string& fileName) {
-    std::shared_ptr<Sound> sound;
-    auto itr = mSounds.find(fileName);
-    if (itr != mSounds.end()) { //既に読み込まれている
-        sound = itr->second;
-    } else { //初読み込み
-        sound = std::make_shared<Sound>();
-        mSoundBase->load(fileName, &sound);
-        mSounds.emplace(fileName, sound);
-    }
-    return sound;
-}
-
-std::shared_ptr<Sound> Renderer::createSE(const std::string& fileName) {
-    auto sound = createSound(fileName);
-    mSoundBase->createSourceVoice(&sound);
-    return sound;
-}
-
-std::shared_ptr<MeshLoader> Renderer::createMesh(const std::string& fileName) {
-    std::shared_ptr<MeshLoader> mesh;
-    auto itr = mMeshLoaders.find(fileName);
-    if (itr != mMeshLoaders.end()) { //既に読み込まれている
-        mesh = itr->second;
-    } else { //初読み込み
-        mesh = std::make_shared<MeshLoader>(shared_from_this(), fileName);
-        mMeshLoaders.emplace(fileName, mesh);
-    }
-    return mesh;
 }
 
 void Renderer::addPointLight(PointLightComponent* light) {

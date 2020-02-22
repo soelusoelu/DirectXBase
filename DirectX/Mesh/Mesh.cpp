@@ -4,6 +4,7 @@
 #include "MeshManager.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
+#include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
@@ -14,9 +15,9 @@
 #include "../System/VertexArray.h"
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mLoader(renderer->createMesh(fileName)),
+    mLoader(renderer->getAssetsManager()->createMesh(fileName)),
     mTransform(nullptr),
-    mShader(renderer->createShader("GBuffer.hlsl")),
+    mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {
 
     //メッシュ用コンスタントバッファの作成

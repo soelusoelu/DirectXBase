@@ -13,6 +13,7 @@
 #include "Texture2D.h"
 #include "Texture2DDesc.h"
 #include "Usage.h"
+#include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
@@ -114,7 +115,7 @@ std::shared_ptr<IndexBuffer> GBuffer::getIndexBuffer() const {
 
 void GBuffer::createShader(std::shared_ptr<Renderer> renderer) {
     //シェーダー生成
-    mShader = renderer->createShader("Deferred.hlsl");
+    mShader = renderer->getAssetsManager()->createShader("Deferred.hlsl");
     mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
 }
 

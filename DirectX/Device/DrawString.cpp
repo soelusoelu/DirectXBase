@@ -1,4 +1,5 @@
 ﻿#include "DrawString.h"
+#include "AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
@@ -7,7 +8,7 @@
 
 void DrawString::initialize(std::shared_ptr<Renderer> renderer) {
     mSprite = new Sprite(renderer, "number.png");
-    renderer->createTexture("font.png");
+    renderer->getAssetsManager()->createTexture("font.png");
 }
 
 void DrawString::end() {

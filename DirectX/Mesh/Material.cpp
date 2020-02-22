@@ -1,4 +1,5 @@
 ﻿#include "Material.h"
+#include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Utility/StringUtil.h"
 
@@ -74,7 +75,7 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
         if (strip == "map_Kd") {
             mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
             //テクスチャーを作成
-            mMaterials[matCount]->texture = renderer->createTexture(mMaterials[matCount]->textureName, false);
+            mMaterials[matCount]->texture = renderer->getAssetsManager()->createTexture(mMaterials[matCount]->textureName, false);
         }
     }
 

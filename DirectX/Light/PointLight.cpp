@@ -1,4 +1,5 @@
 ﻿#include "PointLight.h"
+#include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
 #include "../Shader/Shader.h"
@@ -21,7 +22,7 @@ void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
     std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(Vector3::zero, 0.f);
     mesh->createSphere(&sphere);
     radius = sphere->radius;
-    shader = renderer->createShader("PointLight.hlsl");
+    shader = renderer->getAssetsManager()->createShader("PointLight.hlsl");
 
     //コンスタントバッファ生成
     shader->createConstantBuffer(sizeof(PointLightConstantBuffer));

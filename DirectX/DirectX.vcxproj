@@ -146,6 +146,7 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="System\RenderTargetView.cpp" />
     <ClCompile Include="System\ComparisonFunc.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="System\RenderTargetView.h" />
     <ClInclude Include="System\ComparisonFunc.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
