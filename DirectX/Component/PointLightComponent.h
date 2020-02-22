@@ -19,9 +19,11 @@ public:
     void setColor(const Vector3& color);
     void setInnerRadius(float radius);
     void setOuterRadius(float radius);
+    void setIntensity(float value);
 
 private:
     Vector3 mDiffuseColor; //色
     float mInnerRadius; //この半径以内だと完全な輝度で照らす
     float mOuterRadius; //光の届く半径
+    float mIntensity; //光の強度
 };

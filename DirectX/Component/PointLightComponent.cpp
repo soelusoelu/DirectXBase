@@ -9,13 +9,13 @@
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 #include "../System/SubResourceDesc.h"
-#include "../System/VertexArray.h"
 
 PointLightComponent::PointLightComponent(Actor* owner) :
     Component(owner),
     mDiffuseColor(ColorPalette::white),
-    mInnerRadius(0.25f),
-    mOuterRadius(1.f) {
+    mInnerRadius(0.5f),
+    mOuterRadius(1.f),
+    mIntensity(1.f) {
     owner->renderer()->addPointLight(this);
 }
 
@@ -44,10 +44,12 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
         cb.wvp = world * camera->getView() * camera->getProjection();
         cb.wvp.transpose();
         cb.worldPos = mOwner->transform()->getPosition();
+        cb.cameraPos = camera->getPosition();
+        cb.windowSize = Vector2(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
         cb.diffuseColor = mDiffuseColor;
         cb.innerRadius = mInnerRadius;
         cb.outerRadius = mOuterRadius;
-        cb.windowSize = Vector2(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
+        cb.intensity = mIntensity;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         shader->unmap();
@@ -77,4 +79,8 @@ void PointLightComponent::setInnerRadius(float radius) {
 
 void PointLightComponent::setOuterRadius(float radius) {
     mOuterRadius = radius;
+}
+
+void PointLightComponent::setIntensity(float value) {
+    mIntensity = value;
 }
