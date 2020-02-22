@@ -8,8 +8,9 @@ SamplerState g_samLinear : register(s0);
 cbuffer global_0 : register(b0)
 {
     float3 mLightDir : packoffset(c0); //ライトの方向ベクトル
-    float3 mCameraPos : packoffset(c1); //カメラ位置
-    float3 mAmbientLight : packoffset(c2); //環境光
+    float3 mLightColor : packoffset(c1); //ライトの色
+    float3 mCameraPos : packoffset(c2); //カメラ位置
+    float3 mAmbientLight : packoffset(c3); //環境光
 };
 
 //バーテックスバッファー出力
@@ -56,7 +57,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float NdotL = dot(N, L);
     if (NdotL > 0)
     {
-        float3 Diffuse = NdotL;
+        float3 Diffuse = mLightColor * NdotL;
         float3 Specular = pow(max(0.0, dot(R, V)), 4.0) * gbufferSpecular;
         Phong += Diffuse + Specular;
     }

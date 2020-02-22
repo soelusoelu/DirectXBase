@@ -15,6 +15,7 @@ public:
 
 public:
     static Vector3 direction;
+    static Vector3 color;
 
 private:
     Mesh* mMesh;

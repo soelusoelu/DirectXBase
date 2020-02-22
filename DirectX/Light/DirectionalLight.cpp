@@ -21,10 +21,10 @@ DirectionalLight::DirectionalLight(std::shared_ptr<Renderer> renderer) :
 DirectionalLight::~DirectionalLight() = default;
 
 void DirectionalLight::update() {
-    if (Input::getKey(KeyCode::UpArrow)) {
+    if (Input::getKey(KeyCode::Z)) {
         mTransform->rotate(Vector3::right, -60.f * Time::deltaTime);
     }
-    if (Input::getKey(KeyCode::DownArrow)) {
+    if (Input::getKey(KeyCode::X)) {
         mTransform->rotate(Vector3::right, 60.f * Time::deltaTime);
     }
 
@@ -35,3 +35,4 @@ void DirectionalLight::update() {
 }
 
 Vector3 DirectionalLight::direction = Vector3::zero;
+Vector3 DirectionalLight::color = Vector3::zero;

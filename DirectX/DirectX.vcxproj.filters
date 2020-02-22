@@ -74,6 +74,7 @@
     <ClCompile Include="System\ComparisonFunc.cpp" />
     <ClCompile Include="System\RenderTargetView.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
+    <ClCompile Include="Utility\LevelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -152,5 +153,6 @@
     <ClInclude Include="System\RenderTargetViewDesc.h" />
     <ClInclude Include="System\RenderTargetView.h" />
     <ClInclude Include="Device\AssetsManager.h" />
+    <ClInclude Include="Utility\LevelLoader.h" />
   </ItemGroup>
 </Project>

@@ -23,6 +23,7 @@
 #include "../System/Texture.h"
 #include "../System/Texture2D.h"
 #include "../System/VertexBuffer.h"
+#include "../Utility/LevelLoader.h"
 
 Renderer::Renderer(const HWND& hWnd) :
     mDevice(nullptr),
@@ -36,7 +37,7 @@ Renderer::Renderer(const HWND& hWnd) :
     mAssetsManager(nullptr),
     mGBuffer(std::make_shared<GBuffer>()),
     mPointLight(std::make_shared<PointLight>()),
-    mAmbientLight(Vector3(0.1f, 0.1f, 0.1f)) {
+    mAmbientLight(Vector3::zero) {
     createDeviceAndSwapChain(hWnd);
     ViewportDesc desc;
     desc.width = Game::WINDOW_WIDTH;
@@ -62,6 +63,9 @@ void Renderer::initialize() {
     createDepthStencilView();
     createRenderTargetView();
     setRenderTarget();
+
+    //ディレクショナルライトと環境光の読み込み
+    LevelLoader::loadLevel(shared_from_this(), "globalLight.json");
 }
 
 ID3D11Device* Renderer::device() const {
@@ -170,6 +174,10 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     }
 }
 
+void Renderer::setAmbientLight(const Vector3& ambient) {
+    mAmbientLight = ambient;
+}
+
 void Renderer::renderToTexture() {
     //各テクスチャをレンダーターゲットに設定
     setGBufferRenderTargets();
@@ -211,7 +219,8 @@ void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     MappedSubResourceDesc msrd;
     if (mGBuffer->shader()->map(&msrd)) {
         GBufferShaderConstantBuffer cb;
-        cb.lightDir = DirectionalLight::direction;
+        cb.dirLightDir = DirectionalLight::direction;
+        cb.dirLightColor = DirectionalLight::color;
         cb.cameraPos = camera->getPosition();
         cb.ambientLight = mAmbientLight;
 

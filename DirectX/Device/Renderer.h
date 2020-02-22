@@ -58,6 +58,8 @@ public:
     void removePointLight(PointLightComponent* light);
     void drawPointLights(std::shared_ptr<Camera> camera);
 
+    void setAmbientLight(const Vector3& ambient);
+
     void renderToTexture();
     void renderFromTexture(std::shared_ptr<Camera> camera);
 
@@ -87,6 +89,7 @@ private:
     std::shared_ptr<RasterizerState> mRasterizerState;
     std::shared_ptr<AssetsManager> mAssetsManager;
     std::shared_ptr<GBuffer> mGBuffer;
+
     std::shared_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;
 
