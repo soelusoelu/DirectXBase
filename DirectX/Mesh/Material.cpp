@@ -32,7 +32,7 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
     ifs.seekg(0, std::ios_base::beg);
 
     std::string line;
-    std::string strip;
+    char s[256]; //ダミー
     Vector4 v(0.f, 0.f, 0.f, 1.f);
     int matCount = -1;
 
@@ -45,33 +45,30 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
             continue;
         }
 
-        strip = StringUtil::spritFirst(line, ' ');
+        sscanf_s(line.c_str(), "%s", s, sizeof(s));
 
         //マテリアル名
-        if (strip == "newmtl") {
+        if (strcmp(s, "newmtl") == 0) {
             matCount++;
             mMaterials[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
         }
         //Ka アンビエント
-        if (strip == "Ka") {
-            auto sub = line.substr(3); //「Ka 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
+        if (strcmp(s, "Ka") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
             mMaterials[matCount]->Ka = v;
         }
         //Kd ディフューズ
-        if (strip == "Kd") {
-            auto sub = line.substr(3); //「Kd 」の文字数分
-            auto i = sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
+        if (strcmp(s, "Kd") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
             mMaterials[matCount]->Kd = v;
         }
         //Ks スペキュラー
-        if (strip == "Ks") {
-            auto sub = line.substr(3); //「Ks 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f %f", &v.x, &v.y, &v.z);
+        if (strcmp(s, "Ks") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
             mMaterials[matCount]->Ks = v;
         }
         //map_Kd テクスチャー
-        if (strip == "map_Kd") {
+        if (strcmp(s, "map_Kd") == 0) {
             mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
             //テクスチャーを作成
             mMaterials[matCount]->texture = renderer->createTexture(mMaterials[matCount]->textureName, false);
@@ -84,7 +81,7 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
 bool Material::preload(std::ifstream & stream, const std::string & fileName) {
     //マテリアルファイルを開いて内容を読み込む
     std::string line;
-    std::string strip;
+    char s[256];
     while (!stream.eof()) {
         //キーワード読み込み
         std::getline(stream, line);
@@ -93,10 +90,10 @@ bool Material::preload(std::ifstream & stream, const std::string & fileName) {
             continue;
         }
 
-        strip = StringUtil::spritFirst(line, ' ');
+        sscanf_s(line.c_str(), "%s", s, sizeof(s));
 
         //マテリアル名
-        if (strip == "newmtl") {
+        if (strcmp(s, "newmtl") == 0) {
             mMaterials.emplace_back(std::make_shared<MaterialData>());
         }
     }

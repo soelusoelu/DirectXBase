@@ -110,10 +110,10 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
     ifs.clear();
     ifs.seekg(0, std::ios_base::beg);
     std::string line;
-    std::string strip;
     unsigned vCount = 0;
     unsigned vnCount = 0;
     unsigned vtCount = 0;
+    char s[256]; //ダミー
     float x, y, z;
 
     while (!ifs.eof()) {
@@ -125,12 +125,11 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
         }
 
         //空白が来るまで読み込み
-        strip = StringUtil::spritFirst(line, ' ');
+        sscanf_s(line.c_str(), "%s", s, sizeof(s));
 
         //頂点読み込み
-        if (strip == "v") {
-            auto sub = line.substr(2); //「v 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
+        if (strcmp(s, "v") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &x, &y, &z);
             vertices[vCount].x = -x;
             vertices[vCount].y = y;
             vertices[vCount].z = z;
@@ -138,9 +137,8 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
         }
 
         //法線読み込み
-        if (strip == "vn") {
-            auto sub = line.substr(3); //「vn 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f %f", &x, &y, &z);
+        if (strcmp(s, "vn") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &x, &y, &z);
             normals[vnCount].x = -x;
             normals[vnCount].y = y;
             normals[vnCount].z = z;
@@ -148,9 +146,8 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
         }
 
         //テクスチャー座標 読み込み
-        if (strip == "vt") {
-            auto sub = line.substr(3); //「vt 」の文字数分
-            sscanf_s(sub.c_str(), "%f %f", &x, &y);
+        if (strcmp(s, "vt") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f", s, sizeof(s), &x, &y);
             textures[vtCount].x = x;
             textures[vtCount].y = 1 - y; //OBJファイルはY成分が逆なので合わせる
             vtCount++;
@@ -186,20 +183,19 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
             }
 
             //空白が来るまで読み込み
-            strip = StringUtil::spritFirst(line, ' ');
+            sscanf_s(line.c_str(), "%s", s, sizeof(s));
 
             //フェイス 読み込み→頂点インデックスに
-            if (strip == "usemtl") {
+            if (strcmp(s, "usemtl") == 0) {
                 auto mat = line.substr(7); //「usemtl 」の文字数分
                 matFlag = (mMaterial->getMaterialData(i)->matName == mat);
             }
 
-            if (strip == "f" && matFlag) {
-                auto sub = line.substr(2); //「f 」の文字数分
+            if (strcmp(s, "f") == 0 && matFlag) {
                 if (mMaterial->getMaterialData(i)->texture) { //テクスチャーありサーフェイス
-                    sscanf_s(sub.c_str(), "%d/%d/%d %d/%d/%d %d/%d/%d", &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
+                    sscanf_s(line.c_str(), "%s %d/%d/%d %d/%d/%d %d/%d/%d", s, sizeof(s), &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
                 } else { //テクスチャー無しサーフェイス
-                    sscanf_s(sub.c_str(), "%d//%d %d//%d %d//%d", &v1, &vn1, &v2, &vn2, &v3, &vn3);
+                    sscanf_s(line.c_str(), "%s %d//%d %d//%d %d//%d", s, sizeof(s), &v1, &vn1, &v2, &vn2, &v3, &vn3);
                 }
 
                 //テクスチャー座標 > 頂点数がありえる
@@ -253,7 +249,7 @@ bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<Renderer> rende
     unsigned numTex = 0;
     unsigned numFace = 0;
     std::string line;
-    std::string strip;
+    char s[256];
     //事前に頂点数、ポリゴン数を調べる
     while (!stream.eof()) {
         //キーワード読み込み
@@ -264,29 +260,29 @@ bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<Renderer> rende
         }
 
         //空白が来るまで読み込み
-        strip = StringUtil::spritFirst(line, ' ');
+        sscanf_s(line.c_str(), "%s", s, sizeof(s));
 
         //マテリアル読み込み
-        if (strip == "mtllib") {
+        if (strcmp(s, "mtllib") == 0) {
             auto mat = line.substr(7); //「mtllib 」の文字数分
             if (!mMaterial->load(renderer, mat)) {
                 return false;
             }
         }
         //頂点
-        if (strip == "v") {
+        if (strcmp(s, "v") == 0) {
             numVert++;
         }
         //法線
-        if (strip == "vn") {
+        if (strcmp(s, "vn") == 0) {
             numNormal++;
         }
         //テクスチャー座標
-        if (strip == "vt") {
+        if (strcmp(s, "vt") == 0) {
             numTex++;
         }
         //フェイス(ポリゴン)
-        if (strip == "f") {
+        if (strcmp(s, "f") == 0) {
             numFace++;
         }
     }
