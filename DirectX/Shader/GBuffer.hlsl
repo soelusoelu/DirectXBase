@@ -9,7 +9,9 @@ cbuffer global_0 : register(b0)
 
 cbuffer global_1 : register(b1)
 {
+    float4 mDiffuse;
     float4 mSpecular;
+    float mTextureFlag;
 }
 
 //バーテックスバッファー出力
@@ -54,7 +56,11 @@ PS_OUTPUT PS(VS_OUTPUT input)
     PS_OUTPUT Out = (PS_OUTPUT) 0;
 
     //カラーテクスチャーへ出力
-    Out.Color = g_tex.Sample(g_samLinear, input.UV);
+    Out.Color = mDiffuse;
+    if (mTextureFlag == 1)
+    {
+        Out.Color = g_tex.Sample(g_samLinear, input.UV);
+    }
 
     //ワールド法線テクスチャーへ出力
     float3 normal = input.WorldNormal.xyz;

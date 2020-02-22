@@ -21,7 +21,9 @@ struct MeshConstantBuffer {
 };
 
 struct MaterialConstantBuffer {
+    ALIGN16 Vector4 diffuse;
     ALIGN16 Vector4 specular;
+    ALIGN16 float textureFlag;
 };
 
 class Mesh {

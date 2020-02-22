@@ -83,15 +83,18 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         //インデックスバッファーをセット
         mLoader->setIndexBuffer(i);
 
-        //テクスチャをセット
-        if (auto t = mLoader->getMaterialData(i)->texture) {
-            t->setPSTextures();
-            t->setPSSamplers();
-        }
-
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
+            cb.diffuse = mLoader->getMaterialData(i)->Kd;
             cb.specular = mLoader->getMaterialData(i)->Ks;
+
+            if (auto t = mLoader->getMaterialData(i)->texture) {
+                t->setPSTextures();
+                t->setPSSamplers();
+                cb.textureFlag = 1;
+            } else {
+                cb.textureFlag = 0;
+            }
 
             memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
             mShader->unmap(1);
