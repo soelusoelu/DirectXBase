@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 
+class Camera;
 class IndexBuffer;
 class Renderer;
 class RenderTargetView;
@@ -22,11 +23,6 @@ struct GBufferShaderConstantBuffer {
 };
 
 class GBuffer {
-    using SRVPtr = std::shared_ptr<ShaderResourceView>;
-    using SRVPtrArray = std::vector<SRVPtr>;
-    using RTVPtr = std::shared_ptr<RenderTargetView>;
-    using RTVPtrArray = std::vector<RTVPtr>;
-public:
     enum class Type {
         DIFFUSE,
         NORMAL,
@@ -35,30 +31,38 @@ public:
         NUM_GBUFFER_TEXTURES
     };
 
+    using SRVPtr = std::unique_ptr<ShaderResourceView>;
+    using SRVPtrArray = std::vector<SRVPtr>;
+    using RTVPtr = std::unique_ptr<RenderTargetView>;
+    using RTVPtrArray = std::vector<RTVPtr>;
+
+public:
     GBuffer();
     ~GBuffer();
 
     //Gバッファの生成
     void create(std::shared_ptr<Renderer> renderer);
 
-    RTVPtr getRenderTarget(unsigned index) const;
-    SRVPtr getShaderResourceView(unsigned index) const;
-    std::shared_ptr<Sampler> getSampler() const;
-    std::shared_ptr<Shader> shader() const;
-    std::shared_ptr<VertexBuffer> getVertexBuffer() const;
-    std::shared_ptr<IndexBuffer> getIndexBuffer() const;
+    //GBufferテクスチャ上にレンダリング
+    void renderToTexture();
+    void renderFromTexture(std::shared_ptr<Camera> camera, const Vector3& ambient);
+
+    //全シェーダーリソースの登録
+    void setVSShaderResources() const;
+    void setPSShaderResources() const;
 
 private:
+    void createSampler();
     void createShader(std::shared_ptr<Renderer> renderer);
-    void createVertexBuffer(std::shared_ptr<Renderer> renderer);
-    void createIndexBuffer(std::shared_ptr<Renderer> renderer);
+    void createVertexBuffer();
+    void createIndexBuffer();
 
 private:
     //Gバッファに割り当てられたテクスチャ
     RTVPtrArray mRenderTargets;
     SRVPtrArray mShaderResourceViews;
-    std::shared_ptr<Sampler> mSampler;
+    std::unique_ptr<Sampler> mSampler;
     std::shared_ptr<Shader> mShader;
-    std::shared_ptr<VertexBuffer> mVertexBuffer;
-    std::shared_ptr<IndexBuffer> mIndexBuffer;
+    std::unique_ptr<VertexBuffer> mVertexBuffer;
+    std::unique_ptr<IndexBuffer> mIndexBuffer;
 };

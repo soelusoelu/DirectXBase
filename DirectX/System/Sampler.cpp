@@ -1,11 +1,10 @@
 ﻿#include "Sampler.h"
+#include "DirectX.h"
 #include "Game.h"
-#include "../Device/Renderer.h"
 
-Sampler::Sampler(std::shared_ptr<Renderer> renderer, const SamplerDesc& desc) :
-    mRenderer(renderer),
+Sampler::Sampler(const SamplerDesc& desc) :
     mDesc(desc) {
-    renderer->device()->CreateSamplerState(&toSamplerDesc(desc), &mSampler);
+    Singleton<DirectX>::instance().device()->CreateSamplerState(&toSamplerDesc(desc), &mSampler);
 }
 
 Sampler::~Sampler() {
@@ -13,15 +12,11 @@ Sampler::~Sampler() {
 }
 
 void Sampler::setVSSamplers(unsigned start, unsigned numSamplers) {
-    if (auto r = mRenderer.lock()) {
-        r->deviceContext()->VSSetSamplers(start, numSamplers, &mSampler);
-    }
+    Singleton<DirectX>::instance().deviceContext()->VSSetSamplers(start, numSamplers, &mSampler);
 }
 
 void Sampler::setPSSamplers(unsigned start, unsigned numSamplers) {
-    if (auto r = mRenderer.lock()) {
-        r->deviceContext()->PSSetSamplers(start, numSamplers, &mSampler);
-    }
+    Singleton<DirectX>::instance().deviceContext()->PSSetSamplers(start, numSamplers, &mSampler);
 }
 
 const SamplerDesc& Sampler::desc() const {
@@ -44,7 +39,7 @@ D3D11_SAMPLER_DESC Sampler::toSamplerDesc(const SamplerDesc& desc) const {
 }
 
 D3D11_FILTER Sampler::toFilter(Filter filter) const {
-    static constexpr D3D11_FILTER filters[] {
+    static constexpr D3D11_FILTER filters[]{
         D3D11_FILTER_MIN_MAG_MIP_POINT,
         D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR,
         D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT,

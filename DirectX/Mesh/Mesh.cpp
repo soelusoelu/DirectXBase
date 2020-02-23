@@ -8,6 +8,7 @@
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
+#include "../System/DirectX.h"
 #include "../System/GBuffer.h"
 #include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
@@ -15,7 +16,7 @@
 #include "../System/VertexArray.h"
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mLoader(renderer->getAssetsManager()->createMesh(fileName)),
+    mLoader(renderer->getAssetsManager()->createMesh(renderer, fileName)),
     mTransform(nullptr),
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {
@@ -44,7 +45,7 @@ void Mesh::createSphere(std::shared_ptr<Sphere> * sphere) const {
     mLoader->createSphere(sphere);
 }
 
-void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+void Mesh::draw(std::shared_ptr<Camera> camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -102,7 +103,7 @@ void Mesh::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> came
         }
 
         //プリミティブをレンダリング
-        renderer->drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
+        Singleton<DirectX>::instance().drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
     }
 }
 

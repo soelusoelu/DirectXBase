@@ -2,13 +2,10 @@
 
 #include "DepthStencilDesc.h"
 #include "DirectXIncLib.h"
-#include <memory>
-
-class Renderer;
 
 class DepthStencilState {
 public:
-    DepthStencilState(std::shared_ptr<Renderer> renderer);
+    DepthStencilState();
     ~DepthStencilState();
     void depthTest(bool value);
     void stencilTest(bool value);
@@ -20,6 +17,5 @@ private:
     D3D11_STENCIL_OP toStencilOP(StencilOP stencilOp) const;
 
 private:
-    std::weak_ptr<Renderer> mRenderer;
     DepthStencilDesc mDesc;
 };

@@ -1,10 +1,9 @@
 ﻿#include "DepthStencilState.h"
 #include "ComparisonFunc.h"
+#include "DirectX.h"
 #include "Game.h"
-#include "../Device/Renderer.h"
 
-DepthStencilState::DepthStencilState(std::shared_ptr<Renderer> renderer) :
-    mRenderer(renderer),
+DepthStencilState::DepthStencilState() :
     mDesc() {
     depthTest(true);
 }
@@ -12,30 +11,31 @@ DepthStencilState::DepthStencilState(std::shared_ptr<Renderer> renderer) :
 DepthStencilState::~DepthStencilState() = default;
 
 void DepthStencilState::depthTest(bool value) {
-    if (auto r = mRenderer.lock()) {
-        mDesc.depthEnable = value;
+    mDesc.depthEnable = value;
 
-        ID3D11DepthStencilState* depthStencilState;
+    ID3D11DepthStencilState* depthStencilState;
 
-        r->device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
+    Singleton<DirectX>::instance().device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
 
-        r->deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
+    Singleton<DirectX>::instance().deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-        SAFE_RELEASE(depthStencilState);
+    //SAFE_RELEASE(depthStencilState);
+    if (depthStencilState) {
+        depthStencilState->Release();
     }
 }
 
 void DepthStencilState::stencilTest(bool value) {
-    if (auto r = mRenderer.lock()) {
-        mDesc.stencilEnable = value;
+    mDesc.stencilEnable = value;
 
-        ID3D11DepthStencilState* depthStencilState;
+    ID3D11DepthStencilState* depthStencilState;
 
-        r->device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
+    Singleton<DirectX>::instance().device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
 
-        r->deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
+    Singleton<DirectX>::instance().deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-        SAFE_RELEASE(depthStencilState);
+    if (depthStencilState) {
+        depthStencilState->Release();
     }
 }
 
@@ -43,7 +43,7 @@ const DepthStencilDesc& DepthStencilState::desc() const {
     return mDesc;
 }
 
-D3D11_DEPTH_STENCIL_DESC DepthStencilState::toDepthStencilDesc(const DepthStencilDesc& desc) const {
+D3D11_DEPTH_STENCIL_DESC DepthStencilState::toDepthStencilDesc(const DepthStencilDesc & desc) const {
     D3D11_DEPTH_STENCIL_DESC dsd;
     dsd.DepthEnable = desc.depthEnable;
     dsd.DepthWriteMask = toDepthWriteMask(desc.depthWriteMask);

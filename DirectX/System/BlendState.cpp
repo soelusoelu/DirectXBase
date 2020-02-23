@@ -1,35 +1,32 @@
 ﻿#include "BlendState.h"
+#include "DirectX.h"
 #include "Game.h"
-#include "../Device/Renderer.h"
 
-BlendState::BlendState(std::shared_ptr<Renderer> renderer) :
-    mRenderer(renderer),
+BlendState::BlendState() :
     mDesc() {
     setBlendState(mDesc);
 }
 
 BlendState::~BlendState() = default;
 
-void BlendState::setBlendState(const BlendDesc& desc, unsigned renderTarget) {
-    if (auto r = mRenderer.lock()) {
-        mDesc = desc;
+void BlendState::setBlendState(const BlendDesc & desc, unsigned renderTarget) {
+    mDesc = desc;
 
-        ID3D11BlendState* blend;
+    ID3D11BlendState* blend;
 
-        r->device()->CreateBlendState(&toBlendDesc(desc, renderTarget), &blend);
+    Singleton<DirectX>::instance().device()->CreateBlendState(&toBlendDesc(desc, renderTarget), &blend);
 
-        unsigned mask = 0xffffffff;
-        r->deviceContext()->OMSetBlendState(blend, nullptr, mask);
+    unsigned mask = 0xffffffff;
+    Singleton<DirectX>::instance().deviceContext()->OMSetBlendState(blend, nullptr, mask);
 
-        SAFE_RELEASE(blend);
-    }
+    SAFE_RELEASE(blend);
 }
 
 const BlendDesc& BlendState::desc() const {
     return mDesc;
 }
 
-D3D11_BLEND_DESC BlendState::toBlendDesc(const BlendDesc& desc, unsigned renderTarget) const {
+D3D11_BLEND_DESC BlendState::toBlendDesc(const BlendDesc & desc, unsigned renderTarget) const {
     D3D11_BLEND_DESC bd;
     bd.AlphaToCoverageEnable = desc.alphaToCoverageEnable;
     bd.IndependentBlendEnable = desc.independentBlendEnable;
@@ -45,7 +42,7 @@ D3D11_BLEND_DESC BlendState::toBlendDesc(const BlendDesc& desc, unsigned renderT
     return bd;
 }
 
-D3D11_BLEND BlendState::toBlend(const Blend& blend) const {
+D3D11_BLEND BlendState::toBlend(const Blend & blend) const {
     static constexpr D3D11_BLEND blends[]{
         D3D11_BLEND_ZERO,
         D3D11_BLEND_ONE,
@@ -68,7 +65,7 @@ D3D11_BLEND BlendState::toBlend(const Blend& blend) const {
     return blends[static_cast<unsigned>(blend)];
 }
 
-D3D11_BLEND_OP BlendState::toBlendOP(const BlendOP& blendOp) const {
+D3D11_BLEND_OP BlendState::toBlendOP(const BlendOP & blendOp) const {
     static constexpr D3D11_BLEND_OP blendOps[]{
         D3D11_BLEND_OP_ADD,
         D3D11_BLEND_OP_SUBTRACT,
@@ -79,7 +76,7 @@ D3D11_BLEND_OP BlendState::toBlendOP(const BlendOP& blendOp) const {
     return blendOps[static_cast<unsigned>(blendOp)];
 }
 
-unsigned BlendState::toColorWriteEnable(const ColorWriteEnable& color) const {
+unsigned BlendState::toColorWriteEnable(const ColorWriteEnable & color) const {
     static constexpr unsigned colors[]{
         D3D11_COLOR_WRITE_ENABLE_RED,
         D3D11_COLOR_WRITE_ENABLE_GREEN,

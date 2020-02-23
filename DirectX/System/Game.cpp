@@ -1,4 +1,5 @@
 ﻿#include "Game.h"
+#include "DirectX.h"
 #include "Texture.h"
 #include "Window.h"
 #include "../Main.h"
@@ -7,6 +8,7 @@
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
+#include "../Utility/Singleton.h"
 
 WCHAR szRootPath[1024] = { 0 };
 
@@ -18,6 +20,7 @@ Game::~Game() {
     DrawString::end();
     Input::end();
     Texture::end();
+    SingletonFinalizer::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
@@ -52,7 +55,8 @@ HRESULT Game::init() {
     MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ウィンドウ作成失敗");
     mhWnd = mWindow->gethWnd();
 
-    mRenderer = std::make_shared<Renderer>(mhWnd);
+    Singleton<DirectX>::instance().initialize(mhWnd);
+    mRenderer = std::make_shared<Renderer>();
     mRenderer->initialize();
 
     Random::init();
@@ -65,8 +69,8 @@ HRESULT Game::init() {
 }
 
 void Game::mainLoop() {
-    mRenderer->clearRenderTarget();
-    mRenderer->clearDepthStencilView();
+    Singleton<DirectX>::instance().clearRenderTarget();
+    Singleton<DirectX>::instance().clearDepthStencilView();
 
     Input::update();
 
@@ -74,7 +78,7 @@ void Game::mainLoop() {
     mMain->draw();
 
     fixFPS60();
-    mRenderer->present();
+    Singleton<DirectX>::instance().present();
 }
 
 void Game::fixFPS60() {

@@ -1,21 +1,19 @@
 ﻿#include "ShaderResourceView.h"
+#include "DirectX.h"
 #include "Format.h"
 #include "Game.h"
 #include "Texture2D.h"
-#include "../Device/Renderer.h"
 
-ShaderResourceView::ShaderResourceView(std::shared_ptr<Renderer> renderer, std::shared_ptr<Texture2D> texture2D, const ShaderResourceViewDesc* desc) :
-    mRenderer(renderer),
+ShaderResourceView::ShaderResourceView(std::shared_ptr<Texture2D> texture2D, const ShaderResourceViewDesc* desc) :
     mShaderResourceView(nullptr) {
     if (desc) {
-        renderer->device()->CreateShaderResourceView(texture2D->texture2D(), &toSRVDesc(desc), &mShaderResourceView);
+        Singleton<DirectX>::instance().device()->CreateShaderResourceView(texture2D->texture2D(), &toSRVDesc(desc), &mShaderResourceView);
     } else {
-        renderer->device()->CreateShaderResourceView(texture2D->texture2D(), nullptr, &mShaderResourceView);
+        Singleton<DirectX>::instance().device()->CreateShaderResourceView(texture2D->texture2D(), nullptr, &mShaderResourceView);
     }
 }
 
-ShaderResourceView::ShaderResourceView(std::shared_ptr<Renderer> renderer, ID3D11ShaderResourceView* view) :
-    mRenderer(renderer),
+ShaderResourceView::ShaderResourceView(ID3D11ShaderResourceView* view) :
     mShaderResourceView(view) {
 }
 
@@ -24,15 +22,11 @@ ShaderResourceView::~ShaderResourceView() {
 }
 
 void ShaderResourceView::setVSShaderResources(unsigned start, unsigned numViews) {
-    if (auto r = mRenderer.lock()) {
-        r->deviceContext()->VSSetShaderResources(start, numViews, &mShaderResourceView);
-    }
+    Singleton<DirectX>::instance().deviceContext()->VSSetShaderResources(start, numViews, &mShaderResourceView);
 }
 
 void ShaderResourceView::setPSShaderResources(unsigned start, unsigned numViews) {
-    if (auto r = mRenderer.lock()) {
-        r->deviceContext()->PSSetShaderResources(start, numViews, &mShaderResourceView);
-    }
+    Singleton<DirectX>::instance().deviceContext()->PSSetShaderResources(start, numViews, &mShaderResourceView);
 }
 
 D3D11_SHADER_RESOURCE_VIEW_DESC ShaderResourceView::toSRVDesc(const ShaderResourceViewDesc* desc) const {

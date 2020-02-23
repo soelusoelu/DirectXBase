@@ -8,6 +8,7 @@
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
+#include "../System/DirectX.h"
 #include "../System/SubResourceDesc.h"
 
 PointLightComponent::PointLightComponent(Actor* owner) :
@@ -65,7 +66,7 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
         mesh->getMeshData()->setIndexBuffer(i);
 
         //プリミティブをレンダリング
-        mOwner->renderer()->drawIndexed(mesh->getMeshData()->getMaterialData(i)->numFace * 3);
+        Singleton<DirectX>::instance().drawIndexed(mesh->getMeshData()->getMaterialData(i)->numFace * 3);
     }
 }
 

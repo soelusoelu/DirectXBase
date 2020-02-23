@@ -1,14 +1,13 @@
 #include "VertexArray.h"
 #include "BufferDesc.h"
+#include "DirectX.h"
 #include "Game.h"
 #include "IndexBuffer.h"
 #include "SubResourceDesc.h"
 #include "Usage.h"
 #include "VertexBuffer.h"
-#include "../Device/Renderer.h"
 
-VertexArray::VertexArray(std::shared_ptr<Renderer> renderer) :
-    mRenderer(renderer),
+VertexArray::VertexArray() :
     mNumVerts(0),
     mNumNormal(0),
     mNumTex(0),
@@ -70,9 +69,7 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     SubResourceDesc sub;
     sub.data = data;
 
-    if (auto r = mRenderer.lock()) {
-        mVertexBuffer = r->createVertexBuffer(bd, &sub);
-    }
+    mVertexBuffer = std::make_unique<VertexBuffer>(bd, &sub);
 }
 
 void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void* data) {
@@ -83,13 +80,7 @@ void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void
     SubResourceDesc sub;
     sub.data = data;
 
-    if (auto r = mRenderer.lock()) {
-        mIndexBuffer[index] = r->createIndexBuffer(bd, &sub);
-    }
-}
-
-std::shared_ptr<IndexBuffer> VertexArray::getIndexBuffer(unsigned index) const {
-    return mIndexBuffer[index];
+    mIndexBuffer[index] = std::make_unique<IndexBuffer>(bd, &sub);
 }
 
 void VertexArray::resizeIndexBuffer(size_t size) {

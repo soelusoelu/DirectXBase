@@ -6,7 +6,7 @@
 
 class InputElement {
 public:
-    InputElement(ID3D11Device* device, const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile);
+    InputElement(const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile);
     ~InputElement();
     //ディスクリプタの要素数を返す
     size_t size() const;

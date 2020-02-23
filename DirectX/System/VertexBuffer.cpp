@@ -1,9 +1,8 @@
 ﻿#include "VertexBuffer.h"
-#include "../Device/Renderer.h"
+#include "DirectX.h"
 
-VertexBuffer::VertexBuffer(std::shared_ptr<Renderer> renderer, const BufferDesc& desc, const SubResourceDesc* data) :
-    Buffer(renderer, desc, data),
-    mRenderer(renderer) {
+VertexBuffer::VertexBuffer(const BufferDesc& desc, const SubResourceDesc* data) :
+    Buffer(desc, data) {
 }
 
 VertexBuffer::~VertexBuffer() = default;
@@ -16,7 +15,5 @@ void VertexBuffer::setVertexBuffer(unsigned start, unsigned numStream, unsigned 
         INPUT_ELEMENT_DESC構造体のサイズが入った配列への先頭ポインタ(stride(読み込み単位)として扱うため)
         頂点バッファ配列の各頂点バッファの頭出しをするオフセット値の配列
     */
-    if (auto r = mRenderer.lock()) {
-        r->deviceContext()->IASetVertexBuffers(start, numStream, &mBuffer, &mDesc.oneSize, &offset);
-    }
+    Singleton<DirectX>::instance().deviceContext()->IASetVertexBuffers(start, numStream, &mBuffer, &mDesc.oneSize, &offset);
 }

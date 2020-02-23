@@ -34,6 +34,6 @@ private:
     bool preload(std::ifstream& stream, std::shared_ptr<Renderer> renderer, const std::string& fileName); //事前に頂点数などを調べる
 
 private:
-    std::shared_ptr<Material> mMaterial;
+    std::unique_ptr<Material> mMaterial;
     std::unique_ptr<VertexArray> mVertexArray;
 };

@@ -3,13 +3,10 @@
 #include "BufferDesc.h"
 #include "DirectXIncLib.h"
 #include "SubResourceDesc.h"
-#include <memory>
-
-class Renderer;
 
 class Buffer {
 public:
-    Buffer(std::shared_ptr<Renderer> renderer, const BufferDesc& desc, const SubResourceDesc* data);
+    Buffer(const BufferDesc& desc, const SubResourceDesc* data = nullptr);
     virtual ~Buffer();
     const BufferDesc& desc() const;
     ID3D11Buffer* buffer() const;

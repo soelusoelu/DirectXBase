@@ -1,31 +1,30 @@
 ﻿#include "Texture.h"
-#include "../Device/Renderer.h"
+#include "BufferDesc.h"
+#include "DirectX.h"
+#include "Format.h"
+#include "IndexBuffer.h"
+#include "Sampler.h"
+#include "SamplerDesc.h"
+#include "ShaderResourceView.h"
+#include "SubResourceDesc.h"
+#include "Usage.h"
+#include "VertexBuffer.h"
 #include "../Shader/Shader.h"
-#include "../System/BufferDesc.h"
-#include "../System/Format.h"
-#include "../System/Game.h"
-#include "../System/IndexBuffer.h"
-#include "../System/Sampler.h"
-#include "../System/SamplerDesc.h"
-#include "../System/ShaderResourceView.h"
-#include "../System/SubResourceDesc.h"
-#include "../System/Usage.h"
-#include "../System/VertexBuffer.h"
 
-Texture::Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite) :
+Texture::Texture(const std::string& fileName, bool isSprite) :
     mShaderResourceView(nullptr),
     mSampler(nullptr),
     mDesc() {
     if (!vertexBuffer || !indexBuffer) {
         //バーテックスバッファー作成
-        createVertexBuffer(renderer);
+        createVertexBuffer();
         //インデックスバッファの作成
-        createIndexBuffer(renderer);
+        createIndexBuffer();
     }
     //テクスチャー作成
-    createTexture(renderer, fileName, isSprite);
+    createTexture(fileName, isSprite);
     //テクスチャー用サンプラー作成
-    createSampler(renderer);
+    createSampler();
 }
 
 Texture::~Texture() = default;
@@ -55,7 +54,7 @@ void Texture::setPSSamplers(unsigned start, unsigned numSamplers) {
     mSampler->setPSSamplers(start, numSamplers);
 }
 
-void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
+void Texture::createVertexBuffer() {
     static const TextureVertex vertices[] = {
         Vector3(0.f, 0.f, 0.f), Vector2(0.f, 0.f), //左上
         Vector3(1.f, 0.f, 0.f), Vector2(1.f, 0.f), //右上
@@ -72,10 +71,10 @@ void Texture::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     SubResourceDesc sub;
     sub.data = vertices;
 
-    vertexBuffer = new VertexBuffer(renderer, bd, &sub);
+    vertexBuffer = new VertexBuffer(bd, &sub);
 }
 
-void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
+void Texture::createIndexBuffer() {
     static constexpr unsigned short indices[] = {
         0, 1, 2,
         1, 3, 2
@@ -87,10 +86,10 @@ void Texture::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = indices;
-    indexBuffer = new IndexBuffer(renderer, bd, &sub);
+    indexBuffer = new IndexBuffer(bd, &sub);
 }
 
-void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::string & fileName, bool isSprite) {
+void Texture::createTexture(const std::string & fileName, bool isSprite) {
     if (isSprite) {
         setTextureDirectory();
     } else {
@@ -105,16 +104,16 @@ void Texture::createTexture(std::shared_ptr<Renderer> renderer, const std::strin
 
     ID3D11ShaderResourceView* srv;
 
-    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(renderer->device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
+    if (FAILED(D3DX11CreateShaderResourceViewFromFileA(Singleton<DirectX>::instance().device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
         MSG(L"テクスチャ作成失敗");
     }
 
-    mShaderResourceView = std::make_shared<ShaderResourceView>(renderer, srv);
+    mShaderResourceView = std::make_unique<ShaderResourceView>(srv);
 }
 
-void Texture::createSampler(std::shared_ptr<Renderer> renderer) {
+void Texture::createSampler() {
     SamplerDesc sd;
-    mSampler = renderer->createSamplerState(sd);
+    mSampler = std::make_unique<Sampler>(sd);
 }
 
 D3DX11_IMAGE_LOAD_INFO Texture::toImageLoadInfo(const TextureDesc & desc) const {

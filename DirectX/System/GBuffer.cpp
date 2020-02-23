@@ -1,6 +1,10 @@
 ﻿#include "GBuffer.h"
+#include "BlendDesc.h"
+#include "BlendState.h"
 #include "Buffer.h"
 #include "BufferDesc.h"
+#include "DepthStencilState.h"
+#include "DirectX.h"
 #include "Game.h"
 #include "IndexBuffer.h"
 #include "RenderTargetView.h"
@@ -13,8 +17,11 @@
 #include "Texture2D.h"
 #include "Texture2DDesc.h"
 #include "Usage.h"
+#include "VertexBuffer.h"
+#include "../Camera/Camera.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
+#include "../Light/DirectionalLight.h"
 #include "../Mesh/MeshLoader.h"
 #include "../Shader/Shader.h"
 
@@ -28,7 +35,6 @@ GBuffer::GBuffer() :
 GBuffer::~GBuffer() = default;
 
 void GBuffer::create(std::shared_ptr<Renderer> renderer) {
-    //Deferred 関連 なおそれぞれ深度ステンシルを作るわけではない。サイズが同じなので通常のものを使い回せる。
     Texture2DDesc desc;
     ShaderResourceViewDesc srvDesc;
     RenderTargetViewDesc rtvDesc;
@@ -41,76 +47,133 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     desc.bindFlags =
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_RENDER_TARGET) |
         static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_SHADER_RESOURCE);
-    auto texture = renderer->createTexture2D(desc);
+    auto texture = std::make_shared<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture, &srvDesc));
 
     //ノーマル
     desc.format = Format::FORMAT_R10G10B10A2_UNORM;
-    auto texture2 = renderer->createTexture2D(desc);
+    auto texture2 = std::make_shared<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture2, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture2, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture2, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture2, &srvDesc));
 
     //ポジション
     desc.format = Format::FORMAT_RGBA16_FLOAT;
-    auto texture3 = renderer->createTexture2D(desc);
+    auto texture3 = std::make_shared<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture3, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture3, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture3, &srvDesc));
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture3, &srvDesc));
 
     //スペキュラ
     desc.format = Format::FORMAT_RGBA16_FLOAT;
-    auto texture4 = renderer->createTexture2D(desc);
+    auto texture4 = std::make_shared<Texture2D>(desc);
 
     rtvDesc.format = desc.format;
-    mRenderTargets.emplace_back(std::make_shared<RenderTargetView>(renderer, texture4, &rtvDesc));
+    mRenderTargets.emplace_back(std::make_unique<RenderTargetView>(texture4, &rtvDesc));
 
     srvDesc.format = desc.format;
-    mShaderResourceViews.emplace_back(std::make_shared<ShaderResourceView>(renderer, texture4, &srvDesc));
-
-    //サンプラー作成
-    SamplerDesc sd;
-    mSampler = renderer->createSamplerState(sd);
+    mShaderResourceViews.emplace_back(std::make_unique<ShaderResourceView>(texture4, &srvDesc));
 
     //各種生成
+    createSampler();
     createShader(renderer);
-    createVertexBuffer(renderer);
-    createIndexBuffer(renderer);
+    createVertexBuffer();
+    createIndexBuffer();
 }
 
-std::shared_ptr<RenderTargetView> GBuffer::getRenderTarget(unsigned index) const {
-    return mRenderTargets[index];
+void GBuffer::renderToTexture() {
+    //各テクスチャをレンダーターゲットに設定
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    ID3D11RenderTargetView* views[numGBuffer];
+    for (size_t i = 0; i < numGBuffer; i++) {
+        views[i] = mRenderTargets[i]->getRenderTarget();
+    }
+    Singleton<DirectX>::instance().setRenderTargets(views, numGBuffer);
+
+    //クリア
+    for (size_t i = 0; i < numGBuffer; i++) {
+        mRenderTargets[i]->clearRenderTarget();
+    }
+    Singleton<DirectX>::instance().clearDepthStencilView();
+
+    //デプステスト有効化
+    Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
+    //通常合成
+    BlendDesc bd;
+    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
+    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
+    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 }
 
-std::shared_ptr<ShaderResourceView> GBuffer::getShaderResourceView(unsigned index) const {
-    return mShaderResourceViews[index];
+void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, const Vector3& ambient) {
+    //レンダーターゲットを通常に戻す
+    Singleton<DirectX>::instance().setRenderTarget();
+    //クリア
+    Singleton<DirectX>::instance().clearRenderTarget();
+    Singleton<DirectX>::instance().clearDepthStencilView();
+
+    //使用するシェーダーは、テクスチャーを参照するシェーダー
+    mShader->setVSShader();
+    mShader->setPSShader();
+    //コンスタントバッファの登録
+    mShader->setPSConstantBuffers();
+    //1パス目で作成したテクスチャー3枚をセット
+    setPSShaderResources();
+    //サンプラーをセット
+    mSampler->setPSSamplers();
+
+    MappedSubResourceDesc msrd;
+    if (mShader->map(&msrd)) {
+        GBufferShaderConstantBuffer cb;
+        cb.dirLightDir = DirectionalLight::direction;
+        cb.dirLightColor = DirectionalLight::color;
+        cb.cameraPos = camera->getPosition();
+        cb.ambientLight = ambient;
+
+        memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
+        mShader->unmap();
+    }
+    //スクリーンサイズのポリゴンをレンダー
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //バーテックスバッファーをセット
+    mVertexBuffer->setVertexBuffer();
+    //インデックスバッファをセット
+    mIndexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    //デプステスト無効化
+    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
+
+    Singleton<DirectX>::instance().drawIndexed(6);
 }
 
-std::shared_ptr<Sampler> GBuffer::getSampler() const {
-    return mSampler;
+void GBuffer::setVSShaderResources() const {
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    for (size_t i = 0; i < numGBuffer; i++) {
+        mShaderResourceViews[i]->setVSShaderResources(i);
+    }
 }
 
-std::shared_ptr<Shader> GBuffer::shader() const {
-    return mShader;
+void GBuffer::setPSShaderResources() const {
+    static constexpr unsigned numGBuffer = static_cast<unsigned>(GBuffer::Type::NUM_GBUFFER_TEXTURES);
+    for (size_t i = 0; i < numGBuffer; i++) {
+        mShaderResourceViews[i]->setPSShaderResources(i);
+    }
 }
 
-std::shared_ptr<VertexBuffer> GBuffer::getVertexBuffer() const {
-    return mVertexBuffer;
-}
-
-std::shared_ptr<IndexBuffer> GBuffer::getIndexBuffer() const {
-    return mIndexBuffer;
+void GBuffer::createSampler() {
+    //サンプラー作成
+    SamplerDesc sd;
+    mSampler = std::make_unique<Sampler>(sd);
 }
 
 void GBuffer::createShader(std::shared_ptr<Renderer> renderer) {
@@ -119,7 +182,7 @@ void GBuffer::createShader(std::shared_ptr<Renderer> renderer) {
     mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
 }
 
-void GBuffer::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
+void GBuffer::createVertexBuffer() {
     //バーテックスバッファ生成
     static const MeshVertex vertices[] = {
         Vector3(-1.f, -1.f, 0.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 1.f),
@@ -132,13 +195,14 @@ void GBuffer::createVertexBuffer(std::shared_ptr<Renderer> renderer) {
     bd.size = bd.oneSize * 4;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_VERTEX);
+
     SubResourceDesc sub;
     sub.data = vertices;
 
-    mVertexBuffer = renderer->createVertexBuffer(bd, &sub);
+    mVertexBuffer = std::make_unique<VertexBuffer>(bd, &sub);
 }
 
-void GBuffer::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
+void GBuffer::createIndexBuffer() {
     //インデックスバッファ作成
     static constexpr unsigned short indices[] = {
         0, 1, 2,
@@ -151,5 +215,6 @@ void GBuffer::createIndexBuffer(std::shared_ptr<Renderer> renderer) {
 
     SubResourceDesc sub;
     sub.data = indices;
-    mIndexBuffer = renderer->createIndexBuffer(bd, &sub);
+
+    mIndexBuffer = std::make_unique<IndexBuffer>(bd, &sub);
 }

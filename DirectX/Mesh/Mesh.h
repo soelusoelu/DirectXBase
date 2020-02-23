@@ -37,7 +37,7 @@ public:
     Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Mesh();
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
-    void draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
+    void draw(std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
     std::shared_ptr<MeshLoader> getMeshData() const;
     void destroy();

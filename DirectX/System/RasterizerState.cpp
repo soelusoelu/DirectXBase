@@ -1,34 +1,31 @@
 ﻿#include "RasterizerState.h"
+#include "DirectX.h"
 #include "Game.h"
-#include "../Device/Renderer.h"
 
-RasterizerState::RasterizerState(std::shared_ptr<Renderer> renderer) :
-    mRenderer(renderer),
+RasterizerState::RasterizerState() :
     mDesc() {
     setRasterizerState(mDesc);
 }
 
 RasterizerState::~RasterizerState() = default;
 
-void RasterizerState::setRasterizerState(const RasterizerDesc& desc) {
-    if (auto r = mRenderer.lock()) {
-        mDesc = desc;
+void RasterizerState::setRasterizerState(const RasterizerDesc & desc) {
+    mDesc = desc;
 
-        ID3D11RasterizerState* rasterizer;
+    ID3D11RasterizerState* rasterizer;
 
-        r->device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
+    Singleton<DirectX>::instance().device()->CreateRasterizerState(&toRasterizerDesc(mDesc), &rasterizer);
 
-        r->deviceContext()->RSSetState(rasterizer);
+    Singleton<DirectX>::instance().deviceContext()->RSSetState(rasterizer);
 
-        SAFE_RELEASE(rasterizer);
-    }
+    SAFE_RELEASE(rasterizer);
 }
 
 const RasterizerDesc& RasterizerState::desc() const {
     return mDesc;
 }
 
-D3D11_RASTERIZER_DESC RasterizerState::toRasterizerDesc(const RasterizerDesc& desc) const {
+D3D11_RASTERIZER_DESC RasterizerState::toRasterizerDesc(const RasterizerDesc & desc) const {
     D3D11_RASTERIZER_DESC rd;
     rd.FillMode = toFillMode(desc.fillMode);
     rd.CullMode = toCullMode(desc.cullMode);
@@ -44,7 +41,7 @@ D3D11_RASTERIZER_DESC RasterizerState::toRasterizerDesc(const RasterizerDesc& de
     return rd;
 }
 
-D3D11_FILL_MODE RasterizerState::toFillMode(const FillMode& mode) const {
+D3D11_FILL_MODE RasterizerState::toFillMode(const FillMode & mode) const {
     static constexpr D3D11_FILL_MODE modes[]{
         D3D11_FILL_WIREFRAME,
         D3D11_FILL_SOLID
@@ -52,7 +49,7 @@ D3D11_FILL_MODE RasterizerState::toFillMode(const FillMode& mode) const {
     return modes[static_cast<unsigned>(mode)];
 }
 
-D3D11_CULL_MODE RasterizerState::toCullMode(const CullMode& mode) const {
+D3D11_CULL_MODE RasterizerState::toCullMode(const CullMode & mode) const {
     static constexpr D3D11_CULL_MODE modes[]{
         D3D11_CULL_NONE,
         D3D11_CULL_FRONT,

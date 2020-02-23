@@ -53,7 +53,7 @@ void SceneManager::draw() const {
     //各テクスチャ上にレンダリング
     mRenderer->renderToTexture();
     //メッシュの一括描画
-    mMeshManager->draw(mRenderer, mCamera);
+    mMeshManager->draw(mCamera);
     //各テクスチャを参照してレンダリング
     mRenderer->renderFromTexture(mCamera);
     //ポイントライトの一括描画

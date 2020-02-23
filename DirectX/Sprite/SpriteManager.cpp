@@ -5,6 +5,7 @@
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
 #include "../System/DepthStencilState.h"
+#include "../System/DirectX.h"
 #include "../System/Format.h"
 #include "../System/Game.h"
 #include "../System/IndexBuffer.h"
@@ -37,20 +38,23 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     proj.m[1][1] = -2.f / Game::WINDOW_HEIGHT;
 
     //プリミティブ・トポロジーをセット
-    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
     //インデックスバッファーをセット
     Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //デプステスト無効化
-    renderer->depthStencilState()->depthTest(false);
+    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
     //通常合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
     bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    renderer->blendState()->setBlendState(bd);
+    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 
     for (auto&& sprite : mSprites) {
+        if (!sprite->getActive() || sprite->isDead()) {
+            return;
+        }
         sprite->draw(proj);
     }
 }

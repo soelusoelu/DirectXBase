@@ -5,6 +5,7 @@
 #include "../Device/Renderer.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
+#include "../System/DirectX.h"
 #include "../System/InputElementDesc.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
@@ -67,10 +68,6 @@ void Sprite::update() {
 }
 
 void Sprite::draw(const Matrix4 & proj) {
-    if (!getActive() || isDead()) {
-        return;
-    }
-
     //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -100,7 +97,7 @@ void Sprite::draw(const Matrix4 & proj) {
     //サンプラーのセット
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
-    mRenderer->drawIndexed(6);
+    Singleton<DirectX>::instance().drawIndexed(6);
 
     if (mIsOnceDraw) {
         destroy();

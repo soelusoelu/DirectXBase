@@ -4,11 +4,9 @@
 #include "DirectXIncLib.h"
 #include <memory>
 
-class Renderer;
-
 class BlendState {
 public:
-    BlendState(std::shared_ptr<Renderer> renderer);
+    BlendState();
     ~BlendState();
     void setBlendState(const BlendDesc& desc, unsigned renderTarget = 0);
     const BlendDesc& desc() const;
@@ -24,6 +22,5 @@ private:
     BlendState& operator=(const BlendState&) = delete;
 
 private:
-    std::weak_ptr<Renderer> mRenderer;
     BlendDesc mDesc;
 };

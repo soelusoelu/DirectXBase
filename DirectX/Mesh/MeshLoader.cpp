@@ -6,8 +6,8 @@
 #include "../Utility/StringUtil.h"
 
 MeshLoader::MeshLoader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mMaterial(std::make_shared<Material>()),
-    mVertexArray(std::make_unique<VertexArray>(renderer)) {
+    mMaterial(std::make_unique<Material>()),
+    mVertexArray(std::make_unique<VertexArray>()) {
     if (!load(renderer, fileName)) {
         MSG(L"メッシュ作成失敗");
         return;

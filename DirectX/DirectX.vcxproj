@@ -147,6 +147,7 @@
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
+    <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="System\RenderTargetView.cpp" />
     <ClCompile Include="System\ComparisonFunc.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="System\Texture.cpp" />
     <ClCompile Include="System\Texture2D.cpp" />
     <ClCompile Include="System\Usage.cpp" />
+    <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Device\AssetsManager.h" />
+    <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="System\RenderTargetView.h" />
     <ClInclude Include="System\ComparisonFunc.h" />
@@ -256,6 +259,7 @@
     <ClInclude Include="System\Texture2DDesc.h" />
     <ClInclude Include="System\Texture2D.h" />
     <ClInclude Include="System\Usage.h" />
+    <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
@@ -274,7 +278,6 @@
     <ClInclude Include="System\InputElementDesc.h" />
     <ClInclude Include="System\SubResourceDesc.h" />
     <ClInclude Include="System\TextureDesc.h" />
-    <ClInclude Include="System\ViewportDesc.h" />
     <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />

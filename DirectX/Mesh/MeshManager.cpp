@@ -1,6 +1,7 @@
 ﻿#include "MeshManager.h"
 #include "Mesh.h"
 #include "../Device/Renderer.h"
+#include "../System/DirectX.h"
 #include "../System/RasterizerDesc.h"
 #include "../System/RasterizerState.h"
 
@@ -12,13 +13,13 @@ void MeshManager::update() {
     remove();
 }
 
-void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+void MeshManager::draw(std::shared_ptr<Camera> camera) const {
     if (mMeshes.empty()) {
         return;
     }
 
     //プリミティブ・トポロジーをセット
-    renderer->setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
 
     for (const auto& mesh : mMeshes) {
         if (!mesh->getActive() || mesh->isDead()) {
@@ -26,12 +27,14 @@ void MeshManager::draw(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camer
         }
 
         RasterizerDesc rd;
+
         rd.cullMode = CullMode::FRONT;
-        renderer->rasterizerState()->setRasterizerState(rd);
-        mesh->draw(renderer, camera);
+        Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+        mesh->draw(camera);
+
         rd.cullMode = CullMode::BACK;
-        renderer->rasterizerState()->setRasterizerState(rd);
-        mesh->draw(renderer, camera);
+        Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
+        mesh->draw(camera);
     }
 }
 

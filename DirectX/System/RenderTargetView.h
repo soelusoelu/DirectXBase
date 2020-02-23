@@ -4,14 +4,13 @@
 #include "RenderTargetViewDesc.h"
 #include <memory>
 
-class Renderer;
 class Texture2D;
 
 class RenderTargetView {
 public:
-    RenderTargetView(std::shared_ptr<Renderer> renderer, std::shared_ptr<Texture2D> texture2D, const RenderTargetViewDesc* desc = nullptr);
+    RenderTargetView(std::shared_ptr<Texture2D> texture2D, const RenderTargetViewDesc* desc = nullptr);
     ~RenderTargetView();
-    ID3D11RenderTargetView* getRenderTaget() const;
+    ID3D11RenderTargetView* getRenderTarget() const;
     void clearRenderTarget(float r = 0.f, float g = 0.f, float b = 1.f, float a = 1.f) const;
 
 private:
@@ -19,6 +18,5 @@ private:
     D3D11_RTV_DIMENSION toDimension(RTVDimension dimension) const;
 
 private:
-    std::weak_ptr<Renderer> mRenderer;
     ID3D11RenderTargetView* mRenderTargetView;
 };

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "../System/DirectXIncLib.h"
-#include "../System/Game.h"
-#include "../System/TextureDesc.h"
+#include "DirectXIncLib.h"
+#include "Game.h"
+#include "TextureDesc.h"
 #include "../Utility/Math.h"
 #include <memory>
 #include <string>
@@ -21,16 +21,13 @@ struct TextureShaderConstantBuffer {
 };
 
 class IndexBuffer;
-class InputElement;
-class Renderer;
 class Sampler;
 class ShaderResourceView;
-class Sprite;
 class VertexBuffer;
 
 class Texture {
 public:
-    Texture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite);
+    Texture(const std::string& fileName, bool isSprite);
     ~Texture();
     static void end();
     const TextureDesc& desc() const;
@@ -42,10 +39,10 @@ public:
     void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1);
 
 private:
-    void createVertexBuffer(std::shared_ptr<Renderer> renderer);
-    void createIndexBuffer(std::shared_ptr<Renderer> renderer);
-    void createTexture(std::shared_ptr<Renderer> renderer, const std::string& fileName, bool isSprite);
-    void createSampler(std::shared_ptr<Renderer> renderer);
+    void createVertexBuffer();
+    void createIndexBuffer();
+    void createTexture(const std::string& fileName, bool isSprite);
+    void createSampler();
     //各種変換
     D3DX11_IMAGE_LOAD_INFO toImageLoadInfo(const TextureDesc& desc) const;
     unsigned toFilter(TextureFilter filter) const;
@@ -55,7 +52,7 @@ public:
     static IndexBuffer* indexBuffer;
 
 private:
-    std::shared_ptr<ShaderResourceView> mShaderResourceView;
-    std::shared_ptr<Sampler> mSampler;
+    std::unique_ptr<ShaderResourceView> mShaderResourceView;
+    std::unique_ptr<Sampler> mSampler;
     TextureDesc mDesc;
 };

@@ -1,16 +1,15 @@
 ﻿#include "RenderTargetView.h"
+#include "DirectX.h"
 #include "Format.h"
 #include "Game.h"
 #include "Texture2D.h"
-#include "../Device/Renderer.h"
 
-RenderTargetView::RenderTargetView(std::shared_ptr<Renderer> renderer, std::shared_ptr<Texture2D> texture2D, const RenderTargetViewDesc* desc) :
-    mRenderer(renderer),
+RenderTargetView::RenderTargetView(std::shared_ptr<Texture2D> texture2D, const RenderTargetViewDesc* desc) :
     mRenderTargetView(nullptr) {
     if (desc) {
-        renderer->device()->CreateRenderTargetView(texture2D->texture2D(), &toRTVDesc(desc), &mRenderTargetView);
+        Singleton<DirectX>::instance().device()->CreateRenderTargetView(texture2D->texture2D(), &toRTVDesc(desc), &mRenderTargetView);
     } else {
-        renderer->device()->CreateRenderTargetView(texture2D->texture2D(), nullptr, &mRenderTargetView);
+        Singleton<DirectX>::instance().device()->CreateRenderTargetView(texture2D->texture2D(), nullptr, &mRenderTargetView);
     }
 }
 
@@ -18,15 +17,13 @@ RenderTargetView::~RenderTargetView() {
     SAFE_RELEASE(mRenderTargetView);
 }
 
-ID3D11RenderTargetView* RenderTargetView::getRenderTaget() const {
+ID3D11RenderTargetView* RenderTargetView::getRenderTarget() const {
     return mRenderTargetView;
 }
 
 void RenderTargetView::clearRenderTarget(float r, float g, float b, float a) const {
     const float clearColor[4] = { r, g, b, a };
-    if (auto r = mRenderer.lock()) {
-        r->deviceContext()->ClearRenderTargetView(mRenderTargetView, clearColor);
-    }
+    Singleton<DirectX>::instance().deviceContext()->ClearRenderTargetView(mRenderTargetView, clearColor);
 }
 
 D3D11_RENDER_TARGET_VIEW_DESC RenderTargetView::toRTVDesc(const RenderTargetViewDesc* desc) const {
@@ -39,7 +36,7 @@ D3D11_RENDER_TARGET_VIEW_DESC RenderTargetView::toRTVDesc(const RenderTargetView
 }
 
 D3D11_RTV_DIMENSION RenderTargetView::toDimension(RTVDimension dimension) const {
-    static constexpr D3D11_RTV_DIMENSION dimensions[] {
+    static constexpr D3D11_RTV_DIMENSION dimensions[]{
         D3D11_RTV_DIMENSION_TEXTURE2D
     };
 

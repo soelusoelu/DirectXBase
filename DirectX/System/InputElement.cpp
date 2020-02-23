@@ -1,8 +1,8 @@
 ﻿#include "InputElement.h"
-#include "DirectXIncLib.h"
+#include "DirectX.h"
 #include "Game.h"
 
-InputElement::InputElement(ID3D11Device* device, const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile) :
+InputElement::InputElement(const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile) :
     mDesc(&desc[0], &desc[numElements]) {
     auto mElements = new D3D11_INPUT_ELEMENT_DESC[numElements];
     for (unsigned i = 0; i < numElements; ++i) {
@@ -10,7 +10,7 @@ InputElement::InputElement(ID3D11Device* device, const InputElementDesc desc[], 
     }
 
     //頂点インプットレイアウトを作成
-    device->CreateInputLayout(mElements, numElements, compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
+    Singleton<DirectX>::instance().device()->CreateInputLayout(mElements, numElements, compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
 
     SAFE_DELETE_ARRAY(mElements);
 }
