@@ -1,14 +1,13 @@
 ﻿#include "MeshLoader.h"
 #include "Material.h"
-#include "../Device/Renderer.h"
 #include "../System/Game.h"
 #include "../System/VertexArray.h"
 #include "../Utility/StringUtil.h"
 
-MeshLoader::MeshLoader(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
+MeshLoader::MeshLoader(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) :
     mMaterial(std::make_unique<Material>()),
     mVertexArray(std::make_unique<VertexArray>()) {
-    if (!load(renderer, fileName)) {
+    if (!load(assetsManager, fileName)) {
         MSG(L"メッシュ作成失敗");
         return;
     }
@@ -86,7 +85,7 @@ std::shared_ptr<MaterialData> MeshLoader::getMaterialData(unsigned index) const 
     return mMaterial->getMaterialData(index);
 }
 
-bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
+bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
     //OBJファイルを開いて内容を読み込む
     setOBJDirectory();
     std::ifstream ifs(fileName, std::ios::in);
@@ -96,7 +95,7 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
     }
 
     //事前に頂点数などを調べる
-    if (!preload(ifs, renderer, fileName)) {
+    if (!preload(ifs, assetsManager, fileName)) {
         MSG(L"Meshファイルの事前読み込み失敗");
         return false;
     }
@@ -242,7 +241,7 @@ bool MeshLoader::load(std::shared_ptr<Renderer> renderer, const std::string & fi
     return true;
 }
 
-bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<Renderer> renderer, const std::string & fileName) {
+bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
     //OBJファイルを開いて内容を読み込む
     unsigned numVert = 0;
     unsigned numNormal = 0;
@@ -265,7 +264,7 @@ bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<Renderer> rende
         //マテリアル読み込み
         if (strcmp(s, "mtllib") == 0) {
             auto mat = line.substr(7); //「mtllib 」の文字数分
-            if (!mMaterial->load(renderer, mat)) {
+            if (!mMaterial->load(assetsManager, mat)) {
                 return false;
             }
         }

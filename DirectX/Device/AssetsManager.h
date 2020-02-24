@@ -13,7 +13,7 @@ class Sound;
 class SoundBase;
 class Texture;
 
-class AssetsManager {
+class AssetsManager : public std::enable_shared_from_this<AssetsManager> {
 public:
     AssetsManager();
     ~AssetsManager();
@@ -21,7 +21,7 @@ public:
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
     std::shared_ptr<Sound> createBGM(const std::string& fileName);
     std::shared_ptr<Sound> createSE(const std::string& fileName);
-    std::shared_ptr<MeshLoader> createMesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    std::shared_ptr<MeshLoader> createMesh(const std::string& fileName);
 
 private:
     std::unique_ptr<SoundBase> mSoundBase;

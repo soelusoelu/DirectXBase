@@ -16,7 +16,7 @@
 #include "../System/VertexArray.h"
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mLoader(renderer->getAssetsManager()->createMesh(renderer, fileName)),
+    mLoader(renderer->getAssetsManager()->createMesh(fileName)),
     mTransform(nullptr),
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {

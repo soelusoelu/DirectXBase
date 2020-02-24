@@ -1,6 +1,5 @@
 ﻿#include "Material.h"
 #include "../Device/AssetsManager.h"
-#include "../Device/Renderer.h"
 #include "../Utility/StringUtil.h"
 
 Material::Material() = default;
@@ -15,7 +14,7 @@ std::shared_ptr<MaterialData> Material::getMaterialData(unsigned index) const {
     return mMaterials[index];
 }
 
-bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
+bool Material::load(std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         MSG(L"mtlファイルが存在しません");
@@ -72,7 +71,7 @@ bool Material::load(std::shared_ptr<Renderer> renderer, const std::string & file
         if (strcmp(s, "map_Kd") == 0) {
             mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
             //テクスチャーを作成
-            mMaterials[matCount]->texture = renderer->getAssetsManager()->createTexture(mMaterials[matCount]->textureName, false);
+            mMaterials[matCount]->texture = assetsManager->createTexture(mMaterials[matCount]->textureName, false);
         }
     }
 

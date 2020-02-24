@@ -6,9 +6,9 @@
 #include <memory>
 #include <string>
 
+class AssetsManager;
 class Material;
 struct MaterialData;
-class Renderer;
 class Texture;
 class VertexArray;
 
@@ -21,7 +21,7 @@ struct MeshVertex {
 
 class MeshLoader {
 public:
-    MeshLoader(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    MeshLoader(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName);
     ~MeshLoader();
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
     void setVertexBuffer(unsigned numStream = 1, unsigned start = 0, unsigned offset = 0);
@@ -30,8 +30,8 @@ public:
     std::shared_ptr<MaterialData> getMaterialData(unsigned index) const;
 
 private:
-    bool load(std::shared_ptr<Renderer> renderer, const std::string& fileName);
-    bool preload(std::ifstream& stream, std::shared_ptr<Renderer> renderer, const std::string& fileName); //事前に頂点数などを調べる
+    bool load(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName);
+    bool preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName); //事前に頂点数などを調べる
 
 private:
     std::unique_ptr<Material> mMaterial;

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-class Renderer;
+class AssetsManager;
 class Texture;
 
 struct MaterialData {
@@ -27,7 +27,7 @@ class Material {
 public:
     Material();
     ~Material();
-    bool load(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    bool load(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName);
     unsigned getNumMaterials() const;
     MaterialPtr getMaterialData(unsigned index) const;
 

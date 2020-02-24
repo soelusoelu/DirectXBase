@@ -53,13 +53,13 @@ std::shared_ptr<Sound> AssetsManager::createSE(const std::string & fileName) {
     return sound;
 }
 
-std::shared_ptr<MeshLoader> AssetsManager::createMesh(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
+std::shared_ptr<MeshLoader> AssetsManager::createMesh(const std::string & fileName) {
     std::shared_ptr<MeshLoader> mesh;
     auto itr = mMeshLoaders.find(fileName);
     if (itr != mMeshLoaders.end()) { //既に読み込まれている
         mesh = itr->second;
     } else { //初読み込み
-        mesh = std::make_shared<MeshLoader>(renderer, fileName);
+        mesh = std::make_shared<MeshLoader>(shared_from_this(), fileName);
         mMeshLoaders.emplace(fileName, mesh);
     }
     return mesh;
