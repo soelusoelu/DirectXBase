@@ -22,7 +22,7 @@ void ActorManager::update() {
     remove();
 }
 
-void ActorManager::add(Actor * add) {
+void ActorManager::add(ActorPtr add) {
     if (mUpdatingActors) {
         mPendingActors.emplace_back(add);
     } else {

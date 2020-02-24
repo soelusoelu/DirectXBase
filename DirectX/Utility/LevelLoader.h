@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Math.h"
+#include "Singleton.h"
 #include <functional>
 #include <memory>
 #include <rapidjson/document.h>
@@ -10,26 +11,31 @@
 class Actor;
 class Renderer;
 
-using ActorFunc = std::function<Actor* (std::shared_ptr<Renderer>, const rapidjson::Value&)>;
+using ActorFunc = std::function<std::shared_ptr<Actor>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
 
 class LevelLoader {
+    friend class Singleton<LevelLoader>;
+
 public:
     //グローバルデータを読み込む
-    static bool loadGlobal(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    bool loadGlobal(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     //アクターを読み込む
-    static bool loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    bool loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName);
 
 private:
+    LevelLoader();
+    ~LevelLoader();
+
     //jsonファイルの読み込み
-    static bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc);
+    bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc);
     //グローバルプロパティの読み込み
-    static void loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObject);
+    void loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObject);
     //アクターの読み込み
-    static void loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray);
+    void loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray);
 
 private:
     static constexpr int LEVEL_VERSION = 1;
-    static std::unordered_map<std::string, ActorFunc> mActors;
+    std::unordered_map<std::string, ActorFunc> mActors;
 };
 
 class JsonHelper {

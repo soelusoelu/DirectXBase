@@ -12,12 +12,15 @@ Actor::Actor(std::shared_ptr<Renderer> renderer, const char* tag) :
     mDestroyTimer(nullptr),
     mState(State::ACTIVE),
     mTag(tag) {
-    if (mActorManager) {
-        mActorManager->add(this);
-    }
 }
 
 Actor::~Actor() = default;
+
+void Actor::addToManager() {
+    if (mActorManager) {
+        mActorManager->add(shared_from_this());
+    }
+}
 
 void Actor::update() {
     mComponentManager->start();

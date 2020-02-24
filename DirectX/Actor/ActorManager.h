@@ -7,11 +7,14 @@ class Actor;
 class PlayerActor;
 
 class ActorManager {
+    using ActorPtr = std::shared_ptr<Actor>;
+    using ActorPtrList = std::list<ActorPtr>;
+
 public:
     ActorManager();
     ~ActorManager();
     void update();
-    void add(Actor* add);
+    void add(ActorPtr add);
     void clear();
 
     //アクター配列の中からプレイヤーを取得
@@ -44,8 +47,8 @@ private:
     ActorManager& operator=(const ActorManager&) = delete;
 
 private:
-    std::list<std::shared_ptr<Actor>> mActors;
-    std::list<std::shared_ptr<Actor>> mPendingActors;
+    ActorPtrList mActors;
+    ActorPtrList mPendingActors;
     bool mUpdatingActors;
 };
 

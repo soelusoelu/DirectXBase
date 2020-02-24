@@ -7,7 +7,16 @@
 #include <fstream>
 #include <vector>
 
-bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
+LevelLoader::LevelLoader() {
+    mActors = {
+        { "PlayerActor", &Actor::create<PlayerActor> },
+        { "Field", &Actor::create<Field> }
+    };
+}
+
+LevelLoader::~LevelLoader() = default;
+
+bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         MSG(L"レベルファイルのロードに失敗しました");
@@ -28,7 +37,7 @@ bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::stri
     return true;
 }
 
-bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName) {
+bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::string & fileName) {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         MSG(L"レベルファイルのロードに失敗しました");
@@ -43,7 +52,7 @@ bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::stri
     return true;
 }
 
-bool LevelLoader::loadJSON(const std::string& fileName, rapidjson::Document* outDoc) {
+bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) {
     //フォルダ階層の移動
     setDataDirectory();
 
@@ -74,7 +83,7 @@ bool LevelLoader::loadJSON(const std::string& fileName, rapidjson::Document* out
     return true;
 }
 
-void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObject) {
+void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inObject) {
     //環境光を取得
     Vector3 ambient;
     if (JsonHelper::getVector3(inObject, "ambientLight", &ambient)) {
@@ -90,34 +99,35 @@ void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const
     }
 }
 
-void LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray) {
+void LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray) {
     //アクターの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
         const rapidjson::Value& actorObj = inArray[i];
-        if (actorObj.IsObject()) {
-            //型名を取得
-            std::string type;
-            if (JsonHelper::getString(actorObj, "type", &type)) {
-                auto iter = mActors.find(type);
-                if (iter != mActors.end()) {
-                    //mapからアクターを生成
-                    Actor* actor = iter->second(renderer, actorObj["properties"]);
-                    // Get the actor's components
-                    //if (actorObj.HasMember("components")) {
-                    //    const rapidjson::Value& components = actorObj["components"];
-                    //    if (components.IsArray()) {
-                    //        LoadComponents(actor, components);
-                    //    }
-                    //}
-                } else {
-                    MSG(L"このアクターは存在しません");
-                }
+        if (!actorObj.IsObject()) {
+            continue;
+        }
+        //型名を取得
+        std::string type;
+        if (JsonHelper::getString(actorObj, "type", &type)) {
+            auto iter = mActors.find(type);
+            if (iter != mActors.end()) {
+                //mapからアクターを生成
+                auto actor = iter->second(renderer, actorObj["properties"]);
+                // Get the actor's components
+                //if (actorObj.HasMember("components")) {
+                //    const rapidjson::Value& components = actorObj["components"];
+                //    if (components.IsArray()) {
+                //        LoadComponents(actor, components);
+                //    }
+                //}
+            } else {
+                MSG(L"このアクターは存在しません");
             }
         }
     }
 }
 
-bool JsonHelper::getInt(const rapidjson::Value& inObject, const char* inProperty, int* out) {
+bool JsonHelper::getInt(const rapidjson::Value & inObject, const char* inProperty, int* out) {
     //プロパティが存在するか
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
@@ -135,7 +145,7 @@ bool JsonHelper::getInt(const rapidjson::Value& inObject, const char* inProperty
     return true;
 }
 
-bool JsonHelper::getFloat(const rapidjson::Value& inObject, const char* inProperty, float* out) {
+bool JsonHelper::getFloat(const rapidjson::Value & inObject, const char* inProperty, float* out) {
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
         return false;
@@ -150,7 +160,7 @@ bool JsonHelper::getFloat(const rapidjson::Value& inObject, const char* inProper
     return true;
 }
 
-bool JsonHelper::getString(const rapidjson::Value& inObject, const char* inProperty, std::string* out) {
+bool JsonHelper::getString(const rapidjson::Value & inObject, const char* inProperty, std::string * out) {
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
         return false;
@@ -165,7 +175,7 @@ bool JsonHelper::getString(const rapidjson::Value& inObject, const char* inPrope
     return true;
 }
 
-bool JsonHelper::getBool(const rapidjson::Value& inObject, const char* inProperty, bool* out) {
+bool JsonHelper::getBool(const rapidjson::Value & inObject, const char* inProperty, bool* out) {
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
         return false;
@@ -180,7 +190,7 @@ bool JsonHelper::getBool(const rapidjson::Value& inObject, const char* inPropert
     return true;
 }
 
-bool JsonHelper::getVector3(const rapidjson::Value& inObject, const char* inProperty, Vector3* out) {
+bool JsonHelper::getVector3(const rapidjson::Value & inObject, const char* inProperty, Vector3 * out) {
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
         return false;
@@ -204,7 +214,7 @@ bool JsonHelper::getVector3(const rapidjson::Value& inObject, const char* inProp
     return true;
 }
 
-bool JsonHelper::getQuaternion(const rapidjson::Value& inObject, const char* inProperty, Quaternion* out) {
+bool JsonHelper::getQuaternion(const rapidjson::Value & inObject, const char* inProperty, Quaternion * out) {
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
         return false;
@@ -225,8 +235,3 @@ bool JsonHelper::getQuaternion(const rapidjson::Value& inObject, const char* inP
 
     return true;
 }
-
-std::unordered_map<std::string, ActorFunc> LevelLoader::mActors {
-    { "PlayerActor", &Actor::create<PlayerActor> },
-    { "Field", &Actor::create<Field> }
-};

@@ -19,10 +19,10 @@ public:
 
     std::shared_ptr<AssetsManager> getAssetsManager() const;
 
+    void setAmbientLight(const Vector3& ambient);
     void addPointLight(PointLightComponent* light);
     void removePointLight(PointLightComponent* light);
     void drawPointLights(std::shared_ptr<Camera> camera);
-    void setAmbientLight(const Vector3& ambient);
 
     void renderToTexture();
     void renderFromTexture(std::shared_ptr<Camera> camera);
@@ -31,8 +31,8 @@ private:
     std::shared_ptr<AssetsManager> mAssetsManager;
     std::unique_ptr<GBuffer> mGBuffer;
 
-    std::shared_ptr<PointLight> mPointLight;
     Vector3 mAmbientLight;
+    std::shared_ptr<PointLight> mPointLight;
 
     std::list<PointLightComponent*> mPointLigths;
 };

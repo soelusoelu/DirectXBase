@@ -28,8 +28,8 @@
 Renderer::Renderer() :
     mAssetsManager(nullptr),
     mGBuffer(std::make_unique<GBuffer>()),
-    mPointLight(std::make_shared<PointLight>()),
-    mAmbientLight(Vector3::zero) {
+    mAmbientLight(Vector3::zero),
+    mPointLight(std::make_shared<PointLight>()) {
 }
 
 Renderer::~Renderer() = default;
@@ -40,18 +40,22 @@ void Renderer::initialize() {
     mPointLight->initialize(shared_from_this());
 
     //ディレクショナルライトと環境光の読み込み
-    LevelLoader::loadGlobal(shared_from_this(), "GlobalLight.json");
+    Singleton<LevelLoader>::instance().loadGlobal(shared_from_this(), "GlobalLight.json");
 }
 
 std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
     return mAssetsManager;
 }
 
-void Renderer::addPointLight(PointLightComponent* light) {
+void Renderer::setAmbientLight(const Vector3& ambient) {
+    mAmbientLight = ambient;
+}
+
+void Renderer::addPointLight(PointLightComponent * light) {
     mPointLigths.emplace_back(light);
 }
 
-void Renderer::removePointLight(PointLightComponent* light) {
+void Renderer::removePointLight(PointLightComponent * light) {
     auto itr = std::find(mPointLigths.begin(), mPointLigths.end(), light);
     mPointLigths.erase(itr);
 }
@@ -89,10 +93,6 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     for (const auto& p : mPointLigths) {
         p->draw(mPointLight, camera);
     }
-}
-
-void Renderer::setAmbientLight(const Vector3& ambient) {
-    mAmbientLight = ambient;
 }
 
 void Renderer::renderToTexture() {

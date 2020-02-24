@@ -34,7 +34,7 @@ GamePlay::~GamePlay() {
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
-    LevelLoader::loadActors(mRenderer, "Actors.json");
+    Singleton<LevelLoader>::instance().loadActors(mRenderer, "Actors.json");
 
     mDLight = std::make_shared<DirectionalLight>(mRenderer);
     mCamera->setPlayer(mActorManager->getPlayer());

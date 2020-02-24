@@ -10,7 +10,7 @@ class ComponentManager;
 class Renderer;
 class Time;
 
-class Actor {
+class Actor : public std::enable_shared_from_this<Actor> {
     enum class State {
         ACTIVE,
         DEAD
@@ -20,6 +20,7 @@ protected:
     Actor(std::shared_ptr<Renderer> renderer, const char* tag = "");
 public:
     virtual ~Actor();
+    void addToManager();
 
     //すべての更新
     void update();
@@ -46,8 +47,9 @@ public:
 
     //指定されたプロパティでアクターを生成
     template <typename T>
-    static Actor* create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
-        T* t = new T(renderer);
+    static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
+        auto t = std::make_shared<T>(renderer);
+        t->addToManager();
         t->mTransform->loadProperties(inObj);
         t->loadProperties(inObj);
         return t;
