@@ -9,9 +9,11 @@
 #include <unordered_map>
 
 class Actor;
+class Component;
 class Renderer;
 
 using ActorFunc = std::function<std::shared_ptr<Actor>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
+using ComponentFunc = std::function<std::shared_ptr<Component>(std::shared_ptr<Actor>, const rapidjson::Value&)>;
 
 class LevelLoader {
     friend class Singleton<LevelLoader>;
@@ -31,11 +33,14 @@ private:
     //グローバルプロパティの読み込み
     void loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObject);
     //アクターの読み込み
-    void loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray);
+    void loadActorsProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray);
+    //コンポーネントの読み込み
+    void loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray);
 
 private:
     static constexpr int LEVEL_VERSION = 1;
     std::unordered_map<std::string, ActorFunc> mActors;
+    std::unordered_map<std::string, ComponentFunc> mComponents;
 };
 
 class JsonHelper {

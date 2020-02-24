@@ -4,7 +4,7 @@
 #include "../Device/Renderer.h"
 #include "../Device/Sound.h"
 
-SoundComponent::SoundComponent(Actor* owner) :
+SoundComponent::SoundComponent(std::shared_ptr<Actor> owner) :
     Component(owner) {
 }
 
@@ -17,7 +17,7 @@ void SoundComponent::update() {
 }
 
 void SoundComponent::playOneShot(const char* fileName, float volumeScale) {
-    auto sound = mOwner->renderer()->getAssetsManager()->createSE(fileName);
+    auto sound = owner()->renderer()->getAssetsManager()->createSE(fileName);
 
     sound->setVolume(volumeScale);
     sound->play();

@@ -11,7 +11,7 @@ class Transform3D;
 
 class SphereCollisionComponent : public Collider {
 public:
-    SphereCollisionComponent(Actor* owner);
+    SphereCollisionComponent(std::shared_ptr<Actor> owner);
     ~SphereCollisionComponent();
     virtual void startCollider() override;
     virtual void updateCollider() override;

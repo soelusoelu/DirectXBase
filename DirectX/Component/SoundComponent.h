@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Component.h"
+#include <memory>
 
 class Actor;
 
 class SoundComponent : public Component {
 public:
-    SoundComponent(Actor* owner);
+    SoundComponent(std::shared_ptr<Actor> owner);
     ~SoundComponent();
     virtual void start() override;
     virtual void update() override;

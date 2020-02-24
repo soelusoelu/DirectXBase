@@ -6,7 +6,7 @@
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
 
-PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
+PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner, int updateOrder) :
     Component(owner, updateOrder),
     mSound(nullptr) {
 }
@@ -14,9 +14,9 @@ PlayerMoveComponent::PlayerMoveComponent(Actor* owner, int updateOrder) :
 PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
-    mOwner->transform()->translate(Vector3::up * 0.5);
+    owner()->transform()->translate(Vector3::up * 0.5);
 
-    mSound = mOwner->componentManager()->getComponent<SoundComponent>();
+    mSound = owner()->componentManager()->getComponent<SoundComponent>();
 }
 
 void PlayerMoveComponent::update() {
@@ -31,5 +31,5 @@ void PlayerMoveComponent::move() {
         v = Input::joyVertical();
     }
 
-    mOwner->transform()->translate(Vector3(h, 0.f, v) * Time::deltaTime);
+    owner()->transform()->translate(Vector3(h, 0.f, v) * Time::deltaTime);
 }

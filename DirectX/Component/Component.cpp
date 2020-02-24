@@ -2,10 +2,9 @@
 #include "ComponentManager.h"
 #include "../Actor/Actor.h"
 
-Component::Component(Actor* owner, int updateOrder) :
+Component::Component(std::shared_ptr<Actor> owner, int updateOrder) :
     mOwner(owner),
     mUpdateOrder(updateOrder) {
-    mOwner->componentManager()->addComponent(this);
 }
 
 Component::~Component() = default;
@@ -14,6 +13,6 @@ int Component::getUpdateOrder() const {
     return mUpdateOrder;
 }
 
-Actor* Component::getOwner() const {
-    return mOwner;
+std::shared_ptr<Actor> Component::owner() const {
+    return mOwner.lock();
 }

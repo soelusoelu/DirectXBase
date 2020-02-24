@@ -6,7 +6,7 @@
 #include "../Component/ComponentManager.h"
 #include "../Device/Renderer.h"
 
-SphereCollisionComponent::SphereCollisionComponent(Actor* owner) :
+SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<Actor> owner) :
     Collider(owner),
     mSphere(std::make_shared<Sphere>(Vector3::zero, 0.f)),
     mDefaultCenter(Vector3::zero),
@@ -22,13 +22,13 @@ SphereCollisionComponent::~SphereCollisionComponent() {
 }
 
 void SphereCollisionComponent::startCollider() {
-    auto mesh = mOwner->componentManager()->getComponent<MeshComponent>();
+    auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
     if (mesh) {
         mesh->getMesh()->createSphere(&mSphere);
         mDefaultCenter = mSphere->center;
         mDefaultRadius = mSphere->radius;
 #ifdef _DEBUG //デバッグ時のみ当たり判定表示
-        mSphereMesh = std::make_shared<Mesh>(mOwner->renderer(), "Sphere.obj");
+        mSphereMesh = std::make_shared<Mesh>(owner()->renderer(), "Sphere.obj");
         mSphereMesh->addToManager();
         mTransform->setScale(mSphere->radius);
         mSphereMesh->setTransform(mTransform);
@@ -40,8 +40,8 @@ void SphereCollisionComponent::updateCollider() {
 }
 
 void SphereCollisionComponent::onUpdateWorldTransformCollider() {
-    auto center = mDefaultCenter + mOwner->transform()->getPosition();
-    auto radius = mDefaultRadius * mOwner->transform()->getScale().y;
+    auto center = mDefaultCenter + owner()->transform()->getPosition();
+    auto radius = mDefaultRadius * owner()->transform()->getScale().y;
 
     mSphere->set(center, radius);
 

@@ -2,7 +2,7 @@
 #include "../Device/Physics.h"
 #include <algorithm>
 
-Collider::Collider(Actor* owner) :
+Collider::Collider(std::shared_ptr<Actor> owner) :
     Component(owner, 1000),
     mIsAutoUpdate(true),
     mEnable(false) {

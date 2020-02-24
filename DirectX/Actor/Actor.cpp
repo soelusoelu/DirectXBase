@@ -10,17 +10,11 @@ Actor::Actor(std::shared_ptr<Renderer> renderer, const char* tag) :
     mComponentManager(std::make_shared<ComponentManager>()),
     mTransform(std::make_shared<Transform3D>(this)),
     mDestroyTimer(nullptr),
-    mState(State::ACTIVE),
-    mTag(tag) {
+    mTag(tag),
+    mState(State::ACTIVE) {
 }
 
 Actor::~Actor() = default;
-
-void Actor::addToManager() {
-    if (mActorManager) {
-        mActorManager->add(shared_from_this());
-    }
-}
 
 void Actor::update() {
     mComponentManager->start();
@@ -73,12 +67,22 @@ const char* Actor::tag() const {
     return mTag;
 }
 
-void Actor::setActorManager(ActorManager* manager) {
+void Actor::setActorManager(ActorManager * manager) {
     mActorManager = manager;
 }
 
 ActorManager* Actor::getActorManager() {
     return mActorManager;
+}
+
+void Actor::addToManager() {
+    if (mActorManager) {
+        mActorManager->add(shared_from_this());
+    }
+}
+
+void Actor::transformloadProperties(const rapidjson::Value& inObj) {
+    mTransform->loadProperties(inObj);
 }
 
 void Actor::destroyTimer() {

@@ -9,7 +9,7 @@ class SoundComponent;
 
 class PlayerMoveComponent : public Component {
 public:
-    PlayerMoveComponent(Actor* owner, int updateOrder = 10);
+    PlayerMoveComponent(std::shared_ptr<Actor> owner, int updateOrder = 10);
     ~PlayerMoveComponent();
     virtual void start() override;
     virtual void update() override;

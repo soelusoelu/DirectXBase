@@ -10,29 +10,48 @@
 #include "../Shader/Shader.h"
 #include "../System/DirectX.h"
 #include "../System/SubResourceDesc.h"
+#include "../Utility/LevelLoader.h"
 
-PointLightComponent::PointLightComponent(Actor* owner) :
+PointLightComponent::PointLightComponent(std::shared_ptr<Actor> owner) :
     Component(owner),
-    mDiffuseColor(ColorPalette::white),
+    mColor(ColorPalette::white),
     mInnerRadius(0.5f),
     mOuterRadius(1.f),
     mIntensity(1.f) {
-    owner->renderer()->addPointLight(this);
 }
 
-PointLightComponent::~PointLightComponent() {
-    mOwner->renderer()->removePointLight(this);
-}
+PointLightComponent::~PointLightComponent() = default;
 
 void PointLightComponent::start() {
+    owner()->renderer()->addPointLight(shared_from_this());
 }
 
 void PointLightComponent::update() {
 }
 
+void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
+    Component::loadProperties(inObj);
+
+    Vector3 color;
+    if (JsonHelper::getVector3(inObj, "color", &color)) {
+        mColor = color;
+    }
+
+    float f;
+    if (JsonHelper::getFloat(inObj, "innerRadius", &f)) {
+        mInnerRadius = f;
+    }
+    if (JsonHelper::getFloat(inObj, "outerRadius", &f)) {
+        mOuterRadius = f;
+    }
+    if (JsonHelper::getFloat(inObj, "intensity", &f)) {
+        mIntensity = f;
+    }
+}
+
 void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const {
-    auto scale = Matrix4::createScale(mOwner->transform()->getScale() * mOuterRadius / pointLight->radius);
-    auto trans = Matrix4::createTranslation(mOwner->transform()->getPosition());
+    auto scale = Matrix4::createScale(owner()->transform()->getScale() * mOuterRadius / pointLight->radius);
+    auto trans = Matrix4::createTranslation(owner()->transform()->getPosition());
     auto world = scale * trans;
 
     auto mesh = pointLight->mesh;
@@ -44,10 +63,10 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
         PointLightConstantBuffer cb;
         cb.wvp = world * camera->getView() * camera->getProjection();
         cb.wvp.transpose();
-        cb.worldPos = mOwner->transform()->getPosition();
+        cb.worldPos = owner()->transform()->getPosition();
         cb.cameraPos = camera->getPosition();
         cb.windowSize = Vector2(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
-        cb.diffuseColor = mDiffuseColor;
+        cb.diffuseColor = mColor;
         cb.innerRadius = mInnerRadius;
         cb.outerRadius = mOuterRadius;
         cb.intensity = mIntensity;
@@ -71,7 +90,7 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
 }
 
 void PointLightComponent::setColor(const Vector3& color) {
-    mDiffuseColor = color;
+    mColor = color;
 }
 
 void PointLightComponent::setInnerRadius(float radius) {

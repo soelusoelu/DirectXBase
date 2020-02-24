@@ -6,6 +6,9 @@
 class Component;
 
 class ComponentManager {
+    using ComponentPtr = std::shared_ptr<Component>;
+    using ComponentPtrList = std::list<ComponentPtr>;
+
 public:
     ComponentManager();
     ~ComponentManager();
@@ -14,7 +17,7 @@ public:
     //所有するすべてのコンポーネントを更新
     void update();
     //コンポーネントの追加
-    void addComponent(Component* component);
+    void addComponent(ComponentPtr component);
 
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
     void onUpdateWorldTransform();
@@ -40,7 +43,7 @@ public:
     }
 
 private:
-    std::list<std::shared_ptr<Component>> mStartComponents;
-    std::list<std::shared_ptr<Component>> mComponents;
+    ComponentPtrList mStartComponents;
+    ComponentPtrList mComponents;
 };
 

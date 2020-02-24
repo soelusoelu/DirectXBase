@@ -43,25 +43,24 @@ void Renderer::initialize() {
     Singleton<LevelLoader>::instance().loadGlobal(shared_from_this(), "GlobalLight.json");
 }
 
+void Renderer::update() {
+    removePointLight();
+}
+
 std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
     return mAssetsManager;
 }
 
-void Renderer::setAmbientLight(const Vector3& ambient) {
+void Renderer::setAmbientLight(const Vector3 & ambient) {
     mAmbientLight = ambient;
 }
 
-void Renderer::addPointLight(PointLightComponent * light) {
-    mPointLigths.emplace_back(light);
-}
-
-void Renderer::removePointLight(PointLightComponent * light) {
-    auto itr = std::find(mPointLigths.begin(), mPointLigths.end(), light);
-    mPointLigths.erase(itr);
+void Renderer::addPointLight(std::shared_ptr<PointLightComponent> light) {
+    mPointLights.emplace_back(light);
 }
 
 void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
-    if (mPointLigths.empty()) {
+    if (mPointLights.empty()) {
         return;
     }
 
@@ -90,8 +89,10 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     bd.renderTarget.destBlend = Blend::ONE;
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 
-    for (const auto& p : mPointLigths) {
-        p->draw(mPointLight, camera);
+    for (auto&& pointLight : mPointLights) {
+        if (auto p = pointLight.lock()) {
+            p->draw(mPointLight, camera);
+        }
     }
 }
 
@@ -101,4 +102,19 @@ void Renderer::renderToTexture() {
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
     mGBuffer->renderFromTexture(camera, mAmbientLight);
+}
+
+void Renderer::removePointLight() {
+    if (mPointLights.empty()) {
+        return;
+    }
+
+    auto itr = mPointLights.begin();
+    while (itr != mPointLights.end()) {
+        if (itr->expired()) {
+            itr = mPointLights.erase(itr);
+        } else {
+            ++itr;
+        }
+    }
 }

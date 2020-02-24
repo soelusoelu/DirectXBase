@@ -2,7 +2,7 @@
   "version": 1,
   "actors": [
     {
-      "type": "PlayerActor",
+      "type": "Player",
       "properties": {
         "position": [ 0.0, 0.0, 0.0 ]
       }

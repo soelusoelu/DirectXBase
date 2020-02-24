@@ -1,6 +1,11 @@
 ﻿#include "LevelLoader.h"
+#include "../Actor/Actor.h"
 #include "../Actor/Field.h"
 #include "../Actor/PlayerActor.h"
+#include "../Component/Component.h"
+#include "../Component/ComponentManager.h"
+#include "../Component/MeshComponent.h"
+#include "../Component/PointLightComponent.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
@@ -9,8 +14,13 @@
 
 LevelLoader::LevelLoader() {
     mActors = {
-        { "PlayerActor", &Actor::create<PlayerActor> },
+        { "Player", &Actor::create<PlayerActor> },
         { "Field", &Actor::create<Field> }
+    };
+
+    mComponents = {
+        { "MeshComponent", &Component::create<MeshComponent> },
+        { "PointLightComponent", &Component::create<PointLightComponent> }
     };
 }
 
@@ -46,7 +56,7 @@ bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::stri
 
     const rapidjson::Value& actors = doc["actors"];
     if (actors.IsArray()) {
-        loadActors(renderer, actors);
+        loadActorsProperties(renderer, actors);
     }
 
     return true;
@@ -99,7 +109,7 @@ void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const
     }
 }
 
-void LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray) {
+void LevelLoader::loadActorsProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray) {
     //アクターの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
         const rapidjson::Value& actorObj = inArray[i];
@@ -113,15 +123,43 @@ void LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const rapidjson
             if (iter != mActors.end()) {
                 //mapからアクターを生成
                 auto actor = iter->second(renderer, actorObj["properties"]);
-                // Get the actor's components
-                //if (actorObj.HasMember("components")) {
-                //    const rapidjson::Value& components = actorObj["components"];
-                //    if (components.IsArray()) {
-                //        LoadComponents(actor, components);
-                //    }
-                //}
+                //コンポーネントプロパティがあれば取得
+                if (actorObj.HasMember("components")) {
+                    const rapidjson::Value& components = actorObj["components"];
+                    if (components.IsArray()) {
+                        loadComponents(actor, components);
+                    }
+                }
             } else {
                 MSG(L"このアクターは存在しません");
+            }
+        }
+    }
+}
+
+void LevelLoader::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) {
+    //コンポーネントの配列をループ
+    for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
+        const rapidjson::Value& compObj = inArray[i];
+        if (!compObj.IsObject()) {
+            continue;
+        }
+        //型名を取得
+        std::string type;
+        if (JsonHelper::getString(compObj, "type", &type)) {
+            auto iter = mComponents.find(type);
+            if (iter != mComponents.end()) {
+                //アクターがそのコンポーネントを保持しているか
+                //auto comp = actor->componentManager()->getComponent<MeshComponent>();
+                //if (comp) {
+                //    //プロパティをロード
+                //    comp->loadProperties(compObj["properties"]);
+                //} else {
+                //    //新規コンポーネントを生成
+                //    iter->second(actor, compObj["properties"]);
+                //}
+            } else {
+                MSG(L"このコンポーネントは存在しません");
             }
         }
     }

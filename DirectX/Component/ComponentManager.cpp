@@ -34,7 +34,7 @@ void ComponentManager::update() {
     }
 }
 
-void ComponentManager::addComponent(Component* component) {
+void ComponentManager::addComponent(ComponentPtr component) {
     mStartComponents.emplace_back(component);
 }
 

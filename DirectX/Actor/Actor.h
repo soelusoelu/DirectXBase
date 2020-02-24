@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Transform3D.h"
 #include "../Utility/Math.h"
 #include <memory>
 #include <rapidjson/document.h>
@@ -9,6 +8,7 @@ class ActorManager;
 class ComponentManager;
 class Renderer;
 class Time;
+class Transform3D;
 
 class Actor : public std::enable_shared_from_this<Actor> {
     enum class State {
@@ -20,8 +20,9 @@ protected:
     Actor(std::shared_ptr<Renderer> renderer, const char* tag = "");
 public:
     virtual ~Actor();
-    void addToManager();
 
+    //初期化用
+    virtual void start() = 0;
     //すべての更新
     void update();
     //アクター固有の更新
@@ -50,7 +51,8 @@ public:
     static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>(renderer);
         t->addToManager();
-        t->mTransform->loadProperties(inObj);
+        t->start();
+        t->transformloadProperties(inObj);
         t->loadProperties(inObj);
         return t;
     }
@@ -60,15 +62,19 @@ public:
     ActorManager* getActorManager();
 
 private:
+    void addToManager();
+    void transformloadProperties(const rapidjson::Value& inObj);
     void destroyTimer();
 
-private:
+protected:
     std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<ComponentManager> mComponentManager;
     std::shared_ptr<Transform3D> mTransform;
     std::unique_ptr<Time> mDestroyTimer;
-    State mState;
     const char* mTag;
+
+private:
+    State mState;
 
     static ActorManager* mActorManager;
 };

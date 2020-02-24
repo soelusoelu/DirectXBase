@@ -34,6 +34,8 @@ SceneManager::~SceneManager() {
 void SceneManager::update() {
     //現在のシーンを更新
     mCurrentScene->update();
+    //レンダラーの更新
+    mRenderer->update();
     //カメラ更新
     mCamera->update();
     //各マネージャークラスを更新
