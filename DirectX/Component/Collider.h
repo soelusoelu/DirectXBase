@@ -3,6 +3,7 @@
 #include "Component.h"
 #include <list>
 #include <memory>
+#include <string>
 
 class Actor;
 class Physics;
@@ -27,7 +28,7 @@ public:
     static void setPhysics(Physics* physics);
 
 protected:
-    Collider(std::shared_ptr<Actor> owner);
+    Collider(std::shared_ptr<Actor> owner, const std::string& typeName);
     virtual ~Collider();
 
 protected:

@@ -5,7 +5,7 @@
 #include "../Utility/LevelLoader.h"
 
 MeshComponent::MeshComponent(std::shared_ptr<Actor> owner) :
-    Component(owner),
+    Component(owner, "MeshComponent"),
     mMesh(nullptr) {
 }
 
@@ -23,7 +23,7 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 
     std::string fileName;
-    if (JsonHelper::getString(inObj, "meshFile", &fileName)) {
+    if (JsonHelper::getString(inObj, "fileName", &fileName)) {
         setMesh(fileName);
     }
 }

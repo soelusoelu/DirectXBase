@@ -5,7 +5,7 @@
 #include "../Device/Sound.h"
 
 SoundComponent::SoundComponent(std::shared_ptr<Actor> owner) :
-    Component(owner) {
+    Component(owner, "SoundComponent") {
 }
 
 SoundComponent::~SoundComponent() = default;

@@ -6,8 +6,8 @@
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
 
-PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer, const char* tag) :
-    Actor(renderer, tag) {
+PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer) :
+    Actor(renderer, "Player") {
 }
 
 PlayerActor::~PlayerActor() = default;

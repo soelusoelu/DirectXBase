@@ -6,8 +6,8 @@
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
 
-PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner, int updateOrder) :
-    Component(owner, updateOrder),
+PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
+    Component(owner, "PlayerMoveComponent", 10),
     mSound(nullptr) {
 }
 

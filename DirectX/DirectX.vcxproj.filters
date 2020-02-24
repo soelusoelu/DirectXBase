@@ -77,6 +77,7 @@
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
+    <ClCompile Include="Actor\EmptyActor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -157,5 +158,6 @@
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="System\DirectX.h" />
+    <ClInclude Include="Actor\EmptyActor.h" />
   </ItemGroup>
 </Project>

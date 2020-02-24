@@ -43,3 +43,19 @@ void ComponentManager::onUpdateWorldTransform() {
         comp->onUpdateWorldTransform();
     }
 }
+
+std::shared_ptr<Component> ComponentManager::getComponent(const std::string& type) const {
+    for (const auto& c : mStartComponents) {
+        if (c->getTypeName() == type) {
+            return c;
+        }
+    }
+    for (const auto& c : mComponents) {
+        if (c->getTypeName() == type) {
+            return c;
+        }
+    }
+
+    //最後まで見つからなければnullptrを返す
+    return nullptr;
+}

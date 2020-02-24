@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
+    <ClCompile Include="Actor\EmptyActor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
@@ -214,6 +215,7 @@
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\Actor.h" />
+    <ClInclude Include="Actor\EmptyActor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Device\AssetsManager.h" />

@@ -7,7 +7,7 @@
 #include "../Device/Renderer.h"
 
 SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<Actor> owner) :
-    Collider(owner),
+    Collider(owner, "SphereCollisionComponent"),
     mSphere(std::make_shared<Sphere>(Vector3::zero, 0.f)),
     mDefaultCenter(Vector3::zero),
     mDefaultRadius(0.f),

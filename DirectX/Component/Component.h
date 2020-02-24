@@ -2,12 +2,13 @@
 
 #include <rapidjson/document.h>
 #include <memory>
+#include <string>
 
 class Actor;
 
 class Component {
 protected:
-    Component(std::shared_ptr<Actor> owner, int updateOrder = 100);
+    Component(std::shared_ptr<Actor> owner, const std::string& typeName, int updateOrder = 100);
 public:
     virtual ~Component();
     //getComponentはここでして
@@ -16,8 +17,9 @@ public:
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};
 
-    int getUpdateOrder() const;
     std::shared_ptr<Actor> owner() const;
+    int getUpdateOrder() const;
+    const std::string& getTypeName() const;
 
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj) {};
@@ -35,5 +37,6 @@ public:
 private:
     std::weak_ptr<Actor> mOwner;
     int mUpdateOrder;
+    std::string mTypeName;
 };
 

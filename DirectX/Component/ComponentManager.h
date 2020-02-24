@@ -2,6 +2,7 @@
 
 #include <list>
 #include <memory>
+#include <string>
 
 class Component;
 
@@ -41,6 +42,9 @@ public:
         //最後まで見つからなければnullptrを返す
         return comp;
     }
+
+    //コンポーネントを文字列から取得
+    std::shared_ptr<Component> getComponent(const std::string& type) const;
 
 private:
     ComponentPtrList mStartComponents;

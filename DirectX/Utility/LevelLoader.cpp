@@ -1,11 +1,15 @@
 ﻿#include "LevelLoader.h"
 #include "../Actor/Actor.h"
+#include "../Actor/EmptyActor.h"
 #include "../Actor/Field.h"
 #include "../Actor/PlayerActor.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/MeshComponent.h"
+#include "../Component/PlayerMoveComponent.h"
 #include "../Component/PointLightComponent.h"
+#include "../Component/SoundComponent.h"
+#include "../Component/SphereCollisionComponent.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
@@ -14,13 +18,17 @@
 
 LevelLoader::LevelLoader() {
     mActors = {
+        { "Empty", &Actor::create<EmptyActor> },
         { "Player", &Actor::create<PlayerActor> },
         { "Field", &Actor::create<Field> }
     };
 
     mComponents = {
         { "MeshComponent", &Component::create<MeshComponent> },
-        { "PointLightComponent", &Component::create<PointLightComponent> }
+        { "PlayerMoveComponent", &Component::create<PlayerMoveComponent> },
+        { "PointLightComponent", &Component::create<PointLightComponent> },
+        { "SoundComponent", &Component::create<SoundComponent> },
+        { "SphereCollisionComponent", &Component::create<SphereCollisionComponent> },
     };
 }
 
@@ -150,14 +158,14 @@ void LevelLoader::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::
             auto iter = mComponents.find(type);
             if (iter != mComponents.end()) {
                 //アクターがそのコンポーネントを保持しているか
-                //auto comp = actor->componentManager()->getComponent<MeshComponent>();
-                //if (comp) {
-                //    //プロパティをロード
-                //    comp->loadProperties(compObj["properties"]);
-                //} else {
-                //    //新規コンポーネントを生成
-                //    iter->second(actor, compObj["properties"]);
-                //}
+                auto comp = actor->componentManager()->getComponent(iter->first);
+                if (comp) {
+                    //プロパティをロード
+                    comp->loadProperties(compObj["properties"]);
+                } else {
+                    //新規コンポーネントを生成
+                    comp = iter->second(actor, compObj["properties"]);
+                }
             } else {
                 MSG(L"このコンポーネントは存在しません");
             }

@@ -2,8 +2,8 @@
 #include "../Device/Physics.h"
 #include <algorithm>
 
-Collider::Collider(std::shared_ptr<Actor> owner) :
-    Component(owner, 1000),
+Collider::Collider(std::shared_ptr<Actor> owner, const std::string& typeName) :
+    Component(owner, typeName, 1000),
     mIsAutoUpdate(true),
     mEnable(false) {
 }

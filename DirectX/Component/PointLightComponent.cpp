@@ -13,7 +13,7 @@
 #include "../Utility/LevelLoader.h"
 
 PointLightComponent::PointLightComponent(std::shared_ptr<Actor> owner) :
-    Component(owner),
+    Component(owner, "PointLightComponent"),
     mColor(ColorPalette::white),
     mInnerRadius(0.5f),
     mOuterRadius(1.f),

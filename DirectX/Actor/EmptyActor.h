@@ -5,11 +5,10 @@
 
 class Renderer;
 
-class PlayerActor : public Actor {
+class EmptyActor : public Actor {
 public:
-    PlayerActor(std::shared_ptr<Renderer> renderer);
-    ~PlayerActor();
+    EmptyActor(std::shared_ptr<Renderer> renderer);
+    ~EmptyActor();
     virtual void start() override;
     virtual void updateActor() override;
 };
-

@@ -17,7 +17,7 @@ class Actor : public std::enable_shared_from_this<Actor> {
     };
 
 protected:
-    Actor(std::shared_ptr<Renderer> renderer, const char* tag = "");
+    Actor(std::shared_ptr<Renderer> renderer, const char* tag);
 public:
     virtual ~Actor();
 
