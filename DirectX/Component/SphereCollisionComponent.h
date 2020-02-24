@@ -23,6 +23,6 @@ private:
     std::shared_ptr<Sphere> mSphere;
     Vector3 mDefaultCenter;
     float mDefaultRadius;
-    Mesh* mSphereMesh;
+    std::shared_ptr<Mesh> mSphereMesh;
     std::shared_ptr<Transform3D> mTransform;
 };

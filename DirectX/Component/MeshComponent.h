@@ -13,10 +13,10 @@ public:
     ~MeshComponent();
     virtual void start() override;
     virtual void update() override;
-    Mesh* getMesh() const;
+    std::shared_ptr<Mesh> getMesh() const;
     void setActive(bool value);
     bool getActive() const;
 
 private:
-    Mesh* mMesh;
+    std::shared_ptr<Mesh> mMesh;
 };

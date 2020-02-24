@@ -13,7 +13,7 @@ public:
     ~MeshManager();
     void update();
     void draw(std::shared_ptr<Camera> camera) const;
-    void add(Mesh* mesh);
+    void add(std::shared_ptr<Mesh> mesh);
     void clear();
 
 private:

@@ -20,7 +20,7 @@ struct PointLightConstantBuffer {
 };
 
 struct PointLight {
-    Mesh* mesh;
+    std::shared_ptr<Mesh> mesh;
     std::shared_ptr<Shader> shader;
     float radius;
 

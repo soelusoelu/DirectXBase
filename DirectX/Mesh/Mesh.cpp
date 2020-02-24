@@ -33,13 +33,15 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     };
     constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
     mShader->createInputLayout(layout, numElements);
-
-    if (mMeshManager) {
-        mMeshManager->add(this);
-    }
 }
 
 Mesh::~Mesh() = default;
+
+void Mesh::addToManager() {
+    if (mMeshManager) {
+        mMeshManager->add(shared_from_this());
+    }
+}
 
 void Mesh::createSphere(std::shared_ptr<Sphere> * sphere) const {
     mLoader->createSphere(sphere);

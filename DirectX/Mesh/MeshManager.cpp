@@ -38,7 +38,7 @@ void MeshManager::draw(std::shared_ptr<Camera> camera) const {
     }
 }
 
-void MeshManager::add(Mesh* mesh) {
+void MeshManager::add(std::shared_ptr<Mesh> mesh) {
     mMeshes.emplace_back(mesh);
 }
 

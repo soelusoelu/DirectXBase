@@ -28,7 +28,8 @@ void SphereCollisionComponent::startCollider() {
         mDefaultCenter = mSphere->center;
         mDefaultRadius = mSphere->radius;
 #ifdef _DEBUG //デバッグ時のみ当たり判定表示
-        mSphereMesh = new Mesh(mOwner->renderer(), "Sphere.obj");
+        mSphereMesh = std::make_shared<Mesh>(mOwner->renderer(), "Sphere.obj");
+        mSphereMesh->addToManager();
         mTransform->setScale(mSphere->radius);
         mSphereMesh->setTransform(mTransform);
 #endif // _DEBUG

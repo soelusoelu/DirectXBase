@@ -5,7 +5,8 @@
 
 MeshComponent::MeshComponent(Actor* owner, const std::string& filename) :
     Component(owner) {
-    mMesh = new Mesh(mOwner->renderer(), filename);
+    mMesh = std::make_shared<Mesh>(mOwner->renderer(), filename);
+    mMesh->addToManager();
     mMesh->setTransform(mOwner->transform());
 }
 
@@ -19,7 +20,7 @@ void MeshComponent::start() {
 void MeshComponent::update() {
 }
 
-Mesh* MeshComponent::getMesh() const {
+std::shared_ptr<Mesh> MeshComponent::getMesh() const {
     return mMesh;
 }
 

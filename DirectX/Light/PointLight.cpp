@@ -12,13 +12,11 @@ PointLight::PointLight() :
     radius(0.f) {
 }
 
-PointLight::~PointLight() {
-    SAFE_DELETE(mesh);
-}
+PointLight::~PointLight() = default;
 
 void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
     //メッシュ描画されるとだるいから自己管理
-    mesh = new Mesh(renderer, "Sphere.obj");
+    mesh = std::make_shared<Mesh>(renderer, "Sphere.obj");
     auto sphere = std::make_shared<Sphere>(Vector3::zero, 0.f);
     mesh->createSphere(&sphere);
     radius = sphere->radius;

@@ -26,7 +26,7 @@ struct MaterialConstantBuffer {
     ALIGN16 float textureFlag;
 };
 
-class Mesh {
+class Mesh : public std::enable_shared_from_this<Mesh> {
 public:
     enum class State {
         ACTIVE,
@@ -36,6 +36,7 @@ public:
 
     Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Mesh();
+    void addToManager();
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
     void draw(std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);

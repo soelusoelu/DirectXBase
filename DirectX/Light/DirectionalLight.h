@@ -18,6 +18,6 @@ public:
     static Vector3 color;
 
 private:
-    Mesh* mMesh;
+    std::shared_ptr<Mesh> mMesh;
     std::shared_ptr<Transform3D> mTransform;
 };
