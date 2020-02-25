@@ -83,6 +83,8 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     //mGBuffer->getSampler()->setPSSamplers();
     //デプステスト有効化
     Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
+    //デプスマスク無効化
+    Singleton<DirectX>::instance().depthStencilState()->depthMask(false);
     //加算合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::ONE;

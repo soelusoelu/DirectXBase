@@ -109,6 +109,8 @@ void GBuffer::renderToTexture() {
 
     //デプステスト有効化
     Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
+    //デプスマスク有効化
+    Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
     //通常合成
     BlendDesc bd;
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;

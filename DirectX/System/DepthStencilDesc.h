@@ -3,11 +3,6 @@
 #include "ComparisonFunc.h"
 #include "DirectXIncLib.h"
 
-enum class DepthWriteMask {
-    ZERO, //無効
-    ALL //有効
-};
-
 //深度ステンシルテスト中に実行できるステンシル操作
 enum class StencilOP {
     KEEP, //既存のステンシルデータを保持
@@ -35,7 +30,7 @@ struct DepthStencilDesc {
     //深度テスト有効化指定
     bool depthEnable;
     //深度データを書き込むための深度ステンシルバッファの部分を識別
-    DepthWriteMask depthWriteMask;
+    bool depthWriteMask;
     //比較オプション
     ComparisonFunc depthFunc;
     //ステンシルテスト有効化指定
@@ -51,7 +46,7 @@ struct DepthStencilDesc {
 
     DepthStencilDesc() :
         depthEnable(true),
-        depthWriteMask(DepthWriteMask::ALL),
+        depthWriteMask(true),
         depthFunc(ComparisonFunc::LESS),
         stencilEnable(false),
         stencilReadMask(D3D11_DEFAULT_STENCIL_READ_MASK),

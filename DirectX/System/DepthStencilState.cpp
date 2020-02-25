@@ -5,42 +5,38 @@
 
 DepthStencilState::DepthStencilState() :
     mDesc() {
-    depthTest(true);
+    execute();
 }
 
 DepthStencilState::~DepthStencilState() = default;
 
 void DepthStencilState::depthTest(bool value) {
     mDesc.depthEnable = value;
+    execute();
+}
 
-    ID3D11DepthStencilState* depthStencilState;
-
-    Singleton<DirectX>::instance().device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
-
-    Singleton<DirectX>::instance().deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
-
-    //SAFE_RELEASE(depthStencilState);
-    if (depthStencilState) {
-        depthStencilState->Release();
-    }
+void DepthStencilState::depthMask(bool value) {
+    mDesc.depthWriteMask = value;
+    execute();
 }
 
 void DepthStencilState::stencilTest(bool value) {
     mDesc.stencilEnable = value;
+    execute();
+}
 
+const DepthStencilDesc& DepthStencilState::desc() const {
+    return mDesc;
+}
+
+void DepthStencilState::execute() const {
     ID3D11DepthStencilState* depthStencilState;
 
     Singleton<DirectX>::instance().device()->CreateDepthStencilState(&toDepthStencilDesc(mDesc), &depthStencilState);
 
     Singleton<DirectX>::instance().deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-    if (depthStencilState) {
-        depthStencilState->Release();
-    }
-}
-
-const DepthStencilDesc& DepthStencilState::desc() const {
-    return mDesc;
+    SAFE_RELEASE(depthStencilState);
 }
 
 D3D11_DEPTH_STENCIL_DESC DepthStencilState::toDepthStencilDesc(const DepthStencilDesc & desc) const {
@@ -63,12 +59,8 @@ D3D11_DEPTH_STENCIL_DESC DepthStencilState::toDepthStencilDesc(const DepthStenci
     return dsd;
 }
 
-D3D11_DEPTH_WRITE_MASK DepthStencilState::toDepthWriteMask(DepthWriteMask mask) const {
-    static constexpr D3D11_DEPTH_WRITE_MASK masks[]{
-        D3D11_DEPTH_WRITE_MASK_ZERO,
-        D3D11_DEPTH_WRITE_MASK_ALL
-    };
-    return masks[static_cast<unsigned>(mask)];
+D3D11_DEPTH_WRITE_MASK DepthStencilState::toDepthWriteMask(bool mask) const {
+    return (mask) ? D3D11_DEPTH_WRITE_MASK_ALL : D3D11_DEPTH_WRITE_MASK_ZERO;
 }
 
 D3D11_STENCIL_OP DepthStencilState::toStencilOP(StencilOP stencilOp) const {
