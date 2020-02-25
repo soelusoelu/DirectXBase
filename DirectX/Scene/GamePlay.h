@@ -5,7 +5,6 @@
 #include <memory>
 
 class ActorManager;
-class DirectionalLight;
 class Physics;
 
 class GamePlay : public SceneBase, public std::enable_shared_from_this<GamePlay> {
@@ -25,7 +24,6 @@ public:
 
 private:
     ActorManager* mActorManager;
-    std::shared_ptr<DirectionalLight> mDLight;
     Physics* mPhysics;
     State mState;
 };

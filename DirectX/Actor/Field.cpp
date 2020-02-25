@@ -5,8 +5,8 @@
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
 
-Field::Field(std::shared_ptr<Renderer> renderer, const char* tag) :
-    Actor(renderer, tag) {
+Field::Field(std::shared_ptr<Renderer> renderer) :
+    Actor(renderer, "Field") {
 }
 
 Field::~Field() = default;

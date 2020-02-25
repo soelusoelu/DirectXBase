@@ -118,7 +118,7 @@ void GBuffer::renderToTexture() {
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 }
 
-void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, const Vector3& ambient) {
+void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight, const Vector3& ambient) {
     //レンダーターゲットを通常に戻す
     Singleton<DirectX>::instance().setRenderTarget();
     //クリア
@@ -138,8 +138,8 @@ void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, const Vector3& a
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd)) {
         GBufferShaderConstantBuffer cb;
-        cb.dirLightDir = DirectionalLight::direction;
-        cb.dirLightColor = DirectionalLight::color;
+        cb.dirLightDir = dirLight->getDirection();
+        cb.dirLightColor = dirLight->getColor();
         cb.cameraPos = camera->getPosition();
         cb.ambientLight = ambient;
 

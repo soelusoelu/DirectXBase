@@ -7,6 +7,7 @@
 
 class AssetsManager;
 class Camera;
+class DirectionalLight;
 class GBuffer;
 struct PointLight;
 class PointLightComponent;
@@ -20,7 +21,9 @@ public:
 
     std::shared_ptr<AssetsManager> getAssetsManager() const;
 
+    const Vector3& getAmbientLight() const;
     void setAmbientLight(const Vector3& ambient);
+    std::shared_ptr<DirectionalLight> getDirectionalLight() const;
     void addPointLight(std::shared_ptr<PointLightComponent> light);
     void drawPointLights(std::shared_ptr<Camera> camera);
 
@@ -35,6 +38,7 @@ private:
     std::unique_ptr<GBuffer> mGBuffer;
 
     Vector3 mAmbientLight;
+    std::shared_ptr<DirectionalLight> mDirectionalLight;
     std::shared_ptr<PointLight> mPointLight;
 
     std::list<std::weak_ptr<PointLightComponent>> mPointLights;

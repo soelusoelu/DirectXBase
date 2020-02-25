@@ -1,8 +1,9 @@
 ﻿#pragma once
 
 #include "../Utility/Math.h"
-#include <memory>
 #include <rapidjson/document.h>
+#include <memory>
+#include <string>
 
 class ActorManager;
 class ComponentManager;
@@ -17,7 +18,7 @@ class Actor : public std::enable_shared_from_this<Actor> {
     };
 
 protected:
-    Actor(std::shared_ptr<Renderer> renderer, const char* tag);
+    Actor(std::shared_ptr<Renderer> renderer, const std::string& tag);
 public:
     virtual ~Actor();
 
@@ -40,11 +41,11 @@ public:
     std::shared_ptr<ComponentManager> componentManager() const;
     std::shared_ptr<Transform3D> transform() const;
     bool isDead() const;
-    const char* tag() const;
+    const std::string& tag() const;
 
     //ロード/セーブ
-    virtual void loadProperties(const rapidjson::Value& inObj) {};
-    //virtual void SaveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+    virtual void loadProperties(const rapidjson::Value& inObj);
+    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
 
     //指定されたプロパティでアクターを生成
     template <typename T>
@@ -52,7 +53,6 @@ public:
         auto t = std::make_shared<T>(renderer);
         t->addToManager();
         t->start();
-        t->transformloadProperties(inObj);
         t->loadProperties(inObj);
         return t;
     }
@@ -63,7 +63,6 @@ public:
 
 private:
     void addToManager();
-    void transformloadProperties(const rapidjson::Value& inObj);
     void destroyTimer();
 
 protected:
@@ -71,7 +70,7 @@ protected:
     std::shared_ptr<ComponentManager> mComponentManager;
     std::shared_ptr<Transform3D> mTransform;
     std::unique_ptr<Time> mDestroyTimer;
-    const char* mTag;
+    std::string mTag;
 
 private:
     State mState;

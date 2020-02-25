@@ -7,6 +7,7 @@
 #include <vector>
 
 class Camera;
+class DirectionalLight;
 class IndexBuffer;
 class Renderer;
 class RenderTargetView;
@@ -45,7 +46,7 @@ public:
 
     //GBufferテクスチャ上にレンダリング
     void renderToTexture();
-    void renderFromTexture(std::shared_ptr<Camera> camera, const Vector3& ambient);
+    void renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight, const Vector3& ambient);
 
     //全シェーダーリソースの登録
     void setVSShaderResources() const;

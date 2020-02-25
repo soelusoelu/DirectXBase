@@ -23,7 +23,7 @@ public:
 
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj) {};
-    //virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>

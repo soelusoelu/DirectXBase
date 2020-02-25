@@ -26,16 +26,16 @@
 #include "../Utility/LevelLoader.h"
 
 Renderer::Renderer() :
-    mAssetsManager(nullptr),
+    mAssetsManager(std::make_shared<AssetsManager>()),
     mGBuffer(std::make_unique<GBuffer>()),
     mAmbientLight(Vector3::zero),
+    mDirectionalLight(std::make_shared<DirectionalLight>()),
     mPointLight(std::make_shared<PointLight>()) {
 }
 
 Renderer::~Renderer() = default;
 
 void Renderer::initialize() {
-    mAssetsManager = std::make_shared<AssetsManager>();
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 
@@ -44,6 +44,7 @@ void Renderer::initialize() {
 }
 
 void Renderer::update() {
+    mDirectionalLight->update();
     removePointLight();
 }
 
@@ -51,8 +52,16 @@ std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
     return mAssetsManager;
 }
 
+const Vector3& Renderer::getAmbientLight() const {
+    return mAmbientLight;
+}
+
 void Renderer::setAmbientLight(const Vector3 & ambient) {
     mAmbientLight = ambient;
+}
+
+std::shared_ptr<DirectionalLight> Renderer::getDirectionalLight() const {
+    return mDirectionalLight;
 }
 
 void Renderer::addPointLight(std::shared_ptr<PointLightComponent> light) {
@@ -103,7 +112,7 @@ void Renderer::renderToTexture() {
 }
 
 void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
-    mGBuffer->renderFromTexture(camera, mAmbientLight);
+    mGBuffer->renderFromTexture(camera, mDirectionalLight, mAmbientLight);
 }
 
 void Renderer::removePointLight() {

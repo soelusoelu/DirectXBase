@@ -5,7 +5,7 @@
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
 
-Actor::Actor(std::shared_ptr<Renderer> renderer, const char* tag) :
+Actor::Actor(std::shared_ptr<Renderer> renderer, const std::string& tag) :
     mRenderer(renderer),
     mComponentManager(std::make_shared<ComponentManager>()),
     mTransform(std::make_shared<Transform3D>(this)),
@@ -63,8 +63,16 @@ bool Actor::isDead() const {
     return mState == State::DEAD;
 }
 
-const char* Actor::tag() const {
+const std::string& Actor::tag() const {
     return mTag;
+}
+
+void Actor::loadProperties(const rapidjson::Value& inObj) {
+    mTransform->loadProperties(inObj);
+}
+
+void Actor::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+    mTransform->saveProperties(alloc, inObj);
 }
 
 void Actor::setActorManager(ActorManager * manager) {
@@ -79,10 +87,6 @@ void Actor::addToManager() {
     if (mActorManager) {
         mActorManager->add(shared_from_this());
     }
-}
-
-void Actor::transformloadProperties(const rapidjson::Value& inObj) {
-    mTransform->loadProperties(inObj);
 }
 
 void Actor::destroyTimer() {

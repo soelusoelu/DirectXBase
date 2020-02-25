@@ -1,9 +1,10 @@
 ﻿#pragma once
 
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <list>
 #include <memory>
-#include <rapidjson/document.h>
+#include <string>
 
 class Actor;
 
@@ -50,7 +51,7 @@ public:
     //親子関係
     void addChild(std::shared_ptr<Transform3D> child);
     void removeChild(std::shared_ptr<Transform3D> child);
-    void removeChild(const char* tag);
+    void removeChild(const std::string& tag);
     std::shared_ptr<Transform3D> getChild(const char* tag) const;
     std::shared_ptr<Transform3D> parent() const;
     std::shared_ptr<Transform3D> root() const;
@@ -58,7 +59,7 @@ public:
 
     //ロード/セーブ
     void loadProperties(const rapidjson::Value& inObj);
-    //virtual void SaveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value& inObj) const;
+    void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
 
 private:
     void setParent(std::shared_ptr<Transform3D> parent);
