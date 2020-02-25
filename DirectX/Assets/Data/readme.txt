@@ -19,6 +19,10 @@ PointLightComponent
   outerRadius -> 光の届く半径
   intensity -> 光の強度
 
+HitPointComponent
+  HP -> 現在HP
+  maxHP -> 最大HP
+
 //現状なし
 PlayerMoveComponent
 SoundComponent

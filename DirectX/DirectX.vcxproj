@@ -147,6 +147,7 @@
     <ClCompile Include="Actor\EmptyActor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Actor\EmptyActor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="Utility\LevelLoader.h" />

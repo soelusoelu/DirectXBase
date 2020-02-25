@@ -6,6 +6,7 @@
 #include "../Actor/PlayerActor.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/HitPointComponent.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/PlayerMoveComponent.h"
 #include "../Component/PointLightComponent.h"
@@ -27,6 +28,7 @@ LevelLoader::LevelLoader() {
     };
 
     mComponents = {
+        { "HitPointComponent", &Component::create<HitPointComponent> },
         { "MeshComponent", &Component::create<MeshComponent> },
         { "PlayerMoveComponent", &Component::create<PlayerMoveComponent> },
         { "PointLightComponent", &Component::create<PointLightComponent> },

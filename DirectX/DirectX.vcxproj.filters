@@ -78,6 +78,7 @@
     <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="Actor\EmptyActor.cpp" />
+    <ClCompile Include="Component\HitPointComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -159,5 +160,6 @@
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="Actor\EmptyActor.h" />
+    <ClInclude Include="Component\HitPointComponent.h" />
   </ItemGroup>
 </Project>
