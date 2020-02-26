@@ -79,6 +79,7 @@
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="Actor\EmptyActor.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
+    <ClCompile Include="UI\Score.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -161,5 +162,6 @@
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="Actor\EmptyActor.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
+    <ClInclude Include="UI\Score.h" />
   </ItemGroup>
 </Project>

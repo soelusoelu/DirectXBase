@@ -37,7 +37,8 @@ void GamePlay::start() {
 
     mCamera->setPlayer(mActorManager->getPlayer());
 
-    auto kotori = new Sprite(mRenderer, "kotori.png");
+    auto kotori = std::make_shared<Sprite>(mRenderer, "kotori.png");
+    kotori->addToManager();
     kotori->transform()->setScale(0.5f);
     kotori->transform()->setPivot(Pivot::LEFT_BOTTOM);
     kotori->transform()->setPosition(Vector2(0.f, Game::WINDOW_HEIGHT));

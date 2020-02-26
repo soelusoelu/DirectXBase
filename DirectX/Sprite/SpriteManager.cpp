@@ -23,7 +23,7 @@ void SpriteManager::update() {
     remove();
 }
 
-void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
+void SpriteManager::draw() {
     if (mSprites.empty()) {
         return;
     }
@@ -59,12 +59,7 @@ void SpriteManager::draw(std::shared_ptr<Renderer> renderer) {
     }
 }
 
-void SpriteManager::add(Sprite * add) {
-    std::shared_ptr<Sprite> s(add);
-    this->add(s);
-}
-
-void SpriteManager::add(std::shared_ptr<Sprite> add) {
+void SpriteManager::add(SpritePtr add) {
     mSprites.emplace_back(add);
 }
 

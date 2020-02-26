@@ -8,6 +8,7 @@
 class AssetsManager;
 class Camera;
 class DirectionalLight;
+class DrawString;
 class GBuffer;
 struct PointLight;
 class PointLightComponent;
@@ -20,6 +21,7 @@ public:
     void update();
 
     std::shared_ptr<AssetsManager> getAssetsManager() const;
+    std::shared_ptr<DrawString> getDrawString() const;
 
     const Vector3& getAmbientLight() const;
     void setAmbientLight(const Vector3& ambient);
@@ -35,6 +37,7 @@ private:
 
 private:
     std::shared_ptr<AssetsManager> mAssetsManager;
+    std::shared_ptr<DrawString> mDrawString;
     std::unique_ptr<GBuffer> mGBuffer;
 
     Vector3 mAmbientLight;

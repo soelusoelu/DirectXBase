@@ -62,7 +62,7 @@ void SceneManager::draw() const {
     mRenderer->drawPointLights(mCamera);
 
     //スプライトの一括描画
-    mSpriteManager->draw(mRenderer);
+    mSpriteManager->draw();
 }
 
 void SceneManager::change() {

@@ -6,11 +6,14 @@
 class UI;
 
 class UIManager {
+    using UIPtr = std::shared_ptr<UI>;
+    using UIPtrList = std::list<UIPtr>;
+
 public:
     UIManager();
     ~UIManager();
     void update();
-    void add(UI* add);
+    void add(UIPtr add);
     void clear();
 
 private:
@@ -20,5 +23,5 @@ private:
     UIManager& operator=(const UIManager&) = delete;
 
 private:
-    std::list<std::unique_ptr<UI>> mUIStack;
+    UIPtrList mUIStack;
 };

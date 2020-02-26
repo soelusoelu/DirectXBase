@@ -13,7 +13,8 @@ Title::Title() :
 Title::~Title() = default;
 
 void Title::start() {
-    auto title = new Sprite(mRenderer, "12Title.png");
+    auto title = std::make_shared<Sprite>(mRenderer, "12Title.png");
+    title->addToManager();
     title->transform()->setPosition(Vector2(Game::WINDOW_WIDTH / 2.f, Game::WINDOW_HEIGHT / 2.f));
 }
 

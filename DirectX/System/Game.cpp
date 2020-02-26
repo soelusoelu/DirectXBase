@@ -17,7 +17,6 @@ Game::Game() {
 }
 
 Game::~Game() {
-    DrawString::end();
     Input::end();
     Texture::end();
     SingletonFinalizer::finalize();
@@ -61,7 +60,6 @@ HRESULT Game::init() {
 
     Random::init();
     Input::init(mhWnd);
-    DrawString::initialize(mRenderer);
 
     mMain = std::make_unique<Main>(mRenderer);
 
@@ -100,8 +98,8 @@ void Game::fixFPS60() {
     Time::deltaTime = deltaTime;
     previousTime = currentTime;
 
-    DrawString::drawString("fps", Vector2::zero);
-    DrawString::drawNumber(static_cast<float>(1000.f / time), Vector2(32.f * 4, 0.f), 2);
+    mRenderer->getDrawString()->drawString("fps", Vector2::zero);
+    mRenderer->getDrawString()->drawNumber(static_cast<float>(1000.f / time), Vector2(32.f * 4, 0.f), 2);
 }
 
 

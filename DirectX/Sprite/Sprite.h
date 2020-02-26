@@ -4,13 +4,13 @@
 #include <memory>
 #include <string>
 
-class Transform2D;
-class SpriteManager;
-class Shader;
-class Texture;
 class Renderer;
+class Shader;
+class SpriteManager;
+class Texture;
+class Transform2D;
 
-class Sprite {
+class Sprite : public std::enable_shared_from_this<Sprite> {
     enum class State {
         ACTIVE,
         NON_ACTIVE,
@@ -20,7 +20,8 @@ class Sprite {
 public:
     Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Sprite();
-    Sprite(const Sprite& sprite);
+    //マネージャークラスへの登録
+    void addToManager();
     //SpriteManagerにて毎フレーム実行
     void update();
     //描画
@@ -52,13 +53,11 @@ public:
     std::shared_ptr<Shader> shader() const;
     //ファイル名の取得
     const std::string& fileName() const;
-    std::shared_ptr<Renderer> renderer() const;
 
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);
 
 private:
-    std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<Transform2D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;

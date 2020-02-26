@@ -1,19 +1,21 @@
 ﻿#pragma once
 
 #include <memory>
-#include <vector>
+#include <list>
 
 class Renderer;
 class Sprite;
 
 class SpriteManager {
+    using SpritePtr = std::shared_ptr<Sprite>;
+    using SpritePtrList = std::list<SpritePtr>;
+
 public:
     SpriteManager();
     ~SpriteManager();
     void update();
-    void draw(std::shared_ptr<Renderer> renderer);
-    void add(Sprite* add);
-    void add(std::shared_ptr<Sprite> add);
+    void draw();
+    void add(SpritePtr add);
     void clear();
 
 private:
@@ -23,5 +25,5 @@ private:
     SpriteManager& operator=(const SpriteManager&) = delete;
 
 private:
-    std::vector<std::shared_ptr<Sprite>> mSprites;
+    SpritePtrList mSprites;
 };

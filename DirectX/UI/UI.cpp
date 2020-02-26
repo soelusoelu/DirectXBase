@@ -3,64 +3,67 @@
 #include "../Actor/Transform2D.h"
 #include "../Sprite/Sprite.h"
 
-UI::UI() :
-    mSprites(0),
-    mState(UIState::ACTIVE) {
-    if (mUIManager) {
-        mUIManager->add(this);
-    }
+UI::UI(const std::string& type) :
+    mState(State::ACTIVE),
+    mTypeName(type) {
 }
 
 UI::~UI() {
-    if (mSprites.empty()) {
-        return;
-    }
     for (auto&& sprite : mSprites) {
         sprite->destroy();
     }
 }
 
 void UI::update() {
-    if (mState == UIState::ACTIVE) {
+    if (getActive()) {
         updateUI();
-    } else if (mState == UIState::NON_ACTIVE) {
-        for (auto&& sprite : mSprites) {
-            if (sprite->getActive()) {
-                sprite->setActive(false);
-            }
-        }
     }
 }
 
 void UI::close() {
-    mState = UIState::CLOSING;
+    mState = State::CLOSING;
 }
 
-void UI::addSprite(Sprite* sprite) {
+void UI::addSprite(SpritePtr sprite) {
+    //スプライトをスプライトマネージャーに登録
+    sprite->addToManager();
     mSprites.emplace_back(sprite);
 }
 
-void UI::removeSprite(Sprite* sprite) {
-    auto itr = std::find(mSprites.begin(), mSprites.end(), sprite);
-    if (itr != mSprites.end()) {
-        mSprites.erase(itr);
+void UI::setActive(bool value) {
+    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+
+    if (value) {
+        return;
+    }
+    //管理してる全スプライトを非アクティブに
+    for (auto&& sprite : mSprites) {
+        if (sprite->getActive()) {
+            sprite->setActive(false);
+        }
     }
 }
 
-void UI::setActive(bool value) {
-    mState = (value) ? UIState::ACTIVE : UIState::NON_ACTIVE;
-}
-
 bool UI::getActive() const {
-    return mState == UIState::ACTIVE;
+    return mState == State::ACTIVE;
 }
 
-UIState UI::getState() const {
-    return mState;
+bool UI::isClosing() const {
+    return mState == State::CLOSING;
+}
+
+const std::string& UI::getTypeName() const {
+    return mTypeName;
 }
 
 void UI::setUIManager(UIManager* manager) {
     mUIManager = manager;
+}
+
+void UI::addToManager() {
+    if (mUIManager) {
+        mUIManager->add(shared_from_this());
+    }
 }
 
 UIManager* UI::mUIManager = nullptr;

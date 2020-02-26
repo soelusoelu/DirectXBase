@@ -10,18 +10,21 @@ class Sprite;
 
 class DrawString {
 public:
-    static void initialize(std::shared_ptr<Renderer> renderer);
-    static void end();
-    static void drawNumber(int number, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
-    static void drawNumberRightJustified(int number, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
-    static void drawNumber(float number, const Vector2& position, int decimalDigits = 1, Pivot pivot = Pivot::LEFT_TOP);
+    DrawString();
+    ~DrawString();
+    void initialize(std::shared_ptr<Renderer> renderer);
+    void drawNumber(int number, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
+    void drawNumberRightJustified(int number, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
+    void drawNumber(float number, const Vector2& position, int decimalDigits = 1, Pivot pivot = Pivot::LEFT_TOP);
     //挙動怪しい
-    static void drawNumberRightJustified(float number, const Vector2& position, int decimalDigits = 1);
-    static void drawString(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
-    static void drawStringRightJustified(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
+    void drawNumberRightJustified(float number, const Vector2& position, int decimalDigits = 1);
+    void drawString(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
+    void drawStringRightJustified(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
 
 private:
-    static Sprite* mSprite;
+    std::weak_ptr<Renderer> mRenderer;
+    std::shared_ptr<Sprite> mNumberSprite;
+    std::shared_ptr<Sprite> mFontSprite;
     static constexpr int WIDTH = 32; //画像1文字の横幅
     static constexpr int HEIGHT = 64; //画像1文字の縦幅
     static constexpr int SPRITE_WIDTH = 512; //画像横幅

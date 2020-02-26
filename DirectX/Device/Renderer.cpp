@@ -1,5 +1,6 @@
 ﻿#include "Renderer.h"
 #include "AssetsManager.h"
+#include "DrawString.h"
 #include "Sound.h"
 #include "../Camera/Camera.h"
 #include "../Component/PointLightComponent.h"
@@ -27,6 +28,7 @@
 
 Renderer::Renderer() :
     mAssetsManager(std::make_shared<AssetsManager>()),
+    mDrawString(std::make_shared<DrawString>()),
     mGBuffer(std::make_unique<GBuffer>()),
     mAmbientLight(Vector3::zero),
     mDirectionalLight(std::make_shared<DirectionalLight>()),
@@ -36,6 +38,7 @@ Renderer::Renderer() :
 Renderer::~Renderer() = default;
 
 void Renderer::initialize() {
+    mDrawString->initialize(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 
@@ -50,6 +53,10 @@ void Renderer::update() {
 
 std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
     return mAssetsManager;
+}
+
+std::shared_ptr<DrawString> Renderer::getDrawString() const {
+    return mDrawString;
 }
 
 const Vector3& Renderer::getAmbientLight() const {

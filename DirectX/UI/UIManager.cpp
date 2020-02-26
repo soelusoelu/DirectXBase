@@ -11,7 +11,7 @@ void UIManager::update() {
     remove();
 }
 
-void UIManager::add(UI * add) {
+void UIManager::add(UIPtr add) {
     mUIStack.emplace_back(add);
 }
 
@@ -22,7 +22,7 @@ void UIManager::clear() {
 void UIManager::remove() {
     auto itr = mUIStack.begin();
     while (itr != mUIStack.end()) {
-        if ((*itr)->getState() == UIState::CLOSING) {
+        if ((*itr)->isClosing()) {
             itr = mUIStack.erase(itr);
         } else {
             ++itr;

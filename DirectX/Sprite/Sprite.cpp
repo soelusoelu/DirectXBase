@@ -13,10 +13,9 @@
 #include <cassert>
 
 Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mRenderer(renderer),
     mTransform(std::make_shared<Transform2D>()),
-    mTexture(mRenderer->getAssetsManager()->createTexture(fileName)),
-    mShader(mRenderer->getAssetsManager()->createShader("Texture.hlsl")),
+    mTexture(renderer->getAssetsManager()->createTexture(fileName)),
+    mShader(renderer->getAssetsManager()->createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
@@ -40,25 +39,14 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) 
     };
     constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
     mShader->createInputLayout(layout, numElements);
-
-    if (mSpriteManager) {
-        mSpriteManager->add(this);
-    }
 }
 
 Sprite::~Sprite() = default;
 
-Sprite::Sprite(const Sprite & sprite) :
-    mRenderer(sprite.mRenderer),
-    mTransform(sprite.mTransform),
-    mTextureSize(sprite.mTextureSize),
-    mTexture(sprite.mTexture),
-    mShader(sprite.mShader),
-    mColor(sprite.mColor),
-    mUV(sprite.mUV),
-    mState(State::ACTIVE),
-    mFileName(sprite.mFileName),
-    mIsOnceDraw(sprite.mIsOnceDraw) {
+void Sprite::addToManager() {
+    if (mSpriteManager) {
+        mSpriteManager->add(shared_from_this());
+    }
 }
 
 void Sprite::update() {
@@ -192,10 +180,6 @@ std::shared_ptr<Shader> Sprite::shader() const {
 
 const std::string& Sprite::fileName() const {
     return mFileName;
-}
-
-std::shared_ptr<Renderer> Sprite::renderer() const {
-    return mRenderer;
 }
 
 void Sprite::setSpriteManager(SpriteManager * manager) {

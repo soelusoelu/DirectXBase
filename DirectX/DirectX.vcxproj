@@ -150,6 +150,7 @@
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
+    <ClCompile Include="UI\Score.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="System\RenderTargetView.cpp" />
     <ClCompile Include="System\ComparisonFunc.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="System\DirectX.h" />
+    <ClInclude Include="UI\Score.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="System\RenderTargetView.h" />
     <ClInclude Include="System\ComparisonFunc.h" />
