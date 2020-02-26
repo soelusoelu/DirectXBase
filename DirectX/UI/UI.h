@@ -20,7 +20,7 @@ class UI : public std::enable_shared_from_this<UI> {
     };
 
 protected:
-    UI(const std::string& type);
+    UI(std::shared_ptr<Renderer> renderer, const std::string& type);
 public:
     virtual ~UI();
     void update();
@@ -39,7 +39,7 @@ public:
     //指定されたプロパティでアクターを生成
     template <typename T>
     static std::shared_ptr<UI> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
-        auto t = std::make_shared<T>();
+        auto t = std::make_shared<T>(renderer);
         t->addToManager();
         t->loadProperties(inObj);
         return t;
@@ -49,6 +49,9 @@ public:
 
 private:
     void addToManager();
+
+protected:
+    std::shared_ptr<Renderer> mRenderer;
 
 private:
     SpritePtrList mSprites;

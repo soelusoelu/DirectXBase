@@ -15,6 +15,7 @@
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
+#include "../UI/Score.h"
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <fstream>
@@ -34,6 +35,10 @@ LevelLoader::LevelLoader() {
         { "PointLightComponent", &Component::create<PointLightComponent> },
         { "SoundComponent", &Component::create<SoundComponent> },
         { "SphereCollisionComponent", &Component::create<SphereCollisionComponent> },
+    };
+
+    mUIs = {
+        { "Score", &UI::create<Score> }
     };
 }
 
@@ -91,6 +96,22 @@ std::shared_ptr<Actor> LevelLoader::loadSpecifiedActor(std::shared_ptr<Renderer>
     return actor;
 }
 
+std::shared_ptr<UI> LevelLoader::loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const {
+    rapidjson::Document doc;
+    if (!loadJSON(fileName, &doc)) {
+        MSG(L"レベルファイルのロードに失敗しました");
+        return nullptr;
+    }
+
+    std::shared_ptr<UI> ui = nullptr;
+    const rapidjson::Value& uis = doc["UIs"];
+    if (uis.IsArray()) {
+        ui = loadSpecifiedUIProperties(renderer, uis, type);
+    }
+
+    return ui;
+}
+
 void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
     ////ドキュメントとルートオブジェクトを生成
     //rapidjson::Document doc;
@@ -121,6 +142,45 @@ void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::strin
     //if (outFile.is_open()) {
     //    outFile << output;
     //}
+}
+
+void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string& fileName) const {
+    //ドキュメントとルートオブジェクトを生成
+    rapidjson::Document doc;
+    doc.SetObject();
+
+    rapidjson::Value uis(rapidjson::kArrayType);
+    for (const auto& ui : uiList) {
+        //UI用のjsonオブジェクトを作る
+        rapidjson::Value obj(rapidjson::kObjectType);
+        //タイプを追加
+        JsonHelper::setString(doc.GetAllocator(), &obj, "type", ui->getTypeName());
+
+        //プロパティ用のjsonオブジェクトを作る
+        rapidjson::Value props(rapidjson::kObjectType);
+        //プロパティを保存
+        ui->saveProperties(doc.GetAllocator(), &props);
+        //プロパティをアクターのjsonオブジェクトに追加
+        obj.AddMember("properties", props, doc.GetAllocator());
+
+        //UIを配列に追加
+        uis.PushBack(obj, doc.GetAllocator());
+    }
+    doc.AddMember("UIs", uis, doc.GetAllocator());
+
+    //jsonを文字列バッファに保存
+    rapidjson::StringBuffer buffer;
+    //整形出力用にPrettyWriterを使う(もしくはWriter)
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    doc.Accept(writer);
+    const char* output = buffer.GetString();
+
+    //文字列をファイルに書き込む
+    setDataDirectory();
+    std::ofstream outFile(fileName);
+    if (outFile.is_open()) {
+        outFile << output;
+    }
 }
 
 bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) const {
@@ -275,6 +335,37 @@ void LevelLoader::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::
             comp = iter->second(actor, compObj["properties"]);
         }
     }
+}
+
+std::shared_ptr<UI> LevelLoader::loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const {
+    //そもそも指定のtypeが存在しているかチェック
+    auto itr = mUIs.find(type);
+    if (itr == mUIs.end()) {
+        return nullptr;
+    }
+
+    std::shared_ptr<UI> ui = nullptr;
+    //UIの配列をループ
+    for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
+        //有効なオブジェクトか
+        const rapidjson::Value& uiObj = inArray[i];
+        if (!uiObj.IsObject()) {
+            continue;
+        }
+        //有効な型名か
+        std::string t;
+        if (!JsonHelper::getString(uiObj, "type", &t)) {
+            continue;
+        }
+        //指定のタイプと一致するか
+        if (t != type) {
+            continue;
+        }
+        //mapからUIを生成
+        ui = itr->second(renderer, uiObj["properties"]);
+    }
+
+    return ui;
 }
 
 void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value * inObject) const {

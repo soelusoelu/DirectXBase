@@ -1,19 +1,33 @@
 ﻿#include "Score.h"
 #include "../Device/DrawString.h"
+#include "../Device/Renderer.h"
 #include "../Utility/LevelLoader.h"
+#include "../Utility/Input.h"
 
-Score::Score() :
-    UI("Score"),
+Score::Score(std::shared_ptr<Renderer> renderer) :
+    UI(renderer, "Score"),
     mDrawPosition(Vector2::zero),
     mDrawScale(Vector2::one),
     mScore(0),
     mHighScore(0) {
 }
 
-Score::~Score() = default;
+Score::~Score() {
+    mHighScore = mScore;
+}
 
 void Score::updateUI() {
-    //DrawString::drawNumberRightJustified(mScore, mDrawPosition);
+    if (Input::getKeyDown(KeyCode::U)) {
+        mScore += 10;
+    }
+    if (mScore > mHighScore) {
+        mHighScore = mScore;
+    }
+    auto ds = mRenderer->getDrawString();
+    ds->drawString("Score", mDrawPosition - Vector2(32.f * 14, 0.f));
+    ds->drawNumberRightJustified(mScore, mDrawPosition);
+    ds->drawString("HighScore", mDrawPosition + Vector2(-32.f * 14, 64.f));
+    ds->drawNumberRightJustified(mHighScore, mDrawPosition + Vector2(0.f, 64.f));
 }
 
 void Score::loadProperties(const rapidjson::Value& inObj) {

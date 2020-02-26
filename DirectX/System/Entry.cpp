@@ -1,4 +1,5 @@
 ﻿#include "Game.h"
+#include "../Utility/Singleton.h"
 #include <windows.h>
 //メモリリーク検出用
 #ifdef _DEBUG
@@ -18,6 +19,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT) {
     game->run(hInstance);
 
     delete game;
+
+    SingletonFinalizer::finalize();
 
     //メモリリーク検出関数
 #ifdef _DEBUG

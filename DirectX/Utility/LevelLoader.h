@@ -2,9 +2,10 @@
 
 #include "Math.h"
 #include "Singleton.h"
-#include <functional>
-#include <memory>
 #include <rapidjson/document.h>
+#include <functional>
+#include <list>
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -12,12 +13,15 @@ class Actor;
 class ActorManager;
 class Component;
 class Renderer;
+class UI;
+class UIManager;
 
 class LevelLoader {
     friend class Singleton<LevelLoader>;
 
     using ActorFunc = std::function<std::shared_ptr<Actor>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
     using ComponentFunc = std::function<std::shared_ptr<Component>(std::shared_ptr<Actor>, const rapidjson::Value&)>;
+    using UIFunc = std::function<std::shared_ptr<UI>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
 
 public:
     //グローバルデータを読み込む
@@ -26,8 +30,12 @@ public:
     bool loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
     //指定のアクターを読み込む
     std::shared_ptr<Actor> loadSpecifiedActor(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const;
+    //指定のUIを読み込む
+    std::shared_ptr<UI> loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const;
     //保存
     void saveLevel(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
+    //UI情報の保存
+    void saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string& fileName) const;
 
 private:
     LevelLoader();
@@ -43,6 +51,8 @@ private:
     std::shared_ptr<Actor> loadSpecifiedActorProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const;
     //コンポーネントの読み込み
     void loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) const;
+    //指定のUIの読み込み
+    std::shared_ptr<UI> loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const;
 
     //グローバルプロパティの保存
     void saveGlobalProperties(rapidjson::Document::AllocatorType& alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value* inObject) const;
@@ -50,11 +60,14 @@ private:
     void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
     //コンポーネントの保存
     void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
+    //UIの保存
+    void saveUIs(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
 
 private:
     static constexpr int LEVEL_VERSION = 1;
     std::unordered_map<std::string, ActorFunc> mActors;
     std::unordered_map<std::string, ComponentFunc> mComponents;
+    std::unordered_map<std::string, UIFunc> mUIs;
 };
 
 class JsonHelper {

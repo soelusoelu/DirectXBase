@@ -1,8 +1,11 @@
 ﻿#include "UIManager.h"
 #include "UI.h"
+#include "../Utility/LevelLoader.h"
 
 UIManager::UIManager() = default;
-UIManager::~UIManager() = default;
+UIManager::~UIManager() {
+    Singleton<LevelLoader>::instance().saveUI(mUIStack, "UIList.json");
+}
 
 void UIManager::update() {
     for (auto&& ui : mUIStack) {

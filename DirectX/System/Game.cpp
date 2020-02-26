@@ -8,7 +8,6 @@
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
-#include "../Utility/Singleton.h"
 
 WCHAR szRootPath[1024] = { 0 };
 
@@ -19,7 +18,6 @@ Game::Game() {
 Game::~Game() {
     Input::end();
     Texture::end();
-    SingletonFinalizer::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {

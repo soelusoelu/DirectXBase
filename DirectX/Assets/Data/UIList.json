@@ -1,12 +1,18 @@
 {
-  "UIs": [
-    {
-      "type": "Score",
-      "properties": {
-        "position": [ 0.0, 0.0 ],
-        "scale": [ 1.0, 1.0 ],
-        "highScore": 0
-      }
-    }
-  ]
+    "UIs": [
+        {
+            "type": "Score",
+            "properties": {
+                "position": [
+                    1060.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0
+                ],
+                "highScore": 330
+            }
+        }
+    ]
 }

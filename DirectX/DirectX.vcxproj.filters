@@ -27,7 +27,6 @@
     <ClCompile Include="Sprite\SpriteManager.cpp" />
     <ClCompile Include="System\Buffer.cpp" />
     <ClCompile Include="System\InputElement.cpp" />
-    <ClCompile Include="UI\Pause.cpp" />
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
@@ -104,7 +103,6 @@
     <ClInclude Include="System\InputElementDesc.h" />
     <ClInclude Include="System\SubResourceDesc.h" />
     <ClInclude Include="System\TextureDesc.h" />
-    <ClInclude Include="UI\Pause.h" />
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />

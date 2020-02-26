@@ -6,7 +6,7 @@
 
 class Score : public UI {
 public:
-    Score();
+    Score(std::shared_ptr<Renderer> renderer);
     ~Score();
     virtual void updateUI() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

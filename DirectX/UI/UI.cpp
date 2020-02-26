@@ -3,7 +3,8 @@
 #include "../Actor/Transform2D.h"
 #include "../Sprite/Sprite.h"
 
-UI::UI(const std::string& type) :
+UI::UI(std::shared_ptr<Renderer> renderer, const std::string& type) :
+    mRenderer(renderer),
     mState(State::ACTIVE),
     mTypeName(type) {
 }
