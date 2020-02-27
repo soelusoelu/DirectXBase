@@ -6,18 +6,14 @@
 #include <iomanip>
 #include <sstream>
 
-DrawString::DrawString() :
-    mRenderer(),
-    mNumberSprite(nullptr),
-    mFontSprite(nullptr) {
-}
+DrawString::DrawString() = default;
 
 DrawString::~DrawString() = default;
 
-void DrawString::initialize(std::shared_ptr<Renderer> renderer) {
+void DrawString::initialize(std::shared_ptr<Renderer> renderer, const std::string& number, const std::string& font) {
     mRenderer = renderer;
-    mNumberSprite = std::make_shared<Sprite>(renderer, "number.png");
-    mFontSprite = std::make_shared<Sprite>(renderer, "font.png");
+    mNumber = number;
+    mFont = font;
 }
 
 void DrawString::drawNumber(int number, const Vector2 & position, Pivot pivot) {
@@ -26,14 +22,14 @@ void DrawString::drawNumber(int number, const Vector2 & position, Pivot pivot) {
         number = 0;
     }
 
-    mNumberSprite->transform()->setPosition(position);
+    Vector2 pos = position;
 
     //数字を文字列化し、1文字ずつ取り出す
     for (auto n : std::to_string(number)) {
-        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mNumberSprite->fileName());
+        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mNumber);
         copy->addToManager();
         copy->setOnceDraw();
-        copy->transform()->setPosition(mNumberSprite->transform()->getPosition());
+        copy->transform()->setPosition(pos);
         //数字のテクスチャが数字1つにつき幅32高さ64
         //文字と文字を引き算し、整数値を取得している
         float num = (n - '0') * WIDTH;
@@ -42,7 +38,7 @@ void DrawString::drawNumber(int number, const Vector2 & position, Pivot pivot) {
         copy->transform()->setPivot(pivot);
 
         //1文字描画したら1桁分右にずらす
-        mNumberSprite->transform()->translate(Vector2(WIDTH, 0.f));
+        pos.x += WIDTH;
     }
 }
 
@@ -64,7 +60,7 @@ void DrawString::drawNumber(float number, const Vector2 & position, int decimalD
         number = 0;
     }
 
-    mNumberSprite->transform()->setPosition(position);
+    Vector2 pos = position;
 
     //小数部分の桁数指定
     std::ostringstream oss;
@@ -73,10 +69,10 @@ void DrawString::drawNumber(float number, const Vector2 & position, int decimalD
 
     //数字を文字列化し、1文字ずつ取り出す
     for (auto n : num) {
-        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mNumberSprite->fileName());
+        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mNumber);
         copy->addToManager();
         copy->setOnceDraw();
-        copy->transform()->setPosition(mNumberSprite->transform()->getPosition());
+        copy->transform()->setPosition(pos);
         //数字のテクスチャが数字1つにつき幅32高さ64
         //文字と文字を引き算し、整数値を取得している
         if (n == '.') {
@@ -84,14 +80,14 @@ void DrawString::drawNumber(float number, const Vector2 & position, int decimalD
             copy->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
 
             //「.」のときは1文字の半分ずらす
-            mNumberSprite->transform()->translate(Vector2(PERIOD_WIDTH, 0.f));
+            pos.x += PERIOD_WIDTH;
         } else {
             float num = (n - '0') * WIDTH;
             num /= SPRITE_WIDTH;
             copy->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
 
             //1文字描画したら1桁分右にずらす
-            mNumberSprite->transform()->translate(Vector2(WIDTH, 0.f));
+            pos.x += WIDTH;
         }
         copy->transform()->setPivot(pivot);
     }
@@ -110,13 +106,13 @@ void DrawString::drawNumberRightJustified(float number, const Vector2 & position
 }
 
 void DrawString::drawString(const std::string & alphabet, const Vector2 & position, Pivot pivot) {
-    mNumberSprite->transform()->setPosition(position);
+    Vector2 pos = position;
 
     for (const auto& c : alphabet) {
-        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mFontSprite->fileName());
+        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mFont);
         copy->addToManager();
         copy->setOnceDraw();
-        copy->transform()->setPosition(mNumberSprite->transform()->getPosition());
+        copy->transform()->setPosition(pos);
 
         int t = c;
         t = Math::clamp<int>(t, 32, 127);
@@ -129,7 +125,7 @@ void DrawString::drawString(const std::string & alphabet, const Vector2 & positi
         copy->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
         copy->transform()->setPivot(pivot);
 
-        mNumberSprite->transform()->translate(Vector2(WIDTH, 0.f));
+        pos.x += WIDTH;
     }
 }
 

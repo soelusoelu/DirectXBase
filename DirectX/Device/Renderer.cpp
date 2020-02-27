@@ -38,12 +38,11 @@ Renderer::Renderer() :
 Renderer::~Renderer() = default;
 
 void Renderer::initialize() {
-    mDrawString->initialize(shared_from_this());
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
 
     //ディレクショナルライトと環境光の読み込み
-    Singleton<LevelLoader>::instance().loadGlobal(shared_from_this(), "GlobalLight.json");
+    Singleton<LevelLoader>::instance().loadGlobal(shared_from_this(), "Global.json");
 }
 
 void Renderer::update() {

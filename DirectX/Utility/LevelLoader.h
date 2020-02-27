@@ -60,11 +60,8 @@ private:
     void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
     //コンポーネントの保存
     void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
-    //UIの保存
-    void saveUIs(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
 
 private:
-    static constexpr int LEVEL_VERSION = 1;
     std::unordered_map<std::string, ActorFunc> mActors;
     std::unordered_map<std::string, ComponentFunc> mComponents;
     std::unordered_map<std::string, UIFunc> mUIs;

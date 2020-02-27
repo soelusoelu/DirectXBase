@@ -27,3 +27,11 @@ HitPointComponent
 PlayerMoveComponent
 SoundComponent
 SphereCollisionComponent
+
+
+
+//UI関連
+Score
+  position -> スコア表示位置
+  scale -> 文字スケール
+  highScore -> 今までの最高スコア

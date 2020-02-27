@@ -12,6 +12,7 @@
 #include "../Component/PointLightComponent.h"
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
+#include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
@@ -50,12 +51,6 @@ bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::stri
         MSG(L"レベルファイルのロードに失敗しました");
         return false;
     }
-
-    //int version = 0;
-    //if (!JsonHelper::getInt(doc, "version", &version) || version != LEVEL_VERSION) {
-    //    MSG(L"レベルファイルのバージョンが違います");
-    //    return false;
-    //}
 
     const rapidjson::Value& globals = doc["globalProperties"];
     if (globals.IsObject()) {
@@ -215,13 +210,13 @@ bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * o
 }
 
 void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inObject) const {
-    //環境光を取得
+    //環境光
     Vector3 ambient;
     if (JsonHelper::getVector3(inObject, "ambientLight", &ambient)) {
         renderer->setAmbientLight(ambient);
     }
 
-    //ディレクショナルライトを取得
+    //ディレクショナルライト
     const rapidjson::Value& dirObj = inObject["directionalLight"];
     if (dirObj.IsObject()) {
         Vector3 dir, color;
@@ -234,6 +229,12 @@ void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const
             renderer->getDirectionalLight()->setColor(color);
         }
     }
+
+    //数字とフォント
+    std::string num, font;
+    JsonHelper::getString(inObject, "number", &num);
+    JsonHelper::getString(inObject, "font", &font);
+    renderer->getDrawString()->initialize(renderer, num, font);
 }
 
 void LevelLoader::loadActorsProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray) const {
