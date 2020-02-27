@@ -97,7 +97,7 @@ void Game::fixFPS60() {
     previousTime = currentTime;
 
     mRenderer->getDrawString()->drawString("fps", Vector2::zero);
-    mRenderer->getDrawString()->drawNumber(static_cast<float>(1000.f / time), Vector2(32.f * 4, 0.f), 2);
+    mRenderer->getDrawString()->drawNumber(static_cast<float>(1000.f / time), Vector2(32.f * 4, 0.f), Vector2::one, 2);
 }
 
 

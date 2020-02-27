@@ -12,13 +12,43 @@ public:
     DrawString();
     ~DrawString();
     void initialize(std::shared_ptr<Renderer> renderer, const std::string& number, const std::string& font);
-    void drawNumber(int number, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
-    void drawNumberRightJustified(int number, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
-    void drawNumber(float number, const Vector2& position, int decimalDigits = 1, Pivot pivot = Pivot::LEFT_TOP);
-    //挙動怪しい
-    void drawNumberRightJustified(float number, const Vector2& position, int decimalDigits = 1);
-    void drawString(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::LEFT_TOP);
-    void drawStringRightJustified(const std::string& alphabet, const Vector2& position, Pivot pivot = Pivot::RIGHT_TOP);
+    void drawNumber(
+        int number,
+        const Vector2& position,
+        const Vector2& scale = Vector2::one,
+        Pivot pivot = Pivot::LEFT_TOP
+    );
+    void drawNumberRightJustified(
+        int number,
+        const Vector2& position,
+        const Vector2& scale = Vector2::one,
+        Pivot pivot = Pivot::RIGHT_TOP
+    );
+    void drawNumber(
+        float number,
+        const Vector2& position,
+        const Vector2& scale = Vector2::one,
+        int decimalDigits = 1,
+        Pivot pivot = Pivot::LEFT_TOP
+    );
+    void drawNumberRightJustified(
+        float number,
+        const Vector2& position,
+        const Vector2& scale = Vector2::one,
+        int decimalDigits = 1
+    );
+    void drawString(
+        const std::string& alphabet,
+        const Vector2& position,
+        const Vector2& scale = Vector2::one,
+        Pivot pivot = Pivot::LEFT_TOP
+    );
+    void drawStringRightJustified(
+        const std::string& alphabet,
+        const Vector2& position,
+        const Vector2& scale = Vector2::one,
+        Pivot pivot = Pivot::RIGHT_TOP
+    );
 
 private:
     std::weak_ptr<Renderer> mRenderer;

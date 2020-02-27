@@ -16,7 +16,7 @@ Transform2D::~Transform2D() = default;
 bool Transform2D::computeWorldTransform() {
     if (mIsRecomputeTransform) {
         mWorldTransform = Matrix4::createScale(Vector3(mSize, 1.f)); //テクスチャサイズに
-        mWorldTransform *= Matrix4::createTranslation(-Vector3(mSize / 2.f + mPivot, 0.f)); //中心 + ピボットを原点に
+        mWorldTransform *= Matrix4::createTranslation(Vector3(-mPivot, 0.f)); //中心 + ピボットを原点に
         mWorldTransform *= Matrix4::createScale(Vector3(getScale(), 1.f));
         mWorldTransform *= Matrix4::createRotationZ(mRotation);
         mWorldTransform *= Matrix4::createTranslation(Vector3(getPosition(), 1.f));
@@ -70,31 +70,31 @@ void Transform2D::rotate(float angle) {
 void Transform2D::setPivot(Pivot pivot) {
     switch (pivot) {
     case Pivot::LEFT_TOP:
-        mPivot = -mSize / 2.f;
-        break;
-    case Pivot::CENTER_TOP:
-        mPivot.y = -mSize.y / 2.f;
-        break;
-    case Pivot::RIGHT_TOP:
-        mPivot = Vector2(mSize.x, -mSize.y) / 2.f;
-        break;
-    case Pivot::CENTER_LEFT:
-        mPivot.x = -mSize.x / 2.f;
-        break;
-    case Pivot::CENTER:
         mPivot = Vector2::zero;
         break;
-    case Pivot::CENTER_RIGHT:
+    case Pivot::CENTER_TOP:
         mPivot.x = mSize.x / 2.f;
         break;
-    case Pivot::LEFT_BOTTOM:
-        mPivot = Vector2(-mSize.x, mSize.y) / 2.f;
+    case Pivot::RIGHT_TOP:
+        mPivot.x = mSize.x;
         break;
-    case Pivot::CETNER_BOTTOM:
+    case Pivot::CENTER_LEFT:
         mPivot.y = mSize.y / 2.f;
         break;
-    case Pivot::RIGHT_BOTTOM:
+    case Pivot::CENTER:
         mPivot = mSize / 2.f;
+        break;
+    case Pivot::CENTER_RIGHT:
+        mPivot = Vector2(mSize.x, mSize.y / 2.f);
+        break;
+    case Pivot::LEFT_BOTTOM:
+        mPivot.y = mSize.y;
+        break;
+    case Pivot::CETNER_BOTTOM:
+        mPivot = Vector2(mSize.x / 2.f, mSize.y);
+        break;
+    case Pivot::RIGHT_BOTTOM:
+        mPivot = mSize;
         break;
     default:
         break;
