@@ -89,10 +89,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\include</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2019.0\lib\vs2015\x86\debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libfbxsdk-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,6 +153,7 @@
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
+    <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="UI\Score.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
@@ -221,6 +226,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
+    <ClInclude Include="Mesh\FBX.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="UI\Score.h" />
     <ClInclude Include="Utility\LevelLoader.h" />

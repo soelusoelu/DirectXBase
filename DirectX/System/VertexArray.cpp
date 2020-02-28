@@ -74,7 +74,7 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
 
 void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void* data) {
     BufferDesc bd;
-    bd.size = sizeof(int) * numFace * 3;
+    bd.size = sizeof(int) * numFace;
     bd.usage = Usage::USAGE_DEFAULT;
     bd.type = static_cast<unsigned>(BufferType::BUFFER_TYPE_INDEX);
     SubResourceDesc sub;

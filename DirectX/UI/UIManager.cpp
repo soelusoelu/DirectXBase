@@ -5,6 +5,7 @@
 UIManager::UIManager() = default;
 UIManager::~UIManager() {
     Singleton<LevelLoader>::instance().saveUI(mUIStack, "UIList.json");
+    mUIStack.clear();
 }
 
 void UIManager::update() {

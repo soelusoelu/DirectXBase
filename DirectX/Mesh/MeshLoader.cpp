@@ -224,7 +224,7 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
         }
 
         //インデックスバッファーを作成
-        mVertexArray->createIndexBuffer(i, fCount, faceBuffer);
+        mVertexArray->createIndexBuffer(i, fCount * 3, faceBuffer);
 
         mMaterial->getMaterialData(i)->numFace = fCount;
     }

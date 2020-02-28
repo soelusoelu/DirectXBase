@@ -9,6 +9,7 @@
 #include <vector>
 
 class Camera;
+class FBX;
 class MeshLoader;
 class MeshManager;
 class Renderer;
@@ -50,6 +51,7 @@ public:
 
 private:
     std::shared_ptr<MeshLoader> mLoader;
+    std::shared_ptr<FBX> mFBX;
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;
     State mState;

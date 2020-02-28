@@ -1,4 +1,5 @@
 ﻿#include "Mesh.h"
+#include "FBX.h"
 #include "Material.h"
 #include "MeshLoader.h"
 #include "MeshManager.h"
@@ -17,6 +18,7 @@
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mLoader(renderer->getAssetsManager()->createMesh(fileName)),
+    mFBX(std::make_shared<FBX>()),
     mTransform(nullptr),
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {

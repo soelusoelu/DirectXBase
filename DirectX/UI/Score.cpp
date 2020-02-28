@@ -12,9 +12,7 @@ Score::Score(std::shared_ptr<Renderer> renderer) :
     mHighScore(0) {
 }
 
-Score::~Score() {
-    mHighScore = mScore;
-}
+Score::~Score() = default;
 
 void Score::updateUI() {
     if (Input::getKeyDown(KeyCode::U)) {
