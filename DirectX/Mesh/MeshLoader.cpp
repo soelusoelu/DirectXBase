@@ -87,7 +87,7 @@ std::shared_ptr<Material> MeshLoader::getMaterialData(unsigned index) const {
 
 bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
     //OBJファイルを開いて内容を読み込む
-    setOBJDirectory();
+    setModelDirectory();
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         MSG(L"OBJファイルが存在しません");

@@ -145,9 +145,9 @@ void setDataDirectory() {
     SetCurrentDirectory(tmp);
 }
 
-void setOBJDirectory() {
+void setModelDirectory() {
     WCHAR tmp[1024] = { 0 };
     wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Assets/OBJ");
+    wcscat_s(tmp, L"\\Assets/Model");
     SetCurrentDirectory(tmp);
 }

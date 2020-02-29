@@ -104,7 +104,7 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
             cb.diffuse = mFBX->getMaterial(i)->diffuse;
             cb.specular = mFBX->getMaterial(i)->specular;
 
-            if (auto t = mFBX->getMaterial(0)->texture) {
+            if (auto t = mFBX->getMaterial(i)->texture) {
                 //if (auto t = mLoader->getMaterialData(i)->texture) {
                 t->setPSTextures();
                 t->setPSSamplers();

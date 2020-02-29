@@ -93,7 +93,7 @@ void Texture::createTexture(const std::string & fileName, bool isSprite) {
     if (isSprite) {
         setTextureDirectory();
     } else {
-        setOBJDirectory();
+        setModelDirectory();
     }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;

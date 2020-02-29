@@ -46,4 +46,4 @@ void setShaderDirectory();
 void setTextureDirectory();
 void setSoundDirectory();
 void setDataDirectory();
-void setOBJDirectory();
+void setModelDirectory();

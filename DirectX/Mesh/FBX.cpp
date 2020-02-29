@@ -20,7 +20,7 @@ FBX::~FBX() {
 }
 
 void FBX::create(std::shared_ptr<AssetsManager> assets, const std::string& fileName) {
-    setOBJDirectory();
+    setModelDirectory();
 
     //マネージャーを生成
     mManager = FbxManager::Create();
