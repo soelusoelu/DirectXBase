@@ -4,10 +4,13 @@
 
 FBX::FBX() :
     mManager(nullptr),
+    mVertices(nullptr),
     mVertexArray(std::make_shared<VertexArray>()) {
 }
 
 FBX::~FBX() {
+    //削除されてると思うけど
+    SAFE_DELETE_ARRAY(mVertices);
     //マネージャー解放
     if (mManager) {
         mManager->Destroy();
@@ -45,6 +48,9 @@ void FBX::create(const std::string& fileName) {
     if (root) {
         perse(root, 0);
     }
+
+    mVertexArray->createVertexBuffer(sizeof(Vertex), mVertices);
+    SAFE_DELETE_ARRAY(mVertices);
 }
 
 std::shared_ptr<VertexArray> FBX::getVertexArray() const {
@@ -63,7 +69,9 @@ void FBX::perse(FbxNode* node, int indent) {
             case fbxsdk::FbxNodeAttribute::eMesh:
                 mesh = node->GetMesh();
                 searchIndex(mesh);
-                createVertex(mesh);
+                getVertex(mesh);
+                getNormals(mesh);
+                getUV(mesh);
                 break;
             default:
                 break;
@@ -77,7 +85,23 @@ void FBX::perse(FbxNode* node, int indent) {
     }
 }
 
-void FBX::createVertex(FbxMesh* mesh) {
+void FBX::getVertex(FbxMesh* mesh) {
+    //頂点数
+    int vertexNum = mesh->GetControlPointsCount();
+    mVertexArray->setNumVerts(vertexNum);
+    //頂点座標配列
+    FbxVector4* src = mesh->GetControlPoints();
+
+    mVertices = new Vertex[vertexNum];
+    for (size_t i = 0; i < vertexNum; i++) {
+        mVertices[i].pos.x = -src[i][0];
+        mVertices[i].pos.y = src[i][1];
+        mVertices[i].pos.z = src[i][2];
+        mVertices[i].pos.w = src[i][3];
+    }
+}
+
+void FBX::searchIndex(FbxMesh* mesh) {
     //総ポリゴン数
     int polyNum = mesh->GetPolygonCount();
     mVertexArray->setNumFace(polyNum);
@@ -88,119 +112,146 @@ void FBX::createVertex(FbxMesh* mesh) {
 
     mVertexArray->resizeIndexBuffer(1);
     mVertexArray->createIndexBuffer(0, count, indices);
+}
 
-    //頂点数
-    int vertexNum = mesh->GetControlPointsCount();
-    mVertexArray->setNumVerts(vertexNum);
-    //頂点座標配列
-    FbxVector4* src = mesh->GetControlPoints();
-
-    Vertex* vertices = new Vertex[vertexNum];
-    for (size_t i = 0; i < vertexNum; i++) {
-        vertices[i].pos.x = -src[i][0];
-        vertices[i].pos.y = src[i][1];
-        vertices[i].pos.z = src[i][2];
-        vertices[i].pos.w = src[i][3];
+void FBX::getNormals(FbxMesh* mesh) {
+    FbxGeometryElementNormal* normalElement = mesh->GetElementNormal();
+    if (!normalElement) {
+        return;
     }
 
-    //法線
-    //int layerNum = mesh->GetLayerCount();
-    //Vector3* normalBuffer = nullptr;
-    //for (size_t i = 0; i < layerNum; i++) {
-    //    FbxLayer* layer = mesh->GetLayer(i);
-    //    FbxLayerElementNormal* elementNormal = layer->GetNormals();
-    //    if (!elementNormal) {
+    if (normalElement->GetMappingMode() == FbxGeometryElement::eByControlPoint) {
+        for (size_t i = 0; i < mesh->GetControlPointsCount(); i++) {
+            int normalIndex = 0;
+            if (normalElement->GetReferenceMode() == FbxGeometryElement::eDirect) {
+                normalIndex = i;
+            }
+            if (normalElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect) {
+                normalIndex = normalElement->GetIndexArray().GetAt(i);
+            }
+
+            FbxVector4 normal = normalElement->GetDirectArray().GetAt(normalIndex);
+            mVertices[normalIndex].normal.x = -normal[0];
+            mVertices[normalIndex].normal.y = normal[1];
+            mVertices[normalIndex].normal.z = normal[2];
+            mVertices[normalIndex].normal.w = normal[3];
+        }
+    } else if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
+        int indexByPolygonVertex = 0;
+        for (size_t i = 0; i < mesh->GetPolygonCount(); i++) {
+            int polygonSize = mesh->GetPolygonSize(i);
+            for (size_t j = 0; j < polygonSize; j++) {
+                int normalIndex = 0;
+                if (normalElement->GetReferenceMode() == FbxGeometryElement::eDirect) {
+                    normalIndex = indexByPolygonVertex;
+                }
+                if (normalElement->GetReferenceMode() == FbxGeometryElement::eIndexToDirect) {
+                    normalIndex = normalElement->GetIndexArray().GetAt(indexByPolygonVertex);
+                }
+
+                FbxVector4 normal = normalElement->GetDirectArray().GetAt(normalIndex);
+                mVertices[normalIndex].normal.x = -normal[0];
+                mVertices[normalIndex].normal.y = normal[1];
+                mVertices[normalIndex].normal.z = normal[2];
+                mVertices[normalIndex].normal.w = normal[3];
+
+                indexByPolygonVertex++;
+            }
+        }
+    }
+
+    //FbxVector4 normal;
+    //int* indices = mesh->GetPolygonVertices();
+    //for (int i = 0; i < mVertexArray->getNumFace(); i++) {
+    //    int startIndex = mesh->GetPolygonVertexIndex(i);
+
+    //    int vertIndex0 = indices[startIndex];
+    //    int vertIndex1 = indices[startIndex + 1];
+    //    int vertIndex2 = indices[startIndex + 2];
+
+    //    if (vertIndex0 < 0) {
     //        continue;
     //    }
 
-    //    //法線の数・インデックス
-    //    int normalNum = elementNormal->GetDirectArray().GetCount();
-    //    int indexNum = elementNormal->GetIndexArray().GetCount();
-    //    mVertexArray->setNumNormal(normalNum);
+    //    mesh->GetPolygonVertexNormal(i, 0, normal);
+    //    mVertices[vertIndex0].normal.x = -normal[0];
+    //    mVertices[vertIndex0].normal.y = normal[1];
+    //    mVertices[vertIndex0].normal.z = normal[2];
+    //    mVertices[vertIndex0].normal.w = normal[3];
 
-    //    normalBuffer = new Vector3[normalNum];
+    //    mesh->GetPolygonVertexNormal(i, 1, normal);
+    //    mVertices[vertIndex1].normal.x = -normal[0];
+    //    mVertices[vertIndex1].normal.y = normal[1];
+    //    mVertices[vertIndex1].normal.z = normal[2];
+    //    mVertices[vertIndex1].normal.w = normal[3];
 
-    //    //マッピングモード・リファレンスモード取得
-    //    FbxLayerElement::EMappingMode mappingMode = elementNormal->GetMappingMode();
-    //    FbxLayerElement::EReferenceMode referenceMode = elementNormal->GetReferenceMode();
-
-    //    if (mappingMode == FbxLayerElement::eByPolygonVertex) {
-    //        if (referenceMode == FbxLayerElement::eDirect) {
-    //            //直接取得
-    //            for (size_t i = 0; i < normalNum; i++) {
-    //                normalBuffer[i].x = static_cast<float>(elementNormal->GetDirectArray().GetAt(i)[0]);
-    //                normalBuffer[i].y = static_cast<float>(elementNormal->GetDirectArray().GetAt(i)[1]);
-    //                normalBuffer[i].z = static_cast<float>(elementNormal->GetDirectArray().GetAt(i)[2]);
-    //            }
-    //        }
-    //    } else if (mappingMode == FbxLayerElement::eByControlPoint) {
-    //        if (referenceMode == FbxLayerElement::eDirect) {
-    //            //直接取得
-    //            for (size_t i = 0; i < normalNum; i++) {
-    //                normalBuffer[i].x = static_cast<float>(elementNormal->GetDirectArray().GetAt(i)[0]);
-    //                normalBuffer[i].y = static_cast<float>(elementNormal->GetDirectArray().GetAt(i)[1]);
-    //                normalBuffer[i].z = static_cast<float>(elementNormal->GetDirectArray().GetAt(i)[2]);
-    //            }
-    //        }
-    //    }
+    //    mesh->GetPolygonVertexNormal(i, 2, normal);
+    //    mVertices[vertIndex2].normal.x = -normal[0];
+    //    mVertices[vertIndex2].normal.y = normal[1];
+    //    mVertices[vertIndex2].normal.z = normal[2];
+    //    mVertices[vertIndex2].normal.w = normal[3];
     //}
-    FbxVector4 normal;
-    for (int i = 0; i < mVertexArray->getNumFace(); i++) {
-        int startIndex = mesh->GetPolygonVertexIndex(i);
+}
 
-        int vertIndex0 = indices[startIndex];
-        int vertIndex1 = indices[startIndex + 1];
-        int vertIndex2 = indices[startIndex + 2];
+void FBX::getUV(FbxMesh* mesh) {
+    FbxStringList uvSetNameList;
+    mesh->GetUVSetNames(uvSetNameList);
 
-        if (vertIndex0 < 0) {
+    //すべてのUVセットを反復処理する
+    for (int uvSetIndex = 0; uvSetIndex < uvSetNameList.GetCount(); uvSetIndex++) {
+        //uvSetIndex-番目のUVセットを取得
+        const char* uvSetName = uvSetNameList.GetStringAt(uvSetIndex);
+        const FbxGeometryElementUV* uvElement = mesh->GetElementUV(uvSetName);
+        if (!uvElement) {
             continue;
         }
 
-        mesh->GetPolygonVertexNormal(i, 0, normal);
-        vertices[vertIndex0].normal.x = -normal[0];
-        vertices[vertIndex0].normal.y = normal[1];
-        vertices[vertIndex0].normal.z = normal[2];
-        vertices[vertIndex0].normal.w = normal[3];
+        //マッピングモードeByPolygonVertexおよびeByControlPointのみをサポート
+        if (uvElement->GetMappingMode() != FbxGeometryElement::eByPolygonVertex && uvElement->GetMappingMode() != FbxGeometryElement::eByControlPoint) {
+            return;
+        }
 
-        mesh->GetPolygonVertexNormal(i, 1, normal);
-        vertices[vertIndex1].normal.x = -normal[0];
-        vertices[vertIndex1].normal.y = normal[1];
-        vertices[vertIndex1].normal.z = normal[2];
-        vertices[vertIndex1].normal.w = normal[3];
+        //インデックス配列。uvデータを参照するインデックスを保持します
+        const bool useIndex = uvElement->GetReferenceMode() != FbxGeometryElement::eDirect;
+        const int indexCount = (useIndex) ? uvElement->GetIndexArray().GetCount() : 0;
 
-        mesh->GetPolygonVertexNormal(i, 2, normal);
-        vertices[vertIndex2].normal.x = -normal[0];
-        vertices[vertIndex2].normal.y = normal[1];
-        vertices[vertIndex2].normal.z = normal[2];
-        vertices[vertIndex2].normal.w = normal[3];
+        //ポリゴンごとにデータを反復処理する
+        const int polyCount = mesh->GetPolygonCount();
+
+        if (uvElement->GetMappingMode() == FbxGeometryElement::eByControlPoint) {
+            for (int polyIndex = 0; polyIndex < polyCount; polyIndex++) {
+                //MakePolyに渡す必要がある最大インデックス配列を作成します
+                const int polySize = mesh->GetPolygonSize(polyIndex);
+                for (int vertIndex = 0; vertIndex < polySize; vertIndex++) {
+                    //頂点配列の現在の頂点のインデックスを取得します
+                    int polyVertIndex = mesh->GetPolygonVertex(polyIndex, vertIndex);
+
+                    //UVインデックスは参照モードに依存します
+                    int uvIndex = useIndex ? uvElement->GetIndexArray().GetAt(polyVertIndex) : polyVertIndex;
+
+                    FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
+                    mVertices[uvIndex].normal.x = uv[0];
+                    mVertices[uvIndex].normal.y = 1.f - uv[1];
+                }
+            }
+        } else if (uvElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
+            int polyIndexCounter = 0;
+            for (int polyIndex = 0; polyIndex < polyCount; polyIndex++) {
+                //MakePolyに渡す必要がある最大インデックス配列を作成します
+                const int polySize = mesh->GetPolygonSize(polyIndex);
+                for (int vertIndex = 0; vertIndex < polySize; vertIndex++) {
+                    if (polyIndexCounter < indexCount) {
+                        //UVインデックスは参照モードに依存します
+                        int uvIndex = useIndex ? uvElement->GetIndexArray().GetAt(polyIndexCounter) : polyIndexCounter;
+
+                        FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
+                        mVertices[uvIndex].uv.x = uv[0];
+                        mVertices[uvIndex].uv.y = 1.f - uv[1];
+
+                        polyIndexCounter++;
+                    }
+                }
+            }
+        }
     }
-
-    //テクスチャ座標読み込み
-    auto uvCount = mesh->GetTextureUVCount();
-    mVertexArray->setNumTex(uvCount);
-    FbxLayerElementUV* elementUV = mesh->GetLayer(0)->GetUVs();
-    for (int i = 0; i < uvCount; i++) {
-        FbxVector2 uv;
-        uv = elementUV->GetDirectArray().GetAt(i);
-        //vertices[i].uv.x = uv.;
-        //vertices[i].uv.y = 1.f - uv.GetAt(1);
-    }
-
-    mVertexArray->createVertexBuffer(sizeof(Vertex), vertices);
-
-    SAFE_DELETE_ARRAY(vertices);
-    //SAFE_DELETE_ARRAY(normalBuffer);
-}
-
-void FBX::searchIndex(FbxMesh* mesh) {
-    //総ポリゴン数
-    //int polyNum = mesh->GetPolygonCount();
-    //mVertexArray->setNumFace(polyNum);
-    ////インデックス数
-    //auto count = mesh->GetPolygonVertexCount();
-    ////インデックス配列
-    //auto indices = mesh->GetPolygonVertices();
-
-    //mVertexArray->resizeIndexBuffer(1);
-    //mVertexArray->createIndexBuffer(0, count, indices);
 }

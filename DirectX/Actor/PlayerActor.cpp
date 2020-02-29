@@ -15,12 +15,13 @@ PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer) :
 PlayerActor::~PlayerActor() = default;
 
 void PlayerActor::start() {
+    mTransform->setScale(5.f);
     auto mesh = std::make_shared<MeshComponent>(shared_from_this());
-    mesh->setMesh("hand_tex.fbx");
+    mesh->setMesh("Chips.fbx");
     mComponentManager->addComponent(mesh);
     //mComponentManager->addComponent(std::make_shared<SoundComponent>(shared_from_this()));
     //mComponentManager->addComponent(std::make_shared<SphereCollisionComponent>(shared_from_this()));
-    //mComponentManager->addComponent(std::make_shared<PlayerMoveComponent>(shared_from_this()));
+    mComponentManager->addComponent(std::make_shared<PlayerMoveComponent>(shared_from_this()));
     //mComponentManager->addComponent(std::make_shared<PointLightComponent>(shared_from_this()));
 }
 

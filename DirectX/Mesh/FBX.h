@@ -8,7 +8,7 @@
 struct Vertex {
     Vector4 pos;
     Vector4 normal;
-    //Vector2 uv;
+    Vector2 uv;
 };
 
 class VertexArray;
@@ -22,10 +22,13 @@ public:
 
 private:
     void perse(FbxNode* node, int indent);
-    void createVertex(FbxMesh* mesh);
+    void getVertex(FbxMesh* mesh);
     void searchIndex(FbxMesh* mesh);
+    void getNormals(FbxMesh* mesh);
+    void getUV(FbxMesh* mesh);
 
 private:
     FbxManager* mManager;
+    Vertex* mVertices;
     std::shared_ptr<VertexArray> mVertexArray;
 };
