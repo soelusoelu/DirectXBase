@@ -1,39 +1,35 @@
 ﻿#pragma once
 
-#include "../System/Game.h"
 #include "../Utility/Math.h"
-#include <fstream>
 #include <memory>
 #include <string>
-#include <vector>
 
-class AssetsManager;
 class Texture;
 
-struct MaterialData {
+struct Material {
+    Vector4 ambient; //アンビエント
+    Vector4 diffuse; //ディフューズ
+    Vector4 specular; //スペキュラー
+    Vector4 emissive;
+    Vector4 bump;
+    float transparency;
+    float shininess;
     std::string matName; //newmtl
-    Vector4 Ka; //アンビエント
-    Vector4 Kd; //ディフューズ
-    Vector4 Ks; //スペキュラー
     std::string textureName; //テクスチャーファイル名
     std::shared_ptr<Texture> texture;
     unsigned numFace; //そのマテリアルであるポリゴン数
-};
 
-class Material {
-    using MaterialPtr = std::shared_ptr<MaterialData>;
-    using MaterialPtrArray = std::vector<MaterialPtr>;
-
-public:
-    Material();
-    ~Material();
-    bool load(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName);
-    unsigned getNumMaterials() const;
-    MaterialPtr getMaterialData(unsigned index) const;
-
-private:
-    bool preload(std::ifstream& stream, const std::string& fileName);
-
-private:
-    MaterialPtrArray mMaterials;
+    Material() :
+        ambient(Vector3::zero, 1.f),
+        diffuse(Vector3::zero, 1.f),
+        specular(Vector3::zero, 1.f),
+        emissive(Vector3::zero, 1.f),
+        bump(Vector3::zero, 1.f),
+        transparency(1.f),
+        shininess(1.f),
+        matName(""),
+        textureName(""),
+        texture(nullptr),
+        numFace(0) {
+    }
 };

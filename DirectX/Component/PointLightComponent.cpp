@@ -76,7 +76,7 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
     }
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < mesh->getMeshData()->getMaterialSize(); i++) {
+    for (size_t i = 0; i < mesh->getMeshData()->getNumMaterial(); i++) {
         //使用されていないマテリアル対策
         if (mesh->getMeshData()->getMaterialData(i)->numFace == 0) {
             continue;

@@ -53,7 +53,6 @@
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="System\VertexArray.cpp" />
     <ClCompile Include="Mesh\MeshLoader.cpp" />
-    <ClCompile Include="Mesh\Material.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="System\BlendState.cpp" />

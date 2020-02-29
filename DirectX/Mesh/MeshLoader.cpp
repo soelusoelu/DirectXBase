@@ -1,11 +1,11 @@
 ﻿#include "MeshLoader.h"
 #include "Material.h"
+#include "../Device/AssetsManager.h"
 #include "../System/Game.h"
 #include "../System/VertexArray.h"
 #include "../Utility/StringUtil.h"
 
 MeshLoader::MeshLoader(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) :
-    mMaterial(std::make_unique<Material>()),
     mVertexArray(std::make_unique<VertexArray>()) {
     if (!load(assetsManager, fileName)) {
         MSG(L"メッシュ作成失敗");
@@ -77,12 +77,12 @@ void MeshLoader::setIndexBuffer(unsigned index, unsigned offset) {
     mVertexArray->setIndexBuffer(index, offset);
 }
 
-unsigned MeshLoader::getMaterialSize() const {
-    return mMaterial->getNumMaterials();
+unsigned MeshLoader::getNumMaterial() const {
+    return mMaterials.size();
 }
 
-std::shared_ptr<MaterialData> MeshLoader::getMaterialData(unsigned index) const {
-    return mMaterial->getMaterialData(index);
+std::shared_ptr<Material> MeshLoader::getMaterialData(unsigned index) const {
+    return mMaterials[index];
 }
 
 bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
@@ -154,7 +154,7 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
     }
 
     //マテリアルの数だけインデックスバッファーを作成
-    mVertexArray->resizeIndexBuffer(mMaterial->getNumMaterials());
+    mVertexArray->resizeIndexBuffer(getNumMaterial());
     //頂点情報を記録
     mVertexArray->setVertices(vertices);
 
@@ -168,7 +168,7 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
     int vt1 = 0, vt2 = 0, vt3 = 0;
     int fCount = 0;
 
-    for (unsigned i = 0; i < mMaterial->getNumMaterials(); i++) {
+    for (unsigned i = 0; i < getNumMaterial(); i++) {
         ifs.clear();
         ifs.seekg(0, std::ios_base::beg);
         fCount = 0;
@@ -187,11 +187,11 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
             //フェイス 読み込み→頂点インデックスに
             if (strcmp(s, "usemtl") == 0) {
                 auto mat = line.substr(7); //「usemtl 」の文字数分
-                matFlag = (mMaterial->getMaterialData(i)->matName == mat);
+                matFlag = (mMaterials[i]->matName == mat);
             }
 
             if (strcmp(s, "f") == 0 && matFlag) {
-                if (mMaterial->getMaterialData(i)->texture) { //テクスチャーありサーフェイス
+                if (mMaterials[i]->texture) { //テクスチャーありサーフェイス
                     sscanf_s(line.c_str(), "%s %d/%d/%d %d/%d/%d %d/%d/%d", s, sizeof(s), &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
                 } else { //テクスチャー無しサーフェイス
                     sscanf_s(line.c_str(), "%s %d//%d %d//%d %d//%d", s, sizeof(s), &v1, &vn1, &v2, &vn2, &v3, &vn3);
@@ -226,7 +226,7 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
         //インデックスバッファーを作成
         mVertexArray->createIndexBuffer(i, fCount * 3, faceBuffer);
 
-        mMaterial->getMaterialData(i)->numFace = fCount;
+        mMaterials[i]->numFace = fCount;
     }
 
     delete[] normals;
@@ -264,7 +264,7 @@ bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<AssetsManager> 
         //マテリアル読み込み
         if (strcmp(s, "mtllib") == 0) {
             auto mat = line.substr(7); //「mtllib 」の文字数分
-            if (!mMaterial->load(assetsManager, mat)) {
+            if (!materialLoad(assetsManager, mat)) {
                 return false;
             }
         }
@@ -294,6 +294,98 @@ bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<AssetsManager> 
     mVertexArray->setNumNormal(numNormal);
     mVertexArray->setNumTex(numTex);
     mVertexArray->setNumFace(numFace);
+
+    return true;
+}
+
+bool MeshLoader::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
+    std::ifstream ifs(fileName, std::ios::in);
+    if (ifs.fail()) {
+        MSG(L"mtlファイルが存在しません");
+        return false;
+    }
+
+    //マテリアルの事前読み込み
+    if (!materialPreload(ifs, fileName)) {
+        MSG(L"mtlファイルの事前読み込み失敗");
+        return false;
+    }
+
+    //ファイルの先頭に戻る
+    ifs.clear();
+    ifs.seekg(0, std::ios_base::beg);
+
+    std::string line;
+    char s[256]; //ダミー
+    Vector4 v(0.f, 0.f, 0.f, 1.f);
+    int matCount = -1;
+
+    //本読み込み
+    while (!ifs.eof()) {
+        //キーワード読み込み
+        std::getline(ifs, line);
+
+        if (line.empty() || line[0] == '#') {
+            continue;
+        }
+
+        sscanf_s(line.c_str(), "%s", s, sizeof(s));
+
+        //マテリアル名
+        if (strcmp(s, "newmtl") == 0) {
+            matCount++;
+            mMaterials[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
+        }
+        //アンビエント
+        if (strcmp(s, "Ka") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
+            mMaterials[matCount]->ambient = v;
+        }
+        //ディフューズ
+        if (strcmp(s, "Kd") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
+            mMaterials[matCount]->diffuse = v;
+        }
+        //スペキュラー
+        if (strcmp(s, "Ks") == 0) {
+            sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
+            mMaterials[matCount]->specular = v;
+        }
+        //テクスチャー
+        if (strcmp(s, "map_Kd") == 0) {
+            mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
+            //テクスチャーを作成
+            mMaterials[matCount]->texture = assetsManager->createTexture(mMaterials[matCount]->textureName, false);
+        }
+    }
+
+    return true;
+}
+
+bool MeshLoader::materialPreload(std::ifstream& stream, const std::string& fileName) {
+    //マテリアルファイルを開いて内容を読み込む
+    std::string line;
+    char s[256];
+    while (!stream.eof()) {
+        //キーワード読み込み
+        std::getline(stream, line);
+
+        if (line.empty() || line[0] == '#') {
+            continue;
+        }
+
+        sscanf_s(line.c_str(), "%s", s, sizeof(s));
+
+        //マテリアル名
+        if (strcmp(s, "newmtl") == 0) {
+            mMaterials.emplace_back(std::make_shared<Material>());
+        }
+    }
+
+    if (mMaterials.empty()) {
+        MSG(L"マテリアルが空です");
+        return false;
+    }
 
     return true;
 }

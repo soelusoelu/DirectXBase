@@ -23,7 +23,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {
 
-    mFBX->create(fileName);
+    mFBX->create(renderer->getAssetsManager(), fileName);
 
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);
@@ -85,37 +85,42 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
     //for (size_t i = 0; i < mLoader->getMaterialSize(); i++) {
+    for (size_t i = 0; i < mFBX->getNumMaterial(); i++) {
         //使用されていないマテリアル対策
+        if (mFBX->getMaterial(i)->numFace == 0) {
+            continue;
+        }
         //if (mLoader->getMaterialData(i)->numFace == 0) {
         //    continue;
         //}
         //インデックスバッファーをセット
         //mLoader->setIndexBuffer(i);
-    mFBX->getVertexArray()->setIndexBuffer(0);
+        mFBX->getVertexArray()->setIndexBuffer(i);
 
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
             //cb.diffuse = mLoader->getMaterialData(i)->Kd;
             //cb.specular = mLoader->getMaterialData(i)->Ks;
-            cb.diffuse = Vector4(1.f, 1.f, 1.f, 1.f);
-            cb.specular = Vector4(1.f, 1.f, 1.f, 1.f);
+            cb.diffuse = mFBX->getMaterial(i)->diffuse;
+            cb.specular = mFBX->getMaterial(i)->specular;
 
-            //if (auto t = mLoader->getMaterialData(i)->texture) {
-            //    t->setPSTextures();
-            //    t->setPSSamplers();
-            //    cb.textureFlag = 1;
-            //} else {
+            if (auto t = mFBX->getMaterial(0)->texture) {
+                //if (auto t = mLoader->getMaterialData(i)->texture) {
+                t->setPSTextures();
+                t->setPSSamplers();
+                cb.textureFlag = 1;
+            } else {
                 cb.textureFlag = 0;
-            //}
+            }
 
             memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
             mShader->unmap(1);
         }
 
         //プリミティブをレンダリング
-        Singleton<DirectX>::instance().drawIndexed(mFBX->getVertexArray()->getNumFace() * 3);
+        Singleton<DirectX>::instance().drawIndexed(mFBX->getMaterial(i)->numFace * 3);
         //Singleton<DirectX>::instance().drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
-    //}
+    }
 }
 
 void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {

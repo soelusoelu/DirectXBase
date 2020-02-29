@@ -1,4 +1,6 @@
 ﻿#include "FBX.h"
+#include "Material.h"
+#include "../Device/AssetsManager.h"
 #include "../System/Game.h"
 #include "../System/VertexArray.h"
 
@@ -17,7 +19,7 @@ FBX::~FBX() {
     }
 }
 
-void FBX::create(const std::string& fileName) {
+void FBX::create(std::shared_ptr<AssetsManager> assets, const std::string& fileName) {
     setOBJDirectory();
 
     //マネージャーを生成
@@ -46,18 +48,26 @@ void FBX::create(const std::string& fileName) {
     //Scene解析
     FbxNode* root = scene->GetRootNode();
     if (root) {
-        perse(root, 0);
+        perse(assets, root, 0);
     }
 
     mVertexArray->createVertexBuffer(sizeof(Vertex), mVertices);
     SAFE_DELETE_ARRAY(mVertices);
 }
 
+std::shared_ptr<Material> FBX::getMaterial(unsigned index) const {
+    return mMaterials[index];
+}
+
 std::shared_ptr<VertexArray> FBX::getVertexArray() const {
     return mVertexArray;
 }
 
-void FBX::perse(FbxNode* node, int indent) {
+size_t FBX::getNumMaterial() const {
+    return mMaterials.size();
+}
+
+void FBX::perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent) {
     int attrCount = node->GetNodeAttributeCount();
 
     for (size_t i = 0; i < attrCount; i++) {
@@ -68,10 +78,10 @@ void FBX::perse(FbxNode* node, int indent) {
             switch (type) {
             case fbxsdk::FbxNodeAttribute::eMesh:
                 mesh = node->GetMesh();
-                searchIndex(mesh);
                 getVertex(mesh);
                 getNormals(mesh);
                 getUV(mesh);
+                getMaterial(assets, mesh);
                 break;
             default:
                 break;
@@ -81,7 +91,7 @@ void FBX::perse(FbxNode* node, int indent) {
 
     int childCount = node->GetChildCount();
     for (int i = 0; i < childCount; ++i) {
-        perse(node->GetChild(i), indent + 1);
+        perse(assets, node->GetChild(i), indent + 1);
     }
 }
 
@@ -94,24 +104,10 @@ void FBX::getVertex(FbxMesh* mesh) {
 
     mVertices = new Vertex[vertexNum];
     for (size_t i = 0; i < vertexNum; i++) {
-        mVertices[i].pos.x = -src[i][0];
-        mVertices[i].pos.y = src[i][1];
-        mVertices[i].pos.z = src[i][2];
-        mVertices[i].pos.w = src[i][3];
+        mVertices[i].pos.x = static_cast<float>(-src[i][0]);
+        mVertices[i].pos.y = static_cast<float>(src[i][1]);
+        mVertices[i].pos.z = static_cast<float>(src[i][2]);
     }
-}
-
-void FBX::searchIndex(FbxMesh* mesh) {
-    //総ポリゴン数
-    int polyNum = mesh->GetPolygonCount();
-    mVertexArray->setNumFace(polyNum);
-    //インデックス数
-    auto count = mesh->GetPolygonVertexCount();
-    //インデックス配列
-    auto indices = mesh->GetPolygonVertices();
-
-    mVertexArray->resizeIndexBuffer(1);
-    mVertexArray->createIndexBuffer(0, count, indices);
 }
 
 void FBX::getNormals(FbxMesh* mesh) {
@@ -131,10 +127,9 @@ void FBX::getNormals(FbxMesh* mesh) {
             }
 
             FbxVector4 normal = normalElement->GetDirectArray().GetAt(normalIndex);
-            mVertices[normalIndex].normal.x = -normal[0];
-            mVertices[normalIndex].normal.y = normal[1];
-            mVertices[normalIndex].normal.z = normal[2];
-            mVertices[normalIndex].normal.w = normal[3];
+            mVertices[normalIndex].normal.x = static_cast<float>(-normal[0]);
+            mVertices[normalIndex].normal.y = static_cast<float>(normal[1]);
+            mVertices[normalIndex].normal.z = static_cast<float>(normal[2]);
         }
     } else if (normalElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
         int indexByPolygonVertex = 0;
@@ -150,10 +145,9 @@ void FBX::getNormals(FbxMesh* mesh) {
                 }
 
                 FbxVector4 normal = normalElement->GetDirectArray().GetAt(normalIndex);
-                mVertices[normalIndex].normal.x = -normal[0];
-                mVertices[normalIndex].normal.y = normal[1];
-                mVertices[normalIndex].normal.z = normal[2];
-                mVertices[normalIndex].normal.w = normal[3];
+                mVertices[normalIndex].normal.x = static_cast<float>(-normal[0]);
+                mVertices[normalIndex].normal.y = static_cast<float>(normal[1]);
+                mVertices[normalIndex].normal.z = static_cast<float>(normal[2]);
 
                 indexByPolygonVertex++;
             }
@@ -177,19 +171,16 @@ void FBX::getNormals(FbxMesh* mesh) {
     //    mVertices[vertIndex0].normal.x = -normal[0];
     //    mVertices[vertIndex0].normal.y = normal[1];
     //    mVertices[vertIndex0].normal.z = normal[2];
-    //    mVertices[vertIndex0].normal.w = normal[3];
 
     //    mesh->GetPolygonVertexNormal(i, 1, normal);
     //    mVertices[vertIndex1].normal.x = -normal[0];
     //    mVertices[vertIndex1].normal.y = normal[1];
     //    mVertices[vertIndex1].normal.z = normal[2];
-    //    mVertices[vertIndex1].normal.w = normal[3];
 
     //    mesh->GetPolygonVertexNormal(i, 2, normal);
     //    mVertices[vertIndex2].normal.x = -normal[0];
     //    mVertices[vertIndex2].normal.y = normal[1];
     //    mVertices[vertIndex2].normal.z = normal[2];
-    //    mVertices[vertIndex2].normal.w = normal[3];
     //}
 }
 
@@ -230,8 +221,8 @@ void FBX::getUV(FbxMesh* mesh) {
                     int uvIndex = useIndex ? uvElement->GetIndexArray().GetAt(polyVertIndex) : polyVertIndex;
 
                     FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
-                    mVertices[uvIndex].normal.x = uv[0];
-                    mVertices[uvIndex].normal.y = 1.f - uv[1];
+                    mVertices[uvIndex].normal.x = static_cast<float>(uv[0]);
+                    mVertices[uvIndex].normal.y = 1.f - static_cast<float>(uv[1]);
                 }
             }
         } else if (uvElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
@@ -245,13 +236,168 @@ void FBX::getUV(FbxMesh* mesh) {
                         int uvIndex = useIndex ? uvElement->GetIndexArray().GetAt(polyIndexCounter) : polyIndexCounter;
 
                         FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
-                        mVertices[uvIndex].uv.x = uv[0];
-                        mVertices[uvIndex].uv.y = 1.f - uv[1];
+                        mVertices[uvIndex].uv.x = static_cast<float>(uv[0]);
+                        mVertices[uvIndex].uv.y = 1.f - static_cast<float>(uv[1]);
 
                         polyIndexCounter++;
                     }
                 }
             }
         }
+    }
+}
+
+void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, FbxMesh* mesh) {
+    FbxNode* node = mesh->GetNode();
+    if (!node) {
+        return;
+    }
+
+    //マテリアルの数
+    int materialNum = node->GetMaterialCount();
+    if (materialNum == 0) {
+        return;
+    }
+    //マテリアルの数だけインデックスバッファを作成
+    mVertexArray->resizeIndexBuffer(materialNum);
+
+    //マテリアル情報を取得
+    for (size_t i = 0; i < materialNum; i++) {
+        mMaterials.emplace_back(std::make_shared<Material>());
+
+        FbxSurfaceMaterial* material = node->GetMaterial(i);
+        if (!material) {
+            continue;
+        }
+
+        //解析
+        //LambertかPhongか
+        if (material->GetClassId().Is(FbxSurfaceLambert::ClassId)) {
+            FbxSurfaceLambert* lambert = static_cast<FbxSurfaceLambert*>(material);
+
+            auto mat = mMaterials[i];
+
+            //アンビエント
+            auto ambient = lambert->Ambient.Get();
+            mat->ambient.x = static_cast<float>(ambient[0]);
+            mat->ambient.y = static_cast<float>(ambient[1]);
+            mat->ambient.z = static_cast<float>(ambient[2]);
+            mat->ambient.w = 1.f;
+
+            //ディヒューズ
+            auto diffuse = lambert->Diffuse.Get();
+            mat->diffuse.x = static_cast<float>(diffuse[0]);
+            mat->diffuse.y = static_cast<float>(diffuse[1]);
+            mat->diffuse.z = static_cast<float>(diffuse[2]);
+            mat->diffuse.w = 1.f;
+
+            //エミッシブ
+            auto emissive = lambert->Emissive.Get();
+            mat->emissive.x = static_cast<float>(emissive[0]);
+            mat->emissive.y = static_cast<float>(emissive[1]);
+            mat->emissive.z = static_cast<float>(emissive[2]);
+            mat->emissive.w = 1.f;
+
+            //バンプ
+            auto bump = lambert->Bump.Get();
+            mat->bump.x = static_cast<float>(bump[0]);
+            mat->bump.y = static_cast<float>(bump[1]);
+            mat->bump.z = static_cast<float>(bump[2]);
+            mat->bump.w = 1.f;
+
+            //透過度
+            mat->transparency = static_cast<float>(lambert->TransparencyFactor.Get());
+        } else if (material->GetClassId().Is(FbxSurfacePhong::ClassId)) {
+            FbxSurfacePhong* phong = static_cast<FbxSurfacePhong*>(material);
+
+            auto mat = mMaterials[i];
+
+            //アンビエント
+            auto ambient = phong->Ambient.Get();
+            mat->ambient.x = static_cast<float>(ambient[0]);
+            mat->ambient.y = static_cast<float>(ambient[1]);
+            mat->ambient.z = static_cast<float>(ambient[2]);
+            mat->ambient.w = 1.f;
+
+            //ディヒューズ
+            auto diffuse = phong->Diffuse.Get();
+            mat->diffuse.x = static_cast<float>(diffuse[0]);
+            mat->diffuse.y = static_cast<float>(diffuse[1]);
+            mat->diffuse.z = static_cast<float>(diffuse[2]);
+            mat->diffuse.w = 1.f;
+
+            //エミッシブ
+            auto emissive = phong->Emissive.Get();
+            mat->emissive.x = static_cast<float>(emissive[0]);
+            mat->emissive.y = static_cast<float>(emissive[1]);
+            mat->emissive.z = static_cast<float>(emissive[2]);
+            mat->emissive.w = 1.f;
+
+            //バンプ
+            auto bump = phong->Bump.Get();
+            mat->bump.x = static_cast<float>(bump[0]);
+            mat->bump.y = static_cast<float>(bump[1]);
+            mat->bump.z = static_cast<float>(bump[2]);
+            mat->bump.w = 1.f;
+
+            //透過度
+            mat->transparency = static_cast<float>(phong->TransparencyFactor.Get());
+
+            //スペキュラ
+            auto specular = phong->Specular.Get();
+            mat->specular.x = static_cast<float>(specular[0]);
+            mat->specular.y = static_cast<float>(specular[1]);
+            mat->specular.z = static_cast<float>(specular[2]);
+            mat->specular.w = 1.f;
+
+            //光沢
+            mat->shininess = static_cast<float>(phong->Shininess.Get());
+        }
+
+        //ディフューズプロパティを検索
+        FbxProperty property = material->FindProperty(FbxSurfaceMaterial::sDiffuse);
+
+        //プロパティが持っているレイヤードテクスチャの枚数をチェック
+        int layerNum = property.GetSrcObjectCount<FbxLayeredTexture>();
+
+        //レイヤードテクスチャが無ければ通常テクスチャ
+        if (layerNum == 0) {
+            //通常テクスチャの枚数をチェック
+            int numGeneralTexture = property.GetSrcObjectCount<FbxTexture>();
+
+            //各テクスチャについてテクスチャ情報をゲット
+            for (int j = 0; j < numGeneralTexture; ++j) {
+                //j番目のテクスチャオブジェクト取得
+                FbxTexture* texture = FbxCast<FbxTexture>(property.GetSrcObject<FbxTexture>(j));
+
+                //テクスチャ名
+                mMaterials[i]->textureName = texture->GetName();
+                //テクスチャーを作成
+                mMaterials[i]->texture = assets->createTexture(mMaterials[i]->textureName, false);
+
+                break; //とりあえず今は1枚だけサポート
+            }
+        }
+
+        //マテリアルの数だけインデックスバッファーを作成
+        int count = 0;
+        int* pIndex = new int[mesh->GetPolygonVertexCount()]; //メッシュ内のポリゴン数でメモリ確保
+
+        //そのマテリアルであるインデックス配列内の開始インデックスを調べる + インデックスの個数も調べる
+        for (int j = 0; j < mesh->GetPolygonCount(); j++) {
+            int numLayer = mesh->GetLayerCount();
+            FbxLayerElementMaterial* mat = mesh->GetLayer(0)->GetMaterials(); //レイヤーが1枚だけを想定
+            int matId = mat->GetIndexArray().GetAt(j);
+            if (matId == i) {
+                pIndex[count] = mesh->GetPolygonVertex(j, 0);
+                pIndex[count + 1] = mesh->GetPolygonVertex(j, 1);
+                pIndex[count + 2] = mesh->GetPolygonVertex(j, 2);
+                count += 3;
+            }
+        }
+        mVertexArray->createIndexBuffer(i, count, pIndex);
+        mMaterials[i]->numFace = count / 3; //そのマテリアル内のポリゴン数
+
+        delete[] pIndex;
     }
 }

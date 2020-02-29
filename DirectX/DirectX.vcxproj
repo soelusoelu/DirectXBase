@@ -184,7 +184,6 @@
     <ClCompile Include="System\Format.cpp" />
     <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
-    <ClCompile Include="Mesh\Material.cpp" />
     <ClCompile Include="Mesh\MeshLoader.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
