@@ -3,9 +3,12 @@
 #include "../Utility/Math.h"
 #include <fbxsdk.h>
 #include <memory>
+#include <string>
 
 struct Vertex {
     Vector4 pos;
+    Vector4 normal;
+    //Vector2 uv;
 };
 
 class VertexArray;
@@ -14,14 +17,15 @@ class FBX {
 public:
     FBX();
     ~FBX();
-    void initialize();
+    void create(const std::string& fileName);
+    std::shared_ptr<VertexArray> getVertexArray() const;
 
 private:
-    void enumNodeNamesAndAttributes(FbxNode* node, int indent);
+    void perse(FbxNode* node, int indent);
+    void createVertex(FbxMesh* mesh);
     void searchIndex(FbxMesh* mesh);
-    void searchVertex(FbxMesh* mesh);
 
 private:
     FbxManager* mManager;
-    std::unique_ptr<VertexArray> mVertexArray;
+    std::shared_ptr<VertexArray> mVertexArray;
 };

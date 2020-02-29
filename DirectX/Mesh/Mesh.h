@@ -50,7 +50,7 @@ public:
     static void setMeshManager(MeshManager* manager);
 
 private:
-    std::shared_ptr<MeshLoader> mLoader;
+    //std::shared_ptr<MeshLoader> mLoader;
     std::shared_ptr<FBX> mFBX;
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;

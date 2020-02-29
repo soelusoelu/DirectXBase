@@ -16,21 +16,21 @@ PointLight::~PointLight() = default;
 
 void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
     //メッシュ描画されるとだるいから自己管理
-    mesh = std::make_shared<Mesh>(renderer, "Sphere.obj");
-    auto sphere = std::make_shared<Sphere>(Vector3::zero, 0.f);
-    mesh->createSphere(&sphere);
-    radius = sphere->radius;
-    shader = renderer->getAssetsManager()->createShader("PointLight.hlsl");
+    //mesh = std::make_shared<Mesh>(renderer, "Sphere.obj");
+    //auto sphere = std::make_shared<Sphere>(Vector3::zero, 0.f);
+    //mesh->createSphere(&sphere);
+    //radius = sphere->radius;
+    //shader = renderer->getAssetsManager()->createShader("PointLight.hlsl");
 
-    //コンスタントバッファ生成
-    shader->createConstantBuffer(sizeof(PointLightConstantBuffer));
+    ////コンスタントバッファ生成
+    //shader->createConstantBuffer(sizeof(PointLightConstantBuffer));
 
-    //インプットレイアウトの生成
-    static constexpr InputElementDesc layout[] = {
-        { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-    };
-    static constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
-    shader->createInputLayout(layout, numElements);
+    ////インプットレイアウトの生成
+    //static constexpr InputElementDesc layout[] = {
+    //    { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
+    //    { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
+    //    { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
+    //};
+    //static constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
+    //shader->createInputLayout(layout, numElements);
 }
