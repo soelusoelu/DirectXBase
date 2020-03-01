@@ -7,7 +7,7 @@
 
 Actor::Actor(std::shared_ptr<Renderer> renderer, const std::string& tag) :
     mRenderer(renderer),
-    mComponentManager(std::make_shared<ComponentManager>()),
+    mComponentManager(nullptr),
     mTransform(std::make_shared<Transform3D>(this)),
     mDestroyTimer(nullptr),
     mTag(tag),
@@ -67,11 +67,11 @@ const std::string& Actor::tag() const {
     return mTag;
 }
 
-void Actor::loadProperties(const rapidjson::Value& inObj) {
+void Actor::loadProperties(const rapidjson::Value & inObj) {
     mTransform->loadProperties(inObj);
 }
 
-void Actor::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+void Actor::saveProperties(rapidjson::Document::AllocatorType & alloc, rapidjson::Value * inObj) const {
     mTransform->saveProperties(alloc, inObj);
 }
 
@@ -83,7 +83,8 @@ ActorManager* Actor::getActorManager() {
     return mActorManager;
 }
 
-void Actor::addToManager() {
+void Actor::initialize() {
+    mComponentManager = std::make_shared<ComponentManager>(shared_from_this());
     if (mActorManager) {
         mActorManager->add(shared_from_this());
     }

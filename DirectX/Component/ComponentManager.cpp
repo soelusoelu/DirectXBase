@@ -1,7 +1,9 @@
 ﻿#include "ComponentManager.h"
 #include "Component.h"
 
-ComponentManager::ComponentManager() = default;
+ComponentManager::ComponentManager(std::shared_ptr<Actor> owner) :
+    mOwner(owner) {
+}
 
 ComponentManager::~ComponentManager() {
     mStartComponents.clear();

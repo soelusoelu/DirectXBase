@@ -22,9 +22,6 @@ struct VS_OUTPUT
     float2 UV : TEXCOORD;
 };
 
-//
-//テクスチャーを参照してレンダー バーテックスシェーダー
-//
 VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
@@ -35,9 +32,6 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
     return output;
 }
 
-//
-//テクスチャーを参照してレンダー ピクセルシェーダー
-//
 float4 PS(VS_OUTPUT input) : SV_Target
 {
     //テクスチャーから情報を取り出す

@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+class Actor;
 class Component;
 
 class ComponentManager {
@@ -11,7 +12,7 @@ class ComponentManager {
     using ComponentPtrList = std::list<ComponentPtr>;
 
 public:
-    ComponentManager();
+    ComponentManager(std::shared_ptr<Actor> owner);
     ~ComponentManager();
     //各コンポーネントのstartを一度だけ実行
     void start();
@@ -19,6 +20,11 @@ public:
     void update();
     //コンポーネントの追加
     void addComponent(ComponentPtr component);
+
+    template<typename T>
+    void addComponent() {
+        mStartComponents.emplace_back(std::make_shared<T>(mOwner.lock()));
+    }
 
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
     void onUpdateWorldTransform();
@@ -47,6 +53,7 @@ public:
     std::shared_ptr<Component> getComponent(const std::string& type) const;
 
 private:
+    std::weak_ptr<Actor> mOwner;
     ComponentPtrList mStartComponents;
     ComponentPtrList mComponents;
 };

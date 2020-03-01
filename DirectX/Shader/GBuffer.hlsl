@@ -31,9 +31,6 @@ struct PS_OUTPUT
     float4 Specular : SV_Target3;
 };
 
-//
-//テクスチャーにレンダー バーテックスシェーダー
-//
 VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
@@ -48,9 +45,6 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
     return output;
 }
 
-//
-//テクスチャーにレンダー ピクセルシェーダー
-//
 PS_OUTPUT PS(VS_OUTPUT input)
 {
     PS_OUTPUT Out = (PS_OUTPUT) 0;

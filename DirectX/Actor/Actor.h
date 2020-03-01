@@ -51,7 +51,7 @@ public:
     template <typename T>
     static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>(renderer);
-        t->addToManager();
+        t->initialize();
         t->start();
         t->loadProperties(inObj);
         return t;
@@ -62,7 +62,7 @@ public:
     ActorManager* getActorManager();
 
 private:
-    void addToManager();
+    void initialize();
     void destroyTimer();
 
 protected:
