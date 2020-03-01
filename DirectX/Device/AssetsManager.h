@@ -1,12 +1,12 @@
 ﻿#pragma once
 
+#include "../Mesh/IMeshLoader.h"
 #include <list>
 #include <memory>
 #include <string>
 #include <unordered_map>
 
 class Camera;
-class MeshLoader;
 class Renderer;
 class Shader;
 class Sound;
@@ -21,7 +21,7 @@ public:
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
     std::shared_ptr<Sound> createBGM(const std::string& fileName);
     std::shared_ptr<Sound> createSE(const std::string& fileName);
-    std::shared_ptr<MeshLoader> createMesh(const std::string& fileName);
+    std::shared_ptr<IMeshLoader> createMesh(const std::string& fileName);
 
 private:
     std::unique_ptr<SoundBase> mSoundBase;
@@ -29,5 +29,5 @@ private:
     std::unordered_map<std::string, std::shared_ptr<Shader>> mShaders;
     std::unordered_map<std::string, std::shared_ptr<Texture>> mTextures;
     std::unordered_map<std::string, std::shared_ptr<Sound>> mSounds;
-    std::unordered_map<std::string, std::shared_ptr<MeshLoader>> mMeshLoaders;
+    std::unordered_map<std::string, std::shared_ptr<IMeshLoader>> mMeshLoaders;
 };

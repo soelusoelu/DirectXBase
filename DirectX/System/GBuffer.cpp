@@ -22,7 +22,7 @@
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
-#include "../Mesh/MeshLoader.h"
+#include "../Mesh/OBJ.h"
 #include "../Shader/Shader.h"
 
 GBuffer::GBuffer() :

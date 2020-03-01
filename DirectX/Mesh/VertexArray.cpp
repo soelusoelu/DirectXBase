@@ -1,24 +1,21 @@
 #include "VertexArray.h"
-#include "BufferDesc.h"
-#include "DirectX.h"
-#include "Game.h"
-#include "IndexBuffer.h"
-#include "SubResourceDesc.h"
-#include "Usage.h"
-#include "VertexBuffer.h"
+#include "../System/BufferDesc.h"
+#include "../System/DirectX.h"
+#include "../System/Game.h"
+#include "../System/IndexBuffer.h"
+#include "../System/SubResourceDesc.h"
+#include "../System/Usage.h"
+#include "../System/VertexBuffer.h"
 
 VertexArray::VertexArray() :
     mNumVerts(0),
     mNumNormal(0),
     mNumTex(0),
     mNumFace(0),
-    mVertices(nullptr),
     mVertexBuffer(nullptr) {
 }
 
-VertexArray::~VertexArray() {
-    SAFE_DELETE_ARRAY(mVertices);
-}
+VertexArray::~VertexArray() = default;
 
 void VertexArray::setNumVerts(unsigned num) {
     mNumVerts = num;
@@ -52,14 +49,6 @@ unsigned VertexArray::getNumFace() const {
     return mNumFace;
 }
 
-void VertexArray::setVertices(Vector3* vertices) {
-    mVertices = vertices;
-}
-
-Vector3* VertexArray::getVertices() const {
-    return mVertices;
-}
-
 void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
     BufferDesc bd;
     bd.oneSize = vertexSize;
@@ -73,6 +62,11 @@ void VertexArray::createVertexBuffer(unsigned vertexSize, const void* data) {
 }
 
 void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void* data) {
+    auto num = mIndexBuffer.size();
+    if (index >= num) {
+        mIndexBuffer.resize(num + 1);
+    }
+
     BufferDesc bd;
     bd.size = sizeof(int) * numFace;
     bd.usage = Usage::USAGE_DEFAULT;
@@ -81,10 +75,6 @@ void VertexArray::createIndexBuffer(unsigned index, unsigned numFace, const void
     sub.data = data;
 
     mIndexBuffer[index] = std::make_unique<IndexBuffer>(bd, &sub);
-}
-
-void VertexArray::resizeIndexBuffer(size_t size) {
-    mIndexBuffer.resize(size);
 }
 
 void VertexArray::setVertexBuffer(unsigned numStream, unsigned start, unsigned offset) {

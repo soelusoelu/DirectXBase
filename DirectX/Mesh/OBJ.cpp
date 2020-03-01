@@ -1,103 +1,32 @@
-﻿#include "MeshLoader.h"
+﻿#include "OBJ.h"
 #include "Material.h"
+#include "VertexArray.h"
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
-#include "../System/VertexArray.h"
 #include "../Utility/StringUtil.h"
 
-MeshLoader::MeshLoader(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) :
-    mVertexArray(std::make_unique<VertexArray>()) {
-    if (!load(assetsManager, fileName)) {
-        MSG(L"メッシュ作成失敗");
-        return;
-    }
+OBJ::OBJ() :
+    mVertexArray(std::make_shared<VertexArray>()),
+    mVertices(nullptr) {
 }
 
-MeshLoader::~MeshLoader() = default;
-
-void MeshLoader::createSphere(std::shared_ptr<Sphere> * sphere) const {
-    //バウンディングスフィア作成
-    auto verts = mVertexArray->getVertices();
-    float min = Math::infinity;
-    float max = Math::negInfinity;
-    Vector3 minVec3 = Vector3::one * Math::infinity;
-    Vector3 maxVec3 = Vector3::one * Math::negInfinity;
-    for (size_t i = 0; i < mVertexArray->getNumVerts(); i++) {
-        //半径
-        if (verts[i].x < min) {
-            min = verts[i].x;
-        }
-        if (verts[i].x > max) {
-            max = verts[i].x;
-        }
-        if (verts[i].y < min) {
-            min = verts[i].y;
-        }
-        if (verts[i].y > max) {
-            max = verts[i].y;
-        }
-        if (verts[i].z < min) {
-            min = verts[i].z;
-        }
-        if (verts[i].z > max) {
-            max = verts[i].z;
-        }
-
-        //中心
-        if (verts[i].x < minVec3.x) {
-            minVec3.x = verts[i].x;
-        }
-        if (verts[i].x > maxVec3.x) {
-            maxVec3.x = verts[i].x;
-        }
-        if (verts[i].y < minVec3.y) {
-            minVec3.y = verts[i].y;
-        }
-        if (verts[i].y > maxVec3.y) {
-            maxVec3.y = verts[i].y;
-        }
-        if (verts[i].z < minVec3.z) {
-            minVec3.z = verts[i].z;
-        }
-        if (verts[i].z > maxVec3.z) {
-            maxVec3.z = verts[i].z;
-        }
-    }
-    float r = (max - min) / 2.f;
-    (*sphere)->radius = r;
-    auto c = (maxVec3 + minVec3) / 2.f;
-    (*sphere)->center = c;
+OBJ::~OBJ() {
+    SAFE_DELETE_ARRAY(mVertices);
 }
 
-void MeshLoader::setVertexBuffer(unsigned numStream, unsigned start, unsigned offset) {
-    mVertexArray->setVertexBuffer(numStream, start, offset);
-}
-
-void MeshLoader::setIndexBuffer(unsigned index, unsigned offset) {
-    mVertexArray->setIndexBuffer(index, offset);
-}
-
-unsigned MeshLoader::getNumMaterial() const {
-    return mMaterials.size();
-}
-
-std::shared_ptr<Material> MeshLoader::getMaterialData(unsigned index) const {
-    return mMaterials[index];
-}
-
-bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
+void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
     //OBJファイルを開いて内容を読み込む
     setModelDirectory();
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         MSG(L"OBJファイルが存在しません");
-        return false;
+        return;
     }
 
     //事前に頂点数などを調べる
     if (!preload(ifs, assetsManager, fileName)) {
         MSG(L"Meshファイルの事前読み込み失敗");
-        return false;
+        return;
     }
 
     //サイズ変更
@@ -148,21 +77,16 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
         if (strcmp(s, "vt") == 0) {
             sscanf_s(line.c_str(), "%s %f %f", s, sizeof(s), &x, &y);
             textures[vtCount].x = x;
-            textures[vtCount].y = 1 - y; //OBJファイルはY成分が逆なので合わせる
+            textures[vtCount].y = 1.f - y; //OBJファイルはY成分が逆なので合わせる
             vtCount++;
         }
     }
-
-    //マテリアルの数だけインデックスバッファーを作成
-    mVertexArray->resizeIndexBuffer(getNumMaterial());
-    //頂点情報を記録
-    mVertexArray->setVertices(vertices);
 
     //フェイス読み込み バラバラに収録されている可能性があるので、マテリアル名を頼りにつなぎ合わせる
     bool matFlag = false;
     int* faceBuffer = new int[mVertexArray->getNumFace() * 3]; //3頂点ポリゴンなので、1フェイス=3頂点(3インデックス)
 
-    auto* meshVertices = new MeshVertex[mVertexArray->getNumVerts()];
+    mVertices = new MeshVertex[mVertexArray->getNumVerts()];
     int v1 = 0, v2 = 0, v3 = 0;
     int vn1 = 0, vn2 = 0, vn3 = 0;
     int vt1 = 0, vt2 = 0, vt3 = 0;
@@ -208,15 +132,15 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
                 faceBuffer[fCount * 3 + 2] = index3 - 1;
                 fCount++;
                 //頂点構造体に代入
-                //meshVertices[index1 - 1].pos = vertices[v1 - 1];
-                //meshVertices[index1 - 1].norm = normals[vn1 - 1];
-                //meshVertices[index1 - 1].tex = textures[vt1 - 1];
-                //meshVertices[index2 - 1].pos = vertices[v2 - 1];
-                //meshVertices[index2 - 1].norm = normals[vn2 - 1];
-                //meshVertices[index2 - 1].tex = textures[vt2 - 1];
-                //meshVertices[index3 - 1].pos = vertices[v3 - 1];
-                //meshVertices[index3 - 1].norm = normals[vn3 - 1];
-                //meshVertices[index3 - 1].tex = textures[vt3 - 1];
+                mVertices[index1 - 1].pos = vertices[v1 - 1];
+                mVertices[index1 - 1].normal = normals[vn1 - 1];
+                mVertices[index1 - 1].uv = textures[vt1 - 1];
+                mVertices[index2 - 1].pos = vertices[v2 - 1];
+                mVertices[index2 - 1].normal = normals[vn2 - 1];
+                mVertices[index2 - 1].uv = textures[vt2 - 1];
+                mVertices[index3 - 1].pos = vertices[v3 - 1];
+                mVertices[index3 - 1].normal = normals[vn3 - 1];
+                mVertices[index3 - 1].uv = textures[vt3 - 1];
             }
         }
         if (fCount == 0) { //使用されていないマテリアル対策
@@ -229,19 +153,81 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
         mMaterials[i]->numFace = fCount;
     }
 
+    delete[] vertices;
     delete[] normals;
     delete[] textures;
     delete[] faceBuffer;
 
     //バーテックスバッファーを作成
-    mVertexArray->createVertexBuffer(sizeof(MeshVertex), meshVertices);
-
-    delete[] meshVertices;
-
-    return true;
+    mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
 }
 
-bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<AssetsManager> assetsManager, const std::string & fileName) {
+std::shared_ptr<Material> OBJ::getMaterial(unsigned index) const {
+    return mMaterials[index];
+}
+
+std::shared_ptr<VertexArray> OBJ::getVertexArray() const {
+    return mVertexArray;
+}
+
+size_t OBJ::getNumMaterial() const {
+    return mMaterials.size();
+}
+
+void OBJ::createSphere(std::shared_ptr<Sphere>* sphere) const {
+    //バウンディングスフィア作成
+    float min = Math::infinity;
+    float max = Math::negInfinity;
+    Vector3 minVec3 = Vector3::one * Math::infinity;
+    Vector3 maxVec3 = Vector3::one * Math::negInfinity;
+    for (size_t i = 0; i < mVertexArray->getNumVerts(); i++) {
+        //半径
+        if (mVertices[i].pos.x < min) {
+            min = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.x > max) {
+            max = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.y < min) {
+            min = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.y > max) {
+            max = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.z < min) {
+            min = mVertices[i].pos.z;
+        }
+        if (mVertices[i].pos.z > max) {
+            max = mVertices[i].pos.z;
+        }
+
+        //中心
+        if (mVertices[i].pos.x < minVec3.x) {
+            minVec3.x = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.x > maxVec3.x) {
+            maxVec3.x = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.y < minVec3.y) {
+            minVec3.y = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.y > maxVec3.y) {
+            maxVec3.y = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.z < minVec3.z) {
+            minVec3.z = mVertices[i].pos.z;
+        }
+        if (mVertices[i].pos.z > maxVec3.z) {
+            maxVec3.z = mVertices[i].pos.z;
+        }
+    }
+    float r = (max - min) / 2.f;
+    (*sphere)->radius = r;
+    auto c = (maxVec3 + minVec3) / 2.f;
+    (*sphere)->center = c;
+}
+
+bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
     //OBJファイルを開いて内容を読み込む
     unsigned numVert = 0;
     unsigned numNormal = 0;
@@ -298,7 +284,7 @@ bool MeshLoader::preload(std::ifstream & stream, std::shared_ptr<AssetsManager> 
     return true;
 }
 
-bool MeshLoader::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
+bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         MSG(L"mtlファイルが存在しません");
@@ -362,7 +348,7 @@ bool MeshLoader::materialLoad(std::shared_ptr<AssetsManager> assetsManager, cons
     return true;
 }
 
-bool MeshLoader::materialPreload(std::ifstream& stream, const std::string& fileName) {
+bool OBJ::materialPreload(std::ifstream& stream, const std::string& fileName) {
     //マテリアルファイルを開いて内容を読み込む
     std::string line;
     char s[256];

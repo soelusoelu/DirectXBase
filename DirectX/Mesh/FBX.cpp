@@ -1,8 +1,8 @@
 ﻿#include "FBX.h"
 #include "Material.h"
+#include "VertexArray.h"
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
-#include "../System/VertexArray.h"
 
 FBX::FBX() :
     mManager(nullptr),
@@ -11,7 +11,6 @@ FBX::FBX() :
 }
 
 FBX::~FBX() {
-    //削除されてると思うけど
     SAFE_DELETE_ARRAY(mVertices);
     //マネージャー解放
     if (mManager) {
@@ -52,7 +51,6 @@ void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     }
 
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
-    SAFE_DELETE_ARRAY(mVertices);
 }
 
 std::shared_ptr<Material> FBX::getMaterial(unsigned index) const {
@@ -65,6 +63,59 @@ std::shared_ptr<VertexArray> FBX::getVertexArray() const {
 
 size_t FBX::getNumMaterial() const {
     return mMaterials.size();
+}
+
+void FBX::createSphere(std::shared_ptr<Sphere>* sphere) const {
+    //バウンディングスフィア作成
+    float min = Math::infinity;
+    float max = Math::negInfinity;
+    Vector3 minVec3 = Vector3::one * Math::infinity;
+    Vector3 maxVec3 = Vector3::one * Math::negInfinity;
+    for (size_t i = 0; i < mVertexArray->getNumVerts(); i++) {
+        //半径
+        if (mVertices[i].pos.x < min) {
+            min = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.x > max) {
+            max = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.y < min) {
+            min = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.y > max) {
+            max = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.z < min) {
+            min = mVertices[i].pos.z;
+        }
+        if (mVertices[i].pos.z > max) {
+            max = mVertices[i].pos.z;
+        }
+
+        //中心
+        if (mVertices[i].pos.x < minVec3.x) {
+            minVec3.x = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.x > maxVec3.x) {
+            maxVec3.x = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.y < minVec3.y) {
+            minVec3.y = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.y > maxVec3.y) {
+            maxVec3.y = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.z < minVec3.z) {
+            minVec3.z = mVertices[i].pos.z;
+        }
+        if (mVertices[i].pos.z > maxVec3.z) {
+            maxVec3.z = mVertices[i].pos.z;
+        }
+    }
+    float r = (max - min) / 2.f;
+    (*sphere)->radius = r;
+    auto c = (maxVec3 + minVec3) / 2.f;
+    (*sphere)->center = c;
 }
 
 void FBX::perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent) {
@@ -258,8 +309,6 @@ void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, FbxMesh* mesh) {
     if (materialNum == 0) {
         return;
     }
-    //マテリアルの数だけインデックスバッファを作成
-    mVertexArray->resizeIndexBuffer(materialNum);
 
     //マテリアル情報を取得
     for (size_t i = 0; i < materialNum; i++) {

@@ -5,7 +5,7 @@
 
 Ray::Ray(const Vector3& origin, const Vector3& direction, float maxDistance) :
     start(origin),
-    end(direction * maxDistance) {
+    end(direction* maxDistance) {
 }
 
 Vector3 Ray::pointOnSegment(float t) const {
@@ -122,6 +122,11 @@ bool Circle::contains(const Vector2& point) const {
 }
 
 
+
+Sphere::Sphere() :
+    center(Vector3::zero),
+    radius(0.f) {
+}
 
 Sphere::Sphere(const Vector3& center, float radius) :
     center(center),

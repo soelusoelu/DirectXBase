@@ -22,6 +22,7 @@ public:
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
     virtual size_t getNumMaterial() const override;
+    virtual void createSphere(std::shared_ptr<Sphere>* sphere) const override;
 
 private:
     void perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent);

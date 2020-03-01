@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IMeshLoader.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/Game.h"
 #include "../Utility/Collision.h"
@@ -9,8 +10,6 @@
 #include <vector>
 
 class Camera;
-class FBX;
-class MeshLoader;
 class MeshManager;
 class Renderer;
 class Transform3D;
@@ -41,7 +40,7 @@ public:
     void createSphere(std::shared_ptr<Sphere>* sphere) const;
     void draw(std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
-    std::shared_ptr<MeshLoader> getMeshData() const;
+    std::shared_ptr<IMeshLoader> getMeshData() const;
     void destroy();
     void setActive(bool value);
     bool getActive() const;
@@ -50,8 +49,7 @@ public:
     static void setMeshManager(MeshManager* manager);
 
 private:
-    //std::shared_ptr<MeshLoader> mLoader;
-    std::shared_ptr<FBX> mFBX;
+    std::shared_ptr<IMeshLoader> mMesh;
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;
     State mState;

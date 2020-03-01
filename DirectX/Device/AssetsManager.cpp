@@ -1,8 +1,10 @@
 ﻿#include "AssetsManager.h"
 #include "Sound.h"
-#include "../Mesh/MeshLoader.h"
+#include "../Mesh/FBX.h"
+#include "../Mesh/OBJ.h"
 #include "../Shader/Shader.h"
 #include "../System/Texture.h"
+#include "../Utility/FileUtil.h"
 
 AssetsManager::AssetsManager() :
     mSoundBase(std::make_unique<SoundBase>()) {
@@ -53,13 +55,19 @@ std::shared_ptr<Sound> AssetsManager::createSE(const std::string & fileName) {
     return sound;
 }
 
-std::shared_ptr<MeshLoader> AssetsManager::createMesh(const std::string & fileName) {
-    std::shared_ptr<MeshLoader> mesh;
+std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileName) {
+    std::shared_ptr<IMeshLoader> mesh;
     auto itr = mMeshLoaders.find(fileName);
     if (itr != mMeshLoaders.end()) { //既に読み込まれている
         mesh = itr->second;
     } else { //初読み込み
-        mesh = std::make_shared<MeshLoader>(shared_from_this(), fileName);
+        auto ext = FileUtil::getFileExtension(fileName);
+        if (ext == ".obj") {
+            mesh = std::make_shared<OBJ>();
+        } else if (ext == ".fbx") {
+            mesh = std::make_shared<FBX>();
+        }
+        mesh->perse(shared_from_this(), fileName);
         mMeshLoaders.emplace(fileName, mesh);
     }
     return mesh;

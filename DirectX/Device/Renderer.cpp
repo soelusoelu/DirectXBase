@@ -7,7 +7,8 @@
 #include "../Light/DirectionalLight.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Mesh.h"
-#include "../Mesh/MeshLoader.h"
+#include "../Mesh/OBJ.h"
+#include "../Mesh/VertexArray.h"
 #include "../Shader/Shader.h"
 #include "../System/BlendState.h"
 #include "../System/DirectX.h"
@@ -89,7 +90,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
     //頂点インプットレイアウトをセット
     shader->setInputLayout();
     //バーテックスバッファーをセット
-    mPointLight->mesh->getMeshData()->setVertexBuffer();
+    mPointLight->mesh->getMeshData()->getVertexArray()->setVertexBuffer();
     //プリミティブ指定
     Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     //テクスチャ登録

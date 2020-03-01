@@ -1,8 +1,7 @@
 ﻿#include "Mesh.h"
-#include "FBX.h"
 #include "Material.h"
-#include "MeshLoader.h"
 #include "MeshManager.h"
+#include "VertexArray.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Device/AssetsManager.h"
@@ -14,16 +13,12 @@
 #include "../System/InputElement.h"
 #include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
-#include "../System/VertexArray.h"
 
 Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    //mLoader(renderer->getAssetsManager()->createMesh(fileName)),
-    mFBX(std::make_shared<FBX>()),
+    mMesh(renderer->getAssetsManager()->createMesh(fileName)),
     mTransform(nullptr),
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {
-
-    mFBX->perse(renderer->getAssetsManager(), fileName);
 
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);
@@ -48,7 +43,7 @@ void Mesh::addToManager() {
 }
 
 void Mesh::createSphere(std::shared_ptr<Sphere> * sphere) const {
-    //mLoader->createSphere(sphere);
+    mMesh->createSphere(sphere);
 }
 
 void Mesh::draw(std::shared_ptr<Camera> camera) const {
@@ -77,35 +72,26 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
     }
 
     //バーテックスバッファーをセット
-    //mLoader->setVertexBuffer();
-    mFBX->getVertexArray()->setVertexBuffer();
+    mMesh->getVertexArray()->setVertexBuffer();
 
     //このコンスタントバッファーを使うシェーダーの登録
     mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    //for (size_t i = 0; i < mLoader->getMaterialSize(); i++) {
-    for (size_t i = 0; i < mFBX->getNumMaterial(); i++) {
+    for (size_t i = 0; i < mMesh->getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        if (mFBX->getMaterial(i)->numFace == 0) {
+        if (mMesh->getMaterial(i)->numFace == 0) {
             continue;
         }
-        //if (mLoader->getMaterialData(i)->numFace == 0) {
-        //    continue;
-        //}
         //インデックスバッファーをセット
-        //mLoader->setIndexBuffer(i);
-        mFBX->getVertexArray()->setIndexBuffer(i);
+        mMesh->getVertexArray()->setIndexBuffer(i);
 
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
-            //cb.diffuse = mLoader->getMaterialData(i)->Kd;
-            //cb.specular = mLoader->getMaterialData(i)->Ks;
-            cb.diffuse = mFBX->getMaterial(i)->diffuse;
-            cb.specular = mFBX->getMaterial(i)->specular;
+            cb.diffuse = mMesh->getMaterial(i)->diffuse;
+            cb.specular = mMesh->getMaterial(i)->specular;
 
-            if (auto t = mFBX->getMaterial(i)->texture) {
-                //if (auto t = mLoader->getMaterialData(i)->texture) {
+            if (auto t = mMesh->getMaterial(i)->texture) {
                 t->setPSTextures();
                 t->setPSSamplers();
                 cb.textureFlag = 1;
@@ -118,8 +104,7 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
         }
 
         //プリミティブをレンダリング
-        Singleton<DirectX>::instance().drawIndexed(mFBX->getMaterial(i)->numFace * 3);
-        //Singleton<DirectX>::instance().drawIndexed(mLoader->getMaterialData(i)->numFace * 3);
+        Singleton<DirectX>::instance().drawIndexed(mMesh->getMaterial(i)->numFace * 3);
     }
 }
 
@@ -127,9 +112,8 @@ void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {
     mTransform = transform;
 }
 
-std::shared_ptr<MeshLoader> Mesh::getMeshData() const {
-    //return mLoader;
-    return nullptr;
+std::shared_ptr<IMeshLoader> Mesh::getMeshData() const {
+    return mMesh;
 }
 
 void Mesh::destroy() {

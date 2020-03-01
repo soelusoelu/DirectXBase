@@ -158,6 +158,7 @@
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="UI\Score.cpp" />
+    <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="System\RenderTargetView.cpp" />
     <ClCompile Include="System\ComparisonFunc.cpp" />
@@ -184,7 +185,7 @@
     <ClCompile Include="System\Format.cpp" />
     <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
-    <ClCompile Include="Mesh\MeshLoader.cpp" />
+    <ClCompile Include="Mesh\OBJ.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
     <ClCompile Include="System\RasterizerState.cpp" />
@@ -216,7 +217,7 @@
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
-    <ClCompile Include="System\VertexArray.cpp" />
+    <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="System\VertexBuffer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +232,7 @@
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="UI\Score.h" />
+    <ClInclude Include="Utility\FileUtil.h" />
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="System\RenderTargetView.h" />
     <ClInclude Include="System\ComparisonFunc.h" />
@@ -257,7 +259,7 @@
     <ClInclude Include="Light\DirectionalLight.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Mesh\Material.h" />
-    <ClInclude Include="Mesh\MeshLoader.h" />
+    <ClInclude Include="Mesh\OBJ.h" />
     <ClInclude Include="System\SamplerDesc.h" />
     <ClInclude Include="System\ShaderResourceView.h" />
     <ClInclude Include="System\BlendDesc.h" />
@@ -300,7 +302,7 @@
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
-    <ClInclude Include="System\VertexArray.h" />
+    <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="System\VertexBuffer.h" />
   </ItemGroup>
   <ItemGroup>

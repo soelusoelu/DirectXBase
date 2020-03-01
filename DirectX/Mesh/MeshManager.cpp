@@ -19,7 +19,7 @@ void MeshManager::draw(std::shared_ptr<Camera> camera) const {
     }
 
     //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
 
     for (const auto& mesh : mMeshes) {
         if (!mesh->getActive() || mesh->isDead()) {
