@@ -23,7 +23,7 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
     mState(State::ACTIVE) {
 
-    mFBX->create(renderer->getAssetsManager(), fileName);
+    mFBX->perse(renderer->getAssetsManager(), fileName);
 
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);

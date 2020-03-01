@@ -1,32 +1,27 @@
 ﻿#pragma once
 
+#include "IMeshLoader.h"
 #include "../Utility/Math.h"
 #include <fbxsdk.h>
 #include <memory>
 #include <string>
 #include <vector>
 
-struct Vertex {
-    Vector3 pos;
-    Vector3 normal;
-    Vector2 uv;
-};
-
 class AssetsManager;
 struct Material;
 class VertexArray;
 
-class FBX {
+class FBX : public IMeshLoader {
     using MaterialPtr = std::shared_ptr<Material>;
     using MaterialPtrArray = std::vector<MaterialPtr>;
 
 public:
     FBX();
     ~FBX();
-    void create(std::shared_ptr<AssetsManager> assets, const std::string& fileName);
-    MaterialPtr getMaterial(unsigned index) const;
-    std::shared_ptr<VertexArray> getVertexArray() const;
-    size_t getNumMaterial() const;
+    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) override;
+    virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
+    virtual std::shared_ptr<VertexArray> getVertexArray() const override;
+    virtual size_t getNumMaterial() const override;
 
 private:
     void perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent);
@@ -37,7 +32,7 @@ private:
 
 private:
     FbxManager* mManager;
-    Vertex* mVertices;
+    MeshVertex* mVertices;
     MaterialPtrArray mMaterials;
     std::shared_ptr<VertexArray> mVertexArray;
 };

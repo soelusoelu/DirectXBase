@@ -228,6 +228,7 @@
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="Mesh\FBX.h" />
+    <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="UI\Score.h" />
     <ClInclude Include="Utility\LevelLoader.h" />

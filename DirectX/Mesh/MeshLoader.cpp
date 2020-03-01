@@ -208,15 +208,15 @@ bool MeshLoader::load(std::shared_ptr<AssetsManager> assetsManager, const std::s
                 faceBuffer[fCount * 3 + 2] = index3 - 1;
                 fCount++;
                 //頂点構造体に代入
-                meshVertices[index1 - 1].pos = vertices[v1 - 1];
-                meshVertices[index1 - 1].norm = normals[vn1 - 1];
-                meshVertices[index1 - 1].tex = textures[vt1 - 1];
-                meshVertices[index2 - 1].pos = vertices[v2 - 1];
-                meshVertices[index2 - 1].norm = normals[vn2 - 1];
-                meshVertices[index2 - 1].tex = textures[vt2 - 1];
-                meshVertices[index3 - 1].pos = vertices[v3 - 1];
-                meshVertices[index3 - 1].norm = normals[vn3 - 1];
-                meshVertices[index3 - 1].tex = textures[vt3 - 1];
+                //meshVertices[index1 - 1].pos = vertices[v1 - 1];
+                //meshVertices[index1 - 1].norm = normals[vn1 - 1];
+                //meshVertices[index1 - 1].tex = textures[vt1 - 1];
+                //meshVertices[index2 - 1].pos = vertices[v2 - 1];
+                //meshVertices[index2 - 1].norm = normals[vn2 - 1];
+                //meshVertices[index2 - 1].tex = textures[vt2 - 1];
+                //meshVertices[index3 - 1].pos = vertices[v3 - 1];
+                //meshVertices[index3 - 1].norm = normals[vn3 - 1];
+                //meshVertices[index3 - 1].tex = textures[vt3 - 1];
             }
         }
         if (fCount == 0) { //使用されていないマテリアル対策

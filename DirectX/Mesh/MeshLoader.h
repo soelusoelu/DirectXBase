@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "IMeshLoader.h"
 #include "../Utility/Collision.h"
 #include "../Utility/Math.h"
 #include <fstream>
@@ -11,13 +12,6 @@ class AssetsManager;
 struct Material;
 class Texture;
 class VertexArray;
-
-//頂点の構造体
-struct MeshVertex {
-    Vector3 pos;
-    Vector3 norm;
-    Vector2 tex;
-};
 
 class MeshLoader {
     using MaterialPtr = std::shared_ptr<Material>;

@@ -19,7 +19,7 @@ FBX::~FBX() {
     }
 }
 
-void FBX::create(std::shared_ptr<AssetsManager> assets, const std::string& fileName) {
+void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
     setModelDirectory();
 
     //マネージャーを生成
@@ -48,10 +48,10 @@ void FBX::create(std::shared_ptr<AssetsManager> assets, const std::string& fileN
     //Scene解析
     FbxNode* root = scene->GetRootNode();
     if (root) {
-        perse(assets, root, 0);
+        perse(assetsManager, root, 0);
     }
 
-    mVertexArray->createVertexBuffer(sizeof(Vertex), mVertices);
+    mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
     SAFE_DELETE_ARRAY(mVertices);
 }
 
@@ -102,7 +102,7 @@ void FBX::getVertex(FbxMesh* mesh) {
     //頂点座標配列
     FbxVector4* src = mesh->GetControlPoints();
 
-    mVertices = new Vertex[vertexNum];
+    mVertices = new MeshVertex[vertexNum];
     for (size_t i = 0; i < vertexNum; i++) {
         mVertices[i].pos.x = static_cast<float>(-src[i][0]);
         mVertices[i].pos.y = static_cast<float>(src[i][1]);
@@ -221,8 +221,8 @@ void FBX::getUV(FbxMesh* mesh) {
                     int uvIndex = useIndex ? uvElement->GetIndexArray().GetAt(polyVertIndex) : polyVertIndex;
 
                     FbxVector2 uv = uvElement->GetDirectArray().GetAt(uvIndex);
-                    mVertices[uvIndex].normal.x = static_cast<float>(uv[0]);
-                    mVertices[uvIndex].normal.y = 1.f - static_cast<float>(uv[1]);
+                    mVertices[uvIndex].uv.x = static_cast<float>(uv[0]);
+                    mVertices[uvIndex].uv.y = 1.f - static_cast<float>(uv[1]);
                 }
             }
         } else if (uvElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
