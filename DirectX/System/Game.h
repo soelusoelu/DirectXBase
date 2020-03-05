@@ -1,19 +1,15 @@
 ﻿#pragma once
 
 #include <string>
+#include "DirectXIncLib.h"
+#include <memory>
 
 #define TITLE L"DirectX"
 
 #define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
 #define SAFE_DELETE(x) if(x){delete x; x=0;}
 #define SAFE_DELETE_ARRAY(x) if(x){delete[] x; x=0;}
-#define MFAIL(code,string) if(FAILED(code) ) { MessageBox(0, string, L"error",MB_OK); return E_FAIL; }
-#define MFALSE(code,string) if(!(code) ) { MessageBox(0, string, L"error",MB_OK); return E_FAIL; }
-#define MSG(t) MessageBox(0, t, 0, MB_OK);
 #define ALIGN16 _declspec(align(16))
-
-#include "DirectXIncLib.h"
-#include <memory>
 
 class Main;
 class Renderer;

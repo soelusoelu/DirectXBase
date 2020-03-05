@@ -3,6 +3,7 @@
 #include "VertexArray.h"
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
+#include "../Utility/Debug.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/StringUtil.h"
 
@@ -21,13 +22,13 @@ void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        MSG(L"OBJファイルが存在しません");
+        Debug::windowMessage(fileName + "ファイルが存在しません");
         return;
     }
 
     //事前に頂点数などを調べる
     if (!preload(ifs, assetsManager, fileName)) {
-        MSG(L"Meshファイルの事前読み込み失敗");
+        Debug::windowMessage(fileName + "ファイルの事前読み込み失敗");
         return;
     }
 
@@ -289,15 +290,12 @@ bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsMa
 bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath) {
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        MSG(L"mtlファイルが存在しません");
+        Debug::windowMessage(fileName + "ファイルが存在しません");
         return false;
     }
 
     //マテリアルの事前読み込み
-    if (!materialPreload(ifs)) {
-        MSG(L"mtlファイルの事前読み込み失敗");
-        return false;
-    }
+    materialPreload(ifs);
 
     //ファイルの先頭に戻る
     ifs.clear();
@@ -354,7 +352,7 @@ bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::
     return true;
 }
 
-bool OBJ::materialPreload(std::ifstream& stream) {
+void OBJ::materialPreload(std::ifstream& stream) {
     //マテリアルファイルを開いて内容を読み込む
     std::string line;
     char s[256];
@@ -374,10 +372,5 @@ bool OBJ::materialPreload(std::ifstream& stream) {
         }
     }
 
-    if (mMaterials.empty()) {
-        MSG(L"マテリアルが空です");
-        return false;
-    }
-
-    return true;
+    return;
 }

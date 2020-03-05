@@ -80,6 +80,7 @@
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="Mesh\OBJ.cpp" />
+    <ClCompile Include="Utility\Debug.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -165,5 +166,6 @@
     <ClInclude Include="Utility\FileUtil.h" />
     <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="Mesh\OBJ.h" />
+    <ClInclude Include="Utility\Debug.h" />
   </ItemGroup>
 </Project>

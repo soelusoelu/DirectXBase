@@ -10,7 +10,6 @@
 #include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
 #include "../Utility/StringUtil.h"
-#include <locale.h>
 
 WCHAR szRootPath[1024] = { 0 };
 
@@ -52,7 +51,7 @@ HRESULT Game::init() {
     if (!mWindow) {
         return E_FAIL;
     }
-    MFAIL(mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE), L"ウィンドウ作成失敗");
+    mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE);
     mhWnd = mWindow->gethWnd();
 
     Singleton<DirectX>::instance().initialize(mhWnd);

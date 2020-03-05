@@ -28,7 +28,7 @@ public:
 private:
     bool preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath); //事前に頂点数などを調べる
     bool materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath);
-    bool materialPreload(std::ifstream& stream);
+    void materialPreload(std::ifstream& stream);
 
 private:
     MaterialPtrArray mMaterials;

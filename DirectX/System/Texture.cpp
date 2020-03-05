@@ -10,6 +10,7 @@
 #include "Usage.h"
 #include "VertexBuffer.h"
 #include "../Shader/Shader.h"
+#include "../Utility/Debug.h"
 #include "../Utility/FileUtil.h"
 
 Texture::Texture(const std::string& fileName, bool isSprite) :
@@ -107,7 +108,7 @@ void Texture::createTexture(const std::string & filePath, bool isSprite) {
     ID3D11ShaderResourceView* srv;
 
     if (FAILED(D3DX11CreateShaderResourceViewFromFileA(Singleton<DirectX>::instance().device(), fileName.c_str(), &toImageLoadInfo(mDesc), nullptr, &srv, nullptr))) {
-        MSG(L"テクスチャ作成失敗");
+        Debug::windowMessage(fileName + ": テクスチャ作成失敗");
     }
 
     mShaderResourceView = std::make_unique<ShaderResourceView>(srv);

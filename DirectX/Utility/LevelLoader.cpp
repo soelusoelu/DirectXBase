@@ -1,4 +1,5 @@
 ﻿#include "LevelLoader.h"
+#include "Debug.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ActorManager.h"
 #include "../Actor/EmptyActor.h"
@@ -48,7 +49,7 @@ LevelLoader::~LevelLoader() = default;
 bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
-        MSG(L"レベルファイルのロードに失敗しました");
+        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
         return false;
     }
 
@@ -63,7 +64,7 @@ bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::stri
 bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
-        MSG(L"レベルファイルのロードに失敗しました");
+        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
         return false;
     }
 
@@ -78,7 +79,7 @@ bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::stri
 std::shared_ptr<Actor> LevelLoader::loadSpecifiedActor(std::shared_ptr<Renderer> renderer, const std::string & fileName, const std::string & type) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
-        MSG(L"レベルファイルのロードに失敗しました");
+        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
         return nullptr;
     }
 
@@ -94,7 +95,7 @@ std::shared_ptr<Actor> LevelLoader::loadSpecifiedActor(std::shared_ptr<Renderer>
 std::shared_ptr<UI> LevelLoader::loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
-        MSG(L"レベルファイルのロードに失敗しました");
+        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
         return nullptr;
     }
 
@@ -185,7 +186,7 @@ bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * o
     //バイナリモードで開き、末尾に移動
     std::ifstream file(fileName, std::ios::in | std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
-        MSG(L"jsonファイルが見つかりません");
+        Debug::windowMessage(fileName + "ファイルが見つかりません");
         return false;
     }
 
@@ -202,7 +203,7 @@ bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * o
     //生データをRapidJSONドキュメントにロードする
     outDoc->Parse(bytes.data());
     if (!outDoc->IsObject()) {
-        MSG(L"有効なjsonファイルではありません");
+        Debug::windowMessage(fileName + "ファイルは有効ではありません");
         return false;
     }
 
@@ -253,6 +254,7 @@ void LevelLoader::loadActorsProperties(std::shared_ptr<Renderer> renderer, const
         //mapに存在するか
         auto iter = mActors.find(type);
         if (iter == mActors.end()) {
+            Debug::windowMessage(type + "は有効な型ではありません");
             continue;
         }
         //mapからアクターを生成
@@ -272,6 +274,7 @@ std::shared_ptr<Actor> LevelLoader::loadSpecifiedActorProperties(std::shared_ptr
     //そもそも指定のtypeが存在しているかチェック
     auto itr = mActors.find(type);
     if (itr == mActors.end()) {
+        Debug::windowMessage(type + "は有効な型ではありません");
         return nullptr;
     }
 
@@ -324,6 +327,7 @@ void LevelLoader::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::
         //mapに存在するか
         auto iter = mComponents.find(type);
         if (iter == mComponents.end()) {
+            Debug::windowMessage(type + "は有効な型ではありません");
             continue;
         }
         //アクターがそのコンポーネントを保持しているか
@@ -342,6 +346,7 @@ std::shared_ptr<UI> LevelLoader::loadSpecifiedUIProperties(std::shared_ptr<Rende
     //そもそも指定のtypeが存在しているかチェック
     auto itr = mUIs.find(type);
     if (itr == mUIs.end()) {
+        Debug::windowMessage(type + "は有効な型ではありません");
         return nullptr;
     }
 
