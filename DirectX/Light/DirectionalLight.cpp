@@ -30,7 +30,7 @@ void DirectionalLight::update() {
 
 void DirectionalLight::createMesh(std::shared_ptr<Renderer> renderer) {
 #ifdef _DEBUG //デバッグ時のみメッシュ描画
-    mMesh = std::make_shared<Mesh>(renderer, "DLight.obj");
+    mMesh = std::make_shared<Mesh>(renderer, "Light/DLight.obj");
     mMesh->addToManager();
     mMesh->setTransform(mTransform);
     //位置やスケールは計算には関係ない

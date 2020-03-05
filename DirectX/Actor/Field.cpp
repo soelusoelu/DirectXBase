@@ -13,7 +13,7 @@ Field::~Field() = default;
 
 void Field::start() {
     auto mesh = std::make_shared<MeshComponent>(shared_from_this());
-    mesh->setMesh("test.obj");
+    mesh->setMesh("BackGround/test.obj");
     mComponentManager->addComponent(mesh);
 }
 

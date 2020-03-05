@@ -19,16 +19,16 @@ class OBJ : public IMeshLoader {
 public:
     OBJ();
     ~OBJ();
-    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) override;
+    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) override;
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
     virtual size_t getNumMaterial() const override;
     virtual void createSphere(std::shared_ptr<Sphere>* sphere) const override;
 
 private:
-    bool preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName); //事前に頂点数などを調べる
-    bool materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName);
-    bool materialPreload(std::ifstream& stream, const std::string& fileName);
+    bool preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath); //事前に頂点数などを調べる
+    bool materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath);
+    bool materialPreload(std::ifstream& stream);
 
 private:
     MaterialPtrArray mMaterials;

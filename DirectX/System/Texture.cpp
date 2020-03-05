@@ -10,6 +10,7 @@
 #include "Usage.h"
 #include "VertexBuffer.h"
 #include "../Shader/Shader.h"
+#include "../Utility/FileUtil.h"
 
 Texture::Texture(const std::string& fileName, bool isSprite) :
     mShaderResourceView(nullptr),
@@ -89,14 +90,15 @@ void Texture::createIndexBuffer() {
     indexBuffer = new IndexBuffer(bd, &sub);
 }
 
-void Texture::createTexture(const std::string & fileName, bool isSprite) {
+void Texture::createTexture(const std::string & filePath, bool isSprite) {
     if (isSprite) {
         setTextureDirectory();
     } else {
-        setModelDirectory();
+        setModelDirectory(filePath);
     }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     D3DX11GetImageInfoFromFileA(fileName.c_str(), nullptr, &info, nullptr);
 
     mDesc.width = info.Width;

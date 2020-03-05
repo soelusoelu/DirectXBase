@@ -7,7 +7,10 @@
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
+#include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
+#include "../Utility/StringUtil.h"
+#include <locale.h>
 
 WCHAR szRootPath[1024] = { 0 };
 
@@ -145,9 +148,15 @@ void setDataDirectory() {
     SetCurrentDirectory(tmp);
 }
 
-void setModelDirectory() {
+void setModelDirectory(const std::string& directry) {
     WCHAR tmp[1024] = { 0 };
     wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Assets/Model");
+
+    const std::string modelDir = "\\Assets/Model/";
+    auto modelPath = modelDir + FileUtil::getDirectryFromFilePath(directry);
+
+    auto dir = StringUtil::charToWchar(modelPath.c_str());
+
+    wcscat_s(tmp, dir);
     SetCurrentDirectory(tmp);
 }

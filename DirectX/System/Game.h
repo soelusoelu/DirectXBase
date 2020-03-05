@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <string>
+
 #define TITLE L"DirectX"
 
 #define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
@@ -38,7 +40,6 @@ private:
     HWND mhWnd;
 };
 
-//プロトタイプ
 void initDirectory(WCHAR* root);
 void setRootDirectory();
 void setAssetsDirectory();
@@ -46,4 +47,4 @@ void setShaderDirectory();
 void setTextureDirectory();
 void setSoundDirectory();
 void setDataDirectory();
-void setModelDirectory();
+void setModelDirectory(const std::string& directry);

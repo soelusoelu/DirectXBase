@@ -16,7 +16,7 @@ PointLight::~PointLight() = default;
 
 void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
     //メッシュ描画されるとだるいから自己管理
-    mesh = std::make_shared<Mesh>(renderer, "Sphere.obj");
+    mesh = std::make_shared<Mesh>(renderer, "Shape/Sphere.obj");
     auto sphere = std::make_shared<Sphere>();
     mesh->createSphere(&sphere);
     radius = sphere->radius;

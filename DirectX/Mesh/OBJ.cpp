@@ -3,6 +3,7 @@
 #include "VertexArray.h"
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
+#include "../Utility/FileUtil.h"
 #include "../Utility/StringUtil.h"
 
 OBJ::OBJ() :
@@ -14,9 +15,10 @@ OBJ::~OBJ() {
     SAFE_DELETE_ARRAY(mVertices);
 }
 
-void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
+void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
     //OBJファイルを開いて内容を読み込む
-    setModelDirectory();
+    setModelDirectory(filePath);
+    auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         MSG(L"OBJファイルが存在しません");
@@ -227,7 +229,7 @@ void OBJ::createSphere(std::shared_ptr<Sphere>* sphere) const {
     (*sphere)->center = c;
 }
 
-bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
+bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
     //OBJファイルを開いて内容を読み込む
     unsigned numVert = 0;
     unsigned numNormal = 0;
@@ -250,7 +252,7 @@ bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsMa
         //マテリアル読み込み
         if (strcmp(s, "mtllib") == 0) {
             auto mat = line.substr(7); //「mtllib 」の文字数分
-            if (!materialLoad(assetsManager, mat)) {
+            if (!materialLoad(assetsManager, mat, filePath)) {
                 return false;
             }
         }
@@ -284,7 +286,7 @@ bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsMa
     return true;
 }
 
-bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
+bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath) {
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         MSG(L"mtlファイルが存在しません");
@@ -292,7 +294,7 @@ bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::
     }
 
     //マテリアルの事前読み込み
-    if (!materialPreload(ifs, fileName)) {
+    if (!materialPreload(ifs)) {
         MSG(L"mtlファイルの事前読み込み失敗");
         return false;
     }
@@ -340,15 +342,19 @@ bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::
         //テクスチャー
         if (strcmp(s, "map_Kd") == 0) {
             mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
+
+            auto dir = FileUtil::getDirectryFromFilePath(filePath);
+            dir += "/" + mMaterials[matCount]->textureName;
+
             //テクスチャーを作成
-            mMaterials[matCount]->texture = assetsManager->createTexture(mMaterials[matCount]->textureName, false);
+            mMaterials[matCount]->texture = assetsManager->createTexture(dir, false);
         }
     }
 
     return true;
 }
 
-bool OBJ::materialPreload(std::ifstream& stream, const std::string& fileName) {
+bool OBJ::materialPreload(std::ifstream& stream) {
     //マテリアルファイルを開いて内容を読み込む
     std::string line;
     char s[256];

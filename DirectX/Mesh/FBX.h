@@ -25,12 +25,12 @@ public:
     virtual void createSphere(std::shared_ptr<Sphere>* sphere) const override;
 
 private:
-    void perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent);
+    void perse(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxNode* node, int indent);
     void getIndex(FbxMesh* mesh);
     void getVertex(FbxMesh* mesh);
     void getNormals(FbxMesh* mesh);
     void getUV(FbxMesh* mesh);
-    void getMaterial(std::shared_ptr<AssetsManager> assets, FbxMesh* mesh);
+    void getMaterial(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxMesh* mesh);
 
 private:
     FbxManager* mManager;

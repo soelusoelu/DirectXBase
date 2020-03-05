@@ -3,6 +3,7 @@
 #include "VertexArray.h"
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
+#include "../Utility/FileUtil.h"
 
 FBX::FBX() :
     mManager(nullptr),
@@ -19,7 +20,7 @@ FBX::~FBX() {
 }
 
 void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
-    setModelDirectory();
+    setModelDirectory(fileName);
 
     //マネージャーを生成
     mManager = FbxManager::Create();
@@ -30,7 +31,8 @@ void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
 
     //Importerを生成
     FbxImporter* importer = FbxImporter::Create(mManager, "");
-    if (!importer->Initialize(fileName.c_str(), -1, mManager->GetIOSettings())) {
+    auto sub = fileName.substr(fileName.find_last_of('/') + 1);
+    if (!importer->Initialize(sub.c_str(), -1, mManager->GetIOSettings())) {
         //インポートエラー
         return;
     }
@@ -47,7 +49,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     //Scene解析
     FbxNode* root = scene->GetRootNode();
     if (root) {
-        perse(assetsManager, root, 0);
+        perse(assetsManager, fileName, root, 0);
     }
 
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
@@ -118,7 +120,7 @@ void FBX::createSphere(std::shared_ptr<Sphere>* sphere) const {
     (*sphere)->center = c;
 }
 
-void FBX::perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent) {
+void FBX::perse(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxNode* node, int indent) {
     int attrCount = node->GetNodeAttributeCount();
 
     for (size_t i = 0; i < attrCount; i++) {
@@ -133,7 +135,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent
                 getVertex(mesh);
                 getNormals(mesh);
                 getUV(mesh);
-                getMaterial(assets, mesh);
+                getMaterial(assets, filePath, mesh);
                 break;
             default:
                 break;
@@ -143,7 +145,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent
 
     int childCount = node->GetChildCount();
     for (int i = 0; i < childCount; ++i) {
-        perse(assets, node->GetChild(i), indent + 1);
+        perse(assets, filePath, node->GetChild(i), indent + 1);
     }
 }
 
@@ -408,7 +410,7 @@ void FBX::getUV(FbxMesh* mesh) {
     }
 }
 
-void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, FbxMesh* mesh) {
+void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxMesh* mesh) {
     FbxNode* node = mesh->GetNode();
     if (!node) {
         return;
@@ -531,8 +533,12 @@ void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, FbxMesh* mesh) {
 
                 //テクスチャ名
                 mMaterials[i]->textureName = texture->GetName();
+
+                auto dir = FileUtil::getDirectryFromFilePath(filePath);
+                dir += "/" + mMaterials[i]->textureName;
+
                 //テクスチャーを作成
-                mMaterials[i]->texture = assets->createTexture(mMaterials[i]->textureName, false);
+                mMaterials[i]->texture = assets->createTexture(dir, false);
 
                 break; //とりあえず今は1枚だけサポート
             }
