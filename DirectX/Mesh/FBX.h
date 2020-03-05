@@ -26,6 +26,7 @@ public:
 
 private:
     void perse(std::shared_ptr<AssetsManager> assets, FbxNode* node, int indent);
+    void getIndex(FbxMesh* mesh);
     void getVertex(FbxMesh* mesh);
     void getNormals(FbxMesh* mesh);
     void getUV(FbxMesh* mesh);
@@ -33,6 +34,7 @@ private:
 
 private:
     FbxManager* mManager;
+    std::vector<int> mIndexArray;
     MeshVertex* mVertices;
     MaterialPtrArray mMaterials;
     std::shared_ptr<VertexArray> mVertexArray;
