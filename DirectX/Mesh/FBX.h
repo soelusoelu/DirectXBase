@@ -18,7 +18,7 @@ class FBX : public IMeshLoader {
 public:
     FBX();
     ~FBX();
-    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) override;
+    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) override;
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
     virtual size_t getNumMaterial() const override;

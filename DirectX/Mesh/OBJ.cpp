@@ -22,13 +22,13 @@ void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        Debug::windowMessage(fileName + "ファイルが存在しません");
+        Debug::windowMessage(filePath + "ファイルが存在しません");
         return;
     }
 
     //事前に頂点数などを調べる
     if (!preload(ifs, assetsManager, fileName)) {
-        Debug::windowMessage(fileName + "ファイルの事前読み込み失敗");
+        Debug::windowMessage(filePath + "ファイルの事前読み込み失敗");
         return;
     }
 
@@ -290,7 +290,7 @@ bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsMa
 bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath) {
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
-        Debug::windowMessage(fileName + "ファイルが存在しません");
+        Debug::windowMessage(FileUtil::getDirectryFromFilePath(filePath) + "/" + fileName + "ファイルが存在しません");
         return false;
     }
 

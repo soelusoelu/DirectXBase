@@ -3,6 +3,7 @@
 #include "VertexArray.h"
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
+#include "../Utility/Debug.h"
 #include "../Utility/FileUtil.h"
 
 FBX::FBX() :
@@ -19,8 +20,8 @@ FBX::~FBX() {
     }
 }
 
-void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) {
-    setModelDirectory(fileName);
+void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
+    setModelDirectory(filePath);
 
     //マネージャーを生成
     mManager = FbxManager::Create();
@@ -31,9 +32,9 @@ void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
 
     //Importerを生成
     FbxImporter* importer = FbxImporter::Create(mManager, "");
-    auto sub = fileName.substr(fileName.find_last_of('/') + 1);
-    if (!importer->Initialize(sub.c_str(), -1, mManager->GetIOSettings())) {
-        //インポートエラー
+    auto fileName = filePath.substr(filePath.find_last_of('/') + 1);
+    if (!importer->Initialize(fileName.c_str(), -1, mManager->GetIOSettings())) {
+        Debug::windowMessage(filePath + "ファイルは存在しません");
         return;
     }
 
@@ -49,7 +50,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     //Scene解析
     FbxNode* root = scene->GetRootNode();
     if (root) {
-        perse(assetsManager, fileName, root, 0);
+        perse(assetsManager, filePath, root, 0);
     }
 
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
