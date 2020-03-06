@@ -10,8 +10,6 @@
 #include "../System/Game.h"
 #include "../Utility/Input.h"
 #include "../Utility/LevelLoader.h"
-#include "../Device/Log.h"
-#include "../Utility/Debug.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
