@@ -81,6 +81,7 @@
     <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="Mesh\OBJ.cpp" />
     <ClCompile Include="Utility\Debug.cpp" />
+    <ClCompile Include="Device\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -167,5 +168,6 @@
     <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="Mesh\OBJ.h" />
     <ClInclude Include="Utility\Debug.h" />
+    <ClInclude Include="Device\Log.h" />
   </ItemGroup>
 </Project>

@@ -110,7 +110,7 @@ void DrawString::drawNumberRightJustified(float number, const Vector2 & position
     drawNumber(number, pos, scale, decimalDigits, Pivot::LEFT_TOP);
 }
 
-void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, Pivot pivot) {
+void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3& color, Pivot pivot) {
     Vector2 pos = position;
     const float width = WIDTH * scale.x;
 
@@ -120,6 +120,7 @@ void DrawString::drawString(const std::string & alphabet, const Vector2 & positi
         copy->setOnceDraw();
         copy->transform()->setPosition(pos);
         copy->transform()->setScale(scale);
+        copy->setColor(color);
 
         int t = c;
         t = Math::clamp<int>(t, 32, 127);
@@ -136,8 +137,8 @@ void DrawString::drawString(const std::string & alphabet, const Vector2 & positi
     }
 }
 
-void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2& scale, Pivot pivot) {
+void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2& scale, const Vector3& color, Pivot pivot) {
     auto pos = position;
     pos.x -= alphabet.length() * WIDTH * scale.x;
-    drawString(alphabet, pos, scale, Pivot::LEFT_TOP);
+    drawString(alphabet, pos, scale, color, Pivot::LEFT_TOP);
 }

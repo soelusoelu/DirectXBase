@@ -41,12 +41,14 @@ public:
         const std::string& alphabet,
         const Vector2& position,
         const Vector2& scale = Vector2::one,
+        const Vector3& color = ColorPalette::white,
         Pivot pivot = Pivot::LEFT_TOP
     );
     void drawStringRightJustified(
         const std::string& alphabet,
         const Vector2& position,
         const Vector2& scale = Vector2::one,
+        const Vector3& color = ColorPalette::white,
         Pivot pivot = Pivot::RIGHT_TOP
     );
 

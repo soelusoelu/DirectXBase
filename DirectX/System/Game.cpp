@@ -7,6 +7,7 @@
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
+#include "../Utility/Debug.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
 #include "../Utility/StringUtil.h"
@@ -20,6 +21,7 @@ Game::Game() {
 Game::~Game() {
     Input::end();
     Texture::end();
+    Debug::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
@@ -60,6 +62,7 @@ HRESULT Game::init() {
 
     Random::init();
     Input::init(mhWnd);
+    Debug::initialize(mRenderer);
 
     mMain = std::make_unique<Main>(mRenderer);
 

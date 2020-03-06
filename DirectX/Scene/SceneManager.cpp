@@ -2,6 +2,7 @@
 #include "GamePlay.h"
 #include "Title.h"
 #include "../Camera/Camera.h"
+#include "../Device/Log.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
@@ -10,6 +11,7 @@
 #include "../System/Game.h"
 #include "../UI/UI.h"
 #include "../UI/UIManager.h"
+#include "../Utility/Debug.h"
 
 SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mRenderer(renderer),
@@ -38,6 +40,8 @@ void SceneManager::update() {
     mRenderer->update();
     //カメラ更新
     mCamera->update();
+    //デバッグ表示
+    Debug::log()->drawLogs();
     //各マネージャークラスを更新
     mMeshManager->update();
     mUIManager->update();
