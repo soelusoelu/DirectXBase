@@ -10,14 +10,14 @@ Collider::Collider(std::shared_ptr<Actor> owner, const std::string& typeName) :
 
 Collider::~Collider() {
     if (mPhysics) {
-        mPhysics->remove(this);
+        mPhysics->remove(shared_from_this());
     }
 }
 
 void Collider::start() {
     startCollider();
     if (mPhysics) {
-        mPhysics->add(this);
+        mPhysics->add(shared_from_this());
         mEnable = true;
     }
 }
@@ -55,12 +55,12 @@ void Collider::automation() {
     }
 }
 
-void Collider::addHitCollider(Collider* hit) {
+void Collider::addHitCollider(CollPtr hit) {
     mCurrentCollider.emplace_back(hit);
 }
 
-std::list<Collider*> Collider::onCollisionEnter() {
-    std::list<Collider*> temp;
+std::list<std::shared_ptr<Collider>> Collider::onCollisionEnter() {
+    std::list<std::shared_ptr<Collider>> temp;
     for (const auto& c : mCurrentCollider) {
         auto itr = std::find(mPreviousCollider.begin(), mPreviousCollider.end(), c);
         if (itr == mPreviousCollider.end()) {
@@ -71,8 +71,8 @@ std::list<Collider*> Collider::onCollisionEnter() {
     return temp;
 }
 
-std::list<Collider*> Collider::onCollisionStay() {
-    std::list<Collider*> temp;
+std::list<std::shared_ptr<Collider>> Collider::onCollisionStay() {
+    std::list<std::shared_ptr<Collider>> temp;
     for (const auto& c : mCurrentCollider) {
         auto itr = std::find(mPreviousCollider.begin(), mPreviousCollider.end(), c);
         if (itr != mPreviousCollider.end()) {
@@ -83,8 +83,8 @@ std::list<Collider*> Collider::onCollisionStay() {
     return temp;
 }
 
-std::list<Collider*> Collider::onCollisionExit() {
-    std::list<Collider*> temp;
+std::list<std::shared_ptr<Collider>> Collider::onCollisionExit() {
+    std::list<std::shared_ptr<Collider>> temp;
     for (const auto& c : mPreviousCollider) {
         auto itr = std::find(mCurrentCollider.begin(), mCurrentCollider.end(), c);
         if (itr == mCurrentCollider.end()) {

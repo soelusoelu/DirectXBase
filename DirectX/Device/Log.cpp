@@ -18,6 +18,10 @@ void Log::logError(const std::string& message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::red));
 }
 
+void Log::logWarning(const std::string& message) {
+    mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
+}
+
 void Log::drawLogs() {
     adjustCapacity();
 

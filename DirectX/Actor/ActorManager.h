@@ -16,9 +16,9 @@ public:
     void update();
     void add(ActorPtr add);
     void clear();
-
     //アクター配列の中からプレイヤーを取得
     std::shared_ptr<PlayerActor> getPlayer() const;
+
     //一番最初に見つかったActorの取得
     template<typename T>
     std::shared_ptr<T> getActor() const {

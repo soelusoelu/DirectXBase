@@ -12,13 +12,7 @@ HitPointComponent::HitPointComponent(std::shared_ptr<Actor> onwer) :
 
 HitPointComponent::~HitPointComponent() = default;
 
-void HitPointComponent::start() {
-}
-
-void HitPointComponent::update() {
-}
-
-void HitPointComponent::loadProperties(const rapidjson::Value& inObj) {
+void HitPointComponent::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getInt(inObj, "HP", &mHP);

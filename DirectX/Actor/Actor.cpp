@@ -8,7 +8,7 @@
 Actor::Actor(std::shared_ptr<Renderer> renderer, const std::string& tag) :
     mRenderer(renderer),
     mComponentManager(nullptr),
-    mTransform(std::make_shared<Transform3D>(this)),
+    mTransform(nullptr),
     mDestroyTimer(nullptr),
     mTag(tag),
     mState(State::ACTIVE) {
@@ -19,20 +19,12 @@ Actor::~Actor() = default;
 void Actor::update() {
     mComponentManager->start();
     if (mState == State::ACTIVE) {
-        computeWorldTransform();
-
         mComponentManager->update();
         updateActor();
 
         computeWorldTransform();
 
         destroyTimer();
-    }
-}
-
-void Actor::computeWorldTransform() {
-    if (mTransform->computeWorldTransform()) {
-        mComponentManager->onUpdateWorldTransform();
     }
 }
 
@@ -67,14 +59,6 @@ const std::string& Actor::tag() const {
     return mTag;
 }
 
-void Actor::loadProperties(const rapidjson::Value & inObj) {
-    mTransform->loadProperties(inObj);
-}
-
-void Actor::saveProperties(rapidjson::Document::AllocatorType & alloc, rapidjson::Value * inObj) const {
-    mTransform->saveProperties(alloc, inObj);
-}
-
 void Actor::setActorManager(ActorManager * manager) {
     mActorManager = manager;
 }
@@ -83,10 +67,30 @@ ActorManager* Actor::getActorManager() {
     return mActorManager;
 }
 
+void Actor::loadProperties(const rapidjson::Value & inObj) {
+    mTransform->loadProperties(inObj);
+}
+
+void Actor::saveProperties(rapidjson::Document::AllocatorType & alloc, rapidjson::Value * inObj) const {
+    mTransform->saveProperties(alloc, inObj);
+}
+
 void Actor::initialize() {
-    mComponentManager = std::make_shared<ComponentManager>(shared_from_this());
     if (mActorManager) {
         mActorManager->add(shared_from_this());
+    }
+
+    mComponentManager = std::make_shared<ComponentManager>(shared_from_this());
+    mTransform = std::make_shared<Transform3D>(shared_from_this());
+
+    start();
+
+    computeWorldTransform();
+}
+
+void Actor::computeWorldTransform() {
+    if (mTransform->computeWorldTransform()) {
+        mComponentManager->onUpdateWorldTransform();
     }
 }
 

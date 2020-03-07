@@ -10,11 +10,11 @@
 Physics::Physics() = default;
 Physics::~Physics() = default;
 
-void Physics::add(Collider* circle) {
+void Physics::add(CollPtr circle) {
     mColliders.emplace_back(circle);
 }
 
-void Physics::remove(Collider* circle) {
+void Physics::remove(CollPtr circle) {
     auto itr = std::find(mColliders.begin(), mColliders.end(), circle);
     if (itr != mColliders.end()) {
         std::iter_swap(itr, mColliders.end() - 1);
@@ -32,14 +32,14 @@ void Physics::sweepAndPrune() {
     }
 
     //center.x - mCenter.radiusが小さい順にソート
-    std::sort(mColliders.begin(), mColliders.end(), [](Collider* a, Collider* b) {
-        auto circleA = dynamic_cast<SphereCollisionComponent*>(a);
-        auto circleB = dynamic_cast<SphereCollisionComponent*>(b);
+    std::sort(mColliders.begin(), mColliders.end(), [](CollPtr a, CollPtr b) {
+        auto circleA = std::dynamic_pointer_cast<SphereCollisionComponent>(a);
+        auto circleB = std::dynamic_pointer_cast<SphereCollisionComponent>(b);
         return circleA->getSphere()->center.x - circleA->getSphere()->radius < circleB->getSphere()->center.x - circleB->getSphere()->radius;
     });
 
     for (size_t i = 0; i < mColliders.size(); i++) {
-        auto a = dynamic_cast<SphereCollisionComponent*>(mColliders[i]);
+        auto a = std::dynamic_pointer_cast<SphereCollisionComponent>(mColliders[i]);
         if (!a->getEnable()) {
             continue;
         }
@@ -47,7 +47,7 @@ void Physics::sweepAndPrune() {
         //mCircles[i]の中心+半径を取得
         float max = as->center.x + as->radius;
         for (size_t j = i + 1; j < mColliders.size(); j++) {
-            auto b = dynamic_cast<SphereCollisionComponent*>(mColliders[j]);
+            auto b = std::dynamic_pointer_cast<SphereCollisionComponent>(mColliders[j]);
             if (!b->getEnable()) {
                 continue;
             }

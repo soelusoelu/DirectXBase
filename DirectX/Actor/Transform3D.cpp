@@ -2,7 +2,7 @@
 #include "Actor.h"
 #include "../Utility/LevelLoader.h"
 
-Transform3D::Transform3D(Actor* owner) :
+Transform3D::Transform3D(std::shared_ptr<Actor> owner) :
     mOwner(owner),
     mWorldTransform(Matrix4::identity),
     mPosition(Vector3::zero),
@@ -14,12 +14,12 @@ Transform3D::Transform3D(Actor* owner) :
 
 Transform3D::~Transform3D() {
     for (auto&& child : mChildren) {
-        child->mOwner->destroy();
+        child->owner()->destroy();
     }
 }
 
-Actor* Transform3D::getOwner() const {
-    return mOwner;
+std::shared_ptr<Actor> Transform3D::owner() const {
+    return mOwner.lock();
 }
 
 bool Transform3D::computeWorldTransform() {
@@ -167,13 +167,13 @@ void Transform3D::addChild(std::shared_ptr<Transform3D> child) {
 }
 
 void Transform3D::removeChild(std::shared_ptr<Transform3D> child) {
-    removeChild(child->mOwner->tag());
+    removeChild(child->owner()->tag());
 }
 
 void Transform3D::removeChild(const std::string& tag) {
     for (auto itr = mChildren.begin(); itr != mChildren.end(); ++itr) {
-        if ((*itr)->mOwner->tag() == tag) {
-            (*itr)->mOwner->destroy();
+        if ((*itr)->owner()->tag() == tag) {
+            (*itr)->owner()->destroy();
             mChildren.erase(itr);
             return;
         }
@@ -183,7 +183,7 @@ void Transform3D::removeChild(const std::string& tag) {
 std::shared_ptr<Transform3D> Transform3D::getChild(const char* tag) const {
     std::shared_ptr<Transform3D> child = nullptr;
     for (const auto& c : mChildren) {
-        if (c->mOwner->tag() == tag) {
+        if (c->owner()->tag() == tag) {
             child = c;
         }
     }

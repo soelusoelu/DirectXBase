@@ -22,15 +22,8 @@ protected:
 public:
     virtual ~Actor();
 
-    //初期化用
-    virtual void start() = 0;
     //すべての更新
     void update();
-    //アクター固有の更新
-    virtual void updateActor() = 0;
-
-    //ワールド行列の更新
-    void computeWorldTransform();
 
     //アクター削除
     void destroy();
@@ -43,16 +36,11 @@ public:
     bool isDead() const;
     const std::string& tag() const;
 
-    //ロード/セーブ
-    virtual void loadProperties(const rapidjson::Value& inObj);
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
-
     //指定されたプロパティでアクターを生成
     template <typename T>
     static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>(renderer);
         t->initialize();
-        t->start();
         t->loadProperties(inObj);
         return t;
     }
@@ -61,8 +49,20 @@ public:
     static void setActorManager(ActorManager* manager);
     ActorManager* getActorManager();
 
+protected:
+    //初期化用
+    virtual void start() = 0;
+    //アクター固有の更新
+    virtual void updateActor() = 0;
+    //ロード/セーブ
+    virtual void loadProperties(const rapidjson::Value& inObj);
+    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
+
 private:
+    //初期化
     void initialize();
+    //ワールド行列の更新
+    void computeWorldTransform();
     void destroyTimer();
 
 protected:

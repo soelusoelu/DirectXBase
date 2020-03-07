@@ -10,12 +10,6 @@ SoundComponent::SoundComponent(std::shared_ptr<Actor> owner) :
 
 SoundComponent::~SoundComponent() = default;
 
-void SoundComponent::start() {
-}
-
-void SoundComponent::update() {
-}
-
 void SoundComponent::playOneShot(const char* fileName, float volumeScale) {
     auto sound = owner()->renderer()->getAssetsManager()->createSE(fileName);
 

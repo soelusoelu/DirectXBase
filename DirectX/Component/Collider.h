@@ -8,7 +8,10 @@
 class Actor;
 class Physics;
 
-class Collider : public Component {
+class Collider : public Component, public std::enable_shared_from_this<Collider> {
+    using CollPtr = std::shared_ptr<Collider>;
+    using CollPtrList = std::list<CollPtr>;
+
 public:
     virtual void start() override;
     virtual void startCollider() = 0;
@@ -20,10 +23,10 @@ public:
     void disabled();
     bool getEnable() const;
     void automation();
-    void addHitCollider(Collider* hit);
-    std::list<Collider*> onCollisionEnter();
-    std::list<Collider*> onCollisionStay();
-    std::list<Collider*> onCollisionExit();
+    void addHitCollider(CollPtr hit);
+    CollPtrList onCollisionEnter();
+    CollPtrList onCollisionStay();
+    CollPtrList onCollisionExit();
 
     static void setPhysics(Physics* physics);
 
@@ -35,8 +38,8 @@ protected:
     bool mIsAutoUpdate;
 
 private:
-    std::list<Collider*> mPreviousCollider;
-    std::list<Collider*> mCurrentCollider;
+    CollPtrList mPreviousCollider;
+    CollPtrList mCurrentCollider;
     bool mEnable;
 
     static Physics* mPhysics;

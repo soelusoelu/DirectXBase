@@ -14,8 +14,6 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
 PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
-    owner()->transform()->translate(Vector3::up * 0.5);
-
     mSound = owner()->componentManager()->getComponent<SoundComponent>();
 }
 

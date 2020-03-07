@@ -15,6 +15,7 @@ public:
     ~Log();
     void log(const std::string& message);
     void logError(const std::string& message);
+    void logWarning(const std::string& message);
     void drawLogs();
 
 private:

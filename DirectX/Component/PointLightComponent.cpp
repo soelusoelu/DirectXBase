@@ -27,9 +27,6 @@ void PointLightComponent::start() {
     owner()->renderer()->addPointLight(shared_from_this());
 }
 
-void PointLightComponent::update() {
-}
-
 void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 

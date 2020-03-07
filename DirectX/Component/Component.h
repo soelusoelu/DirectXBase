@@ -12,18 +12,17 @@ protected:
 public:
     virtual ~Component();
     //getComponentはここでして
-    virtual void start() = 0;
-    virtual void update() = 0;
+    virtual void start() {};
+    virtual void update() {};
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};
+    //ロード/セーブ
+    virtual void loadProperties(const rapidjson::Value& inObj) {};
+    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
 
     std::shared_ptr<Actor> owner() const;
     int getUpdateOrder() const;
     const std::string& getTypeName() const;
-
-    //ロード/セーブ
-    virtual void loadProperties(const rapidjson::Value& inObj) {};
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
