@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../Utility/Math.h"
 #include <memory>
 #include <list>
 
@@ -14,7 +15,7 @@ public:
     SpriteManager();
     ~SpriteManager();
     void update();
-    void draw();
+    void draw(const Matrix4& proj);
     void add(SpritePtr add);
     void clear();
 

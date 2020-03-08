@@ -6,42 +6,42 @@
 #include <iomanip>
 #include <sstream>
 
-DrawString::DrawString() = default;
+DrawString::DrawString() :
+    mNumberSprite(nullptr),
+    mFontSprite(nullptr) {
+}
 
 DrawString::~DrawString() = default;
 
 void DrawString::initialize(std::shared_ptr<Renderer> renderer, const std::string & number, const std::string & font) {
-    mRenderer = renderer;
-    mNumber = number;
-    mFont = font;
+    mNumberSprite = std::make_unique<Sprite>(renderer, number);
+    mFontSprite = std::make_unique<Sprite>(renderer, font);
+}
+
+void DrawString::drawAll(const Matrix4& proj) {
+    for (const auto& param : mParamsInt) {
+        drawInt(param, proj);
+    }
+    for (const auto& param : mParamsFloat) {
+        drawFloat(param, proj);
+    }
+    for (const auto& param : mParamsString) {
+        drawString(param, proj);
+    }
+
+    mParamsInt.clear();
+    mParamsFloat.clear();
+    mParamsString.clear();
 }
 
 void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, Pivot pivot) {
-    //マイナスは扱わない
-    if (number < 0) {
-        number = 0;
-    }
+    ParamInt param;
+    param.number = number;
+    param.position = position;
+    param.scale = scale;
+    param.pivot = pivot;
 
-    Vector2 pos = position;
-    const float width = WIDTH * scale.x;
-
-    //数字を文字列化し、1文字ずつ取り出す
-    for (auto n : std::to_string(number)) {
-        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mNumber);
-        copy->addToManager();
-        copy->setOnceDraw();
-        copy->transform()->setPosition(pos);
-        copy->transform()->setScale(scale);
-        //数字のテクスチャが数字1つにつき幅32高さ64
-        //文字と文字を引き算し、整数値を取得している
-        float num = (n - '0') * WIDTH;
-        num /= SPRITE_WIDTH;
-        copy->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
-        copy->transform()->setPivot(pivot);
-
-        //1文字描画したら1桁分右にずらす
-        pos.x += width;
-    }
+    mParamsInt.emplace_back(param);
 }
 
 void DrawString::drawNumberRightJustified(int number, const Vector2 & position, const Vector2 & scale, Pivot pivot) {
@@ -57,45 +57,14 @@ void DrawString::drawNumberRightJustified(int number, const Vector2 & position, 
 }
 
 void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, Pivot pivot) {
-    //マイナスは扱わない
-    if (number < 0) {
-        number = 0;
-    }
+    ParamFloat param;
+    param.number = number;
+    param.position = position;
+    param.scale = scale;
+    param.decimalDigits = decimalDigits;
+    param.pivot = pivot;
 
-    Vector2 pos = position;
-    const float width = WIDTH * scale.x;
-    const float periodWidth = PERIOD_WIDTH * scale.x;
-
-    //小数部分の桁数指定
-    std::ostringstream oss;
-    oss << std::fixed << std::setprecision(decimalDigits) << number;
-    std::string num = oss.str();
-
-    //数字を文字列化し、1文字ずつ取り出す
-    for (auto n : num) {
-        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mNumber);
-        copy->addToManager();
-        copy->setOnceDraw();
-        copy->transform()->setPosition(pos);
-        copy->transform()->setScale(scale);
-        //数字のテクスチャが数字1つにつき幅32高さ64
-        //文字と文字を引き算し、整数値を取得している
-        if (n == '.') {
-            constexpr float num = 10 * WIDTH_RATE; //ピリオドは画像の10番目
-            copy->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
-
-            //「.」のときは1文字の半分ずらす
-            pos.x += periodWidth;
-        } else {
-            float num = (n - '0') * WIDTH;
-            num /= SPRITE_WIDTH;
-            copy->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
-
-            //1文字描画したら1桁分右にずらす
-            pos.x += width;
-        }
-        copy->transform()->setPivot(pivot);
-    }
+    mParamsFloat.emplace_back(param);
 }
 
 void DrawString::drawNumberRightJustified(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits) {
@@ -111,16 +80,122 @@ void DrawString::drawNumberRightJustified(float number, const Vector2 & position
 }
 
 void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3& color, Pivot pivot) {
-    Vector2 pos = position;
+    ParamString param;
+    param.alphabet = alphabet;
+    param.position = position;
+    param.scale = scale;
+    param.color = color;
+    param.pivot = pivot;
+
+    mParamsString.emplace_back(param);
+}
+
+void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2& scale, const Vector3& color, Pivot pivot) {
+    auto pos = position;
+    pos.x -= alphabet.length() * WIDTH * scale.x;
+    drawString(alphabet, pos, scale, color, Pivot::LEFT_TOP);
+}
+
+void DrawString::drawInt(const ParamInt& param, const Matrix4& proj) const {
+    //要素取り出し
+    auto number = param.number;
+    auto pos = param.position;
+    auto scale = param.scale;
+    auto pivot = param.pivot;
+
+    //マイナスは扱わない
+    if (number < 0) {
+        number = 0;
+    }
+
+    const float width = WIDTH * scale.x;
+
+    //数字を文字列化し、1文字ずつ取り出す
+    for (auto n : std::to_string(number)) {
+        mNumberSprite->transform()->setPosition(pos);
+        mNumberSprite->transform()->setScale(scale);
+        //数字のテクスチャが数字1つにつき幅32高さ64
+        //文字と文字を引き算し、整数値を取得している
+        float num = (n - '0') * WIDTH;
+        num /= SPRITE_WIDTH;
+        mNumberSprite->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
+        mNumberSprite->transform()->setPivot(pivot);
+
+        //ワールド座標を更新するため
+        mNumberSprite->update();
+        mNumberSprite->draw(proj);
+
+        //1文字描画したら1桁分右にずらす
+        pos.x += width;
+    }
+}
+
+void DrawString::drawFloat(const ParamFloat& param, const Matrix4& proj) const {
+    //要素取り出し
+    auto number = param.number;
+    auto pos = param.position;
+    auto scale = param.scale;
+    auto decimalDigits = param.decimalDigits;
+    auto pivot = param.pivot;
+    
+    //マイナスは扱わない
+    if (number < 0) {
+        number = 0;
+    }
+
+    const float width = WIDTH * scale.x;
+    const float periodWidth = PERIOD_WIDTH * scale.x;
+
+    //小数部分の桁数指定
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(decimalDigits) << number;
+    std::string num = oss.str();
+
+    //数字を文字列化し、1文字ずつ取り出す
+    for (auto n : num) {
+        mNumberSprite->transform()->setPosition(pos);
+        mNumberSprite->transform()->setScale(scale);
+        //数字のテクスチャが数字1つにつき幅32高さ64
+        //文字と文字を引き算し、整数値を取得している
+        float widthAmount = 0.f;
+        if (n == '.') {
+            constexpr float num = 10 * WIDTH_RATE; //ピリオドは画像の10番目
+            mNumberSprite->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
+
+            //「.」のときは1文字の半分ずらす
+            widthAmount = periodWidth;
+        } else {
+            float num = (n - '0') * WIDTH;
+            num /= SPRITE_WIDTH;
+            mNumberSprite->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
+
+            //1文字描画したら1桁分右にずらす
+            widthAmount = width;
+        }
+        mNumberSprite->transform()->setPivot(pivot);
+
+        //ワールド座標を更新するため
+        mNumberSprite->update();
+        mNumberSprite->draw(proj);
+
+        pos.x += widthAmount;
+    }
+}
+
+void DrawString::drawString(const ParamString& param, const Matrix4& proj) const {
+    //要素取り出し
+    auto alphabet = param.alphabet;
+    auto pos = param.position;
+    auto scale = param.scale;
+    auto color = param.color;
+    auto pivot = param.pivot;
+
     const float width = WIDTH * scale.x;
 
     for (const auto& c : alphabet) {
-        auto copy = std::make_shared<Sprite>(mRenderer.lock(), mFont);
-        copy->addToManager();
-        copy->setOnceDraw();
-        copy->transform()->setPosition(pos);
-        copy->transform()->setScale(scale);
-        copy->setColor(color);
+        mFontSprite->transform()->setPosition(pos);
+        mFontSprite->transform()->setScale(scale);
+        mFontSprite->setColor(color);
 
         int t = c;
         t = Math::clamp<int>(t, 32, 127);
@@ -130,15 +205,13 @@ void DrawString::drawString(const std::string & alphabet, const Vector2 & positi
         left /= WIDTH_CHAR_COUNT;
         float top = t / WIDTH_CHAR_COUNT;
         top /= HEIGHT_CHAR_COUNT;
-        copy->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
-        copy->transform()->setPivot(pivot);
+        mFontSprite->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
+        mFontSprite->transform()->setPivot(pivot);
+
+        //ワールド座標を更新するため
+        mFontSprite->update();
+        mFontSprite->draw(proj);
 
         pos.x += width;
     }
-}
-
-void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2& scale, const Vector3& color, Pivot pivot) {
-    auto pos = position;
-    pos.x -= alphabet.length() * WIDTH * scale.x;
-    drawString(alphabet, pos, scale, color, Pivot::LEFT_TOP);
 }

@@ -31,6 +31,7 @@ public:
 
     void renderToTexture();
     void renderFromTexture(std::shared_ptr<Camera> camera);
+    void renderSprite(Matrix4* proj);
 
 private:
     void removePointLight();

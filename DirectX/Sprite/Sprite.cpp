@@ -20,8 +20,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) 
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
     mState(State::ACTIVE),
-    mFileName(fileName),
-    mIsOnceDraw(false) {
+    mFileName(fileName) {
 
     //デスクをもとにサイズ取得
     auto desc = mTexture->desc();
@@ -30,7 +29,7 @@ Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) 
     //Transformに通知
     mTransform->setSize(mTextureSize);
 
-    mShader->createConstantBuffer(sizeof(TextureShaderConstantBuffer));
+    mShader->createConstantBuffer(sizeof(TextureConstantBuffer), 0);
 
     //インプットレイアウトの生成
     static constexpr InputElementDesc layout[] = {
@@ -55,7 +54,7 @@ void Sprite::update() {
     }
 }
 
-void Sprite::draw(const Matrix4 & proj) {
+void Sprite::draw(const Matrix4& proj) {
     //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -68,14 +67,12 @@ void Sprite::draw(const Matrix4 & proj) {
     //シェーダーのコンスタントバッファーに各種データを渡す
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd)) {
-        TextureShaderConstantBuffer cb;
+        TextureConstantBuffer cb;
         //ワールド、射影行列を渡す
-        cb.mWorld = mTransform->getWorldTransform();
-        cb.mWorld.transpose();
-        cb.mProjection = proj;
-        cb.mProjection.transpose();
-        cb.mColor = mColor;
-        cb.mUV = mUV;
+        cb.wp = mTransform->getWorldTransform() * proj;
+        cb.wp.transpose();
+        cb.color = mColor;
+        cb.uv = mUV;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
         mShader->unmap();
@@ -86,10 +83,6 @@ void Sprite::draw(const Matrix4 & proj) {
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
     Singleton<DirectX>::instance().drawIndexed(6);
-
-    if (mIsOnceDraw) {
-        destroy();
-    }
 }
 
 std::shared_ptr<Sprite> Sprite::copy() const {
@@ -160,10 +153,6 @@ void Sprite::setActive(bool value) {
 
 bool Sprite::getActive() const {
     return mState == State::ACTIVE;
-}
-
-void Sprite::setOnceDraw() {
-    mIsOnceDraw = true;
 }
 
 bool Sprite::isDead() const {

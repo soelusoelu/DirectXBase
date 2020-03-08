@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "DirectXIncLib.h"
-#include "Game.h"
 #include "TextureDesc.h"
 #include "../Utility/Math.h"
 #include <memory>
@@ -13,11 +12,10 @@ struct TextureVertex {
     Vector2 mTex; //テクスチャ座標
 };
 
-struct TextureShaderConstantBuffer {
-    ALIGN16 Matrix4 mWorld;
-    ALIGN16 Matrix4 mProjection;
-    ALIGN16 Vector4 mColor;
-    ALIGN16 Vector4 mUV;
+struct TextureConstantBuffer {
+    Matrix4 wp;
+    Vector4 color;
+    Vector4 uv;
 };
 
 class IndexBuffer;

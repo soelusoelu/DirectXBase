@@ -2,16 +2,20 @@
 
 #include "../Actor/Transform2D.h"
 #include "../Utility/Math.h"
+#include <list>
 #include <memory>
 #include <string>
 
 class Renderer;
+class Sprite;
 
 class DrawString {
 public:
     DrawString();
     ~DrawString();
     void initialize(std::shared_ptr<Renderer> renderer, const std::string& number, const std::string& font);
+    void drawAll(const Matrix4& proj);
+
     void drawNumber(
         int number,
         const Vector2& position,
@@ -53,9 +57,38 @@ public:
     );
 
 private:
-    std::weak_ptr<Renderer> mRenderer;
-    std::string mNumber;
-    std::string mFont;
+    struct ParamInt {
+        int number;
+        Vector2 position;
+        Vector2 scale;
+        Pivot pivot;
+    };
+    struct ParamFloat {
+        float number;
+        Vector2 position;
+        Vector2 scale;
+        int decimalDigits;
+        Pivot pivot;
+    };
+    struct ParamString {
+        std::string alphabet;
+        Vector2 position;
+        Vector2 scale;
+        Vector3 color;
+        Pivot pivot;
+    };
+
+    void drawInt(const ParamInt& param, const Matrix4& proj) const;
+    void drawFloat(const ParamFloat& param, const Matrix4& proj) const;
+    void drawString(const ParamString& param, const Matrix4& proj) const;
+
+private:
+    std::unique_ptr<Sprite> mNumberSprite;
+    std::unique_ptr<Sprite> mFontSprite;
+    std::list<ParamInt> mParamsInt;
+    std::list<ParamFloat> mParamsFloat;
+    std::list<ParamString> mParamsString;
+
     static constexpr int WIDTH = 32; //画像1文字の横幅
     static constexpr int HEIGHT = 64; //画像1文字の縦幅
     static constexpr int SPRITE_WIDTH = 512; //画像横幅
@@ -67,4 +100,5 @@ private:
     static constexpr int WIDTH_CHAR_COUNT = SPRITE_WIDTH / WIDTH; //フォント画像の画像横の文字数
     static constexpr int HEIGHT_CHAR_COUNT = FONT_HEIGHT / HEIGHT;
     static constexpr float FONT_HEIGHT_RATE = static_cast<float>(HEIGHT) / static_cast<float>(FONT_HEIGHT);
+
 };

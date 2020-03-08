@@ -46,7 +46,6 @@ public:
     void setActive(bool value);
     bool getActive() const;
     bool isDead() const;
-    void setOnceDraw();
     //テクスチャの取得
     std::shared_ptr<Texture> texture() const;
     //シェーダーの取得
@@ -66,7 +65,6 @@ private:
     Vector4 mUV;
     State mState;
     std::string mFileName;
-    bool mIsOnceDraw; //一回描画したら削除
 
     static SpriteManager* mSpriteManager;
 };

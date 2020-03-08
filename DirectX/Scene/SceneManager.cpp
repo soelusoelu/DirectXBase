@@ -2,6 +2,7 @@
 #include "GamePlay.h"
 #include "Title.h"
 #include "../Camera/Camera.h"
+#include "../Device/DrawString.h"
 #include "../Device/Log.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
@@ -65,8 +66,13 @@ void SceneManager::draw() const {
     //ポイントライトの一括描画
     mRenderer->drawPointLights(mCamera);
 
+    //スプライト描画準備
+    Matrix4 proj = Matrix4::identity;
+    mRenderer->renderSprite(&proj);
     //スプライトの一括描画
-    mSpriteManager->draw();
+    mSpriteManager->draw(proj);
+    //テキスト一括描画
+    mRenderer->getDrawString()->drawAll(proj);
 }
 
 void SceneManager::change() {

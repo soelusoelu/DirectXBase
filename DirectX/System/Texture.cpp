@@ -2,6 +2,7 @@
 #include "BufferDesc.h"
 #include "DirectX.h"
 #include "Format.h"
+#include "Game.h"
 #include "IndexBuffer.h"
 #include "Sampler.h"
 #include "SamplerDesc.h"
