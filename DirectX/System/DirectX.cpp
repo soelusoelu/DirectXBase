@@ -56,20 +56,25 @@ std::shared_ptr<RasterizerState> DirectX::rasterizerState() const {
     return mRasterizerState;
 }
 
-void DirectX::setViewport(float width, float height) const {
+void DirectX::setViewport(float width, float height, float x, float y) const {
     //ビューポートの設定
     D3D11_VIEWPORT vp;
     vp.Width = width;
     vp.Height = height;
     vp.MinDepth = 0.f;
     vp.MaxDepth = 1.f;
-    vp.TopLeftX = 0;
-    vp.TopLeftY = 0;
+    vp.TopLeftX = x;
+    vp.TopLeftY = y;
     mDeviceContext->RSSetViewports(1, &vp);
 }
 
 void DirectX::setRenderTarget() const {
     auto rt = mRenderTargetView->getRenderTarget();
+    mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView);
+}
+
+void DirectX::setDebugRenderTarget() const {
+    auto rt = mDebugRenderTargetView->getRenderTarget();
     mDeviceContext->OMSetRenderTargets(1, &rt, mDepthStencilView);
 }
 
@@ -91,6 +96,7 @@ void DirectX::drawIndexed(unsigned numIndices, unsigned startIndex, int startVer
 
 void DirectX::clearRenderTarget(float r, float g, float b, float a) const {
     mRenderTargetView->clearRenderTarget(r, g, b, a);
+    mDebugRenderTargetView->clearRenderTarget(0.f, 0.f, 0.f, 1.f);
 }
 
 void DirectX::clearDepthStencilView(bool depth, bool stencil) {
@@ -113,8 +119,8 @@ void DirectX::createDeviceAndSwapChain(const HWND& hWnd) {
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory(&sd, sizeof(sd));
     sd.BufferCount = 1;
-    sd.BufferDesc.Width = Game::WINDOW_WIDTH;
-    sd.BufferDesc.Height = Game::WINDOW_HEIGHT;
+    sd.BufferDesc.Width = Game::WINDOW_DEBUG_WIDTH;
+    sd.BufferDesc.Height = Game::WINDOW_DEBUG_HEIGHT;
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     sd.BufferDesc.RefreshRate.Numerator = 60;
     sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -135,12 +141,14 @@ void DirectX::createRenderTargetView() {
     mSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer);
     auto tex = std::make_shared<Texture2D>(backBuffer);
     mRenderTargetView = std::make_unique<RenderTargetView>(tex);
+
+    mDebugRenderTargetView = std::make_unique<RenderTargetView>(tex);
 }
 
 void DirectX::createDepthStencilView() {
     Texture2DDesc desc;
-    desc.width = Game::WINDOW_WIDTH;
-    desc.height = Game::WINDOW_HEIGHT;
+    desc.width = Game::WINDOW_DEBUG_WIDTH;
+    desc.height = Game::WINDOW_DEBUG_HEIGHT;
     desc.format = Format::FORMAT_D24_UNORM_S8_UINT;
     desc.bindFlags = static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_DEPTH_STENCIL);
 

@@ -53,7 +53,7 @@ HRESULT Game::init() {
     if (!mWindow) {
         return E_FAIL;
     }
-    mWindow->initWindow(mInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, TITLE);
+    mWindow->initWindow(mInstance, 0, 0, WINDOW_DEBUG_WIDTH, WINDOW_DEBUG_HEIGHT, TITLE);
     mhWnd = mWindow->gethWnd();
 
     Singleton<DirectX>::instance().initialize(mhWnd);

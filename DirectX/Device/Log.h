@@ -25,6 +25,6 @@ private:
     std::shared_ptr<DrawString> mDrawString;
     //表示する文字列と色
     std::list<std::pair<std::string, Vector3>> mLogs;
-    static constexpr int NUM_LOG = 10;
+    static constexpr int NUM_LOG = 9;
     static const Vector2 SCALE;
 };

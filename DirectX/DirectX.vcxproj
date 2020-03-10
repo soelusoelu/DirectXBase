@@ -195,6 +195,7 @@
     <ClCompile Include="System\Texture.cpp" />
     <ClCompile Include="System\Texture2D.cpp" />
     <ClCompile Include="System\Usage.cpp" />
+    <ClCompile Include="Utility\Mouse.cpp" />
     <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
@@ -278,6 +279,7 @@
     <ClInclude Include="System\Texture2DDesc.h" />
     <ClInclude Include="System\Texture2D.h" />
     <ClInclude Include="System\Usage.h" />
+    <ClInclude Include="Utility\Mouse.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />

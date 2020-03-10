@@ -1,8 +1,8 @@
 ﻿#include "Input.h"
 #include "Math.h"
+#include "Mouse.h"
 #include "../System/Game.h"
 #include <algorithm>
-
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE*, VOID*);
 BOOL CALLBACK enumObjectsCallback(const DIDEVICEOBJECTINSTANCE*, VOID*);
@@ -27,6 +27,9 @@ HRESULT Input::init(HWND hWnd) {
     }
     // デバイスを「取得」する
     mKeyDevice->Acquire();
+
+    mMouse = new Mouse();
+    mMouse->initialize(hWnd, mDinput);
 
     //利用可能なゲームコントローラーの列挙関数を実行
     if (FAILED(mDinput->EnumDevices(DI8DEVCLASS_GAMECTRL, enumJoysticksCallback, NULL, DIEDFL_ATTACHEDONLY))) {
@@ -90,6 +93,7 @@ BOOL CALLBACK enumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pC
 void Input::end() {
     SAFE_RELEASE(mDinput);
     SAFE_RELEASE(mKeyDevice);
+    SAFE_DELETE(mMouse);
     SAFE_RELEASE(mPadDevice);
 }
 
@@ -109,6 +113,7 @@ void Input::update() {
         }
     }
 
+    mMouse->update();
 }
 
 bool Input::getKeyDown(KeyCode key) {
@@ -171,6 +176,10 @@ float Input::joyRVertical() {
     return (Math::abs(mCurrentJoyState.lRx) > 100.f) ? -mCurrentJoyState.lRx / 1000.f : 0.f;
 }
 
+Mouse* Input::mouse() {
+    return mMouse;
+}
+
 BYTE Input::mCurrentKeys[256] = { 0 };
 BYTE Input::mPreviousKeys[256] = { 0 };
 DIJOYSTATE2 Input::mCurrentJoyState;
@@ -178,3 +187,4 @@ DIJOYSTATE2 Input::mPreviousJoyState;
 LPDIRECTINPUT8 Input::mDinput = nullptr;
 LPDIRECTINPUTDEVICE8 Input::mKeyDevice = nullptr;
 LPDIRECTINPUTDEVICE8 Input::mPadDevice = nullptr;
+Mouse* Input::mMouse = nullptr;

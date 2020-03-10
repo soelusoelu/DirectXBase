@@ -69,6 +69,8 @@ void SceneManager::draw() const {
     mRenderer->renderSprite(&proj);
     //スプライトの一括描画
     mSpriteManager->draw(proj);
+
+    mRenderer->renderToDebug(&proj);
     //デバッグ表示
     Debug::log()->drawLogs();
     //テキスト一括描画

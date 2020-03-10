@@ -82,6 +82,7 @@
     <ClCompile Include="Mesh\OBJ.cpp" />
     <ClCompile Include="Utility\Debug.cpp" />
     <ClCompile Include="Device\Log.cpp" />
+    <ClCompile Include="Utility\Mouse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -169,5 +170,6 @@
     <ClInclude Include="Mesh\OBJ.h" />
     <ClInclude Include="Utility\Debug.h" />
     <ClInclude Include="Device\Log.h" />
+    <ClInclude Include="Utility\Mouse.h" />
   </ItemGroup>
 </Project>

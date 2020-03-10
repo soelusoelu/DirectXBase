@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Math.h"
 #include "../System/DirectXIncLib.h"
 #include <dinput.h>
 #pragma comment(lib,"dxguid.lib")
@@ -84,6 +85,8 @@ enum class JoyCode {
     RightStickButton = 9,
 };
 
+class Mouse;
+
 class Input {
 public:
     static HRESULT init(HWND hWnd);
@@ -107,6 +110,7 @@ public:
     //ジョイスティック右
     static float joyRHorizontal();
     static float joyRVertical();
+    static Mouse* mouse();
 
 public:
     static LPDIRECTINPUT8 mDinput;
@@ -120,5 +124,5 @@ private:
 
     static LPDIRECTINPUTDEVICE8 mKeyDevice;
 
+    static Mouse* mMouse;
 };
-

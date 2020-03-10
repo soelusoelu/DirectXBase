@@ -5,6 +5,8 @@
 #include "../Component/PointLightComponent.h"
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
+#include "../Device/Log.h"
+#include "../Utility/Debug.h"
 
 PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer) :
     Actor(renderer, "Player") {
@@ -20,6 +22,8 @@ void PlayerActor::start() {
     //mComponentManager->addComponent<SphereCollisionComponent>();
     mComponentManager->addComponent<PlayerMoveComponent>();
     mComponentManager->addComponent<PointLightComponent>();
+
+    Debug::log()->log("Player spawn.");
 }
 
 void PlayerActor::updateActor() {

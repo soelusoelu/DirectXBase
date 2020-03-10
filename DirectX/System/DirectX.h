@@ -35,8 +35,9 @@ public:
     std::shared_ptr<DepthStencilState> depthStencilState() const;
     std::shared_ptr<RasterizerState> rasterizerState() const;
 
-    void setViewport(float width, float height) const;
+    void setViewport(float width, float height, float x = 0.f, float y = 0.f) const;
     void setRenderTarget() const;
+    void setDebugRenderTarget() const;
     void setRenderTargets(ID3D11RenderTargetView* targets[], unsigned numTargets) const;
     void setPrimitive(PrimitiveType primitive) const;
 
@@ -62,6 +63,7 @@ private:
     ID3D11DepthStencilView* mDepthStencilView;
 
     std::unique_ptr<RenderTargetView> mRenderTargetView;
+    std::unique_ptr<RenderTargetView> mDebugRenderTargetView;
     std::shared_ptr<BlendState> mBlendState;
     std::shared_ptr<DepthStencilState> mDepthStencilState;
     std::shared_ptr<RasterizerState> mRasterizerState;

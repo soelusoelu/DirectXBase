@@ -26,7 +26,7 @@ void Log::drawLogs() {
     adjustCapacity();
 
 #ifdef _DEBUG
-    auto pos = Vector2(0.f, Game::WINDOW_HEIGHT - 64.f * NUM_LOG * SCALE.y);
+    auto pos = Vector2(0.f, Game::WINDOW_DEBUG_HEIGHT - 64.f * NUM_LOG * SCALE.y);
     for (const auto& log : mLogs) {
         mDrawString->drawString(log.first, pos, SCALE, log.second);
         pos.y += 64.f * SCALE.y;
@@ -40,4 +40,4 @@ void Log::adjustCapacity() {
     }
 }
 
-const Vector2 Log::SCALE = Vector2(0.5f, 0.5f);
+const Vector2 Log::SCALE = Vector2(0.35f, 0.35f);

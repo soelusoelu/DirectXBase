@@ -115,6 +115,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
 }
 
 void Renderer::renderToTexture() {
+    Singleton<DirectX>::instance().setViewport(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
     mGBuffer->renderToTexture();
 }
 
@@ -144,6 +145,18 @@ void Renderer::renderSprite(Matrix4* proj) {
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
     bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+}
+
+void Renderer::renderToDebug(Matrix4* proj) {
+    Singleton<DirectX>::instance().setDebugRenderTarget();
+    Singleton<DirectX>::instance().setViewport(Game::WINDOW_DEBUG_WIDTH, Game::WINDOW_DEBUG_HEIGHT);
+
+    //原点をスクリーン左上にするために平行移動
+    proj->m[3][0] = -1.f;
+    proj->m[3][1] = 1.f;
+    //デバッグレイヤー基準のピクセル単位で扱うために
+    proj->m[0][0] = 2.f / Game::WINDOW_DEBUG_WIDTH;
+    proj->m[1][1] = -2.f / Game::WINDOW_DEBUG_HEIGHT;
 }
 
 void Renderer::removePointLight() {
