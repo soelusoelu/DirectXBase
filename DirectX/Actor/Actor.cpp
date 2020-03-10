@@ -74,7 +74,7 @@ void Actor::saveProperties(rapidjson::Document::AllocatorType & alloc, rapidjson
     mTransform->saveProperties(alloc, inObj);
 }
 
-void Actor::initialize() {
+void Actor::initialize(const rapidjson::Value& inObj) {
     if (mActorManager) {
         mActorManager->add(shared_from_this());
     }
@@ -83,6 +83,8 @@ void Actor::initialize() {
     mTransform = std::make_shared<Transform3D>(shared_from_this());
 
     start();
+
+    loadProperties(inObj);
 
     computeWorldTransform();
 }

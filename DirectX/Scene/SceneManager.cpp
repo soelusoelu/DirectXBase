@@ -41,8 +41,6 @@ void SceneManager::update() {
     mRenderer->update();
     //カメラ更新
     mCamera->update();
-    //デバッグ表示
-    Debug::log()->drawLogs();
     //各マネージャークラスを更新
     mMeshManager->update();
     mUIManager->update();
@@ -71,6 +69,8 @@ void SceneManager::draw() const {
     mRenderer->renderSprite(&proj);
     //スプライトの一括描画
     mSpriteManager->draw(proj);
+    //デバッグ表示
+    Debug::log()->drawLogs();
     //テキスト一括描画
     mRenderer->getDrawString()->drawAll(proj);
 }

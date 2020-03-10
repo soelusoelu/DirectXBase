@@ -40,8 +40,7 @@ public:
     template <typename T>
     static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>(renderer);
-        t->initialize();
-        t->loadProperties(inObj);
+        t->initialize(inObj);
         return t;
     }
 
@@ -60,7 +59,7 @@ protected:
 
 private:
     //初期化
-    void initialize();
+    void initialize(const rapidjson::Value& inObj);
     //ワールド行列の更新
     void computeWorldTransform();
     void destroyTimer();

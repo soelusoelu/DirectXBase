@@ -30,7 +30,7 @@ GamePlay::~GamePlay() {
 void GamePlay::start() {
     //ファイルからアクターを読み込む
     Singleton<LevelLoader>::instance().loadActors(mRenderer, "Actors.json");
-    Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
+    auto score = Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
 
