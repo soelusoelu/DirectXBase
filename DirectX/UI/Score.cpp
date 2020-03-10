@@ -1,8 +1,9 @@
 ﻿#include "Score.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
-#include "../Utility/LevelLoader.h"
 #include "../Utility/Input.h"
+#include "../Utility/Keyboard.h"
+#include "../Utility/LevelLoader.h"
 
 Score::Score(std::shared_ptr<Renderer> renderer) :
     UI(renderer, "Score"),
@@ -15,7 +16,7 @@ Score::Score(std::shared_ptr<Renderer> renderer) :
 Score::~Score() = default;
 
 void Score::updateUI() {
-    if (Input::getKeyDown(KeyCode::U)) {
+    if (Input::keyboard()->getKeyDown(KeyCode::U)) {
         mScore += 10;
     }
     if (mScore > mHighScore) {

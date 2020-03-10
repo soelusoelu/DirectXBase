@@ -1,13 +1,11 @@
 ﻿#include "Title.h"
 #include "GamePlay.h"
-#include "../Actor/Transform2D.h"
 #include "../Sprite/Sprite.h"
-#include "../System/Game.h"
+#include "../Utility/Input.h"
+#include "../Utility/Keyboard.h"
 
 Title::Title() :
-    SceneBase(),
-    mNextKey(KeyCode::Space),
-    mNextJoy(JoyCode::A) {
+    SceneBase() {
 }
 
 Title::~Title() = default;
@@ -18,7 +16,7 @@ void Title::start() {
 }
 
 void Title::update() {
-    if (Input::getKeyDown(mNextKey) || Input::getJoyDown(mNextJoy)) {
+    if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::getJoyDown(JoyCode::A)) {
         nextScene(std::make_shared<GamePlay>());
     }
 }

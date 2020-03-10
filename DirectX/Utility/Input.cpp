@@ -1,4 +1,5 @@
 ﻿#include "Input.h"
+#include "Keyboard.h"
 #include "Math.h"
 #include "Mouse.h"
 #include "../System/Game.h"
@@ -13,20 +14,8 @@ HRESULT Input::init(HWND hWnd) {
         return E_FAIL;
     }
 
-    // 「DirectInputデバイス」オブジェクトの作成
-    if (FAILED(mDinput->CreateDevice(GUID_SysKeyboard, &mKeyDevice, NULL))) {
-        return E_FAIL;
-    }
-    // デバイスをキーボードに設定
-    if (FAILED(mKeyDevice->SetDataFormat(&c_dfDIKeyboard))) {
-        return E_FAIL;
-    }
-    // 協調レベルの設定
-    if (FAILED(mKeyDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND))) {
-        return E_FAIL;
-    }
-    // デバイスを「取得」する
-    mKeyDevice->Acquire();
+    mKeyboard = new Keyboard();
+    mKeyboard->initialize(hWnd, mDinput);
 
     mMouse = new Mouse();
     mMouse->initialize(hWnd, mDinput);
@@ -92,72 +81,35 @@ BOOL CALLBACK enumObjectsCallback(const DIDEVICEOBJECTINSTANCE* pdidoi, VOID* pC
 
 void Input::end() {
     SAFE_RELEASE(mDinput);
-    SAFE_RELEASE(mKeyDevice);
+    SAFE_DELETE(mKeyboard);
     SAFE_DELETE(mMouse);
     SAFE_RELEASE(mPadDevice);
 }
 
 void Input::update() {
-    memcpy_s(mPreviousKeys, sizeof(mPreviousKeys), mCurrentKeys, sizeof(mCurrentKeys));
     mPreviousJoyState = mCurrentJoyState;
 
-    HRESULT hr = mKeyDevice->Acquire();
-    if ((hr == DI_OK) || (hr == S_FALSE)) {
-        mKeyDevice->GetDeviceState(sizeof(mCurrentKeys), &mCurrentKeys);
-    }
+    mKeyboard->update();
+    mMouse->update();
 
     if (mPadDevice) {
-        hr = mPadDevice->Acquire();
+        HRESULT hr = mPadDevice->Acquire();
         if ((hr == DI_OK) || (hr == S_FALSE)) {
             mPadDevice->GetDeviceState(sizeof(DIJOYSTATE2), &mCurrentJoyState);
         }
     }
-
-    mMouse->update();
-}
-
-bool Input::getKeyDown(KeyCode key) {
-    return (mCurrentKeys[static_cast<BYTE>(key)] & 0x80 && !(mPreviousKeys[static_cast<BYTE>(key)] & 0x80));
 }
 
 bool Input::getJoyDown(JoyCode joy) {
     return (mCurrentJoyState.rgbButtons[static_cast<int>(joy)] & 0x80 && !(mPreviousJoyState.rgbButtons[static_cast<int>(joy)] & 0x80));
 }
 
-bool Input::getKey(KeyCode key) {
-    return mCurrentKeys[static_cast<BYTE>(key)] & 0x80;
-}
-
 bool Input::getJoy(JoyCode joy) {
     return mCurrentJoyState.rgbButtons[static_cast<int>(joy)] & 0x80;
 }
 
-bool Input::getKeyUp(KeyCode key) {
-    return (!(mCurrentKeys[static_cast<BYTE>(key)] & 0x80) && mPreviousKeys[static_cast<BYTE>(key)] & 0x80);
-}
-
 bool Input::getJoyUp(JoyCode joy) {
     return (!(mCurrentJoyState.rgbButtons[static_cast<int>(joy)] & 0x80) && mPreviousJoyState.rgbButtons[static_cast<int>(joy)] & 0x80);
-}
-
-int Input::horizontal() {
-    if (getKey(KeyCode::A) || getKey(KeyCode::LeftArrow)) {
-        return -1;
-    } else if (getKey(KeyCode::D) || getKey(KeyCode::RightArrow)) {
-        return 1;
-    } else {
-        return 0;
-    }
-}
-
-int Input::vertical() {
-    if (getKey(KeyCode::W) || getKey(KeyCode::UpArrow)) {
-        return 1;
-    } else if (getKey(KeyCode::S) || getKey(KeyCode::DownArrow)) {
-        return -1;
-    } else {
-        return 0;
-    }
 }
 
 float Input::joyHorizontal() {
@@ -176,15 +128,17 @@ float Input::joyRVertical() {
     return (Math::abs(mCurrentJoyState.lRx) > 100.f) ? -mCurrentJoyState.lRx / 1000.f : 0.f;
 }
 
+Keyboard* Input::keyboard() {
+    return mKeyboard;
+}
+
 Mouse* Input::mouse() {
     return mMouse;
 }
 
-BYTE Input::mCurrentKeys[256] = { 0 };
-BYTE Input::mPreviousKeys[256] = { 0 };
 DIJOYSTATE2 Input::mCurrentJoyState;
 DIJOYSTATE2 Input::mPreviousJoyState;
 LPDIRECTINPUT8 Input::mDinput = nullptr;
-LPDIRECTINPUTDEVICE8 Input::mKeyDevice = nullptr;
 LPDIRECTINPUTDEVICE8 Input::mPadDevice = nullptr;
+Keyboard* Input::mKeyboard = nullptr;
 Mouse* Input::mMouse = nullptr;

@@ -2,11 +2,11 @@
 #include "../System/Game.h"
 
 Mouse::Mouse() :
+    mMouseDevice(nullptr),
     mCurrentMouseState(),
     mPreviousMouseState(),
-    mMouseDevice(nullptr),
-    mMousePosition(Vector2::zero),
-    mhWnd(nullptr) {
+    mhWnd(nullptr),
+    mMousePosition(Vector2::zero) {
 }
 
 Mouse::~Mouse() {

@@ -5,6 +5,7 @@
 #include "../Component/SoundComponent.h"
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
+#include "../Utility/Keyboard.h"
 
 PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
     Component(owner, "PlayerMoveComponent", 10),
@@ -22,8 +23,8 @@ void PlayerMoveComponent::update() {
 }
 
 void PlayerMoveComponent::move() {
-    float h = Input::horizontal();
-    float v = Input::vertical();
+    float h = Input::keyboard()->horizontal();
+    float v = Input::keyboard()->vertical();
     if (Math::nearZero(h) && Math::nearZero(v)) {
         h = Input::joyHorizontal();
         v = Input::joyVertical();

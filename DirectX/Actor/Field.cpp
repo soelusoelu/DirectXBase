@@ -4,6 +4,7 @@
 #include "../Component/MeshComponent.h"
 #include "../Device/Time.h"
 #include "../Utility/Input.h"
+#include "../Utility/Keyboard.h"
 
 Field::Field(std::shared_ptr<Renderer> renderer) :
     Actor(renderer, "Field") {
@@ -18,10 +19,10 @@ void Field::start() {
 }
 
 void Field::updateActor() {
-    if (Input::getKey(KeyCode::Q)) {
+    if (Input::keyboard()->getKey(KeyCode::Q)) {
         transform()->rotate(Vector3::up, -60.f * Time::deltaTime);
     }
-    if (Input::getKey(KeyCode::E)) {
+    if (Input::keyboard()->getKey(KeyCode::E)) {
         transform()->rotate(Vector3::up, 60.f * Time::deltaTime);
     }
     //transform()->rotate(Vector3::up, 60.f * Time::deltaTime);

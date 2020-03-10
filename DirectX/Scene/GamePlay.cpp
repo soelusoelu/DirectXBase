@@ -9,6 +9,7 @@
 #include "../Scene/Title.h"
 #include "../System/Game.h"
 #include "../Utility/Input.h"
+#include "../Utility/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
 GamePlay::GamePlay() :
@@ -44,7 +45,7 @@ void GamePlay::update() {
         //総当たり判定
         mPhysics->sweepAndPrune();
 
-        if (Input::getKeyDown(KeyCode::Space)) {
+        if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
             nextScene(std::make_shared<Title>());
         }
     } else if (mState == State::PAUSED) {

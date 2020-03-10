@@ -83,6 +83,7 @@
     <ClCompile Include="Utility\Debug.cpp" />
     <ClCompile Include="Device\Log.cpp" />
     <ClCompile Include="Utility\Mouse.cpp" />
+    <ClCompile Include="Utility\Keyboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -171,5 +172,6 @@
     <ClInclude Include="Utility\Debug.h" />
     <ClInclude Include="Device\Log.h" />
     <ClInclude Include="Utility\Mouse.h" />
+    <ClInclude Include="Utility\Keyboard.h" />
   </ItemGroup>
 </Project>

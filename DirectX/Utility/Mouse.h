@@ -28,9 +28,9 @@ public:
     const Vector2& getMousePosition();
 
 private:
+    LPDIRECTINPUTDEVICE8 mMouseDevice;
     DIMOUSESTATE2 mCurrentMouseState;
     DIMOUSESTATE2 mPreviousMouseState;
-    LPDIRECTINPUTDEVICE8 mMouseDevice;
-    Vector2 mMousePosition;
     HWND mhWnd;
+    Vector2 mMousePosition;
 };

@@ -15,13 +15,6 @@ DirectionalLight::DirectionalLight() :
 DirectionalLight::~DirectionalLight() = default;
 
 void DirectionalLight::update() {
-    if (Input::getKey(KeyCode::Z)) {
-        mTransform->rotate(Vector3::right, -60.f * Time::deltaTime);
-    }
-    if (Input::getKey(KeyCode::X)) {
-        mTransform->rotate(Vector3::right, 60.f * Time::deltaTime);
-    }
-
     mTransform->rotate(Vector3::right, Time::deltaTime * 30.f);
     mTransform->computeWorldTransform();
 
