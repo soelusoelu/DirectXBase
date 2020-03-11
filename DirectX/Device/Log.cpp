@@ -22,6 +22,13 @@ void Log::logWarning(const std::string& message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
 }
 
+void Log::drawFPS(float fps) {
+    auto drawPos = Vector2(Game::WINDOW_WIDTH / 2.f, Game::WINDOW_HEIGHT);
+    mDrawString->drawString("fps", drawPos, SCALE);
+    drawPos.x += 32.f * 4 * SCALE.x;
+    mDrawString->drawNumber(fps, drawPos, SCALE, 2);
+}
+
 void Log::drawLogs() {
     adjustCapacity();
 

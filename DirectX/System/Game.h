@@ -11,8 +11,9 @@
 #define SAFE_DELETE_ARRAY(x) if(x){delete[] x; x=0;}
 #define ALIGN16 _declspec(align(16))
 
-class Main;
+class FPSCounter;
 class Renderer;
+class SceneManager;
 class Window;
 
 class Game {
@@ -22,7 +23,6 @@ public:
     void run(HINSTANCE);
     HRESULT init();
     void mainLoop();
-    void fixFPS60();
 
 public:
     static const int WINDOW_WIDTH = 1080;
@@ -33,7 +33,8 @@ public:
 private:
     std::unique_ptr<Window> mWindow;
     std::shared_ptr<Renderer> mRenderer;
-    std::unique_ptr<Main> mMain;
+    std::unique_ptr<SceneManager> mSceneManager;
+    std::unique_ptr<FPSCounter> mFPSCounter;
     HINSTANCE mInstance;
     HWND mhWnd;
 };

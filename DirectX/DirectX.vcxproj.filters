@@ -37,7 +37,6 @@
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
@@ -85,6 +84,7 @@
     <ClCompile Include="Utility\Mouse.cpp" />
     <ClCompile Include="Utility\Keyboard.cpp" />
     <ClCompile Include="Utility\JoyPad.cpp" />
+    <ClCompile Include="Device\FPSCounter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -114,7 +114,6 @@
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
-    <ClInclude Include="Main.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
@@ -175,5 +174,6 @@
     <ClInclude Include="Utility\Mouse.h" />
     <ClInclude Include="Utility\Keyboard.h" />
     <ClInclude Include="Utility\JoyPad.h" />
+    <ClInclude Include="Device\FPSCounter.h" />
   </ItemGroup>
 </Project>

@@ -156,6 +156,7 @@
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="Device\Log.cpp" />
+    <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="Utility\JoyPad.cpp" />
     <ClCompile Include="Utility\Keyboard.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
@@ -218,7 +219,6 @@
     <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="Utility\Input.cpp" />
     <ClCompile Include="Utility\Math.cpp" />
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
@@ -234,6 +234,7 @@
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="Device\Log.h" />
+    <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="Utility\JoyPad.h" />
     <ClInclude Include="Utility\Keyboard.h" />
     <ClInclude Include="Mesh\FBX.h" />
@@ -308,7 +309,6 @@
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
-    <ClInclude Include="Main.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />

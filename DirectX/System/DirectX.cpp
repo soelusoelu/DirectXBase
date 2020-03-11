@@ -96,7 +96,7 @@ void DirectX::drawIndexed(unsigned numIndices, unsigned startIndex, int startVer
 
 void DirectX::clearRenderTarget(float r, float g, float b, float a) const {
     mRenderTargetView->clearRenderTarget(r, g, b, a);
-    mDebugRenderTargetView->clearRenderTarget(0.f, 0.f, 0.f, 1.f);
+    mDebugRenderTargetView->clearRenderTarget(0.1f, 0.1f, 0.1f, 1.f);
 }
 
 void DirectX::clearDepthStencilView(bool depth, bool stencil) {

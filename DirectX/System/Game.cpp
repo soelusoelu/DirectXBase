@@ -2,11 +2,12 @@
 #include "DirectX.h"
 #include "Texture.h"
 #include "Window.h"
-#include "../Main.h"
 #include "../Device/DrawString.h"
+#include "../Device/FPSCounter.h"
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
+#include "../Scene/SceneManager.h"
 #include "../Utility/Debug.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
@@ -64,7 +65,8 @@ HRESULT Game::init() {
     Input::initialize(mhWnd);
     Debug::initialize(mRenderer);
 
-    mMain = std::make_unique<Main>(mRenderer);
+    mFPSCounter = std::make_unique<FPSCounter>(mRenderer, 60.f);
+    mSceneManager = std::make_unique<SceneManager>(mRenderer);
 
     return S_OK;
 }
@@ -75,34 +77,11 @@ void Game::mainLoop() {
 
     Input::update();
 
-    mMain->update();
-    mMain->draw();
+    mSceneManager->update();
+    mSceneManager->draw();
 
-    fixFPS60();
+    mFPSCounter->fixedFrame();
     Singleton<DirectX>::instance().present();
-}
-
-void Game::fixFPS60() {
-    static LARGE_INTEGER frq = { 0 }, previousTime = { 0 }, currentTime = { 0 };
-    double time = 0;
-
-    while (time < 16.6666) //1000ms / 60frame = 16.6666 
-    {
-        QueryPerformanceFrequency(&frq);
-
-        QueryPerformanceCounter(&currentTime);
-        time = currentTime.QuadPart - previousTime.QuadPart;
-        time *= 1000.0 / static_cast<double>(frq.QuadPart);
-    }
-    float deltaTime = static_cast<float>(time / 1000.0);
-    if (deltaTime > 0.05f) {
-        deltaTime = 0.05f;
-    }
-    Time::deltaTime = deltaTime;
-    previousTime = currentTime;
-
-    mRenderer->getDrawString()->drawString("fps", Vector2::zero);
-    mRenderer->getDrawString()->drawNumber(static_cast<float>(1000.f / time), Vector2(32.f * 4, 0.f), Vector2::one, 2);
 }
 
 
