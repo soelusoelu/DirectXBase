@@ -16,7 +16,7 @@ void Title::start() {
 }
 
 void Title::update() {
-    if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::getJoyDown(JoyCode::A)) {
+    if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
         nextScene(std::make_shared<GamePlay>());
     }
 }

@@ -156,6 +156,7 @@
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="Device\Log.cpp" />
+    <ClCompile Include="Utility\JoyPad.cpp" />
     <ClCompile Include="Utility\Keyboard.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="Device\Log.h" />
+    <ClInclude Include="Utility\JoyPad.h" />
     <ClInclude Include="Utility\Keyboard.h" />
     <ClInclude Include="Mesh\FBX.h" />
     <ClInclude Include="Mesh\IMeshLoader.h" />

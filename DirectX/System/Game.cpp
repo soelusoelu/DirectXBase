@@ -61,7 +61,7 @@ HRESULT Game::init() {
     mRenderer->initialize();
 
     Random::init();
-    Input::init(mhWnd);
+    Input::initialize(mhWnd);
     Debug::initialize(mRenderer);
 
     mMain = std::make_unique<Main>(mRenderer);

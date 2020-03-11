@@ -84,6 +84,7 @@
     <ClCompile Include="Device\Log.cpp" />
     <ClCompile Include="Utility\Mouse.cpp" />
     <ClCompile Include="Utility\Keyboard.cpp" />
+    <ClCompile Include="Utility\JoyPad.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -173,5 +174,6 @@
     <ClInclude Include="Device\Log.h" />
     <ClInclude Include="Utility\Mouse.h" />
     <ClInclude Include="Utility\Keyboard.h" />
+    <ClInclude Include="Utility\JoyPad.h" />
   </ItemGroup>
 </Project>

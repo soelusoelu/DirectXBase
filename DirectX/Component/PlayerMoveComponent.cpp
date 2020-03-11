@@ -25,10 +25,7 @@ void PlayerMoveComponent::update() {
 void PlayerMoveComponent::move() {
     float h = Input::keyboard()->horizontal();
     float v = Input::keyboard()->vertical();
-    if (Math::nearZero(h) && Math::nearZero(v)) {
-        h = Input::joyHorizontal();
-        v = Input::joyVertical();
+    if (!Math::nearZero(h) || !Math::nearZero(v)) {
+        owner()->transform()->translate(Vector3(h, 0.f, v) * Time::deltaTime);
     }
-
-    owner()->transform()->translate(Vector3(h, 0.f, v) * Time::deltaTime);
 }
