@@ -155,6 +155,7 @@
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
+    <ClCompile Include="Device\FixedDebugInformation.cpp" />
     <ClCompile Include="Device\Log.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="Utility\JoyPad.cpp" />
@@ -233,6 +234,7 @@
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Device\AssetsManager.h" />
+    <ClInclude Include="Device\FixedDebugInformation.h" />
     <ClInclude Include="Device\Log.h" />
     <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="Utility\JoyPad.h" />

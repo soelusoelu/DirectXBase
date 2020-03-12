@@ -7,16 +7,14 @@
 #include <utility>
 
 class DrawString;
-class Renderer;
 
 class Log {
 public:
-    Log(std::shared_ptr<Renderer> renderer);
+    Log(std::shared_ptr<DrawString> drawString);
     ~Log();
     void log(const std::string& message);
     void logError(const std::string& message);
     void logWarning(const std::string& message);
-    void drawFPS(float fps);
     void drawLogs();
 
 private:
@@ -26,6 +24,6 @@ private:
     std::shared_ptr<DrawString> mDrawString;
     //表示する文字列と色
     std::list<std::pair<std::string, Vector3>> mLogs;
-    static constexpr int NUM_LOG = 9;
     static const Vector2 SCALE;
+    static const int NUM_ROWS_TO_DISPLAY;
 };

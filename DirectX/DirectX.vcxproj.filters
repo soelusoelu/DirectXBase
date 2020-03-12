@@ -85,6 +85,7 @@
     <ClCompile Include="Utility\Keyboard.cpp" />
     <ClCompile Include="Utility\JoyPad.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
+    <ClCompile Include="Device\FixedDebugInformation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -175,5 +176,6 @@
     <ClInclude Include="Utility\Keyboard.h" />
     <ClInclude Include="Utility\JoyPad.h" />
     <ClInclude Include="Device\FPSCounter.h" />
+    <ClInclude Include="Device\FixedDebugInformation.h" />
   </ItemGroup>
 </Project>

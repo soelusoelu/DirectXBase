@@ -1,6 +1,8 @@
 ﻿#include "ActorManager.h"
 #include "Actor.h"
 #include "PlayerActor.h"
+#include "../Device/FixedDebugInformation.h"
+#include "../Utility/Debug.h"
 #include <algorithm>
 #include <iterator>
 
@@ -20,6 +22,8 @@ void ActorManager::update() {
     movePendingToMain();
 
     remove();
+
+    Debug::fixedDebugInfo()->drawActors(mActors);
 }
 
 void ActorManager::add(ActorPtr add) {

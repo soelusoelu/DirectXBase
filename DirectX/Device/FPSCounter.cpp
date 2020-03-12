@@ -1,6 +1,6 @@
 ﻿#include "FPSCounter.h"
 #include "DrawString.h"
-#include "Log.h"
+#include "FixedDebugInformation.h"
 #include "Renderer.h"
 #include "Time.h"
 #include "../Utility/Debug.h"
@@ -47,5 +47,5 @@ void FPSCounter::drawFPS(float time) {
         mDrawUpdateTimer->reset();
         mCurrentFPS = 1000.f / time;
     }
-    Debug::log()->drawFPS(mCurrentFPS);
+    Debug::fixedDebugInfo()->drawFPS(mCurrentFPS);
 }

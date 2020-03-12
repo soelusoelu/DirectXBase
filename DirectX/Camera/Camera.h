@@ -13,7 +13,7 @@ public:
     const Vector3& getPosition() const;
     const Matrix4& getView() const;
     const Matrix4& getProjection() const;
-    void setPlayer(std::shared_ptr<PlayerActor> player);
+    void lookAt(const Vector3& position);
 
 private:
     Vector3 mPosition;
@@ -22,7 +22,5 @@ private:
 
     Matrix4 mView;
     Matrix4 mProjection;
-
-    std::weak_ptr<PlayerActor> mPlayer;
 };
 

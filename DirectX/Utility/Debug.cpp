@@ -1,14 +1,18 @@
 ﻿#include "Debug.h"
+#include "../Device/FixedDebugInformation.h"
 #include "../Device/Log.h"
+#include "../Device/Renderer.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/Game.h"
 
 void Debug::initialize(std::shared_ptr<Renderer> renderer) {
-    mLog = new Log(renderer);
+    mLog = new Log(renderer->getDrawString());
+    mFixedDebugInfo = new FixedDebugInformation(renderer->getDrawString());
 }
 
 void Debug::finalize() {
     SAFE_DELETE(mLog);
+    SAFE_DELETE(mFixedDebugInfo);
 }
 
 void Debug::windowMessage(const std::string& message) {
@@ -21,4 +25,9 @@ Log* Debug::log() {
     return mLog;
 }
 
+FixedDebugInformation* Debug::fixedDebugInfo() {
+    return mFixedDebugInfo;
+}
+
 Log* Debug::mLog = nullptr;
+FixedDebugInformation* Debug::mFixedDebugInfo = nullptr;

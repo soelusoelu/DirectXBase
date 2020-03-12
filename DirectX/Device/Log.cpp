@@ -1,11 +1,10 @@
 ﻿#include "Log.h"
 #include "DrawString.h"
-#include "Renderer.h"
 #include "../System/Game.h"
 
-Log::Log(std::shared_ptr<Renderer> renderer) :
-    mDrawString(renderer->getDrawString()) {
-    mLogs.resize(NUM_LOG);
+Log::Log(std::shared_ptr<DrawString> drawString) :
+    mDrawString(drawString) {
+    mLogs.resize(NUM_ROWS_TO_DISPLAY);
 }
 
 Log::~Log() = default;
@@ -22,29 +21,23 @@ void Log::logWarning(const std::string& message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
 }
 
-void Log::drawFPS(float fps) {
-    auto drawPos = Vector2(Game::WINDOW_WIDTH / 2.f, Game::WINDOW_HEIGHT);
-    mDrawString->drawString("fps", drawPos, SCALE);
-    drawPos.x += 32.f * 4 * SCALE.x;
-    mDrawString->drawNumber(fps, drawPos, SCALE, 2);
-}
-
 void Log::drawLogs() {
     adjustCapacity();
 
 #ifdef _DEBUG
-    auto pos = Vector2(0.f, Game::WINDOW_DEBUG_HEIGHT - 64.f * NUM_LOG * SCALE.y);
+    auto pos = Vector2(0.f, Game::WINDOW_DEBUG_HEIGHT - DrawString::HEIGHT * NUM_ROWS_TO_DISPLAY * SCALE.y);
     for (const auto& log : mLogs) {
         mDrawString->drawString(log.first, pos, SCALE, log.second);
-        pos.y += 64.f * SCALE.y;
+        pos.y += DrawString::HEIGHT * SCALE.y;
     }
 #endif // _DEBUG
 }
 
 void Log::adjustCapacity() {
-    while (mLogs.size() > NUM_LOG) {
+    while (mLogs.size() > NUM_ROWS_TO_DISPLAY) {
         mLogs.pop_front();
     }
 }
 
-const Vector2 Log::SCALE = Vector2(0.35f, 0.35f);
+const Vector2 Log::SCALE = Vector2(0.3125f, 0.3125f);
+const int Log::NUM_ROWS_TO_DISPLAY = (Game::WINDOW_DEBUG_HEIGHT - Game::WINDOW_HEIGHT) / (DrawString::HEIGHT * SCALE.y);
