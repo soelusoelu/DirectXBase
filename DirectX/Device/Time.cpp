@@ -42,10 +42,10 @@ float Time::rate() const {
     return mCurrentTime / mLimitTime;
 }
 
-unsigned Time::time() {
+long Time::time() {
     LARGE_INTEGER time;
     QueryPerformanceCounter(&time);
-    return static_cast<unsigned>(time.QuadPart);
+    return static_cast<long>(time.QuadPart);
 }
 
 float Time::deltaTime = 0.01666f;
