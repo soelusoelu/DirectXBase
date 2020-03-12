@@ -23,6 +23,5 @@ private:
     float mFixedFrame;
     float mCurrentFPS;
     LARGE_INTEGER mFrequency;
-    LARGE_INTEGER mCurrentTime;
-    LARGE_INTEGER mPreviousTime;
+    unsigned mPreviousTime;
 };

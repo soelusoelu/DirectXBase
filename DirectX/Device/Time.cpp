@@ -1,4 +1,5 @@
 ﻿#include "Time.h"
+#include "../System/DirectXIncLib.h"
 
 Time::Time(float sec) :
     mCurrentTime(0.f),
@@ -39,6 +40,12 @@ float Time::limitTime() const {
 
 float Time::rate() const {
     return mCurrentTime / mLimitTime;
+}
+
+unsigned Time::time() {
+    LARGE_INTEGER time;
+    QueryPerformanceCounter(&time);
+    return static_cast<unsigned>(time.QuadPart);
 }
 
 float Time::deltaTime = 0.01666f;

@@ -70,6 +70,7 @@ void SceneManager::draw() const {
     //スプライトの一括描画
     mSpriteManager->draw(proj);
 
+    //レンダリング領域をデバッグに変更
     mRenderer->renderToDebug(&proj);
     //デバッグ表示
     Debug::log()->drawLogs();

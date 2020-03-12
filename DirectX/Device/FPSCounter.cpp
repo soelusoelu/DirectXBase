@@ -11,7 +11,6 @@ FPSCounter::FPSCounter(std::shared_ptr<Renderer> renderer, float fixedFrame) :
     mFixedFrame(fixedFrame),
     mCurrentFPS(fixedFrame),
     mFrequency(),
-    mCurrentTime(),
     mPreviousTime() {
 }
 
@@ -24,18 +23,16 @@ void FPSCounter::fixedFrame() {
     while (time < fix) {
         QueryPerformanceFrequency(&mFrequency);
 
-        QueryPerformanceCounter(&mCurrentTime);
-        time = static_cast<float>(mCurrentTime.QuadPart - mPreviousTime.QuadPart);
+        time = static_cast<float>(Time::time() - mPreviousTime);
         time *= 1000.f / static_cast<float>(mFrequency.QuadPart);
     }
+    mPreviousTime = Time::time();
 
     float deltaTime = static_cast<float>(time / 1000.f);
     if (deltaTime > 0.05f) {
         deltaTime = 0.05f;
     }
     Time::deltaTime = deltaTime;
-
-    mPreviousTime = mCurrentTime;
 
     drawFPS(time);
 }
