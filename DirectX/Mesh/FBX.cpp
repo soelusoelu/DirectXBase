@@ -4,6 +4,7 @@
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
 #include "../Utility/Debug.h"
+#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
 FBX::FBX() :
@@ -21,7 +22,7 @@ FBX::~FBX() {
 }
 
 void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
-    setModelDirectory(filePath);
+    Directory::setModelDirectory(filePath);
 
     //マネージャーを生成
     mManager = FbxManager::Create();

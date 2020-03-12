@@ -6,6 +6,7 @@
 #include "../System/InputElement.h"
 #include "../System/InputElementDesc.h"
 #include "../System/Usage.h"
+#include "../Utility/Directory.h"
 
 Shader::Shader(const std::string& fileName) :
     mCompileShader(nullptr),
@@ -80,7 +81,7 @@ void Shader::setInputLayout() {
 }
 
 void Shader::createVertexShader(const std::string& fileName) {
-    setShaderDirectory();
+    Directory::setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
@@ -95,7 +96,7 @@ void Shader::createVertexShader(const std::string& fileName) {
 
 void Shader::createPixelShader(const std::string& fileName) {
     ID3D10Blob* compiledShader;
-    setShaderDirectory();
+    Directory::setShaderDirectory();
     //ブロブからピクセルシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
         MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);

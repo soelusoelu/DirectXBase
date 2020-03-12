@@ -12,6 +12,7 @@
 #include "VertexBuffer.h"
 #include "../Shader/Shader.h"
 #include "../Utility/Debug.h"
+#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
 Texture::Texture(const std::string& fileName, bool isSprite) :
@@ -94,9 +95,9 @@ void Texture::createIndexBuffer() {
 
 void Texture::createTexture(const std::string & filePath, bool isSprite) {
     if (isSprite) {
-        setTextureDirectory();
+        Directory::setTextureDirectory();
     } else {
-        setModelDirectory(filePath);
+        Directory::setModelDirectory(filePath);
     }
     //ファイルからテクスチャ情報を取得
     D3DX11_IMAGE_INFO info;

@@ -87,6 +87,7 @@
     <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="Device\FixedDebugInformation.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
+    <ClCompile Include="Utility\Directory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -179,5 +180,6 @@
     <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="Device\FixedDebugInformation.h" />
     <ClInclude Include="UI\UIButton.h" />
+    <ClInclude Include="Utility\Directory.h" />
   </ItemGroup>
 </Project>

@@ -9,11 +9,10 @@
 #include "../Device/Time.h"
 #include "../Scene/SceneManager.h"
 #include "../Utility/Debug.h"
+#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
 #include "../Utility/StringUtil.h"
-
-WCHAR szRootPath[1024] = { 0 };
 
 Game::Game() {
     ZeroMemory(this, sizeof(Game));
@@ -26,12 +25,10 @@ Game::~Game() {
 }
 
 void Game::run(HINSTANCE hInstance) {
-    WCHAR dir[1024];
-    GetCurrentDirectory(sizeof(dir), dir);
-    initDirectory(dir);
+    Directory::initDirectory();
 
     mInstance = hInstance;
-    if (FAILED(init())) {
+    if (!initialize()) {
         return;
     }
     ShowWindow(mhWnd, SW_SHOW);
@@ -49,10 +46,10 @@ void Game::run(HINSTANCE hInstance) {
     }
 }
 
-HRESULT Game::init() {
+bool Game::initialize() {
     mWindow = std::make_unique<Window>();
     if (!mWindow) {
-        return E_FAIL;
+        return false;
     }
     mWindow->initWindow(mInstance, 0, 0, WINDOW_DEBUG_WIDTH, WINDOW_DEBUG_HEIGHT, TITLE);
     mhWnd = mWindow->gethWnd();
@@ -68,7 +65,7 @@ HRESULT Game::init() {
     mFPSCounter = std::make_unique<FPSCounter>(mRenderer, 60.f);
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
 
-    return S_OK;
+    return true;
 }
 
 void Game::mainLoop() {
@@ -86,62 +83,4 @@ void Game::mainLoop() {
 
 void Game::quit() {
     PostQuitMessage(0);
-}
-
-
-
-void initDirectory(WCHAR* root) {
-    wcsncpy_s(szRootPath, root, wcslen(root));
-}
-
-void setRootDirectory() {
-    SetCurrentDirectory(szRootPath);
-}
-
-void setAssetsDirectory() {
-    WCHAR tmp[1024] = { 0 };
-    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Assets");
-    SetCurrentDirectory(tmp);
-}
-
-void setShaderDirectory() {
-    WCHAR tmp[1024] = { 0 };
-    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Shader");
-    SetCurrentDirectory(tmp);
-}
-
-void setTextureDirectory() {
-    WCHAR tmp[1024] = { 0 };
-    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Assets/Texture");
-    SetCurrentDirectory(tmp);
-}
-
-void setSoundDirectory() {
-    WCHAR tmp[1024] = { 0 };
-    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Assets/Sound");
-    SetCurrentDirectory(tmp);
-}
-
-void setDataDirectory() {
-    WCHAR tmp[1024] = { 0 };
-    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-    wcscat_s(tmp, L"\\Assets/Data");
-    SetCurrentDirectory(tmp);
-}
-
-void setModelDirectory(const std::string& directry) {
-    WCHAR tmp[1024] = { 0 };
-    wcsncpy_s(tmp, szRootPath, wcslen(szRootPath));
-
-    const std::string modelDir = "\\Assets/Model/";
-    auto modelPath = modelDir + FileUtil::getDirectryFromFilePath(directry);
-
-    auto dir = StringUtil::charToWchar(modelPath.c_str());
-
-    wcscat_s(tmp, dir);
-    SetCurrentDirectory(tmp);
 }

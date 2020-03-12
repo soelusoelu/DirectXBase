@@ -21,7 +21,7 @@ public:
     Game();
     ~Game();
     void run(HINSTANCE);
-    HRESULT init();
+    bool initialize();
     void mainLoop();
     static void quit();
 
@@ -39,12 +39,3 @@ private:
     HINSTANCE mInstance;
     HWND mhWnd;
 };
-
-void initDirectory(WCHAR* root);
-void setRootDirectory();
-void setAssetsDirectory();
-void setShaderDirectory();
-void setTextureDirectory();
-void setSoundDirectory();
-void setDataDirectory();
-void setModelDirectory(const std::string& directry);

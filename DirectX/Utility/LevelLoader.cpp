@@ -1,5 +1,6 @@
 ﻿#include "LevelLoader.h"
 #include "Debug.h"
+#include "Directory.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ActorManager.h"
 #include "../Actor/EmptyActor.h"
@@ -172,7 +173,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
     const char* output = buffer.GetString();
 
     //文字列をファイルに書き込む
-    setDataDirectory();
+    Directory::setDataDirectory();
     std::ofstream outFile(fileName);
     if (outFile.is_open()) {
         outFile << output;
@@ -181,7 +182,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
 
 bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) const {
     //フォルダ階層の移動
-    setDataDirectory();
+    Directory::setDataDirectory();
 
     //バイナリモードで開き、末尾に移動
     std::ifstream file(fileName, std::ios::in | std::ios::binary | std::ios::ate);

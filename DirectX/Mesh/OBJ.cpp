@@ -4,6 +4,7 @@
 #include "../Device/AssetsManager.h"
 #include "../System/Game.h"
 #include "../Utility/Debug.h"
+#include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/StringUtil.h"
 
@@ -18,7 +19,7 @@ OBJ::~OBJ() {
 
 void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
     //OBJファイルを開いて内容を読み込む
-    setModelDirectory(filePath);
+    Directory::setModelDirectory(filePath);
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
