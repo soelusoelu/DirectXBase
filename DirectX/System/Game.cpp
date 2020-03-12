@@ -84,6 +84,10 @@ void Game::mainLoop() {
     Singleton<DirectX>::instance().present();
 }
 
+void Game::quit() {
+    PostQuitMessage(0);
+}
+
 
 
 void initDirectory(WCHAR* root) {

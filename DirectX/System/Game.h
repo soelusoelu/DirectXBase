@@ -23,6 +23,7 @@ public:
     void run(HINSTANCE);
     HRESULT init();
     void mainLoop();
+    static void quit();
 
 public:
     static const int WINDOW_WIDTH = 1080;

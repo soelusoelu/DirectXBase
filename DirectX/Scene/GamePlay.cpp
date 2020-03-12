@@ -53,6 +53,9 @@ void GamePlay::update() {
         if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
             nextScene(std::make_shared<Title>());
         }
+        if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
+            Game::quit();
+        }
     } else if (mState == State::PAUSED) {
 
     }

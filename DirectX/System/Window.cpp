@@ -37,11 +37,6 @@ HRESULT Window::initWindow(HINSTANCE hInstance, INT iX, INT iY, INT iWidth, INT 
 LRESULT Window::msgProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam) {
     switch (iMsg) {
     case WM_KEYDOWN:
-        switch ((char)wParam) {
-        case VK_ESCAPE:
-            PostQuitMessage(0);
-            break;
-        }
         break;
     case WM_DESTROY:
         PostQuitMessage(0);

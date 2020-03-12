@@ -158,6 +158,7 @@
     <ClCompile Include="Device\FixedDebugInformation.cpp" />
     <ClCompile Include="Device\Log.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
+    <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Utility\JoyPad.cpp" />
     <ClCompile Include="Utility\Keyboard.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="Device\FixedDebugInformation.h" />
     <ClInclude Include="Device\Log.h" />
     <ClInclude Include="Device\FPSCounter.h" />
+    <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Utility\JoyPad.h" />
     <ClInclude Include="Utility\Keyboard.h" />
     <ClInclude Include="Mesh\FBX.h" />
