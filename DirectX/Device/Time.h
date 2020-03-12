@@ -19,7 +19,7 @@ public:
     //リミットタイムに対してのカウントアップタイムの比率
     float rate() const;
     //現在時刻をミリ秒で返す
-    static long time();
+    static unsigned long long time();
 
 public:
     static float deltaTime;
