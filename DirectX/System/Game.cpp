@@ -22,6 +22,7 @@ Game::~Game() {
     Input::end();
     Texture::end();
     Debug::finalize();
+    Directory::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {

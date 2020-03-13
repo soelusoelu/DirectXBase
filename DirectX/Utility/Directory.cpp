@@ -8,6 +8,11 @@ void Directory::initDirectory() {
     mRootPath = dir;
 }
 
+void Directory::finalize() {
+    std::string str;
+    str.swap(mRootPath);
+}
+
 void Directory::setRootDirectory() {
     setCurrentDirectory(mRootPath);
 }

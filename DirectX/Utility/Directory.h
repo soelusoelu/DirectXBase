@@ -5,6 +5,7 @@
 class Directory {
 public:
     static void initDirectory();
+    static void finalize();
     static void setRootDirectory();
     static void setAssetsDirectory();
     static void setShaderDirectory();
