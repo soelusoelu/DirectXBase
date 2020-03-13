@@ -4,6 +4,7 @@
 #include <string>
 
 class FixedDebugInformation;
+class Inspector;
 class Log;
 class Renderer;
 
@@ -14,8 +15,10 @@ public:
     static void windowMessage(const std::string& message);
     static Log* log();
     static FixedDebugInformation* fixedDebugInfo();
+    static Inspector* inspector();
 
 private:
     static Log* mLog;
     static FixedDebugInformation* mFixedDebugInfo;
+    static Inspector* mInspector;
 };

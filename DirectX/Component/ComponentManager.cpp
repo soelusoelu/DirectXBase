@@ -46,6 +46,10 @@ void ComponentManager::onUpdateWorldTransform() {
     }
 }
 
+std::list<std::shared_ptr<Component>> ComponentManager::getAllComponents() const {
+    return mComponents;
+}
+
 std::shared_ptr<Component> ComponentManager::getComponent(const std::string& type) const {
     for (const auto& c : mStartComponents) {
         if (c->getTypeName() == type) {

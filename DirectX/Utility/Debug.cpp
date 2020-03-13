@@ -1,5 +1,6 @@
 ﻿#include "Debug.h"
 #include "../Device/FixedDebugInformation.h"
+#include "../Device/Inspector.h"
 #include "../Device/Log.h"
 #include "../Device/Renderer.h"
 #include "../System/DirectXIncLib.h"
@@ -8,11 +9,13 @@
 void Debug::initialize(std::shared_ptr<Renderer> renderer) {
     mLog = new Log(renderer->getDrawString());
     mFixedDebugInfo = new FixedDebugInformation(renderer->getDrawString());
+    mInspector = new Inspector(renderer->getDrawString());
 }
 
 void Debug::finalize() {
     SAFE_DELETE(mLog);
     SAFE_DELETE(mFixedDebugInfo);
+    SAFE_DELETE(mInspector);
 }
 
 void Debug::windowMessage(const std::string& message) {
@@ -29,5 +32,10 @@ FixedDebugInformation* Debug::fixedDebugInfo() {
     return mFixedDebugInfo;
 }
 
+Inspector* Debug::inspector() {
+    return mInspector;
+}
+
 Log* Debug::mLog = nullptr;
 FixedDebugInformation* Debug::mFixedDebugInfo = nullptr;
+Inspector* Debug::mInspector = nullptr;

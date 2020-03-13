@@ -13,6 +13,8 @@
 #include "../Utility/Input.h"
 #include "../Utility/Keyboard.h"
 #include "../Utility/LevelLoader.h"
+#include "../Device/Inspector.h"
+#include "../Utility/Debug.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
@@ -36,6 +38,7 @@ void GamePlay::start() {
     auto score = Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
+    Debug::inspector()->setTarget(mActorManager->getPlayer());
 }
 
 void GamePlay::update() {

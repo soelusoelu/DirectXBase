@@ -28,8 +28,8 @@ public:
 public:
     static const int WINDOW_WIDTH = 1080;
     static const int WINDOW_HEIGHT = 720;
-    static const int WINDOW_DEBUG_WIDTH = 1280;
-    static const int WINDOW_DEBUG_HEIGHT = 920;
+    static const int WINDOW_DEBUG_WIDTH = 1500;
+    static const int WINDOW_DEBUG_HEIGHT = 1000;
 
 private:
     std::unique_ptr<Window> mWindow;

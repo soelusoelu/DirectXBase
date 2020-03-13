@@ -88,6 +88,7 @@
     <ClCompile Include="Device\FixedDebugInformation.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
+    <ClCompile Include="Device\Inspector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -181,5 +182,6 @@
     <ClInclude Include="Device\FixedDebugInformation.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Utility\Directory.h" />
+    <ClInclude Include="Device\Inspector.h" />
   </ItemGroup>
 </Project>

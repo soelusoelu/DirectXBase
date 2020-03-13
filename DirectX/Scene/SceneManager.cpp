@@ -3,6 +3,7 @@
 #include "Title.h"
 #include "../Camera/Camera.h"
 #include "../Device/DrawString.h"
+#include "../Device/Inspector.h"
 #include "../Device/Log.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
@@ -74,6 +75,7 @@ void SceneManager::draw() const {
     mRenderer->renderToDebug(&proj);
     //デバッグ表示
     Debug::log()->drawLogs();
+    Debug::inspector()->drawInspect();
     //テキスト一括描画
     mRenderer->getDrawString()->drawAll(proj);
 }

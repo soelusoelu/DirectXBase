@@ -1,5 +1,7 @@
 ﻿#include "StringUtil.h"
 #include <locale.h>
+#include <iomanip>
+#include <sstream>
 
 std::string StringUtil::spritFirst(const std::string& string, const char delimiter) {
     return string.substr(0, string.find_first_of(delimiter));
@@ -12,4 +14,10 @@ wchar_t* StringUtil::charToWchar(const char* src) {
     mbstowcs_s(&len, dst, 256, src, _TRUNCATE);
 
     return dst;
+}
+
+std::string StringUtil::floatToString(float number, int decimalDigits) {
+    std::ostringstream oss;
+    oss << std::fixed << std::setprecision(decimalDigits) << number;
+    return oss.str();
 }

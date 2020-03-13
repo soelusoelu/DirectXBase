@@ -7,6 +7,7 @@
 #include "../Component/SphereCollisionComponent.h"
 #include "../Device/Log.h"
 #include "../Utility/Debug.h"
+#include "Transform3D.h"
 
 PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer) :
     Actor(renderer, "Player") {
@@ -27,4 +28,5 @@ void PlayerActor::start() {
 }
 
 void PlayerActor::updateActor() {
+    mTransform->rotate(Vector3::up, 0.5f);
 }

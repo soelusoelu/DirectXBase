@@ -29,6 +29,8 @@ public:
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
     void onUpdateWorldTransform();
 
+    //全コンポーネントの取得
+    ComponentPtrList getAllComponents() const;
     //コンポーネントの取得
     template<typename T>
     std::shared_ptr<T> getComponent() const {
