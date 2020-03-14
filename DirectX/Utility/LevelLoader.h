@@ -12,6 +12,7 @@
 class Actor;
 class ActorManager;
 class Component;
+class Game;
 class Renderer;
 class UI;
 class UIManager;
@@ -25,7 +26,8 @@ class LevelLoader {
 
 public:
     //グローバルデータを読み込む
-    bool loadGlobal(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
+    //なぜかshared_ptrじゃうまくいかなかった
+    void loadGlobal(Game* root, const std::string& fileName) const;
     //アクターを読み込む
     bool loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
     //指定のアクターを読み込む
@@ -43,8 +45,6 @@ private:
 
     //jsonファイルの読み込み
     bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc) const;
-    //グローバルプロパティの読み込み
-    void loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObject) const;
     //アクターの読み込み
     void loadActorsProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray) const;
     //指定のアクターの読み込み

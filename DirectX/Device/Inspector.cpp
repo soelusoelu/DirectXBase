@@ -4,7 +4,7 @@
 #include "../Actor/Transform3D.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
-#include "../System/Game.h"
+#include "../System/Window.h"
 #include "../Utility/StringUtil.h"
 #include <list>
 #include <string>
@@ -34,7 +34,7 @@ void Inspector::drawInspect() const {
         return;
     }
 
-    auto drawPos = Vector2(Game::WINDOW_WIDTH, 64.f * 3);
+    auto drawPos = Vector2(Window::width(), 64.f * 3);
     //全コンポーネントの情報を表示
     for (const auto& comp : compList) {
         mDrawString->drawString(comp->getTypeName(), drawPos, Vector2(0.3f, 0.3f));
@@ -107,8 +107,8 @@ void Inspector::drawScale(const TransformPtr target, const Vector2& pos) const {
     mDrawString->drawString("Z " + StringUtil::floatToString(scale.z, 2), p, TRANSFORM_SCALE);
 }
 
-const Vector2 Inspector::TAG_POSITION = Vector2(Game::WINDOW_WIDTH + (Game::WINDOW_DEBUG_WIDTH - Game::WINDOW_WIDTH) / 2.f, 0.f);
+const Vector2 Inspector::TAG_POSITION = Vector2(Window::width() + (Window::debugWidth() - Window::width()) / 2.f, 0.f);
 const Vector2 Inspector::TAG_SCALE = Vector2(0.5f, 0.5f);
-const Vector2 Inspector::TRANSFORM_POSITION = Vector2(Game::WINDOW_WIDTH, DrawString::HEIGHT * TAG_SCALE.y * 2);
+const Vector2 Inspector::TRANSFORM_POSITION = Vector2(Window::width(), DrawString::HEIGHT * TAG_SCALE.y * 2);
 const Vector2 Inspector::TRANSFORM_SCALE = Vector2(0.3f, 0.3f);
-const float Inspector::TRANSFORM_ELEMENT_POSITION_X = Game::WINDOW_WIDTH + DrawString::WIDTH * TRANSFORM_SCALE.x * 11;
+const float Inspector::TRANSFORM_ELEMENT_POSITION_X = Window::width() + DrawString::WIDTH * TRANSFORM_SCALE.x * 11;

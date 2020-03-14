@@ -2,6 +2,7 @@
 
 #include "../Actor/Transform2D.h"
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 #include <string>
@@ -13,7 +14,8 @@ class DrawString {
 public:
     DrawString();
     ~DrawString();
-    void initialize(std::shared_ptr<Renderer> renderer, const std::string& number, const std::string& font);
+    void initialize(std::shared_ptr<Renderer> renderer);
+    void loadProperties(const rapidjson::Value& inObj);
     void drawAll(const Matrix4& proj);
 
     void drawNumber(
@@ -92,6 +94,9 @@ private:
     std::list<ParamInt> mParamsInt;
     std::list<ParamFloat> mParamsFloat;
     std::list<ParamString> mParamsString;
+
+    std::string mNumberFileName;
+    std::string mFontFileName;
 
     static constexpr int SPRITE_WIDTH = 512; //画像横幅
     static constexpr float WIDTH_RATE = static_cast<float>(WIDTH) / static_cast<float>(SPRITE_WIDTH); //画像横幅に対する1文字の比率

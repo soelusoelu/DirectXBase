@@ -1,10 +1,8 @@
 ﻿#pragma once
 
-#include <string>
 #include "DirectXIncLib.h"
+#include <rapidjson/document.h>
 #include <memory>
-
-#define TITLE L"DirectX"
 
 #define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
 #define SAFE_DELETE(x) if(x){delete x; x=0;}
@@ -24,12 +22,7 @@ public:
     bool initialize();
     void mainLoop();
     static void quit();
-
-public:
-    static const int WINDOW_WIDTH = 1080;
-    static const int WINDOW_HEIGHT = 720;
-    static const int WINDOW_DEBUG_WIDTH = 1500;
-    static const int WINDOW_DEBUG_HEIGHT = 1000;
+    void loadProperties(const rapidjson::Value& inObj);
 
 private:
     std::unique_ptr<Window> mWindow;

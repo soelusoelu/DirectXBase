@@ -1,6 +1,12 @@
 {
   "version": 1,
   "globalProperties": {
+    "window": {
+      "windowWidth": 1080,
+      "windowHeight": 720,
+      "windowDebugWidth": 1500,
+      "windowDebugHeight": 1000
+    },
     "ambientLight": [ 0.1, 0.1, 0.1 ],
     "directionalLight": {
       "direction": [ 0.0, 0.0, 0.0 ],

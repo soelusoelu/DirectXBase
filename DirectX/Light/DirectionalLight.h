@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <memory>
 
 class Mesh;
@@ -12,6 +13,7 @@ public:
     DirectionalLight();
     ~DirectionalLight();
     void update();
+    void loadProperties(const rapidjson::Value& inObj);
     void createMesh(std::shared_ptr<Renderer> renderer);
     const Vector3& getDirection() const;
     void setDirection(const Vector3& dir);

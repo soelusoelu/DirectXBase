@@ -7,8 +7,6 @@ class Directory {
     friend class Singleton<Directory>;
 
 public:
-    Directory();
-    ~Directory();
     void initialize();
     void setRootDirectory();
     void setAssetsDirectory();
@@ -19,6 +17,8 @@ public:
     void setModelDirectory(const std::string& directry);
 
 private:
+    Directory();
+    ~Directory();
     void setCurrentDirectory(const std::string& path);
 
 private:

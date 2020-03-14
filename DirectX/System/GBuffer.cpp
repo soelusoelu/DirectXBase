@@ -5,7 +5,6 @@
 #include "BufferDesc.h"
 #include "DepthStencilState.h"
 #include "DirectX.h"
-#include "Game.h"
 #include "IndexBuffer.h"
 #include "RenderTargetView.h"
 #include "RenderTargetViewDesc.h"
@@ -18,6 +17,7 @@
 #include "Texture2DDesc.h"
 #include "Usage.h"
 #include "VertexBuffer.h"
+#include "Window.h"
 #include "../Camera/Camera.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
@@ -40,8 +40,8 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
     RenderTargetViewDesc rtvDesc;
 
     //カラー
-    desc.width = Game::WINDOW_WIDTH;
-    desc.height = Game::WINDOW_HEIGHT;
+    desc.width = Window::width();
+    desc.height = Window::height();
     desc.format = Format::FORMAT_RGBA16_FLOAT;
     desc.usage = Usage::USAGE_DEFAULT;
     desc.bindFlags =

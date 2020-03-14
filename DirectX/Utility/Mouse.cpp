@@ -1,5 +1,6 @@
 ﻿#include "Mouse.h"
 #include "../System/Game.h"
+#include "../System/Window.h"
 
 Mouse::Mouse() :
     mMouseDevice(nullptr),
@@ -50,7 +51,11 @@ void Mouse::update() {
     mMousePosition.y = point.y;
 
     //マウス座標をウィンドウ幅でクランプ
-    mMousePosition.clamp(Vector2::zero, Vector2(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT));
+#ifdef _DEBUG
+    mMousePosition.clamp(Vector2::zero, Vector2(Window::debugWidth(), Window::debugHeight()));
+#else
+    mMousePosition.clamp(Vector2::zero, Vector2(Window::width(), Window::height()));
+#endif // _DEBUG
 }
 
 bool Mouse::getMouseDown(MouseCode button) {

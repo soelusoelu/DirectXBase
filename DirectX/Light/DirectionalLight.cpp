@@ -4,6 +4,7 @@
 #include "../Device/Time.h"
 #include "../Mesh/Mesh.h"
 #include "../Utility/Input.h"
+#include "../Utility/LevelLoader.h"
 
 DirectionalLight::DirectionalLight() :
     mMesh(nullptr),
@@ -19,6 +20,15 @@ void DirectionalLight::update() {
     mTransform->computeWorldTransform();
 
     mDirection = Vector3::transform(Vector3::up, mTransform->getRotation());
+}
+
+void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
+    const auto& dirObj = inObj["directionalLight"];
+    if (dirObj.IsObject()) {
+        //向きと色を設定
+        JsonHelper::getVector3(dirObj, "direction", &mDirection);
+        JsonHelper::getVector3(dirObj, "color", &mColor);
+    }
 }
 
 void DirectionalLight::createMesh(std::shared_ptr<Renderer> renderer) {

@@ -3,6 +3,7 @@
 #include "../Device/Renderer.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
+#include "../Utility/LevelLoader.h"
 #include <iomanip>
 #include <sstream>
 
@@ -13,9 +14,14 @@ DrawString::DrawString() :
 
 DrawString::~DrawString() = default;
 
-void DrawString::initialize(std::shared_ptr<Renderer> renderer, const std::string & number, const std::string & font) {
-    mNumberSprite = std::make_unique<Sprite>(renderer, number);
-    mFontSprite = std::make_unique<Sprite>(renderer, font);
+void DrawString::initialize(std::shared_ptr<Renderer> renderer) {
+    mNumberSprite = std::make_unique<Sprite>(renderer, mNumberFileName);
+    mFontSprite = std::make_unique<Sprite>(renderer, mFontFileName);
+}
+
+void DrawString::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getString(inObj, "number", &mNumberFileName);
+    JsonHelper::getString(inObj, "font", &mFontFileName);
 }
 
 void DrawString::drawAll(const Matrix4& proj) {

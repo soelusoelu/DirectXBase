@@ -2,6 +2,7 @@
 
 #include "../System/DirectXIncLib.h"
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 
@@ -19,6 +20,7 @@ public:
     ~Renderer();
     void initialize();
     void update();
+    void loadProperties(const rapidjson::Value& inObj);
 
     std::shared_ptr<AssetsManager> getAssetsManager() const;
     std::shared_ptr<DrawString> getDrawString() const;

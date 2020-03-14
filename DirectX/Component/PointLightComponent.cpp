@@ -11,6 +11,7 @@
 #include "../Shader/Shader.h"
 #include "../System/DirectX.h"
 #include "../System/SubResourceDesc.h"
+#include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
 PointLightComponent::PointLightComponent(std::shared_ptr<Actor> owner) :
@@ -63,7 +64,7 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
         cb.wvp.transpose();
         cb.worldPos = owner()->transform()->getPosition();
         cb.cameraPos = camera->getPosition();
-        cb.windowSize = Vector2(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
+        cb.windowSize = Vector2(Window::width(), Window::height());
         cb.diffuseColor = mColor;
         cb.innerRadius = mInnerRadius;
         cb.outerRadius = mOuterRadius;

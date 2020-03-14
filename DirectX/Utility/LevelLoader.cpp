@@ -47,19 +47,18 @@ LevelLoader::LevelLoader() {
 
 LevelLoader::~LevelLoader() = default;
 
-bool LevelLoader::loadGlobal(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
+void LevelLoader::loadGlobal(Game* root, const std::string & fileName) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
-        return false;
     }
 
     const rapidjson::Value& globals = doc["globalProperties"];
-    if (globals.IsObject()) {
-        loadGlobalProperties(renderer, globals);
+    if (!globals.IsObject()) {
+        Debug::windowMessage(fileName + ": [globalProperties]が見つからないか、正しいオブジェクトではありません");
     }
 
-    return true;
+    root->loadProperties(globals);
 }
 
 bool LevelLoader::loadActors(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
@@ -93,7 +92,7 @@ std::shared_ptr<Actor> LevelLoader::loadSpecifiedActor(std::shared_ptr<Renderer>
     return actor;
 }
 
-std::shared_ptr<UI> LevelLoader::loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const {
+std::shared_ptr<UI> LevelLoader::loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string & fileName, const std::string & type) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
@@ -141,7 +140,7 @@ void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::strin
     //}
 }
 
-void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string& fileName) const {
+void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string & fileName) const {
     //ドキュメントとルートオブジェクトを生成
     rapidjson::Document doc;
     doc.SetObject();
@@ -209,34 +208,6 @@ bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * o
     }
 
     return true;
-}
-
-void LevelLoader::loadGlobalProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inObject) const {
-    //環境光
-    Vector3 ambient;
-    if (JsonHelper::getVector3(inObject, "ambientLight", &ambient)) {
-        renderer->setAmbientLight(ambient);
-    }
-
-    //ディレクショナルライト
-    const rapidjson::Value& dirObj = inObject["directionalLight"];
-    if (dirObj.IsObject()) {
-        Vector3 dir, color;
-
-        //向きと色を設定
-        if (JsonHelper::getVector3(dirObj, "direction", &dir)) {
-            renderer->getDirectionalLight()->setDirection(dir);
-        }
-        if (JsonHelper::getVector3(dirObj, "color", &color)) {
-            renderer->getDirectionalLight()->setColor(color);
-        }
-    }
-
-    //数字とフォント
-    std::string num, font;
-    JsonHelper::getString(inObject, "number", &num);
-    JsonHelper::getString(inObject, "font", &font);
-    renderer->getDrawString()->initialize(renderer, num, font);
 }
 
 void LevelLoader::loadActorsProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray) const {
@@ -343,7 +314,7 @@ void LevelLoader::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::
     }
 }
 
-std::shared_ptr<UI> LevelLoader::loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const {
+std::shared_ptr<UI> LevelLoader::loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray, const std::string & type) const {
     //そもそも指定のtypeが存在しているかチェック
     auto itr = mUIs.find(type);
     if (itr == mUIs.end()) {
@@ -387,7 +358,7 @@ void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & allo
     inObject->AddMember("directionalLight", dirObj, alloc);
 }
 
-void LevelLoader::saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const {
+void LevelLoader::saveActors(rapidjson::Document::AllocatorType & alloc, ActorManager * manager, rapidjson::Value * inArray) const {
     //for (const auto& actor : manager->getActors()) {
     //    //アクター用のjsonオブジェクトを作る
     //    rapidjson::Value obj(rapidjson::kObjectType);
@@ -411,7 +382,7 @@ void LevelLoader::saveActors(rapidjson::Document::AllocatorType& alloc, ActorMan
     //}
 }
 
-void LevelLoader::saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const {
+void LevelLoader::saveComponents(rapidjson::Document::AllocatorType & alloc, const std::shared_ptr<Actor> actor, rapidjson::Value * inArray) const {
     //const auto& components = actor->getComponents();
     //for (const Component& comp : components) {
     //    // Make a JSON object
@@ -494,7 +465,7 @@ bool JsonHelper::getBool(const rapidjson::Value & inObject, const char* inProper
     return true;
 }
 
-bool JsonHelper::getVector2(const rapidjson::Value& inObject, const char* inProperty, Vector2* out) {
+bool JsonHelper::getVector2(const rapidjson::Value & inObject, const char* inProperty, Vector2 * out) {
     auto itr = inObject.FindMember(inProperty);
     if (itr == inObject.MemberEnd()) {
         return false;
@@ -584,7 +555,7 @@ void JsonHelper::setBool(rapidjson::Document::AllocatorType & alloc, rapidjson::
     inObject->AddMember(rapidjson::StringRef(name), v, alloc);
 }
 
-void JsonHelper::setVector2(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, const Vector2& value) {
+void JsonHelper::setVector2(rapidjson::Document::AllocatorType & alloc, rapidjson::Value * inObject, const char* name, const Vector2 & value) {
     //配列を生成
     rapidjson::Value v(rapidjson::kArrayType);
     //x, y, zそれぞれ追加

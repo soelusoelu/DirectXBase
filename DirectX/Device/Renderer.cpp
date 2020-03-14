@@ -25,6 +25,7 @@
 #include "../System/Texture.h"
 #include "../System/Texture2D.h"
 #include "../System/VertexBuffer.h"
+#include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
 Renderer::Renderer() :
@@ -41,14 +42,18 @@ Renderer::~Renderer() = default;
 void Renderer::initialize() {
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
-
-    //ディレクショナルライトと環境光の読み込み
-    Singleton<LevelLoader>::instance().loadGlobal(shared_from_this(), "Global.json");
+    mDrawString->initialize(shared_from_this());
 }
 
 void Renderer::update() {
     mDirectionalLight->update();
     removePointLight();
+}
+
+void Renderer::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getVector3(inObj, "ambientLight", &mAmbientLight);
+    mDirectionalLight->loadProperties(inObj);
+    mDrawString->loadProperties(inObj);
 }
 
 std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
@@ -115,7 +120,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
 }
 
 void Renderer::renderToTexture() {
-    Singleton<DirectX>::instance().setViewport(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
+    Singleton<DirectX>::instance().setViewport(Window::width(), Window::height());
     mGBuffer->renderToTexture();
 }
 
@@ -129,8 +134,8 @@ void Renderer::renderSprite(Matrix4* proj) {
     proj->m[3][0] = -1.f;
     proj->m[3][1] = 1.f;
     //ピクセル単位で扱うために
-    proj->m[0][0] = 2.f / Game::WINDOW_WIDTH;
-    proj->m[1][1] = -2.f / Game::WINDOW_HEIGHT;
+    proj->m[0][0] = 2.f / Window::width();
+    proj->m[1][1] = -2.f / Window::height();
 
     //プリミティブ・トポロジーをセット
     Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
@@ -149,14 +154,14 @@ void Renderer::renderSprite(Matrix4* proj) {
 
 void Renderer::renderToDebug(Matrix4* proj) {
     Singleton<DirectX>::instance().setDebugRenderTarget();
-    Singleton<DirectX>::instance().setViewport(Game::WINDOW_DEBUG_WIDTH, Game::WINDOW_DEBUG_HEIGHT);
+    Singleton<DirectX>::instance().setViewport(Window::debugWidth(), Window::debugHeight());
 
     //原点をスクリーン左上にするために平行移動
     proj->m[3][0] = -1.f;
     proj->m[3][1] = 1.f;
     //デバッグレイヤー基準のピクセル単位で扱うために
-    proj->m[0][0] = 2.f / Game::WINDOW_DEBUG_WIDTH;
-    proj->m[1][1] = -2.f / Game::WINDOW_DEBUG_HEIGHT;
+    proj->m[0][0] = 2.f / Window::debugWidth();
+    proj->m[1][1] = -2.f / Window::debugHeight();
 }
 
 void Renderer::removePointLight() {

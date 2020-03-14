@@ -5,6 +5,7 @@
 #include "RasterizerState.h"
 #include "RenderTargetView.h"
 #include "Texture2D.h"
+#include "Window.h"
 
 DirectX::DirectX() :
     mDevice(nullptr),
@@ -29,7 +30,7 @@ void DirectX::initialize(const HWND& hWnd) {
     createDepthStencilView();
     createRenderTargetView();
     setRenderTarget();
-    setViewport(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
+    setViewport(Window::width(), Window::height());
 
     mBlendState = std::make_shared<BlendState>();
     mDepthStencilState = std::make_shared<DepthStencilState>();
@@ -119,8 +120,13 @@ void DirectX::createDeviceAndSwapChain(const HWND& hWnd) {
     DXGI_SWAP_CHAIN_DESC sd;
     ZeroMemory(&sd, sizeof(sd));
     sd.BufferCount = 1;
-    sd.BufferDesc.Width = Game::WINDOW_DEBUG_WIDTH;
-    sd.BufferDesc.Height = Game::WINDOW_DEBUG_HEIGHT;
+#ifdef _DEBUG
+    sd.BufferDesc.Width = Window::debugWidth();
+    sd.BufferDesc.Height = Window::debugHeight();
+#else
+    sd.BufferDesc.Width = Window::Width();
+    sd.BufferDesc.Height = Window::Height();
+#endif // _DEBUG
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     sd.BufferDesc.RefreshRate.Numerator = 60;
     sd.BufferDesc.RefreshRate.Denominator = 1;
@@ -147,8 +153,13 @@ void DirectX::createRenderTargetView() {
 
 void DirectX::createDepthStencilView() {
     Texture2DDesc desc;
-    desc.width = Game::WINDOW_DEBUG_WIDTH;
-    desc.height = Game::WINDOW_DEBUG_HEIGHT;
+#ifdef _DEBUG
+    desc.width = Window::debugWidth();
+    desc.height = Window::debugHeight();
+#else
+    desc.width = Window::Width();
+    desc.height = Window::Height();
+#endif // _DEBUG
     desc.format = Format::FORMAT_D24_UNORM_S8_UINT;
     desc.bindFlags = static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_DEPTH_STENCIL);
 

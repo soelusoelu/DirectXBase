@@ -12,6 +12,7 @@
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
+#include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 Game::Game() {
@@ -48,14 +49,13 @@ void Game::run(HINSTANCE hInstance) {
 
 bool Game::initialize() {
     mWindow = std::make_unique<Window>();
-    if (!mWindow) {
-        return false;
-    }
-    mWindow->initWindow(mInstance, 0, 0, WINDOW_DEBUG_WIDTH, WINDOW_DEBUG_HEIGHT, TITLE);
+    mRenderer = std::make_shared<Renderer>();
+    Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
+
+    mWindow->initWindow(mInstance, 0, 0);
     mhWnd = mWindow->gethWnd();
 
     Singleton<DirectX>::instance().initialize(mhWnd);
-    mRenderer = std::make_shared<Renderer>();
     mRenderer->initialize();
 
     Random::init();
@@ -83,4 +83,9 @@ void Game::mainLoop() {
 
 void Game::quit() {
     PostQuitMessage(0);
+}
+
+void Game::loadProperties(const rapidjson::Value& inObj) {
+    mWindow->loadProperties(inObj);
+    mRenderer->loadProperties(inObj);
 }

@@ -1,7 +1,7 @@
 ﻿#include "FixedDebugInformation.h"
 #include "DrawString.h"
 #include "../Actor/Actor.h"
-#include "../System/Game.h"
+#include "../System/Window.h"
 
 FixedDebugInformation::FixedDebugInformation(std::shared_ptr<DrawString> drawString) :
     mDrawString(drawString) {
@@ -30,6 +30,6 @@ void FixedDebugInformation::drawActors(std::list<std::shared_ptr<Actor>> actors)
 }
 
 const Vector2 FixedDebugInformation::SCALE = Vector2(0.3125f, 0.3125f);
-const Vector2 FixedDebugInformation::FPS_POS = Vector2(Game::WINDOW_WIDTH / 2.f, Game::WINDOW_HEIGHT);
+const Vector2 FixedDebugInformation::FPS_POS = Vector2(Window::width() / 2.f, Window::height());
 const Vector2 FixedDebugInformation::ACTORS_POS = FPS_POS + Vector2(0.f, DrawString::HEIGHT * SCALE.y);
-const int FixedDebugInformation::NUM_ROWS_TO_DISPLAY = (Game::WINDOW_DEBUG_HEIGHT - Game::WINDOW_HEIGHT) / (DrawString::HEIGHT * SCALE.y) - 1;
+const int FixedDebugInformation::NUM_ROWS_TO_DISPLAY = (Window::debugWidth() - Window::height()) / (DrawString::HEIGHT * SCALE.y) - 1;
