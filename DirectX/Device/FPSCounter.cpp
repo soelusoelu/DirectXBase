@@ -4,17 +4,22 @@
 #include "Renderer.h"
 #include "Time.h"
 #include "../Utility/Debug.h"
+#include "../Utility/LevelLoader.h"
 
-FPSCounter::FPSCounter(std::shared_ptr<Renderer> renderer, float fixedFrame) :
+FPSCounter::FPSCounter(std::shared_ptr<Renderer> renderer) :
     mDrawString(renderer->getDrawString()),
     mDrawUpdateTimer(std::make_unique<Time>(0.5f)),
-    mFixedFrame(fixedFrame),
-    mCurrentFPS(fixedFrame),
+    mFixedFrame(60.f),
+    mCurrentFPS(60.f),
     mFrequency(),
     mPreviousTime() {
 }
 
 FPSCounter::~FPSCounter() = default;
+
+void FPSCounter::loadProperties(const rapidjson::Value & inObj) {
+    JsonHelper::getFloat(inObj, "fps", &mFixedFrame);
+}
 
 void FPSCounter::fixedFrame() {
     float time = 0.f;
@@ -34,7 +39,9 @@ void FPSCounter::fixedFrame() {
     }
     Time::deltaTime = deltaTime;
 
+#ifdef _DEBUG
     drawFPS(time);
+#endif // _DEBUG
 }
 
 void FPSCounter::setFixedFrame(float fixedFrame) {

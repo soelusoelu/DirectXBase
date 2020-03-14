@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <rapidjson/document.h>
 #include <memory>
 #include <string>
 
@@ -10,6 +11,7 @@ class Renderer;
 
 class Debug {
 public:
+    static void loadProperties(const rapidjson::Value& inObj);
     static void initialize(std::shared_ptr<Renderer> renderer);
     static void finalize();
     static void windowMessage(const std::string& message);

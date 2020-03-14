@@ -18,9 +18,9 @@ class Renderer : public std::enable_shared_from_this<Renderer> {
 public:
     Renderer();
     ~Renderer();
+    void loadProperties(const rapidjson::Value& inObj);
     void initialize();
     void update();
-    void loadProperties(const rapidjson::Value& inObj);
 
     std::shared_ptr<AssetsManager> getAssetsManager() const;
     std::shared_ptr<DrawString> getDrawString() const;

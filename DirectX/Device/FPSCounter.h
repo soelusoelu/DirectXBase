@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../System/DirectXIncLib.h"
+#include <rapidjson/document.h>
 #include <memory>
 
 class DrawString;
@@ -9,8 +10,9 @@ class Time;
 
 class FPSCounter {
 public:
-    FPSCounter(std::shared_ptr<Renderer> renderer, float fixedFrame);
+    FPSCounter(std::shared_ptr<Renderer> renderer);
     ~FPSCounter();
+    void loadProperties(const rapidjson::Value& inObj);
     void fixedFrame();
     void setFixedFrame(float fixedFrame);
 

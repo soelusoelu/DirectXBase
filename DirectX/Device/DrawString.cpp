@@ -4,8 +4,7 @@
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
 #include "../Utility/LevelLoader.h"
-#include <iomanip>
-#include <sstream>
+#include "../Utility/StringUtil.h"
 
 DrawString::DrawString() :
     mNumberSprite(nullptr),
@@ -19,12 +18,15 @@ void DrawString::initialize(std::shared_ptr<Renderer> renderer) {
     mFontSprite = std::make_unique<Sprite>(renderer, mFontFileName);
 }
 
-void DrawString::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getString(inObj, "number", &mNumberFileName);
-    JsonHelper::getString(inObj, "font", &mFontFileName);
+void DrawString::loadProperties(const rapidjson::Value & inObj) {
+    const auto& obj = inObj["drawString"];
+    if (obj.IsObject()) {
+        JsonHelper::getString(obj, "number", &mNumberFileName);
+        JsonHelper::getString(obj, "font", &mFontFileName);
+    }
 }
 
-void DrawString::drawAll(const Matrix4& proj) {
+void DrawString::drawAll(const Matrix4 & proj) {
     for (const auto& param : mParamsInt) {
         drawInt(param, proj);
     }
@@ -85,7 +87,7 @@ void DrawString::drawNumberRightJustified(float number, const Vector2 & position
     drawNumber(number, pos, scale, decimalDigits, Pivot::LEFT_TOP);
 }
 
-void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3& color, Pivot pivot) {
+void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, Pivot pivot) {
     ParamString param;
     param.alphabet = alphabet;
     param.position = position;
@@ -96,13 +98,13 @@ void DrawString::drawString(const std::string & alphabet, const Vector2 & positi
     mParamsString.emplace_back(param);
 }
 
-void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2& scale, const Vector3& color, Pivot pivot) {
+void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, Pivot pivot) {
     auto pos = position;
     pos.x -= alphabet.length() * WIDTH * scale.x;
     drawString(alphabet, pos, scale, color, Pivot::LEFT_TOP);
 }
 
-void DrawString::drawInt(const ParamInt& param, const Matrix4& proj) const {
+void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
     //要素取り出し
     auto number = param.number;
     auto pos = param.position;
@@ -136,14 +138,14 @@ void DrawString::drawInt(const ParamInt& param, const Matrix4& proj) const {
     }
 }
 
-void DrawString::drawFloat(const ParamFloat& param, const Matrix4& proj) const {
+void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const {
     //要素取り出し
     auto number = param.number;
     auto pos = param.position;
     auto scale = param.scale;
     auto decimalDigits = param.decimalDigits;
     auto pivot = param.pivot;
-    
+
     //マイナスは扱わない
     if (number < 0) {
         number = 0;
@@ -153,9 +155,7 @@ void DrawString::drawFloat(const ParamFloat& param, const Matrix4& proj) const {
     const float periodWidth = PERIOD_WIDTH * scale.x;
 
     //小数部分の桁数指定
-    std::ostringstream oss;
-    oss << std::fixed << std::setprecision(decimalDigits) << number;
-    std::string num = oss.str();
+    auto num = StringUtil::floatToString(number, decimalDigits);
 
     //数字を文字列化し、1文字ずつ取り出す
     for (auto n : num) {
@@ -188,7 +188,7 @@ void DrawString::drawFloat(const ParamFloat& param, const Matrix4& proj) const {
     }
 }
 
-void DrawString::drawString(const ParamString& param, const Matrix4& proj) const {
+void DrawString::drawString(const ParamString & param, const Matrix4 & proj) const {
     //要素取り出し
     auto alphabet = param.alphabet;
     auto pos = param.position;

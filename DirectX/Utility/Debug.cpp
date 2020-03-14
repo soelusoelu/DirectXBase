@@ -6,6 +6,13 @@
 #include "../System/DirectXIncLib.h"
 #include "../System/Game.h"
 
+void Debug::loadProperties(const rapidjson::Value& inObj) {
+    //あまり良くない書き方
+    mLog->loadProperties(inObj);
+
+    mLog->initialize();
+}
+
 void Debug::initialize(std::shared_ptr<Renderer> renderer) {
     mLog = new Log(renderer->getDrawString());
     mFixedDebugInfo = new FixedDebugInformation(renderer->getDrawString());

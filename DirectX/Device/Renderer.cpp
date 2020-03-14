@@ -39,6 +39,12 @@ Renderer::Renderer() :
 
 Renderer::~Renderer() = default;
 
+void Renderer::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getVector3(inObj, "ambientLight", &mAmbientLight);
+    mDirectionalLight->loadProperties(inObj);
+    mDrawString->loadProperties(inObj);
+}
+
 void Renderer::initialize() {
     mGBuffer->create(shared_from_this());
     mPointLight->initialize(shared_from_this());
@@ -48,12 +54,6 @@ void Renderer::initialize() {
 void Renderer::update() {
     mDirectionalLight->update();
     removePointLight();
-}
-
-void Renderer::loadProperties(const rapidjson::Value& inObj) {
-    JsonHelper::getVector3(inObj, "ambientLight", &mAmbientLight);
-    mDirectionalLight->loadProperties(inObj);
-    mDrawString->loadProperties(inObj);
 }
 
 std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 #include <string>
@@ -12,6 +13,8 @@ class Log {
 public:
     Log(std::shared_ptr<DrawString> drawString);
     ~Log();
+    void loadProperties(const rapidjson::Value& inObj);
+    void initialize();
     void log(const std::string& message);
     void logError(const std::string& message);
     void logWarning(const std::string& message);
@@ -24,6 +27,8 @@ private:
     std::shared_ptr<DrawString> mDrawString;
     //表示する文字列と色
     std::list<std::pair<std::string, Vector3>> mLogs;
-    static const Vector2 SCALE;
-    static const int NUM_ROWS_TO_DISPLAY;
+    //文字のスケール
+    Vector2 mScale;
+    //画面に表示するログの行数
+    int mNumRowsToDisplay;
 };

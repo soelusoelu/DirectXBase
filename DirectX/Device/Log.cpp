@@ -1,23 +1,37 @@
 ﻿#include "Log.h"
 #include "DrawString.h"
 #include "../System/Window.h"
+#include "../Utility/LevelLoader.h"
 
 Log::Log(std::shared_ptr<DrawString> drawString) :
-    mDrawString(drawString) {
-    mLogs.resize(NUM_ROWS_TO_DISPLAY);
+    mDrawString(drawString),
+    mScale(Vector2::one),
+    mNumRowsToDisplay(0) {
 }
 
 Log::~Log() = default;
 
-void Log::log(const std::string& message) {
+void Log::loadProperties(const rapidjson::Value & inObj) {
+    const auto& logObj = inObj["log"];
+    if (logObj.IsObject()) {
+        JsonHelper::getVector2(logObj, "scale", &mScale);
+    }
+}
+
+void Log::initialize() {
+    mNumRowsToDisplay = (Window::debugHeight() - Window::height()) / (DrawString::HEIGHT * mScale.y);
+    mLogs.resize(mNumRowsToDisplay);
+}
+
+void Log::log(const std::string & message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::white));
 }
 
-void Log::logError(const std::string& message) {
+void Log::logError(const std::string & message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::red));
 }
 
-void Log::logWarning(const std::string& message) {
+void Log::logWarning(const std::string & message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
 }
 
@@ -25,19 +39,16 @@ void Log::drawLogs() {
     adjustCapacity();
 
 #ifdef _DEBUG
-    auto pos = Vector2(0.f, Window::debugWidth() -DrawString::HEIGHT * NUM_ROWS_TO_DISPLAY * SCALE.y);
+    auto pos = Vector2(0.f, Window::debugHeight() - DrawString::HEIGHT * mNumRowsToDisplay * mScale.y);
     for (const auto& log : mLogs) {
-        mDrawString->drawString(log.first, pos, SCALE, log.second);
-        pos.y += DrawString::HEIGHT * SCALE.y;
+        mDrawString->drawString(log.first, pos, mScale, log.second);
+        pos.y += DrawString::HEIGHT * mScale.y;
     }
 #endif // _DEBUG
 }
 
 void Log::adjustCapacity() {
-    while (mLogs.size() > NUM_ROWS_TO_DISPLAY) {
+    while (mLogs.size() > mNumRowsToDisplay) {
         mLogs.pop_front();
     }
 }
-
-const Vector2 Log::SCALE = Vector2(0.3125f, 0.3125f);
-const int Log::NUM_ROWS_TO_DISPLAY = (Window::debugHeight() - Window::height()) / (DrawString::HEIGHT * SCALE.y);
