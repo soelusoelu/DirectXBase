@@ -22,11 +22,10 @@ Game::~Game() {
     Input::end();
     Texture::end();
     Debug::finalize();
-    Directory::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
-    Directory::initDirectory();
+    Singleton<Directory>::instance().initialize();
 
     mInstance = hInstance;
     if (!initialize()) {

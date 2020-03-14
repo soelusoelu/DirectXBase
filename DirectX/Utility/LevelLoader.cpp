@@ -173,7 +173,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
     const char* output = buffer.GetString();
 
     //文字列をファイルに書き込む
-    Directory::setDataDirectory();
+    Singleton<Directory>::instance().setDataDirectory();
     std::ofstream outFile(fileName);
     if (outFile.is_open()) {
         outFile << output;
@@ -182,7 +182,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
 
 bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) const {
     //フォルダ階層の移動
-    Directory::setDataDirectory();
+    Singleton<Directory>::instance().setDataDirectory();
 
     //バイナリモードで開き、末尾に移動
     std::ifstream file(fileName, std::ios::in | std::ios::binary | std::ios::ate);

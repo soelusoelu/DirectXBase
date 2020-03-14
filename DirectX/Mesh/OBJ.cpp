@@ -19,7 +19,7 @@ OBJ::~OBJ() {
 
 void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
     //OBJファイルを開いて内容を読み込む
-    Directory::setModelDirectory(filePath);
+    Singleton<Directory>::instance().setModelDirectory(filePath);
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {

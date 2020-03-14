@@ -39,7 +39,7 @@ void SoundBase::load(const std::string& fileName, std::shared_ptr<Sound>* sound)
     MMCKINFO riffckInfo; // 最上部チャンク(RIFFチャンク)保存用
     PCMWAVEFORMAT pcmWaveForm;
     //WAVファイル内のヘッダー情報(音データ以外)の確認と読み込み
-    Directory::setSoundDirectory();
+    Singleton<Directory>::instance().setSoundDirectory();
     char* fn = const_cast<char*>(fileName.c_str()); //他にやり方思い浮かばない
     hMmio = mmioOpenA(fn, NULL, MMIO_ALLOCBUF | MMIO_READ);
     //ファイルポインタをRIFFチャンクの先頭にセットする

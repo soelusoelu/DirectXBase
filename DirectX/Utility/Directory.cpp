@@ -2,15 +2,14 @@
 #include "FileUtil.h"
 #include "../System/DirectXIncLib.h"
 
-void Directory::initDirectory() {
+Directory::Directory() = default;
+
+Directory::~Directory() = default;
+
+void Directory::initialize() {
     char dir[1024];
     GetCurrentDirectoryA(sizeof(dir), dir);
     mRootPath = dir;
-}
-
-void Directory::finalize() {
-    std::string str;
-    str.swap(mRootPath);
 }
 
 void Directory::setRootDirectory() {
@@ -52,5 +51,3 @@ void Directory::setModelDirectory(const std::string& directry) {
 void Directory::setCurrentDirectory(const std::string& path) {
     SetCurrentDirectoryA(path.c_str());
 }
-
-std::string Directory::mRootPath = "";
