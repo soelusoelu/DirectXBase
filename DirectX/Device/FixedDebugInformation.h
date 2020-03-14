@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <list>
 #include <memory>
 #include <string>
@@ -12,6 +13,8 @@ class FixedDebugInformation {
 public:
     FixedDebugInformation(std::shared_ptr<DrawString> drawString);
     ~FixedDebugInformation();
+    void loadProperties(const rapidjson::Value& inObj);
+    void initialize();
     //フレームレート表示
     void drawFPS(float fps) const;
     //マネージャーに登録されてる全アクターを表示
@@ -19,8 +22,12 @@ public:
 
 private:
     std::shared_ptr<DrawString> mDrawString;
-    static const Vector2 SCALE;
+    //文字のスケール
+    Vector2 mScale;
+    //"Actors"を表示する位置
+    Vector2 mActorsPos;
+    //画面に表示するログの行数
+    int mNumRowsToDisplay;
+    //FPSを表示する位置 固定
     static const Vector2 FPS_POS;
-    static const Vector2 ACTORS_POS;
-    static const int NUM_ROWS_TO_DISPLAY;
 };

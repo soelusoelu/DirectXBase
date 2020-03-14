@@ -60,7 +60,7 @@ bool Game::initialize() {
     Singleton<DirectX>::instance().initialize(mhWnd);
     mRenderer->initialize();
 
-    Random::init();
+    Random::initialize();
     Input::initialize(mhWnd);
 
     mSceneManager = std::make_unique<SceneManager>(mRenderer);

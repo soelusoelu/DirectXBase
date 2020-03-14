@@ -5,15 +5,37 @@
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../System/Window.h"
+#include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 #include <list>
 #include <string>
 
 Inspector::Inspector(const std::shared_ptr<DrawString> drawString) :
-    mDrawString(drawString) {
+    mDrawString(drawString),
+    mTagScale(Vector2::one),
+    mTransformScale(Vector2::one),
+    mTransformPosition(Vector2::zero),
+    mTransformElementPositionX(0.f),
+    mComponentPosition(Vector2::zero)
+{
 }
 
 Inspector::~Inspector() = default;
+
+void Inspector::loadProperties(const rapidjson::Value & inObj) {
+    const auto& obj = inObj["inspector"];
+    if (obj.IsObject()) {
+        JsonHelper::getVector2(obj, "tagScale", &mTagScale);
+        JsonHelper::getVector2(obj, "transformScale", &mTransformScale);
+    }
+}
+
+void Inspector::initialize() {
+    mTransformPosition = Vector2(Window::width(), DrawString::HEIGHT * mTagScale.y + DrawString::HEIGHT * mTransformScale.y);
+    mTransformElementPositionX = Window::width() + DrawString::WIDTH * mTransformScale.x * 11;
+    mComponentPosition = mTransformPosition;
+    mComponentPosition.y += DrawString::HEIGHT * mTransformScale.y * 5;
+}
 
 void Inspector::setTarget(const ActorPtr target) {
     mTarget = target;
@@ -34,26 +56,27 @@ void Inspector::drawInspect() const {
         return;
     }
 
-    auto drawPos = Vector2(Window::width(), 64.f * 3);
+    auto drawPos = mComponentPosition;
     //全コンポーネントの情報を表示
     for (const auto& comp : compList) {
-        mDrawString->drawString(comp->getTypeName(), drawPos, Vector2(0.3f, 0.3f));
-        drawPos.y += 64.f;
+        drawComponent(comp, &drawPos);
+        drawPos.x = Window::width();
+        drawPos.y += DrawString::HEIGHT * mTransformScale.y;
     }
 }
 
 void Inspector::drawActorTag(const ActorPtr target) const {
     auto tag = target->tag();
     auto pos = TAG_POSITION;
-    pos.x -= DrawString::WIDTH * TAG_SCALE.x * tag.length() / 2.f;
-    mDrawString->drawString(tag, pos, TAG_SCALE);
+    pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
+    mDrawString->drawString(tag, pos, mTagScale);
 }
 
 void Inspector::drawActorTransform(const TransformPtr target) const {
-    auto pos = TRANSFORM_POSITION;
-    mDrawString->drawString("Transform", pos, TRANSFORM_SCALE);
-    pos.x += DrawString::WIDTH * TRANSFORM_SCALE.x * 2.f;
-    const static float offsetY = DrawString::HEIGHT * TRANSFORM_SCALE.y;
+    auto pos = mTransformPosition;
+    mDrawString->drawString("Transform", pos, mTransformScale);
+    pos.x += DrawString::WIDTH * mTransformScale.x * 2.f;
+    const static float offsetY = DrawString::HEIGHT * mTransformScale.y;
     pos.y += offsetY;
     //Transformの各要素を描画
     drawPosition(target, pos);
@@ -64,51 +87,57 @@ void Inspector::drawActorTransform(const TransformPtr target) const {
     pos.y += offsetY;
 }
 
-void Inspector::drawPosition(const TransformPtr target, const Vector2& pos) const {
-    auto p = pos;
+void Inspector::drawPosition(const TransformPtr target, const Vector2& position) const {
+    auto pos = position;
     std::string str = "position";
-    mDrawString->drawString(str, p, TRANSFORM_SCALE);
-    p.x = TRANSFORM_ELEMENT_POSITION_X;
-    mDrawString->drawString("X " + StringUtil::floatToString(target->getPosition().x, 2), p, TRANSFORM_SCALE);
-    const static float offset = DrawString::WIDTH * TRANSFORM_SCALE.x * 8;
-    p.x += offset;
-    mDrawString->drawString("Y " + StringUtil::floatToString(target->getPosition().y, 2), p, TRANSFORM_SCALE);
-    p.x += offset;
-    mDrawString->drawString("Z " + StringUtil::floatToString(target->getPosition().z, 2), p, TRANSFORM_SCALE);
+    mDrawString->drawString(str, pos, mTransformScale);
+    pos.x = mTransformElementPositionX;
+    mDrawString->drawString("X " + StringUtil::floatToString(target->getPosition().x, 2), pos, mTransformScale);
+    const static float offset = DrawString::WIDTH * mTransformScale.x * 8;
+    pos.x += offset;
+    mDrawString->drawString("Y " + StringUtil::floatToString(target->getPosition().y, 2), pos, mTransformScale);
+    pos.x += offset;
+    mDrawString->drawString("Z " + StringUtil::floatToString(target->getPosition().z, 2), pos, mTransformScale);
 }
 
-void Inspector::drawRotation(const TransformPtr target, const Vector2& pos) const {
-    auto p = pos;
+void Inspector::drawRotation(const TransformPtr target, const Vector2& position) const {
+    auto pos = position;
     std::string str = "rotation";
-    mDrawString->drawString(str, p, TRANSFORM_SCALE);
-    p.x = TRANSFORM_ELEMENT_POSITION_X;
+    mDrawString->drawString(str, pos, mTransformScale);
+    pos.x = mTransformElementPositionX;
     auto rot = target->getRotation();
-    mDrawString->drawString("X " + StringUtil::floatToString(rot.x, 2), p, TRANSFORM_SCALE);
-    const static float offset = DrawString::WIDTH * TRANSFORM_SCALE.x * 8;
-    p.x += offset;
-    mDrawString->drawString("Y " + StringUtil::floatToString(rot.y, 2), p, TRANSFORM_SCALE);
-    p.x += offset;
-    mDrawString->drawString("Z " + StringUtil::floatToString(rot.z, 2), p, TRANSFORM_SCALE);
-    p.x += offset;
-    mDrawString->drawString("W " + StringUtil::floatToString(rot.w, 2), p, TRANSFORM_SCALE);
+    mDrawString->drawString("X " + StringUtil::floatToString(rot.x, 2), pos, mTransformScale);
+    const static float offset = DrawString::WIDTH * mTransformScale.x * 8;
+    pos.x += offset;
+    mDrawString->drawString("Y " + StringUtil::floatToString(rot.y, 2), pos, mTransformScale);
+    pos.x += offset;
+    mDrawString->drawString("Z " + StringUtil::floatToString(rot.z, 2), pos, mTransformScale);
+    pos.x += offset;
+    mDrawString->drawString("W " + StringUtil::floatToString(rot.w, 2), pos, mTransformScale);
 }
 
-void Inspector::drawScale(const TransformPtr target, const Vector2& pos) const {
-    auto p = pos;
+void Inspector::drawScale(const TransformPtr target, const Vector2& position) const {
+    auto pos = position;
     std::string str = "scale";
-    mDrawString->drawString(str, p, TRANSFORM_SCALE);
-    p.x = TRANSFORM_ELEMENT_POSITION_X;
+    mDrawString->drawString(str, pos, mTransformScale);
+    pos.x = mTransformElementPositionX;
     auto scale = target->getScale();
-    mDrawString->drawString("X " + StringUtil::floatToString(scale.x, 2), p, TRANSFORM_SCALE);
-    const static float offset = DrawString::WIDTH * TRANSFORM_SCALE.x * 8;
-    p.x += offset;
-    mDrawString->drawString("Y " + StringUtil::floatToString(scale.y, 2), p, TRANSFORM_SCALE);
-    p.x += offset;
-    mDrawString->drawString("Z " + StringUtil::floatToString(scale.z, 2), p, TRANSFORM_SCALE);
+    mDrawString->drawString("X " + StringUtil::floatToString(scale.x, 2), pos, mTransformScale);
+    const static float offset = DrawString::WIDTH * mTransformScale.x * 8;
+    pos.x += offset;
+    mDrawString->drawString("Y " + StringUtil::floatToString(scale.y, 2), pos, mTransformScale);
+    pos.x += offset;
+    mDrawString->drawString("Z " + StringUtil::floatToString(scale.z, 2), pos, mTransformScale);
+}
+
+void Inspector::drawComponent(const ComponentPtr component, Vector2* position) const {
+    auto pos = *position;
+    mDrawString->drawString(component->getTypeName(), pos, mTransformScale);
+
+    pos.x = mTransformElementPositionX;
+    pos.y += DrawString::HEIGHT * mTransformScale.y;
+
+    *position = pos;
 }
 
 const Vector2 Inspector::TAG_POSITION = Vector2(Window::width() + (Window::debugWidth() - Window::width()) / 2.f, 0.f);
-const Vector2 Inspector::TAG_SCALE = Vector2(0.5f, 0.5f);
-const Vector2 Inspector::TRANSFORM_POSITION = Vector2(Window::width(), DrawString::HEIGHT * TAG_SCALE.y * 2);
-const Vector2 Inspector::TRANSFORM_SCALE = Vector2(0.3f, 0.3f);
-const float Inspector::TRANSFORM_ELEMENT_POSITION_X = Window::width() + DrawString::WIDTH * TRANSFORM_SCALE.x * 11;

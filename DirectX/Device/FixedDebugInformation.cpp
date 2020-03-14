@@ -2,34 +2,52 @@
 #include "DrawString.h"
 #include "../Actor/Actor.h"
 #include "../System/Window.h"
+#include "../Utility/LevelLoader.h"
+#include "../Utility/StringUtil.h"
 
 FixedDebugInformation::FixedDebugInformation(std::shared_ptr<DrawString> drawString) :
-    mDrawString(drawString) {
+    mDrawString(drawString),
+    mScale(Vector2::one),
+    mActorsPos(Vector2::zero),
+    mNumRowsToDisplay(0) {
 }
 
 FixedDebugInformation::~FixedDebugInformation() = default;
 
-void FixedDebugInformation::drawFPS(float fps) const {
-    auto drawPos = FPS_POS;
-    std::string str = "fps";
-    mDrawString->drawString(str, drawPos, SCALE);
-    drawPos.x += DrawString::WIDTH * (str.length() + 1) * SCALE.x;
-    mDrawString->drawNumber(fps, drawPos, SCALE, 2);
-}
-
-void FixedDebugInformation::drawActors(std::list<std::shared_ptr<Actor>> actors) {
-    auto drawPos = ACTORS_POS;
-    std::string str = "Actors";
-    mDrawString->drawString(str, drawPos, SCALE);
-    drawPos.x += DrawString::WIDTH * (str.length() + 1) * SCALE.x;
-
-    for (const auto& actor : actors) {
-        mDrawString->drawString(actor->tag(), drawPos, SCALE);
-        drawPos.y += DrawString::HEIGHT * SCALE.y;
+void FixedDebugInformation::loadProperties(const rapidjson::Value & inObj) {
+    const auto& obj = inObj["fixedDebugInfo"];
+    if (obj.IsObject()) {
+        JsonHelper::getVector2(obj, "scale", &mScale);
     }
 }
 
-const Vector2 FixedDebugInformation::SCALE = Vector2(0.3125f, 0.3125f);
+void FixedDebugInformation::initialize() {
+    mActorsPos = FPS_POS + Vector2(0.f, DrawString::HEIGHT * mScale.y);
+    mNumRowsToDisplay = (Window::debugWidth() - Window::height()) / (DrawString::HEIGHT * mScale.y);
+}
+
+void FixedDebugInformation::drawFPS(float fps) const {
+#ifdef _DEBUG
+    auto drawPos = FPS_POS;
+    std::string str = "fps";
+    mDrawString->drawString(str, drawPos, mScale);
+    drawPos.x += DrawString::WIDTH * (str.length() + 1) * mScale.x;
+    mDrawString->drawString(StringUtil::floatToString(fps, 2), drawPos, mScale);
+#endif // _DEBUG
+}
+
+void FixedDebugInformation::drawActors(std::list<std::shared_ptr<Actor>> actors) {
+#ifdef _DEBUG
+    auto drawPos = mActorsPos;
+    std::string str = "Actors";
+    mDrawString->drawString(str, drawPos, mScale);
+    drawPos.x += DrawString::WIDTH * (str.length() + 1) * mScale.x;
+
+    for (const auto& actor : actors) {
+        mDrawString->drawString(actor->tag(), drawPos, mScale);
+        drawPos.y += DrawString::HEIGHT * mScale.y;
+    }
+#endif // _DEBUG
+}
+
 const Vector2 FixedDebugInformation::FPS_POS = Vector2(Window::width() / 2.f, Window::height());
-const Vector2 FixedDebugInformation::ACTORS_POS = FPS_POS + Vector2(0.f, DrawString::HEIGHT * SCALE.y);
-const int FixedDebugInformation::NUM_ROWS_TO_DISPLAY = (Window::debugWidth() - Window::height()) / (DrawString::HEIGHT * SCALE.y) - 1;

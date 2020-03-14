@@ -19,6 +19,13 @@
     },
     "log": {
       "scale": [ 0.3125, 0.3125 ]
+    },
+    "fixedDebugInfo": {
+      "scale": [ 0.3125, 0.3125 ]
+    },
+    "inspector": {
+      "tagScale": [ 0.5, 0.5 ],
+      "transformScale": [ 0.3, 0.3 ]
     }
   }
 }

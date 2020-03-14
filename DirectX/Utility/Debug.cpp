@@ -9,8 +9,12 @@
 void Debug::loadProperties(const rapidjson::Value& inObj) {
     //あまり良くない書き方
     mLog->loadProperties(inObj);
+    mFixedDebugInfo->loadProperties(inObj);
+    mInspector->loadProperties(inObj);
 
     mLog->initialize();
+    mFixedDebugInfo->initialize();
+    mInspector->initialize();
 }
 
 void Debug::initialize(std::shared_ptr<Renderer> renderer) {

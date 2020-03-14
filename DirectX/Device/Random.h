@@ -5,7 +5,7 @@
 
 class Random {
 public:
-    static void init();
+    static void initialize();
     //0.f <= value <= 1.f
     static float randomNormal();
     //min <= value <= max

@@ -1,6 +1,6 @@
 ﻿#include "Random.h"
 
-void Random::init() {
+void Random::initialize() {
     std::random_device rd;
     mt.seed(rd());
 }
