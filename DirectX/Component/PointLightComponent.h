@@ -15,6 +15,7 @@ public:
     ~PointLightComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void drawDebugInfo(debugInfoList* inspect) const override;
     void draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const;
     void setColor(const Vector3& color);
     void setInnerRadius(float radius);

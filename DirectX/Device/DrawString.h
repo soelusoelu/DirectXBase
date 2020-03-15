@@ -103,7 +103,7 @@ private:
     static constexpr int PERIOD_WIDTH = WIDTH / 2.f; //ピリオドの横幅
     static constexpr float PERIOD_RATE = static_cast<float>(PERIOD_WIDTH) / static_cast<float>(SPRITE_WIDTH); //画像横幅に対する1文字の比率
 
-    static constexpr int FONT_HEIGHT = 384; //フォント画像の縦幅
+    static constexpr int FONT_HEIGHT = 512; //フォント画像の縦幅
     static constexpr int WIDTH_CHAR_COUNT = SPRITE_WIDTH / WIDTH; //フォント画像の画像横の文字数
     static constexpr int HEIGHT_CHAR_COUNT = FONT_HEIGHT / HEIGHT;
     static constexpr float FONT_HEIGHT_RATE = static_cast<float>(HEIGHT) / static_cast<float>(FONT_HEIGHT);

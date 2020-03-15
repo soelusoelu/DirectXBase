@@ -13,11 +13,13 @@
 Inspector::Inspector(const std::shared_ptr<DrawString> drawString) :
     mDrawString(drawString),
     mTagScale(Vector2::one),
-    mTransformScale(Vector2::one),
+    mElementScale(Vector2::one),
     mTransformPosition(Vector2::zero),
-    mTransformElementPositionX(0.f),
-    mComponentPosition(Vector2::zero)
-{
+    mComponentPosition(Vector2::zero),
+    mElementPositionX(0.f),
+    mValuePositionX(0.f),
+    mCharWidth(0.f),
+    mCharHeight(0.f) {
 }
 
 Inspector::~Inspector() = default;
@@ -26,15 +28,20 @@ void Inspector::loadProperties(const rapidjson::Value & inObj) {
     const auto& obj = inObj["inspector"];
     if (obj.IsObject()) {
         JsonHelper::getVector2(obj, "tagScale", &mTagScale);
-        JsonHelper::getVector2(obj, "transformScale", &mTransformScale);
+        JsonHelper::getVector2(obj, "transformScale", &mElementScale);
     }
 }
 
 void Inspector::initialize() {
-    mTransformPosition = Vector2(Window::width(), DrawString::HEIGHT * mTagScale.y + DrawString::HEIGHT * mTransformScale.y);
-    mTransformElementPositionX = Window::width() + DrawString::WIDTH * mTransformScale.x * 11;
+    //1文字のサイズを基準に描画位置を決める
+    mCharWidth = DrawString::WIDTH * mElementScale.x;
+    mCharHeight = DrawString::HEIGHT * mElementScale.y;
+
+    mTransformPosition = Vector2(Window::width(), DrawString::HEIGHT * mTagScale.y + mCharHeight);
     mComponentPosition = mTransformPosition;
-    mComponentPosition.y += DrawString::HEIGHT * mTransformScale.y * 5;
+    mComponentPosition.y += mCharHeight * 5;
+    mElementPositionX = Window::width() + mCharWidth * 2;
+    mValuePositionX = Window::width() + mCharWidth * 11;
 }
 
 void Inspector::setTarget(const ActorPtr target) {
@@ -61,83 +68,86 @@ void Inspector::drawInspect() const {
     for (const auto& comp : compList) {
         drawComponent(comp, &drawPos);
         drawPos.x = Window::width();
-        drawPos.y += DrawString::HEIGHT * mTransformScale.y;
+        drawPos.y += mCharHeight * 2;
     }
 }
 
 void Inspector::drawActorTag(const ActorPtr target) const {
     auto tag = target->tag();
-    auto pos = TAG_POSITION;
+    auto pos = Vector2(Window::width() + (Window::debugWidth() - Window::width()) / 2.f, 0.f);
     pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
     mDrawString->drawString(tag, pos, mTagScale);
 }
 
 void Inspector::drawActorTransform(const TransformPtr target) const {
     auto pos = mTransformPosition;
-    mDrawString->drawString("Transform", pos, mTransformScale);
-    pos.x += DrawString::WIDTH * mTransformScale.x * 2.f;
-    const static float offsetY = DrawString::HEIGHT * mTransformScale.y;
-    pos.y += offsetY;
+    mDrawString->drawString("Transform", pos, mElementScale);
+    pos.x = mElementPositionX;
+    pos.y += mCharHeight;
     //Transformの各要素を描画
     drawPosition(target, pos);
-    pos.y += offsetY;
+    pos.y += mCharHeight;
     drawRotation(target, pos);
-    pos.y += offsetY;
+    pos.y += mCharHeight;
     drawScale(target, pos);
-    pos.y += offsetY;
 }
 
-void Inspector::drawPosition(const TransformPtr target, const Vector2& position) const {
+void Inspector::drawPosition(const TransformPtr target, const Vector2 & position) const {
     auto pos = position;
-    std::string str = "position";
-    mDrawString->drawString(str, pos, mTransformScale);
-    pos.x = mTransformElementPositionX;
-    mDrawString->drawString("X " + StringUtil::floatToString(target->getPosition().x, 2), pos, mTransformScale);
-    const static float offset = DrawString::WIDTH * mTransformScale.x * 8;
-    pos.x += offset;
-    mDrawString->drawString("Y " + StringUtil::floatToString(target->getPosition().y, 2), pos, mTransformScale);
-    pos.x += offset;
-    mDrawString->drawString("Z " + StringUtil::floatToString(target->getPosition().z, 2), pos, mTransformScale);
+    mDrawString->drawString("Position", pos, mElementScale);
+    pos.x = mValuePositionX;
+    auto tPos = target->getPosition();
+    mDrawString->drawString(InspectHelper::vector3ToString(tPos), pos, mElementScale);
 }
 
-void Inspector::drawRotation(const TransformPtr target, const Vector2& position) const {
+void Inspector::drawRotation(const TransformPtr target, const Vector2 & position) const {
     auto pos = position;
-    std::string str = "rotation";
-    mDrawString->drawString(str, pos, mTransformScale);
-    pos.x = mTransformElementPositionX;
+    mDrawString->drawString("Rotation", pos, mElementScale);
+    pos.x = mValuePositionX;
     auto rot = target->getRotation();
-    mDrawString->drawString("X " + StringUtil::floatToString(rot.x, 2), pos, mTransformScale);
-    const static float offset = DrawString::WIDTH * mTransformScale.x * 8;
-    pos.x += offset;
-    mDrawString->drawString("Y " + StringUtil::floatToString(rot.y, 2), pos, mTransformScale);
-    pos.x += offset;
-    mDrawString->drawString("Z " + StringUtil::floatToString(rot.z, 2), pos, mTransformScale);
-    pos.x += offset;
-    mDrawString->drawString("W " + StringUtil::floatToString(rot.w, 2), pos, mTransformScale);
+    mDrawString->drawString(InspectHelper::quaternionToString(rot), pos, mElementScale);
 }
 
-void Inspector::drawScale(const TransformPtr target, const Vector2& position) const {
+void Inspector::drawScale(const TransformPtr target, const Vector2 & position) const {
     auto pos = position;
-    std::string str = "scale";
-    mDrawString->drawString(str, pos, mTransformScale);
-    pos.x = mTransformElementPositionX;
+    mDrawString->drawString("Scale", pos, mElementScale);
+    pos.x = mValuePositionX;
     auto scale = target->getScale();
-    mDrawString->drawString("X " + StringUtil::floatToString(scale.x, 2), pos, mTransformScale);
-    const static float offset = DrawString::WIDTH * mTransformScale.x * 8;
-    pos.x += offset;
-    mDrawString->drawString("Y " + StringUtil::floatToString(scale.y, 2), pos, mTransformScale);
-    pos.x += offset;
-    mDrawString->drawString("Z " + StringUtil::floatToString(scale.z, 2), pos, mTransformScale);
+    mDrawString->drawString(InspectHelper::vector3ToString(scale), pos, mElementScale);
 }
 
-void Inspector::drawComponent(const ComponentPtr component, Vector2* position) const {
+void Inspector::drawComponent(const ComponentPtr component, Vector2 * position) const {
     auto pos = *position;
-    mDrawString->drawString(component->getTypeName(), pos, mTransformScale);
+    mDrawString->drawString(component->getTypeName(), pos, mElementScale);
 
-    pos.x = mTransformElementPositionX;
-    pos.y += DrawString::HEIGHT * mTransformScale.y;
+    //コンポーネントのデバッグ情報を取得
+    std::list<std::pair<std::string, std::string>> debugInfo;
+    component->drawDebugInfo(&debugInfo);
+
+    //すべてのデバッグ情報を描画
+    for (const auto& info : debugInfo) {
+        pos.x = mElementPositionX;
+        pos.y += mCharHeight;
+        auto sub = info.first.substr(0, 8);
+        mDrawString->drawString(sub, pos, mElementScale);
+        pos.x = mValuePositionX;
+        mDrawString->drawString(info.second, pos, mElementScale);
+    }
 
     *position = pos;
 }
 
-const Vector2 Inspector::TAG_POSITION = Vector2(Window::width() + (Window::debugWidth() - Window::width()) / 2.f, 0.f);
+std::string InspectHelper::vector2ToString(const Vector2 & vec) {
+    return "X " + StringUtil::floatToString(vec.x, 2) + "  Y " + StringUtil::floatToString(vec.y, 2);
+}
+
+std::string InspectHelper::vector3ToString(const Vector3 & vec) {
+    return "X " + StringUtil::floatToString(vec.x, 2) + "  Y " + StringUtil::floatToString(vec.y, 2) + "  Z " + StringUtil::floatToString(vec.z, 2);
+}
+
+std::string InspectHelper::quaternionToString(const Quaternion & quaternion) {
+    return "X " + StringUtil::floatToString(quaternion.x, 2) +
+        "  Y " + StringUtil::floatToString(quaternion.y, 2) +
+        "  Z " + StringUtil::floatToString(quaternion.z, 2) +
+        "  W " + StringUtil::floatToString(quaternion.w, 2);
+}

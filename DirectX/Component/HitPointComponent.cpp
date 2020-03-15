@@ -2,6 +2,7 @@
 #include "../Actor/Actor.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/Math.h"
+#include "../Utility/StringUtil.h"
 #include <string>
 
 HitPointComponent::HitPointComponent(std::shared_ptr<Actor> onwer) :
@@ -17,6 +18,16 @@ void HitPointComponent::loadProperties(const rapidjson::Value & inObj) {
 
     JsonHelper::getInt(inObj, "HP", &mHP);
     JsonHelper::getInt(inObj, "maxHP", &mMaxHP);
+}
+
+void HitPointComponent::drawDebugInfo(debugInfoList* inspect) const {
+    debugInfo info;
+    info.first = "HP";
+    info.second = StringUtil::intToString(mHP);
+    inspect->emplace_back(info);
+    info.first = "MaxHP";
+    info.second = StringUtil::intToString(mMaxHP);
+    inspect->emplace_back(info);
 }
 
 void HitPointComponent::takeDamage(int damage) {

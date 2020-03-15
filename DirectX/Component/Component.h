@@ -1,12 +1,18 @@
 ﻿#pragma once
 
 #include <rapidjson/document.h>
+#include <list>
 #include <memory>
 #include <string>
+#include <utility>
 
 class Actor;
 
 class Component {
+protected:
+    using debugInfo = std::pair<std::string, std::string>;
+    using debugInfoList = std::list<debugInfo>;
+
 protected:
     Component(std::shared_ptr<Actor> owner, const std::string& typeName, int updateOrder = 100);
 public:
@@ -19,6 +25,10 @@ public:
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj) {};
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
+    //Inspectorに表示する情報
+    //first: 変数名
+    //second: 値
+    virtual void drawDebugInfo(debugInfoList* inspect) const {};
 
     std::shared_ptr<Actor> owner() const;
     int getUpdateOrder() const;

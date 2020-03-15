@@ -16,6 +16,10 @@ wchar_t* StringUtil::charToWchar(const char* src) {
     return dst;
 }
 
+std::string StringUtil::intToString(int number) {
+    return std::to_string(number);
+}
+
 std::string StringUtil::floatToString(float number, int decimalDigits) {
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(decimalDigits) << number;

@@ -2,6 +2,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
+#include "../Device/Inspector.h"
 #include "../Device/Renderer.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Material.h"
@@ -13,6 +14,7 @@
 #include "../System/SubResourceDesc.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
+#include "../Utility/StringUtil.h"
 
 PointLightComponent::PointLightComponent(std::shared_ptr<Actor> owner) :
     Component(owner, "PointLightComponent"),
@@ -46,6 +48,22 @@ void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
     if (JsonHelper::getFloat(inObj, "intensity", &f)) {
         mIntensity = f;
     }
+}
+
+void PointLightComponent::drawDebugInfo(debugInfoList* inspect) const {
+    debugInfo info;
+    info.first = "Color";
+    info.second = InspectHelper::vector3ToString(mColor);
+    inspect->emplace_back(info);
+    info.first = "InnerRadius";
+    info.second = StringUtil::floatToString(mInnerRadius);
+    inspect->emplace_back(info);
+    info.first = "OuterRadius";
+    info.second = StringUtil::floatToString(mOuterRadius);
+    inspect->emplace_back(info);
+    info.first = "Intensity";
+    info.second = StringUtil::floatToString(mIntensity);
+    inspect->emplace_back(info);
 }
 
 void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const {

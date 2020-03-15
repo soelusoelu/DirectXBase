@@ -4,8 +4,8 @@
     "window": {
       "windowWidth": 1080,
       "windowHeight": 720,
-      "windowDebugWidth": 1500,
-      "windowDebugHeight": 1000
+      "windowDebugWidth": 1920,
+      "windowDebugHeight": 1080
     },
     "fps": 60.0,
     "ambientLight": [ 0.1, 0.1, 0.1 ],
