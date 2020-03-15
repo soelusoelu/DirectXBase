@@ -4,9 +4,9 @@
 #include <rapidjson/document.h>
 #include <memory>
 
-#define SAFE_RELEASE(x) if(x){x->Release(); x=0;}
-#define SAFE_DELETE(x) if(x){delete x; x=0;}
-#define SAFE_DELETE_ARRAY(x) if(x){delete[] x; x=0;}
+#define SAFE_RELEASE(x) if(x) { (x)->Release(); (x) = nullptr; }
+#define SAFE_DELETE(x) if(x) { delete (x); (x) = nullptr; }
+#define SAFE_DELETE_ARRAY(x) if(x) { delete[] (x); (x) = nullptr; }
 #define ALIGN16 _declspec(align(16))
 
 class FPSCounter;

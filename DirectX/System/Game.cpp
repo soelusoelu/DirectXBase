@@ -13,7 +13,6 @@
 #include "../Utility/FileUtil.h"
 #include "../Utility/Input.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Game::Game() {
     ZeroMemory(this, sizeof(Game));
