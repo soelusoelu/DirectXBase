@@ -20,17 +20,26 @@ SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mMeshManager(new MeshManager()),
     mSpriteManager(new SpriteManager()),
     mUIManager(new UIManager()) {
-
-    Mesh::setMeshManager(mMeshManager);
-    Sprite::setSpriteManager(mSpriteManager);
-    UI::setUIManager(mUIManager);
-    change();
 }
 
 SceneManager::~SceneManager() {
     SAFE_DELETE(mMeshManager);
     SAFE_DELETE(mSpriteManager);
     SAFE_DELETE(mUIManager);
+}
+
+void SceneManager::loadProperties(const rapidjson::Value& inObj) {
+    mCamera->loadProperties(inObj);
+}
+
+void SceneManager::initialize() {
+    Mesh::setMeshManager(mMeshManager);
+    Sprite::setSpriteManager(mSpriteManager);
+    UI::setUIManager(mUIManager);
+
+    mCamera->initialize();
+
+    change();
 }
 
 void SceneManager::update() {

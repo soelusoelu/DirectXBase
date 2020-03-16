@@ -26,7 +26,6 @@ class LevelLoader {
 
 public:
     //グローバルデータを読み込む
-    //なぜかshared_ptrじゃうまくいかなかった
     void loadGlobal(Game* root, const std::string& fileName) const;
     //アクターを読み込む
     bool loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;

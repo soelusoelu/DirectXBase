@@ -9,11 +9,11 @@
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 #include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../System/Game.h"
-#include "../Input/Input.h"
-#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
 GamePlay::GamePlay() :

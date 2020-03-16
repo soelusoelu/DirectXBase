@@ -21,8 +21,8 @@ public:
     void run(HINSTANCE);
     bool initialize();
     void mainLoop();
-    static void quit();
     void loadProperties(const rapidjson::Value& inObj);
+    static void quit();
 
 private:
     std::unique_ptr<Window> mWindow;

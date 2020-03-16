@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <rapidjson/document.h>
 #include <memory>
 
 class Camera;
@@ -13,6 +14,8 @@ class SceneManager {
 public:
     SceneManager(std::shared_ptr<Renderer> renderer);
     ~SceneManager();
+    void loadProperties(const rapidjson::Value& inObj);
+    void initialize();
     void update();
     void draw() const;
 

@@ -51,6 +51,7 @@ bool Game::initialize() {
     mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>(mRenderer);
     Debug::create();
+    mSceneManager = std::make_unique<SceneManager>(mRenderer);
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
 
     mWindow->initWindow(mInstance, 0, 0);
@@ -62,8 +63,7 @@ bool Game::initialize() {
     Random::initialize();
     Input::initialize(mhWnd);
     Debug::initialize(mRenderer);
-
-    mSceneManager = std::make_unique<SceneManager>(mRenderer);
+    mSceneManager->initialize();
 
     return true;
 }
@@ -81,13 +81,14 @@ void Game::mainLoop() {
     Singleton<DirectX>::instance().present();
 }
 
-void Game::quit() {
-    PostQuitMessage(0);
-}
-
 void Game::loadProperties(const rapidjson::Value& inObj) {
     mWindow->loadProperties(inObj);
     mRenderer->loadProperties(inObj);
     mFPSCounter->loadProperties(inObj);
     Debug::loadProperties(inObj);
+    mSceneManager->loadProperties(inObj);
+}
+
+void Game::quit() {
+    PostQuitMessage(0);
 }

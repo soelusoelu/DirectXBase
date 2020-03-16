@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Utility/Math.h"
+#include <rapidjson/document.h>
 #include <memory>
 
 class PlayerActor;
@@ -9,6 +10,8 @@ class Camera {
 public:
     Camera();
     ~Camera();
+    void loadProperties(const rapidjson::Value& inObj);
+    void initialize();
     void update();
     const Vector3& getPosition() const;
     const Matrix4& getView() const;
@@ -19,6 +22,10 @@ private:
     Vector3 mPosition;
     Vector3 mLookAt;
     Vector3 mUp;
+
+    float mFOV;
+    float mNearClip;
+    float mFarClip;
 
     Matrix4 mView;
     Matrix4 mProjection;
