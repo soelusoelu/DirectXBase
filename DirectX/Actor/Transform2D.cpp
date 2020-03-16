@@ -1,5 +1,6 @@
 ﻿#include "Transform2D.h"
 #include "Actor.h"
+#include "../System/Window.h"
 
 Transform2D::Transform2D() :
     mWorldTransform(Matrix4::identity),
@@ -17,9 +18,12 @@ bool Transform2D::computeWorldTransform() {
     if (mIsRecomputeTransform) {
         mWorldTransform = Matrix4::createScale(Vector3(mSize, 1.f)); //テクスチャサイズに
         mWorldTransform *= Matrix4::createTranslation(Vector3(-mPivot, 0.f)); //中心 + ピボットを原点に
-        mWorldTransform *= Matrix4::createScale(Vector3(getScale(), 1.f));
+
+        auto w = static_cast<float>(Window::width()) / static_cast<float>(STANDARD_WINDOW_WIDTH);
+        auto h = static_cast<float>(Window::height()) / static_cast<float>(STANDARD_WINDOW_HEIGHT);
+        mWorldTransform *= Matrix4::createScale(Vector3(getScale() * Vector2(w, h), 1.f));
         mWorldTransform *= Matrix4::createRotationZ(mRotation);
-        mWorldTransform *= Matrix4::createTranslation(Vector3(getPosition(), 1.f));
+        mWorldTransform *= Matrix4::createTranslation(Vector3(getPosition() * Vector2(w, h), 1.f));
 
         mIsRecomputeTransform = false;
 
@@ -32,7 +36,7 @@ const Matrix4& Transform2D::getWorldTransform() const {
     return mWorldTransform;
 }
 
-void Transform2D::setPosition(const Vector2& pos) {
+void Transform2D::setPosition(const Vector2 & pos) {
     mPosition.x = pos.x;
     mPosition.y = pos.y;
     shouldRecomputeTransform();
@@ -42,7 +46,7 @@ const Vector2& Transform2D::getPosition() const {
     return mPosition;
 }
 
-void Transform2D::translate(const Vector2& translation) {
+void Transform2D::translate(const Vector2 & translation) {
     mPosition.x += translation.x;
     mPosition.y += translation.y;
     shouldRecomputeTransform();
@@ -106,7 +110,7 @@ const Vector2& Transform2D::getPivot() const {
     return mPivot;
 }
 
-void Transform2D::setScale(const Vector2& scale) {
+void Transform2D::setScale(const Vector2 & scale) {
     mScale = scale;
     shouldRecomputeTransform();
 }
@@ -121,7 +125,7 @@ const Vector2& Transform2D::getScale() const {
     return mScale;
 }
 
-void Transform2D::setSize(const Vector2& size) {
+void Transform2D::setSize(const Vector2 & size) {
     mSize = size;
     shouldRecomputeTransform();
 }

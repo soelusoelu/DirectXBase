@@ -28,7 +28,7 @@ void Inspector::loadProperties(const rapidjson::Value & inObj) {
     const auto& obj = inObj["inspector"];
     if (obj.IsObject()) {
         JsonHelper::getVector2(obj, "tagScale", &mTagScale);
-        JsonHelper::getVector2(obj, "transformScale", &mElementScale);
+        JsonHelper::getVector2(obj, "elementScale", &mElementScale);
     }
 }
 

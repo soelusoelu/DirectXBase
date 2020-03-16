@@ -18,14 +18,14 @@
       "font": "font2.png"
     },
     "log": {
-      "scale": [ 0.3125, 0.3125 ]
+      "scale": [ 0.5, 0.5 ]
     },
     "fixedDebugInfo": {
-      "scale": [ 0.3125, 0.3125 ]
+      "scale": [ 0.5, 0.5 ]
     },
     "inspector": {
-      "tagScale": [ 0.5, 0.5 ],
-      "transformScale": [ 0.3, 0.3 ]
+      "tagScale": [ 1.0, 1.0 ],
+      "elementScale": [ 0.5, 0.5 ]
     }
   }
 }
