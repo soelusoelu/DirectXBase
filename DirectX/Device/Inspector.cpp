@@ -10,7 +10,7 @@
 #include <list>
 #include <string>
 
-Inspector::Inspector(const std::shared_ptr<DrawString> drawString) :
+Inspector::Inspector(DrawString* drawString) :
     mDrawString(drawString),
     mTagScale(Vector2::one),
     mElementScale(Vector2::one),
@@ -18,6 +18,7 @@ Inspector::Inspector(const std::shared_ptr<DrawString> drawString) :
     mComponentPosition(Vector2::zero),
     mElementPositionX(0.f),
     mValuePositionX(0.f),
+    mOffsetX(0.f),
     mCharWidth(0.f),
     mCharHeight(0.f) {
 }
@@ -37,11 +38,12 @@ void Inspector::initialize() {
     mCharWidth = DrawString::WIDTH * mElementScale.x;
     mCharHeight = DrawString::HEIGHT * mElementScale.y;
 
-    mTransformPosition = Vector2(Window::width(), DrawString::HEIGHT * mTagScale.y + mCharHeight);
+    mOffsetX = mCharWidth * 2;
+    mTransformPosition = Vector2(Window::width() + mOffsetX, DrawString::HEIGHT * mTagScale.y + mCharHeight);
     mComponentPosition = mTransformPosition;
     mComponentPosition.y += mCharHeight * 5;
-    mElementPositionX = Window::width() + mCharWidth * 2;
-    mValuePositionX = Window::width() + mCharWidth * 11;
+    mElementPositionX = mTransformPosition.x + mCharWidth * 2;
+    mValuePositionX = mTransformPosition.x + mCharWidth * 14;
 }
 
 void Inspector::setTarget(const ActorPtr target) {
@@ -67,7 +69,7 @@ void Inspector::drawInspect() const {
     //全コンポーネントの情報を表示
     for (const auto& comp : compList) {
         drawComponent(comp, &drawPos);
-        drawPos.x = Window::width();
+        drawPos.x = mComponentPosition.x;
         drawPos.y += mCharHeight * 2;
     }
 }
@@ -128,8 +130,7 @@ void Inspector::drawComponent(const ComponentPtr component, Vector2 * position) 
     for (const auto& info : debugInfo) {
         pos.x = mElementPositionX;
         pos.y += mCharHeight;
-        auto sub = info.first.substr(0, 8);
-        mDrawString->drawString(sub, pos, mElementScale);
+        mDrawString->drawString(info.first, pos, mElementScale);
         pos.x = mValuePositionX;
         mDrawString->drawString(info.second, pos, mElementScale);
     }

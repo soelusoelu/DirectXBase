@@ -159,9 +159,9 @@ void Renderer::renderToDebug(Matrix4* proj) {
     //原点をスクリーン左上にするために平行移動
     proj->m[3][0] = -1.f;
     proj->m[3][1] = 1.f;
-    //デバッグレイヤー基準のピクセル単位で扱うために
-    proj->m[0][0] = 2.f / Window::debugWidth();
-    proj->m[1][1] = -2.f / Window::debugHeight();
+    //ピクセル単位で扱うために
+    proj->m[0][0] = 2.f / Window::width();
+    proj->m[1][1] = -2.f / Window::height();
 }
 
 void Renderer::removePointLight() {

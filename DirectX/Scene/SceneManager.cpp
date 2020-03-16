@@ -70,14 +70,13 @@ void SceneManager::draw() const {
     mRenderer->renderSprite(&proj);
     //スプライトの一括描画
     mSpriteManager->draw(proj);
+    //テキスト一括描画
+    mRenderer->getDrawString()->drawAll(proj);
 
     //レンダリング領域をデバッグに変更
     mRenderer->renderToDebug(&proj);
     //デバッグ表示
-    Debug::log()->drawLogs();
-    Debug::inspector()->drawInspect();
-    //テキスト一括描画
-    mRenderer->getDrawString()->drawAll(proj);
+    Debug::draw(proj);
 }
 
 void SceneManager::change() {

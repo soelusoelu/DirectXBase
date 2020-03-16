@@ -7,6 +7,7 @@
 class Actor;
 class Component;
 class DrawString;
+class Renderer;
 class Transform3D;
 
 class Inspector {
@@ -17,7 +18,7 @@ class Inspector {
     using TransformPtr = std::shared_ptr<Transform3D>;
 
 public:
-    Inspector(const std::shared_ptr<DrawString> drawString);
+    Inspector(DrawString* drawString);
     ~Inspector();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
@@ -33,7 +34,7 @@ private:
     void drawComponent(const ComponentPtr component, Vector2* position) const;
 
 private:
-    std::shared_ptr<DrawString> mDrawString;
+    DrawString* mDrawString;
     std::weak_ptr<Actor> mTarget;
     Vector2 mTagScale;
     Vector2 mElementScale;
@@ -43,6 +44,8 @@ private:
     float mElementPositionX;
     //値のX軸の位置
     float mValuePositionX;
+    //表示位置を右にずらす分量
+    float mOffsetX;
     //1文字の大きさ
     float mCharWidth;
     float mCharHeight;

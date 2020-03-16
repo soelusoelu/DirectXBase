@@ -3,8 +3,7 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
-Log::Log(std::shared_ptr<DrawString> drawString) :
-    mDrawString(drawString),
+Log::Log() :
     mScale(Vector2::one),
     mNumRowsToDisplay(0) {
 }
@@ -35,13 +34,13 @@ void Log::logWarning(const std::string & message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
 }
 
-void Log::drawLogs() {
+void Log::drawLogs(DrawString* drawString) {
     adjustCapacity();
 
 #ifdef _DEBUG
     auto pos = Vector2(0.f, Window::debugHeight() - DrawString::HEIGHT * mNumRowsToDisplay * mScale.y);
     for (const auto& log : mLogs) {
-        mDrawString->drawString(log.first, pos, mScale, log.second);
+        drawString->drawString(log.first, pos, mScale, log.second);
         pos.y += DrawString::HEIGHT * mScale.y;
     }
 #endif // _DEBUG

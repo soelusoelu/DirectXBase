@@ -50,7 +50,7 @@ bool Game::initialize() {
     mWindow = std::make_unique<Window>();
     mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>(mRenderer);
-    Debug::initialize(mRenderer);
+    Debug::create();
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
 
     mWindow->initWindow(mInstance, 0, 0);
@@ -61,6 +61,7 @@ bool Game::initialize() {
 
     Random::initialize();
     Input::initialize(mhWnd);
+    Debug::initialize(mRenderer);
 
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
 

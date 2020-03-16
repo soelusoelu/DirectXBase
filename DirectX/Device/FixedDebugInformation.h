@@ -11,7 +11,7 @@ class DrawString;
 
 class FixedDebugInformation {
 public:
-    FixedDebugInformation(std::shared_ptr<DrawString> drawString);
+    FixedDebugInformation(DrawString* drawString);
     ~FixedDebugInformation();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
@@ -21,7 +21,7 @@ public:
     void drawActors(std::list<std::shared_ptr<Actor>> actors);
 
 private:
-    std::shared_ptr<DrawString> mDrawString;
+    DrawString* mDrawString;
     //文字のスケール
     Vector2 mScale;
     //"Actors"を表示する位置
@@ -29,5 +29,5 @@ private:
     //画面に表示するログの行数
     int mNumRowsToDisplay;
     //FPSを表示する位置 固定
-    static const Vector2 FPS_POS;
+    Vector2 mFPSPos;
 };

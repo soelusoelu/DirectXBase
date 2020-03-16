@@ -5,11 +5,12 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-FixedDebugInformation::FixedDebugInformation(std::shared_ptr<DrawString> drawString) :
+FixedDebugInformation::FixedDebugInformation(DrawString* drawString) :
     mDrawString(drawString),
     mScale(Vector2::one),
     mActorsPos(Vector2::zero),
-    mNumRowsToDisplay(0) {
+    mNumRowsToDisplay(0),
+    mFPSPos(Vector2::zero) {
 }
 
 FixedDebugInformation::~FixedDebugInformation() = default;
@@ -22,13 +23,14 @@ void FixedDebugInformation::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void FixedDebugInformation::initialize() {
-    mActorsPos = FPS_POS + Vector2(0.f, DrawString::HEIGHT * mScale.y);
+    mFPSPos = Vector2(Window::width() / 2.f, Window::height());
+    mActorsPos = mFPSPos + Vector2(0.f, DrawString::HEIGHT * mScale.y);
     mNumRowsToDisplay = (Window::debugWidth() - Window::height()) / (DrawString::HEIGHT * mScale.y);
 }
 
 void FixedDebugInformation::drawFPS(float fps) const {
 #ifdef _DEBUG
-    auto drawPos = FPS_POS;
+    auto drawPos = mFPSPos;
     std::string str = "fps";
     mDrawString->drawString(str, drawPos, mScale);
     drawPos.x += DrawString::WIDTH * (str.length() + 1) * mScale.x;
@@ -49,5 +51,3 @@ void FixedDebugInformation::drawActors(std::list<std::shared_ptr<Actor>> actors)
     }
 #endif // _DEBUG
 }
-
-const Vector2 FixedDebugInformation::FPS_POS = Vector2(Window::width() / 2.f, Window::height());
