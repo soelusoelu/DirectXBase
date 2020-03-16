@@ -1,8 +1,8 @@
 ﻿#include "Score.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
-#include "../Utility/Input.h"
-#include "../Utility/Keyboard.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
 Score::Score(std::shared_ptr<Renderer> renderer) :

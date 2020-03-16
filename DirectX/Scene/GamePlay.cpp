@@ -5,16 +5,16 @@
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
+#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/Inspector.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../System/Game.h"
-#include "../Utility/Input.h"
-#include "../Utility/Keyboard.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
-#include "../Device/Inspector.h"
-#include "../Utility/Debug.h"
 
 GamePlay::GamePlay() :
     SceneBase(),

@@ -1,6 +1,6 @@
 ﻿#include "FixedDebugInformation.h"
-#include "DrawString.h"
 #include "../Actor/Actor.h"
+#include "../Device/DrawString.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"

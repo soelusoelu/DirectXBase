@@ -4,8 +4,8 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/SoundComponent.h"
 #include "../Device/Time.h"
-#include "../Utility/Input.h"
-#include "../Utility/Keyboard.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 
 PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
     Component(owner, "PlayerMoveComponent", 10),

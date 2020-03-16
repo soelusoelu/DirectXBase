@@ -3,8 +3,8 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/MeshComponent.h"
 #include "../Device/Time.h"
-#include "../Utility/Input.h"
-#include "../Utility/Keyboard.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 
 Field::Field(std::shared_ptr<Renderer> renderer) :
     Actor(renderer, "Field") {

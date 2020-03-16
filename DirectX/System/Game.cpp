@@ -2,16 +2,16 @@
 #include "DirectX.h"
 #include "Texture.h"
 #include "Window.h"
+#include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../Device/FPSCounter.h"
 #include "../Device/Random.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
+#include "../Input/Input.h"
 #include "../Scene/SceneManager.h"
-#include "../Utility/Debug.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
-#include "../Utility/Input.h"
 #include "../Utility/LevelLoader.h"
 
 Game::Game() {

@@ -1,13 +1,11 @@
 ﻿#pragma once
 
 #include "SceneBase.h"
-#include "../Utility/Input.h"
-#include <memory>
 
 class ActorManager;
 class Physics;
 
-class GamePlay : public SceneBase, public std::enable_shared_from_this<GamePlay> {
+class GamePlay : public SceneBase {
     enum class State {
         PLAY,
         PAUSED

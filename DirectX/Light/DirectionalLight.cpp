@@ -3,7 +3,6 @@
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
 #include "../Mesh/Mesh.h"
-#include "../Utility/Input.h"
 #include "../Utility/LevelLoader.h"
 
 DirectionalLight::DirectionalLight() :

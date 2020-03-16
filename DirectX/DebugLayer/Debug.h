@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Math.h"
+#include "../Utility/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>

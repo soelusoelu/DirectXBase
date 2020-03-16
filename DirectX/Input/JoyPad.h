@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Math.h"
+#include "../Utility/Math.h"
 #include <dinput.h>
 
 enum class JoyCode {

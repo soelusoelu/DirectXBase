@@ -1,5 +1,4 @@
 ﻿#include "LevelLoader.h"
-#include "Debug.h"
 #include "Directory.h"
 #include "../Actor/Actor.h"
 #include "../Actor/ActorManager.h"
@@ -14,6 +13,7 @@
 #include "../Component/PointLightComponent.h"
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
+#include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"

@@ -1,8 +1,8 @@
 ﻿#include "Title.h"
 #include "GamePlay.h"
 #include "../Sprite/Sprite.h"
-#include "../Utility/Input.h"
-#include "../Utility/Keyboard.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 
 Title::Title() :
     SceneBase() {

@@ -1,8 +1,8 @@
 ﻿#include "ActorManager.h"
 #include "Actor.h"
 #include "PlayerActor.h"
-#include "../Device/FixedDebugInformation.h"
-#include "../Utility/Debug.h"
+#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/FixedDebugInformation.h"
 #include <algorithm>
 #include <iterator>
 

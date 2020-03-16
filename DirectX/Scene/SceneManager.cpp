@@ -2,9 +2,8 @@
 #include "GamePlay.h"
 #include "Title.h"
 #include "../Camera/Camera.h"
+#include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
-#include "../Device/Inspector.h"
-#include "../Device/Log.h"
 #include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
@@ -13,7 +12,6 @@
 #include "../System/Game.h"
 #include "../UI/UI.h"
 #include "../UI/UIManager.h"
-#include "../Utility/Debug.h"
 
 SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mRenderer(renderer),

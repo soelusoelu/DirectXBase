@@ -1,9 +1,9 @@
 ﻿#include "FPSCounter.h"
 #include "DrawString.h"
-#include "FixedDebugInformation.h"
 #include "Renderer.h"
 #include "Time.h"
-#include "../Utility/Debug.h"
+#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/FixedDebugInformation.h"
 #include "../Utility/LevelLoader.h"
 
 FPSCounter::FPSCounter(std::shared_ptr<Renderer> renderer) :

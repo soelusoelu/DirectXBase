@@ -2,7 +2,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
-#include "../Device/Inspector.h"
+#include "../DebugLayer/Inspector.h"
 #include "../Device/Renderer.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Material.h"

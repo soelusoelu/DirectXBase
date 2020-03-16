@@ -10,8 +10,8 @@
 #include "SubResourceDesc.h"
 #include "Usage.h"
 #include "VertexBuffer.h"
+#include "../DebugLayer/Debug.h"
 #include "../Shader/Shader.h"
-#include "../Utility/Debug.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 

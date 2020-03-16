@@ -30,7 +30,6 @@
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
-    <ClCompile Include="Utility\Input.cpp" />
     <ClCompile Include="Utility\Math.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
@@ -79,16 +78,17 @@
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="Mesh\OBJ.cpp" />
-    <ClCompile Include="Utility\Debug.cpp" />
-    <ClCompile Include="Device\Log.cpp" />
-    <ClCompile Include="Utility\Mouse.cpp" />
-    <ClCompile Include="Utility\Keyboard.cpp" />
-    <ClCompile Include="Utility\JoyPad.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
-    <ClCompile Include="Device\FixedDebugInformation.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
-    <ClCompile Include="Device\Inspector.cpp" />
+    <ClCompile Include="DebugLayer\Debug.cpp" />
+    <ClCompile Include="DebugLayer\Log.cpp" />
+    <ClCompile Include="DebugLayer\FixedDebugInformation.cpp" />
+    <ClCompile Include="DebugLayer\Inspector.cpp" />
+    <ClCompile Include="Input\JoyPad.cpp" />
+    <ClCompile Include="Input\Keyboard.cpp" />
+    <ClCompile Include="Input\Mouse.cpp" />
+    <ClCompile Include="Input\Input.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -116,7 +116,6 @@
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />
-    <ClInclude Include="Utility\Input.h" />
     <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
@@ -173,15 +172,16 @@
     <ClInclude Include="Utility\FileUtil.h" />
     <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="Mesh\OBJ.h" />
-    <ClInclude Include="Utility\Debug.h" />
-    <ClInclude Include="Device\Log.h" />
-    <ClInclude Include="Utility\Mouse.h" />
-    <ClInclude Include="Utility\Keyboard.h" />
-    <ClInclude Include="Utility\JoyPad.h" />
     <ClInclude Include="Device\FPSCounter.h" />
-    <ClInclude Include="Device\FixedDebugInformation.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Utility\Directory.h" />
-    <ClInclude Include="Device\Inspector.h" />
+    <ClInclude Include="DebugLayer\Debug.h" />
+    <ClInclude Include="DebugLayer\Log.h" />
+    <ClInclude Include="DebugLayer\FixedDebugInformation.h" />
+    <ClInclude Include="DebugLayer\Inspector.h" />
+    <ClInclude Include="Input\JoyPad.h" />
+    <ClInclude Include="Input\Keyboard.h" />
+    <ClInclude Include="Input\Mouse.h" />
+    <ClInclude Include="Input\Input.h" />
   </ItemGroup>
 </Project>

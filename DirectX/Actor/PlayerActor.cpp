@@ -1,13 +1,13 @@
 ﻿#include "PlayerActor.h"
+#include "Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/PlayerMoveComponent.h"
 #include "../Component/PointLightComponent.h"
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
-#include "../Device/Log.h"
-#include "../Utility/Debug.h"
-#include "Transform3D.h"
+#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/Log.h"
 
 PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer) :
     Actor(renderer, "Player") {
