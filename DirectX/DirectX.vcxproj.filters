@@ -90,6 +90,7 @@
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="UI\Text.cpp" />
+    <ClCompile Include="DebugLayer\Hierarchy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -185,5 +186,6 @@
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="UI\Text.h" />
+    <ClInclude Include="DebugLayer\Hierarchy.h" />
   </ItemGroup>
 </Project>

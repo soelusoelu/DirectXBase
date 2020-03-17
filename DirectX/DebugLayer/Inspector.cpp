@@ -12,12 +12,14 @@
 
 Inspector::Inspector(DrawString* drawString) :
     mDrawString(drawString),
+    mInspectorPositionX(0.f),
     mTagScale(Vector2::one),
     mElementScale(Vector2::one),
     mTransformPosition(Vector2::zero),
     mComponentPosition(Vector2::zero),
     mElementPositionX(0.f),
     mValuePositionX(0.f),
+    mOffsetCharCountX(0),
     mOffsetX(0.f),
     mCharWidth(0.f),
     mCharHeight(0.f) {
@@ -28,8 +30,10 @@ Inspector::~Inspector() = default;
 void Inspector::loadProperties(const rapidjson::Value & inObj) {
     const auto& obj = inObj["inspector"];
     if (obj.IsObject()) {
+        JsonHelper::getFloat(obj, "inspectorPositionX", &mInspectorPositionX);
         JsonHelper::getVector2(obj, "tagScale", &mTagScale);
         JsonHelper::getVector2(obj, "elementScale", &mElementScale);
+        JsonHelper::getInt(obj, "offsetCharCountX", &mOffsetCharCountX);
     }
 }
 
@@ -38,8 +42,8 @@ void Inspector::initialize() {
     mCharWidth = DrawString::WIDTH * mElementScale.x;
     mCharHeight = DrawString::HEIGHT * mElementScale.y;
 
-    mOffsetX = mCharWidth * 2;
-    mTransformPosition = Vector2(Window::width() + mOffsetX, DrawString::HEIGHT * mTagScale.y + mCharHeight);
+    mOffsetX = mCharWidth * mOffsetCharCountX;
+    mTransformPosition = Vector2(mInspectorPositionX + mOffsetX, DrawString::HEIGHT * mTagScale.y + mCharHeight);
     mComponentPosition = mTransformPosition;
     mComponentPosition.y += mCharHeight * 5;
     mElementPositionX = mTransformPosition.x + mCharWidth * 2;
@@ -76,7 +80,7 @@ void Inspector::drawInspect() const {
 
 void Inspector::drawActorTag(const ActorPtr target) const {
     auto tag = target->tag();
-    auto pos = Vector2(Window::width() + (Window::debugWidth() - Window::width()) / 2.f, 0.f);
+    auto pos = Vector2(mInspectorPositionX + (Window::debugWidth() - mInspectorPositionX) / 2.f, 0.f);
     pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
     mDrawString->drawString(tag, pos, mTagScale);
 }

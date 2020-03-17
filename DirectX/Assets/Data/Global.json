@@ -28,9 +28,16 @@
     "fixedDebugInfo": {
       "scale": [ 0.3125, 0.3125 ]
     },
+    "hierarchy": {
+      "scale": [ 0.3, 0.3 ],
+      "offsetCharCountX": 2,
+      "offsetCharCountY": 3
+    },
     "inspector": {
+      "inspectorPositionX": 1400.0,
       "tagScale": [ 0.5, 0.5 ],
-      "elementScale": [ 0.3, 0.3 ]
+      "elementScale": [ 0.3, 0.3 ],
+      "offsetCharCountX": 2
     }
   }
 }

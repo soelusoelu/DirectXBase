@@ -36,6 +36,7 @@ private:
 private:
     DrawString* mDrawString;
     std::weak_ptr<Actor> mTarget;
+    float mInspectorPositionX;
     Vector2 mTagScale;
     Vector2 mElementScale;
     Vector2 mTransformPosition;
@@ -44,6 +45,8 @@ private:
     float mElementPositionX;
     //値のX軸の位置
     float mValuePositionX;
+    //表示位置を右にずらす文字数
+    int mOffsetCharCountX;
     //表示位置を右にずらす分量
     float mOffsetX;
     //1文字の大きさ

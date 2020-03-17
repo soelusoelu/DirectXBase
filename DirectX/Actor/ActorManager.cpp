@@ -2,7 +2,7 @@
 #include "Actor.h"
 #include "PlayerActor.h"
 #include "../DebugLayer/Debug.h"
-#include "../DebugLayer/FixedDebugInformation.h"
+#include "../DebugLayer/Hierarchy.h"
 #include <algorithm>
 #include <iterator>
 
@@ -23,7 +23,7 @@ void ActorManager::update() {
 
     remove();
 
-    Debug::fixedDebugInfo()->drawActors(mActors);
+    Debug::hierarchy()->drawActors(mActors);
 }
 
 void ActorManager::add(ActorPtr add) {

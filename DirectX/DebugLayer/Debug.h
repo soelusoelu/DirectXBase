@@ -7,6 +7,7 @@
 
 class DrawString;
 class FixedDebugInformation;
+class Hierarchy;
 class Inspector;
 class Log;
 class Renderer;
@@ -21,11 +22,13 @@ public:
     static void draw(const Matrix4& proj);
     static Log* log();
     static FixedDebugInformation* fixedDebugInfo();
+    static Hierarchy* hierarchy();
     static Inspector* inspector();
 
 private:
     static DrawString* mDrawString;
     static Log* mLog;
     static FixedDebugInformation* mFixedDebugInfo;
+    static Hierarchy* mHierarchy;
     static Inspector* mInspector;
 };
