@@ -3,8 +3,19 @@
 #include <iomanip>
 #include <sstream>
 
-std::string StringUtil::spritFirst(const std::string& string, const char delimiter) {
-    return string.substr(0, string.find_first_of(delimiter));
+std::vector<std::string> StringUtil::split(const std::string& src, const char delimiter) {
+    StringArray temp;
+    auto s = src;
+    auto pos = s.find(delimiter);
+    while (pos != std::string::npos) {
+        auto sub = s.substr(0, pos);
+        temp.emplace_back(sub);
+        s = s.substr(pos + 1);
+        pos = s.find(delimiter);
+    }
+    temp.emplace_back(s);
+
+    return temp;
 }
 
 wchar_t* StringUtil::charToWchar(const char* src) {

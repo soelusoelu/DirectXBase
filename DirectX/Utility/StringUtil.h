@@ -4,11 +4,14 @@
 #define TO_STRING(X) # X;
 
 #include <string>
+#include <vector>
 
 class StringUtil {
+    using StringArray = std::vector<std::string>;
+
 public:
-    //デリミタが見つかるまでの文字列を返す
-    static std::string spritFirst(const std::string& string, const char delimiter);
+    //デリミタごとに文字列作成
+    static StringArray split(const std::string& src, const char delimiter);
     //charからWcharへの文字変換
     static wchar_t* charToWchar(const char* src);
     //intからstringへの変換
