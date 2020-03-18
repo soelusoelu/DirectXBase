@@ -23,7 +23,7 @@ void ActorManager::update() {
 
     remove();
 
-    Debug::hierarchy()->drawActors(mActors);
+    Debug::hierarchy()->update(mActors);
 }
 
 void ActorManager::add(ActorPtr add) {

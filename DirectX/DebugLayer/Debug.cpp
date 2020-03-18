@@ -48,6 +48,7 @@ void Debug::windowMessage(const std::string& message) {
 
 void Debug::draw(const Matrix4& proj) {
     mLog->drawLogs(mDrawString);
+    mHierarchy->drawActors();
     mInspector->drawInspect();
     mDrawString->drawAll(proj);
 }

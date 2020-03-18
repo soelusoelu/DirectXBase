@@ -1,7 +1,6 @@
 ﻿#include "UIButton.h"
 
-UIButton::UIButton(const std::string& name, std::function<void()> onClick, const Vector2& pos, const Vector2& dims) :
-    mName(name),
+UIButton::UIButton(std::function<void()> onClick, const Vector2& pos, const Vector2& dims) :
     mOnClick(onClick),
     mPosition(pos),
     mDimensions(dims),
@@ -9,6 +8,10 @@ UIButton::UIButton(const std::string& name, std::function<void()> onClick, const
 }
 
 UIButton::~UIButton() = default;
+
+void UIButton::setClickFunc(std::function<void()> onClick) {
+    mOnClick = onClick;
+}
 
 const Vector2& UIButton::getPosition() const {
     return mPosition;
@@ -22,7 +25,7 @@ bool UIButton::getHighlighted() const {
     return mHighlighted;
 }
 
-bool UIButton::containsPoint(const Vector2& pt) const {
+bool UIButton::containsPoint(const Vector2 & pt) const {
     bool no = pt.x < (mPosition.x) ||
         pt.x > (mPosition.x + mDimensions.x) ||
         pt.y < (mPosition.y) ||

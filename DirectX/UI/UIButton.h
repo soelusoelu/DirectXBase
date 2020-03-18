@@ -2,14 +2,14 @@
 
 #include "../Utility/Math.h"
 #include <functional>
-#include <string>
 
 class UIButton {
 public:
     //ボタン名称、コールバック関数、位置、寸法
-    UIButton(const std::string& name, std::function<void()> onClick, const Vector2& pos, const Vector2& dims);
+    UIButton(std::function<void()> onClick, const Vector2& pos, const Vector2& dims);
     ~UIButton();
 
+    void setClickFunc(std::function<void()> onClick);
     const Vector2& getPosition() const;
     void setHighlighted(bool set);
     bool getHighlighted() const;
@@ -21,7 +21,6 @@ public:
 
 private:
     std::function<void()> mOnClick;
-    std::string mName;
     Vector2 mPosition;
     Vector2 mDimensions;
     bool mHighlighted;
