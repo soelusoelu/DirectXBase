@@ -16,7 +16,10 @@ public:
     ~DrawString();
     void initialize(std::shared_ptr<Renderer> renderer);
     void loadProperties(const rapidjson::Value& inObj);
-    void drawAll(const Matrix4& proj);
+    //保持してる文字列を一括描画
+    void drawAll(const Matrix4& proj) const;
+    //保持してる文字列をすべて削除
+    void clear();
 
     void drawNumber(
         int number,

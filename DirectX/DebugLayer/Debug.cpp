@@ -40,6 +40,10 @@ void Debug::finalize() {
     SAFE_DELETE(mDrawString);
 }
 
+void Debug::update() {
+    mLog->update();
+}
+
 void Debug::windowMessage(const std::string& message) {
 #ifdef _DEBUG
     MessageBoxA(0, message.c_str(), 0, MB_OK);
@@ -47,10 +51,16 @@ void Debug::windowMessage(const std::string& message) {
 }
 
 void Debug::draw(const Matrix4& proj) {
+#ifdef _DEBUG
     mLog->drawLogs(mDrawString);
     mHierarchy->drawActors();
     mInspector->drawInspect();
     mDrawString->drawAll(proj);
+#endif // _DEBUG
+}
+
+void Debug::drawStringClear() {
+    mDrawString->clear();
 }
 
 Log* Debug::log() {

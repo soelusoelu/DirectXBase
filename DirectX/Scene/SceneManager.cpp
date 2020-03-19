@@ -43,6 +43,10 @@ void SceneManager::initialize() {
 }
 
 void SceneManager::update() {
+    //アップデートの最初で文字列削除
+    mRenderer->getDrawString()->clear();
+    Debug::drawStringClear();
+
     //現在のシーンを更新
     mCurrentScene->update();
     //レンダラーの更新
@@ -53,6 +57,8 @@ void SceneManager::update() {
     mMeshManager->update();
     mUIManager->update();
     mSpriteManager->update();
+    //デバッグ
+    Debug::update();
 
     //nullptrじゃなければシーン移行
     auto next = mCurrentScene->getNextScene();
@@ -80,10 +86,12 @@ void SceneManager::draw() const {
     //テキスト一括描画
     mRenderer->getDrawString()->drawAll(proj);
 
+#ifdef _DEBUG
     //レンダリング領域をデバッグに変更
     mRenderer->renderToDebug(&proj);
     //デバッグ表示
     Debug::draw(proj);
+#endif // _DEBUG
 }
 
 void SceneManager::change() {

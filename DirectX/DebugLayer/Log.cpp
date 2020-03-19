@@ -22,6 +22,10 @@ void Log::initialize() {
     mLogs.resize(mNumRowsToDisplay);
 }
 
+void Log::update() {
+    adjustCapacity();
+}
+
 void Log::log(const std::string & message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::white));
 }
@@ -34,16 +38,12 @@ void Log::logWarning(const std::string & message) {
     mLogs.emplace_back(std::make_pair(message, ColorPalette::yellow));
 }
 
-void Log::drawLogs(DrawString* drawString) {
-    adjustCapacity();
-
-#ifdef _DEBUG
+void Log::drawLogs(DrawString* drawString) const {
     auto pos = Vector2(0.f, Window::debugHeight() - DrawString::HEIGHT * mNumRowsToDisplay * mScale.y);
     for (const auto& log : mLogs) {
         drawString->drawString(log.first, pos, mScale, log.second);
         pos.y += DrawString::HEIGHT * mScale.y;
     }
-#endif // _DEBUG
 }
 
 void Log::adjustCapacity() {

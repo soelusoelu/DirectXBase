@@ -26,7 +26,7 @@ void DrawString::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void DrawString::drawAll(const Matrix4 & proj) {
+void DrawString::drawAll(const Matrix4 & proj) const {
     for (const auto& param : mParamsInt) {
         drawInt(param, proj);
     }
@@ -36,7 +36,9 @@ void DrawString::drawAll(const Matrix4 & proj) {
     for (const auto& param : mParamsString) {
         drawString(param, proj);
     }
+}
 
+void DrawString::clear() {
     mParamsInt.clear();
     mParamsFloat.clear();
     mParamsString.clear();

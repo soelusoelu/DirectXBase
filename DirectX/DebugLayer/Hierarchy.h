@@ -19,7 +19,7 @@ public:
     void initialize();
     void update(const std::list<std::shared_ptr<Actor>> actors);
     //マネージャーに登録されてる全アクターを表示
-    void drawActors();
+    void drawActors() const;
 
 private:
     DrawString* mDrawString;

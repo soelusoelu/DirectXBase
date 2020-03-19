@@ -82,7 +82,7 @@ void Hierarchy::update(const std::list<std::shared_ptr<Actor>> actors) {
     }
 }
 
-void Hierarchy::drawActors() {
+void Hierarchy::drawActors() const {
     auto drawPos = mPosition;
     for (const auto& b : mButtons) {
         auto actor = b.second.lock();
