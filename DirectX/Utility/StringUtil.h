@@ -17,5 +17,5 @@ public:
     //intからstringへの変換
     static std::string intToString(int number);
     //floatからstringへの変換
-    static std::string floatToString(float number, int decimalDigits = 1);
+    static std::string floatToString(float number, int decimalDigits = 2);
 };

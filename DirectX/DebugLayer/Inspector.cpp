@@ -143,16 +143,33 @@ void Inspector::drawComponent(const ComponentPtr component, Vector2 * position) 
 }
 
 std::string InspectHelper::vector2ToString(const Vector2 & vec) {
-    return "X " + StringUtil::floatToString(vec.x, 2) + "  Y " + StringUtil::floatToString(vec.y, 2);
+    auto x = "X " + minusPosition(vec.x);
+    x.resize(10);
+    auto y = "Y " + minusPosition(vec.y);
+    return x + y;
 }
 
 std::string InspectHelper::vector3ToString(const Vector3 & vec) {
-    return "X " + StringUtil::floatToString(vec.x, 2) + "  Y " + StringUtil::floatToString(vec.y, 2) + "  Z " + StringUtil::floatToString(vec.z, 2);
+    auto x = "X " + minusPosition(vec.x);
+    x.resize(10);
+    auto y = "Y " + minusPosition(vec.y);
+    y.resize(10);
+    auto z = "Z " + minusPosition(vec.z);
+    return x + y + z;
 }
 
 std::string InspectHelper::quaternionToString(const Quaternion & quaternion) {
-    return "X " + StringUtil::floatToString(quaternion.x, 2) +
-        "  Y " + StringUtil::floatToString(quaternion.y, 2) +
-        "  Z " + StringUtil::floatToString(quaternion.z, 2) +
-        "  W " + StringUtil::floatToString(quaternion.w, 2);
+    auto x = "X " + minusPosition(quaternion.x);
+    x.resize(10);
+    auto y = "Y " + minusPosition(quaternion.y);
+    y.resize(10);
+    auto z = "Z " + minusPosition(quaternion.z);
+    z.resize(10);
+    auto w = "W " + minusPosition(quaternion.w);
+    return x + y + z + w;
+}
+
+std::string InspectHelper::minusPosition(float value) {
+    auto s = StringUtil::floatToString(value);
+    return (value < 0.f) ? s : " " + s;
 }

@@ -20,7 +20,7 @@
     "camera": {
       "fov": 45.0,
       "nearClip": 0.1,
-      "farClip": 100.0
+      "farClip": 1000.0
     },
     "log": {
       "scale": [ 0.3125, 0.3125 ]

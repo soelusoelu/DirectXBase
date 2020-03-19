@@ -59,4 +59,7 @@ public:
     static std::string vector2ToString(const Vector2& vec);
     static std::string vector3ToString(const Vector3& vec);
     static std::string quaternionToString(const Quaternion& quaternion);
+
+private:
+    static std::string minusPosition(float value);
 };
