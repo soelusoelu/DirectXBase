@@ -124,8 +124,8 @@ void DirectX::createDeviceAndSwapChain(const HWND& hWnd) {
     sd.BufferDesc.Width = Window::debugWidth();
     sd.BufferDesc.Height = Window::debugHeight();
 #else
-    sd.BufferDesc.Width = Window::Width();
-    sd.BufferDesc.Height = Window::Height();
+    sd.BufferDesc.Width = Window::width();
+    sd.BufferDesc.Height = Window::height();
 #endif // _DEBUG
     sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     sd.BufferDesc.RefreshRate.Numerator = 60;
@@ -157,8 +157,8 @@ void DirectX::createDepthStencilView() {
     desc.width = Window::debugWidth();
     desc.height = Window::debugHeight();
 #else
-    desc.width = Window::Width();
-    desc.height = Window::Height();
+    desc.width = Window::width();
+    desc.height = Window::height();
 #endif // _DEBUG
     desc.format = Format::FORMAT_D24_UNORM_S8_UINT;
     desc.bindFlags = static_cast<unsigned>(Texture2DBind::TEXTURE_BIND_DEPTH_STENCIL);

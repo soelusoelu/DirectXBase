@@ -74,8 +74,13 @@ int Window::debugHeight() {
 void Window::loadProperties(const rapidjson::Value& inObj) {
     const auto& windowObj = inObj["window"];
     if (windowObj.IsObject()) {
+#ifdef _DEBUG
         JsonHelper::getInt(windowObj, "windowWidth", &mWidth);
         JsonHelper::getInt(windowObj, "windowHeight", &mHeight);
+#else
+        JsonHelper::getInt(windowObj, "releaseWindowWidth", &mWidth);
+        JsonHelper::getInt(windowObj, "releaseWindowHeight", &mHeight);
+#endif // _DEBUG
         JsonHelper::getInt(windowObj, "windowDebugWidth", &mDebugWidth);
         JsonHelper::getInt(windowObj, "windowDebugHeight", &mDebugHeight);
     }

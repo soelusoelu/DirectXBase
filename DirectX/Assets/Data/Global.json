@@ -2,8 +2,10 @@
   "version": 1,
   "globalProperties": {
     "window": {
-      "windowWidth": 1080,
-      "windowHeight": 720,
+      "windowWidth": 1024,
+      "windowHeight": 576,
+      "releaseWindowWidth": 1920,
+      "releaseWindowHeight": 1080,
       "windowDebugWidth": 1920,
       "windowDebugHeight": 1080
     },
