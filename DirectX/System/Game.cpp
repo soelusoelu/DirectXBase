@@ -2,6 +2,7 @@
 #include "DirectX.h"
 #include "Texture.h"
 #include "Window.h"
+#include "../Actor/ActorCreater.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../Device/FPSCounter.h"
@@ -50,6 +51,7 @@ bool Game::initialize() {
     mWindow = std::make_unique<Window>();
     mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>(mRenderer);
+    Singleton<ActorCreater>::instance().initialize(mRenderer);
     Debug::create();
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");

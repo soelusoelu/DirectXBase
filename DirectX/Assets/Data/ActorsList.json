@@ -4,9 +4,16 @@
     {
       "type": "Player",
       "properties": {
-        "position": [ 0.0, 0.0, 0.0 ]
+        "position": [ 0.0, 0.85, 0.0 ],
+        "scale": [ 5.0, 5.0, 5.0 ]
       },
       "components": [
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "Chips/Chips.fbx"
+          }
+        },
         {
           "type": "PointLightComponent",
           "properties": {
@@ -20,7 +27,16 @@
     {
       "type": "Field",
       "properties": {
-      }
+        "position": [ 0.0, 0.0, 0.0 ]
+      },
+      "components": [
+        {
+          "type": "MeshComponent",
+          "properties": {
+            "fileName": "BackGround/test.obj"
+          }
+        }
+      ]
     },
     {
       "type": "Empty",

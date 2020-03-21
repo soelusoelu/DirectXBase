@@ -1,5 +1,6 @@
 ﻿#include "GamePlay.h"
 #include "../Actor/Actor.h"
+#include "../Actor/ActorCreater.h"
 #include "../Actor/ActorManager.h"
 #include "../Actor/PlayerActor.h"
 #include "../Actor/Transform3D.h"
@@ -34,7 +35,8 @@ GamePlay::~GamePlay() {
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
-    Singleton<LevelLoader>::instance().loadActors(mRenderer, "Actors.json");
+    auto p = Singleton<ActorCreater>::instance().create<PlayerActor>("Player");
+    auto f = Singleton<ActorCreater>::instance().create<PlayerActor>("Field");
     auto score = Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
