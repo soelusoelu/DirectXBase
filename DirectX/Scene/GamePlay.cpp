@@ -47,11 +47,6 @@ void GamePlay::update() {
         mActorManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();
-        //The camera loooks at the Player.
-        auto p = mActorManager->getPlayer();
-        if (p) {
-            mCamera->lookAt(p->transform()->getPosition());
-        }
 
         if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
             nextScene(std::make_shared<Title>());

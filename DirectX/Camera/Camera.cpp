@@ -8,9 +8,9 @@ Camera::Camera() :
     mPosition(Vector3::zero),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
-    mFOV(0.f),
-    mNearClip(0.f),
-    mFarClip(0.f),
+    mFOV(45.f),
+    mNearClip(0.1f),
+    mFarClip(100.f),
     mView(Matrix4::identity),
     mProjection(Matrix4::identity) {
 }
@@ -20,6 +20,7 @@ Camera::~Camera() = default;
 void Camera::loadProperties(const rapidjson::Value & inObj) {
     const auto& obj = inObj["camera"];
     if (obj.IsObject()) {
+        JsonHelper::getVector3(obj, "position", &mPosition);
         JsonHelper::getFloat(obj, "fov", &mFOV);
         JsonHelper::getFloat(obj, "nearClip", &mNearClip);
         JsonHelper::getFloat(obj, "farClip", &mFarClip);
@@ -27,7 +28,6 @@ void Camera::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void Camera::initialize() {
-    mPosition.set(5.f, 7.f, -14.f);
     mView = Matrix4::createLookAt(mPosition, mLookAt, mUp);
     mProjection = Matrix4::createPerspectiveFOV(mFOV, Window::width(), Window::height(), mNearClip, mFarClip);
 }
