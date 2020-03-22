@@ -11,7 +11,6 @@
 
 class Actor;
 class ActorManager;
-class Component;
 class Game;
 class Renderer;
 class UI;
@@ -20,17 +19,13 @@ class UIManager;
 class LevelLoader {
     friend class Singleton<LevelLoader>;
 
-    using ActorFunc = std::function<std::shared_ptr<Actor>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
-    using ComponentFunc = std::function<std::shared_ptr<Component>(std::shared_ptr<Actor>, const rapidjson::Value&)>;
     using UIFunc = std::function<std::shared_ptr<UI>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
 
 public:
+    //jsonファイルの読み込み
+    bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc) const;
     //グローバルデータを読み込む
     void loadGlobal(Game* root, const std::string& fileName) const;
-    //アクターを読み込む
-    bool loadActors(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
-    //指定のアクターを読み込む
-    std::shared_ptr<Actor> loadSpecifiedActor(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const;
     //指定のUIを読み込む
     std::shared_ptr<UI> loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const;
     //保存
@@ -42,14 +37,6 @@ private:
     LevelLoader();
     ~LevelLoader();
 
-    //jsonファイルの読み込み
-    bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc) const;
-    //アクターの読み込み
-    void loadActorsProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray) const;
-    //指定のアクターの読み込み
-    std::shared_ptr<Actor> loadSpecifiedActorProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const;
-    //コンポーネントの読み込み
-    void loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) const;
     //指定のUIの読み込み
     std::shared_ptr<UI> loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const;
 
@@ -61,8 +48,6 @@ private:
     void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
 
 private:
-    std::unordered_map<std::string, ActorFunc> mActors;
-    std::unordered_map<std::string, ComponentFunc> mComponents;
     std::unordered_map<std::string, UIFunc> mUIs;
 };
 

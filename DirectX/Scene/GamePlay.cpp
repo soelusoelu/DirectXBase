@@ -2,6 +2,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/ActorCreater.h"
 #include "../Actor/ActorManager.h"
+#include "../Actor/Field.h"
 #include "../Actor/PlayerActor.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
@@ -36,11 +37,11 @@ GamePlay::~GamePlay() {
 void GamePlay::start() {
     //ファイルからアクターを読み込む
     auto p = Singleton<ActorCreater>::instance().create<PlayerActor>("Player");
-    auto f = Singleton<ActorCreater>::instance().create<PlayerActor>("Field");
+    auto f = Singleton<ActorCreater>::instance().create<Field>("Field");
     auto score = Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
-    Debug::inspector()->setTarget(mActorManager->getPlayer());
+    Debug::inspector()->setTarget(p);
 }
 
 void GamePlay::update() {
