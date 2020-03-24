@@ -22,7 +22,8 @@ Inspector::Inspector(DrawString* drawString) :
     mOffsetCharCountX(0),
     mOffsetX(0.f),
     mCharWidth(0.f),
-    mCharHeight(0.f) {
+    mCharHeight(0.f),
+    mMaxElementCharCount(0) {
 }
 
 Inspector::~Inspector() = default;
@@ -48,6 +49,7 @@ void Inspector::initialize() {
     mComponentPosition.y += mCharHeight * 5;
     mElementPositionX = mTransformPosition.x + mCharWidth * 2;
     mValuePositionX = mTransformPosition.x + mCharWidth * 14;
+    mMaxElementCharCount = (mValuePositionX - mElementPositionX) / mCharWidth - 1;
 }
 
 void Inspector::setTarget(const ActorPtr target) {
@@ -133,8 +135,12 @@ void Inspector::drawComponent(const ComponentPtr component, Vector2 * position) 
     //すべてのデバッグ情報を描画
     for (const auto& info : debugInfo) {
         pos.x = mElementPositionX;
+        auto ele = info.first;
+        if (ele.length() > mMaxElementCharCount) {
+            ele = ele.substr(0, mMaxElementCharCount);
+        }
         pos.y += mCharHeight;
-        mDrawString->drawString(info.first, pos, mElementScale);
+        mDrawString->drawString(ele, pos, mElementScale);
         pos.x = mValuePositionX;
         mDrawString->drawString(info.second, pos, mElementScale);
     }

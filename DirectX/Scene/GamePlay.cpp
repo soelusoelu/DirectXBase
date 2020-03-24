@@ -2,8 +2,9 @@
 #include "../Actor/Actor.h"
 #include "../Actor/ActorCreater.h"
 #include "../Actor/ActorManager.h"
-#include "../Actor/Field.h"
+#include "../Actor/FriedChickenManager.h"
 #include "../Actor/PlayerActor.h"
+#include "../Actor/PlayerChickenConnection.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
@@ -21,6 +22,8 @@
 GamePlay::GamePlay() :
     SceneBase(),
     mActorManager(new ActorManager()),
+    mFriedChickenManager(std::make_unique<FriedChickenManager>()),
+    mPCConnection(std::make_unique<PlayerChickenConnection>()),
     mPhysics(new Physics()),
     mState(State::PLAY) {
     Actor::setActorManager(mActorManager);
@@ -36,8 +39,11 @@ GamePlay::~GamePlay() {
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
-    auto p = Singleton<ActorCreater>::instance().create<PlayerActor>("Player");
-    auto f = Singleton<ActorCreater>::instance().create<Field>("Field");
+    auto p = ActorCreater::create<PlayerActor>("Player");
+    mFriedChickenManager->initialize();
+    auto c = mFriedChickenManager->FindNearestChicken(p);
+    mPCConnection->setPlayer(p);
+    mPCConnection->setChicken(c);
     auto score = Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
@@ -46,26 +52,24 @@ void GamePlay::start() {
 
 void GamePlay::update() {
     if (mState == State::PLAY) {
+        auto p = mActorManager->getPlayer();
+        //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
+        auto c = mFriedChickenManager->FindNearestChicken(p, mPCConnection->getChicken());
+        mPCConnection->playerJumpTarget(c);
         //総アクターアップデート
         mActorManager->update();
+        //連結クラス
+        mPCConnection->connect();
         //総当たり判定
         mPhysics->sweepAndPrune();
 
-        if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
-            nextScene(std::make_shared<Title>());
-        }
+        //if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
+        //    nextScene(std::make_shared<Title>());
+        //}
         if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
             Game::quit();
         }
     } else if (mState == State::PAUSED) {
 
     }
-}
-
-void GamePlay::setPlay() {
-    mState = State::PLAY;
-}
-
-void GamePlay::setPause() {
-    mState = State::PAUSED;
 }

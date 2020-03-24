@@ -92,6 +92,10 @@
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
     <ClCompile Include="Actor\ActorCreater.cpp" />
+    <ClCompile Include="Actor\FriedChicken.cpp" />
+    <ClCompile Include="Actor\FriedChickenManager.cpp" />
+    <ClCompile Include="Component\FriedChickenComponent.cpp" />
+    <ClCompile Include="Actor\PlayerChickenConnection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -189,5 +193,9 @@
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
     <ClInclude Include="Actor\ActorCreater.h" />
+    <ClInclude Include="Actor\FriedChicken.h" />
+    <ClInclude Include="Actor\FriedChickenManager.h" />
+    <ClInclude Include="Component\FriedChickenComponent.h" />
+    <ClInclude Include="Actor\PlayerChickenConnection.h" />
   </ItemGroup>
 </Project>

@@ -36,3 +36,24 @@ std::string StringUtil::floatToString(float number, int decimalDigits) {
     oss << std::fixed << std::setprecision(decimalDigits) << number;
     return oss.str();
 }
+
+std::string StringUtil::vector2ToString(const Vector2& vec, int decimalDigits) {
+    auto x = "X " + floatToString(vec.x, decimalDigits);
+    auto y = "Y " + floatToString(vec.y, decimalDigits);
+    return x + "  " + y;
+}
+
+std::string StringUtil::vector3ToString(const Vector3& vec, int decimalDigits) {
+    auto x = "X " + floatToString(vec.x, decimalDigits);
+    auto y = "Y " + floatToString(vec.y, decimalDigits);
+    auto z = "Z " + floatToString(vec.z, decimalDigits);
+    return x + "  " + y + "  " + z;
+}
+
+std::string StringUtil::quaternionToString(const Quaternion& quaternion, int decimalDigits) {
+    auto x = "X " + floatToString(quaternion.x, decimalDigits);
+    auto y = "Y " + floatToString(quaternion.y, decimalDigits);
+    auto z = "Z " + floatToString(quaternion.z, decimalDigits);
+    auto w = "W " + floatToString(quaternion.w, decimalDigits);
+    return x + "  " + y + "  " + z + "  " + w;
+}

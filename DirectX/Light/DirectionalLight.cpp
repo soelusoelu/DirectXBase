@@ -4,6 +4,9 @@
 #include "../Device/Time.h"
 #include "../Mesh/Mesh.h"
 #include "../Utility/LevelLoader.h"
+#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/Log.h"
+#include "../Utility/StringUtil.h"
 
 DirectionalLight::DirectionalLight() :
     mMesh(nullptr),
@@ -15,7 +18,7 @@ DirectionalLight::DirectionalLight() :
 DirectionalLight::~DirectionalLight() = default;
 
 void DirectionalLight::update() {
-    mTransform->rotate(Vector3::right, Time::deltaTime * 30.f);
+    //mTransform->rotate(Vector3::right, Time::deltaTime * 30.f);
     mTransform->computeWorldTransform();
 
     mDirection = Vector3::transform(Vector3::up, mTransform->getRotation());
@@ -28,6 +31,7 @@ void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
         JsonHelper::getVector3(dirObj, "direction", &mDirection);
         JsonHelper::getVector3(dirObj, "color", &mColor);
     }
+    mTransform->rotate(mDirection);
 }
 
 void DirectionalLight::createMesh(std::shared_ptr<Renderer> renderer) {

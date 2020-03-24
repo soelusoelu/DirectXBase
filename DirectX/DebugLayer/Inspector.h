@@ -52,6 +52,8 @@ private:
     //1文字の大きさ
     float mCharWidth;
     float mCharHeight;
+    //変数名の表示限界文字数
+    int mMaxElementCharCount;
 };
 
 class InspectHelper {

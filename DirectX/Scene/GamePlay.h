@@ -1,8 +1,11 @@
 ﻿#pragma once
 
 #include "SceneBase.h"
+#include <memory>
 
 class ActorManager;
+class FriedChickenManager;
+class PlayerChickenConnection;
 class Physics;
 
 class GamePlay : public SceneBase {
@@ -17,11 +20,10 @@ public:
     virtual void start() override;
     virtual void update() override;
 
-    void setPlay();
-    void setPause();
-
 private:
     ActorManager* mActorManager;
+    std::unique_ptr<FriedChickenManager> mFriedChickenManager;
+    std::unique_ptr<PlayerChickenConnection> mPCConnection;
     Physics* mPhysics;
     State mState;
 };

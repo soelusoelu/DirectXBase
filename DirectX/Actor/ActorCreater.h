@@ -8,20 +8,30 @@
 #include <unordered_map>
 
 //練習がてら、ちょい楽できるように
-#define ADD_COMPONENTS(className) { mComponents.emplace((#className), &Component::create<className>); }
+#define ADD_COMPONENT(className) { mComponents.emplace((#className), &Component::create<className>); }
+
+class ActorFactory;
+
+class ActorCreater {
+public:
+    template<typename T>
+    static std::shared_ptr<T> create(const std::string& type) {
+        return Singleton<ActorFactory>::instance().create<T>(type);
+    }
+};
 
 class Actor;
 class Component;
 class Renderer;
 
-class ActorCreater {
-    friend class Singleton<ActorCreater>;
+class ActorFactory {
+    friend class Singleton<ActorFactory>;
     using ActorFunc = std::function<std::shared_ptr<Actor>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
     using ComponentFunc = std::function<std::shared_ptr<Component>(std::shared_ptr<Actor>, const rapidjson::Value&)>;
 
 private:
-    ActorCreater();
-    ~ActorCreater();
+    ActorFactory();
+    ~ActorFactory();
 
 public:
     void initialize(const std::shared_ptr<Renderer> renderer);

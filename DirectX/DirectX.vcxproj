@@ -165,6 +165,10 @@
     <ClCompile Include="DebugLayer\Log.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="DebugLayer\Inspector.cpp" />
+    <ClCompile Include="Actor\FriedChicken.cpp" />
+    <ClCompile Include="Actor\FriedChickenManager.cpp" />
+    <ClCompile Include="Component\FriedChickenComponent.cpp" />
+    <ClCompile Include="Actor\PlayerChickenConnection.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
@@ -250,6 +254,10 @@
     <ClInclude Include="DebugLayer\Log.h" />
     <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="DebugLayer\Inspector.h" />
+    <ClInclude Include="Actor\FriedChicken.h" />
+    <ClInclude Include="Actor\FriedChickenManager.h" />
+    <ClInclude Include="Component\FriedChickenComponent.h" />
+    <ClInclude Include="Actor\PlayerChickenConnection.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />

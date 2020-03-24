@@ -12,7 +12,7 @@
     "fps": 60.0,
     "ambientLight": [ 0.1, 0.1, 0.1 ],
     "directionalLight": {
-      "direction": [ 0.0, 0.0, 0.0 ],
+      "direction": [ -50.0, 0.0, 0.0 ],
       "color": [ 0.5, 0.75, 1.0 ]
     },
     "drawString": {

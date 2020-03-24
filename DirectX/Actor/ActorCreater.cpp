@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/FriedChickenComponent.h"
 #include "../Component/HitPointComponent.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/PlayerMoveComponent.h"
@@ -11,19 +12,20 @@
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
 
-ActorCreater::ActorCreater() :
+ActorFactory::ActorFactory() :
     mRenderer(nullptr) {
-    ADD_COMPONENTS(HitPointComponent);
-    ADD_COMPONENTS(MeshComponent);
-    ADD_COMPONENTS(PlayerMoveComponent);
-    ADD_COMPONENTS(PointLightComponent);
-    ADD_COMPONENTS(SoundComponent);
-    ADD_COMPONENTS(SphereCollisionComponent);
+    ADD_COMPONENT(FriedChickenComponent);
+    ADD_COMPONENT(HitPointComponent);
+    ADD_COMPONENT(MeshComponent);
+    ADD_COMPONENT(PlayerMoveComponent);
+    ADD_COMPONENT(PointLightComponent);
+    ADD_COMPONENT(SoundComponent);
+    ADD_COMPONENT(SphereCollisionComponent);
 }
 
-ActorCreater::~ActorCreater() = default;
+ActorFactory::~ActorFactory() = default;
 
-void ActorCreater::initialize(const std::shared_ptr<Renderer> renderer) {
+void ActorFactory::initialize(const std::shared_ptr<Renderer> renderer) {
     mRenderer = renderer;
 
     const std::string fileName = "ActorsList.json";
@@ -32,7 +34,7 @@ void ActorCreater::initialize(const std::shared_ptr<Renderer> renderer) {
     }
 }
 
-std::shared_ptr<Actor> ActorCreater::loadActors(const std::string& type) const {
+std::shared_ptr<Actor> ActorFactory::loadActors(const std::string& type) const {
     std::shared_ptr<Actor> actor = nullptr;
     const auto& actors = mDoc["actors"];
     if (actors.IsArray()) {
@@ -42,7 +44,7 @@ std::shared_ptr<Actor> ActorCreater::loadActors(const std::string& type) const {
     return actor;
 }
 
-std::shared_ptr<Actor> ActorCreater::loadActorProperties(const rapidjson::Value & inArray, const std::string & type) const {
+std::shared_ptr<Actor> ActorFactory::loadActorProperties(const rapidjson::Value & inArray, const std::string & type) const {
     std::shared_ptr<Actor> actor = nullptr;
     //アクターの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
@@ -76,7 +78,7 @@ std::shared_ptr<Actor> ActorCreater::loadActorProperties(const rapidjson::Value 
     return actor;
 }
 
-void ActorCreater::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) const {
+void ActorFactory::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) const {
     //コンポーネントの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
         //有効なオブジェクトか

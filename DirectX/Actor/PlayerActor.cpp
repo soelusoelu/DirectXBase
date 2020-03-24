@@ -1,32 +1,32 @@
 ﻿#include "PlayerActor.h"
-#include "Transform3D.h"
 #include "../Component/ComponentManager.h"
-#include "../Component/MeshComponent.h"
 #include "../Component/PlayerMoveComponent.h"
-#include "../Component/PointLightComponent.h"
 #include "../Component/SoundComponent.h"
-#include "../Component/SphereCollisionComponent.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Log.h"
 
 PlayerActor::PlayerActor(std::shared_ptr<Renderer> renderer) :
-    Actor(renderer, "Player") {
+    Actor(renderer, "Player"),
+    mMoveComp(nullptr) {
 }
 
 PlayerActor::~PlayerActor() = default;
 
 void PlayerActor::start() {
-    //auto mesh = std::make_shared<MeshComponent>(shared_from_this());
-    //mesh->setMesh("Chips.fbx");
-    //mComponentManager->addComponent(mesh);
     mComponentManager->addComponent<SoundComponent>();
-    //mComponentManager->addComponent<SphereCollisionComponent>();
-    mComponentManager->addComponent<PlayerMoveComponent>();
-    mComponentManager->addComponent<PointLightComponent>();
+    mMoveComp = std::make_shared<PlayerMoveComponent>(shared_from_this());
+    mComponentManager->addComponent(mMoveComp);
 
     Debug::log()->log("Player spawn.");
 }
 
 void PlayerActor::updateActor() {
-    mTransform->rotate(Vector3::up, 0.5f);
+}
+
+bool PlayerActor::isJump() const {
+    return mMoveComp->isJump();
+}
+
+void PlayerActor::setTargetPosition(const Vector3& pos) {
+    mMoveComp->setTargetPosition(pos);
 }

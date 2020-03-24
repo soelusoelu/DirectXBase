@@ -3,6 +3,7 @@
 #include "Actor.h"
 #include <memory>
 
+class PlayerMoveComponent;
 class Renderer;
 
 class PlayerActor : public Actor {
@@ -11,5 +12,10 @@ public:
     ~PlayerActor();
     virtual void start() override;
     virtual void updateActor() override;
+    bool isJump() const;
+    void setTargetPosition(const Vector3& pos);
+
+private:
+    std::shared_ptr<PlayerMoveComponent> mMoveComp;
 };
 
