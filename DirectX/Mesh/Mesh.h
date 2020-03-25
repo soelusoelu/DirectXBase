@@ -37,10 +37,14 @@ public:
     Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
     ~Mesh();
     void addToManager();
-    void createSphere(std::shared_ptr<Sphere>* sphere) const;
     void draw(std::shared_ptr<Camera> camera) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
     std::shared_ptr<IMeshLoader> getMeshData() const;
+    //半径の取得
+    float getRadius() const;
+    //中心座標の取得
+    const Vector3& getCenter() const;
+    //メッシュの破棄
     void destroy();
     void setActive(bool value);
     bool getActive() const;
@@ -53,6 +57,8 @@ private:
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Shader> mShader;
     State mState;
+    float mRadius;
+    Vector3 mCenter;
 
     static MeshManager* mMeshManager;
 };

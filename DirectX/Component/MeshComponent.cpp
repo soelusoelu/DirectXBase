@@ -28,8 +28,12 @@ void MeshComponent::setMesh(const std::string& fileName) {
     mMesh->setTransform(owner()->transform());
 }
 
-std::shared_ptr<Mesh> MeshComponent::getMesh() const {
-    return mMesh;
+const Vector3& MeshComponent::getCenter() const {
+    return mMesh->getCenter();
+}
+
+float MeshComponent::getRadius() const {
+    return mMesh->getRadius();
 }
 
 void MeshComponent::setActive(bool value) {

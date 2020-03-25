@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "../Utility/Collision.h"
 #include "../Utility/Math.h"
 #include <memory>
 #include <string>
@@ -23,5 +22,6 @@ public:
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const = 0;
     virtual std::shared_ptr<VertexArray> getVertexArray() const = 0;
     virtual size_t getNumMaterial() const = 0;
-    virtual void createSphere(std::shared_ptr<Sphere>* sphere) const = 0;
+    virtual Vector3 getCenter() const = 0;
+    virtual float getRadius() const = 0;
 };

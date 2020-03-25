@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "../Utility/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -14,7 +15,8 @@ public:
     ~MeshComponent();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     void setMesh(const std::string& fileName);
-    std::shared_ptr<Mesh> getMesh() const;
+    const Vector3& getCenter() const;
+    float getRadius() const;
     void setActive(bool value);
     bool getActive() const;
 

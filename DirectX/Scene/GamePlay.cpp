@@ -44,6 +44,7 @@ void GamePlay::start() {
     auto c = mFriedChickenManager->FindNearestChicken(p);
     mPCConnection->setPlayer(p);
     mPCConnection->setChicken(c);
+    mPCConnection->initialize();
     auto score = Singleton<LevelLoader>::instance().loadSpecifiedUI(mRenderer, "UIList.json", "Score");
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);

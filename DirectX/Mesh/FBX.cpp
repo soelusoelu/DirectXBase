@@ -69,12 +69,35 @@ size_t FBX::getNumMaterial() const {
     return mMaterials.size();
 }
 
-void FBX::createSphere(std::shared_ptr<Sphere>* sphere) const {
-    //バウンディングスフィア作成
+Vector3 FBX::getCenter() const {
+    auto min = Vector3::one * Math::infinity;
+    auto max = Vector3::one * Math::negInfinity;
+    for (size_t i = 0; i < mVertexArray->getNumVerts(); i++) {
+        if (mVertices[i].pos.x < min.x) {
+            min.x = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.x > max.x) {
+            max.x = mVertices[i].pos.x;
+        }
+        if (mVertices[i].pos.y < min.y) {
+            min.y = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.y > max.y) {
+            max.y = mVertices[i].pos.y;
+        }
+        if (mVertices[i].pos.z < min.z) {
+            min.z = mVertices[i].pos.z;
+        }
+        if (mVertices[i].pos.z > max.z) {
+            max.z = mVertices[i].pos.z;
+        }
+    }
+    return (max + min) / 2.f;
+}
+
+float FBX::getRadius() const {
     float min = Math::infinity;
     float max = Math::negInfinity;
-    Vector3 minVec3 = Vector3::one * Math::infinity;
-    Vector3 maxVec3 = Vector3::one * Math::negInfinity;
     for (size_t i = 0; i < mVertexArray->getNumVerts(); i++) {
         //半径
         if (mVertices[i].pos.x < min) {
@@ -95,31 +118,8 @@ void FBX::createSphere(std::shared_ptr<Sphere>* sphere) const {
         if (mVertices[i].pos.z > max) {
             max = mVertices[i].pos.z;
         }
-
-        //中心
-        if (mVertices[i].pos.x < minVec3.x) {
-            minVec3.x = mVertices[i].pos.x;
-        }
-        if (mVertices[i].pos.x > maxVec3.x) {
-            maxVec3.x = mVertices[i].pos.x;
-        }
-        if (mVertices[i].pos.y < minVec3.y) {
-            minVec3.y = mVertices[i].pos.y;
-        }
-        if (mVertices[i].pos.y > maxVec3.y) {
-            maxVec3.y = mVertices[i].pos.y;
-        }
-        if (mVertices[i].pos.z < minVec3.z) {
-            minVec3.z = mVertices[i].pos.z;
-        }
-        if (mVertices[i].pos.z > maxVec3.z) {
-            maxVec3.z = mVertices[i].pos.z;
-        }
     }
-    float r = (max - min) / 2.f;
-    (*sphere)->radius = r;
-    auto c = (maxVec3 + minVec3) / 2.f;
-    (*sphere)->center = c;
+    return (max - min) / 2.f;
 }
 
 void FBX::perse(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxNode* node, int indent) {

@@ -7,19 +7,27 @@ class PlayerActor;
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection {
+    using PlayerPtr = std::shared_ptr<PlayerActor>;
+    using ChickenPtr = std::shared_ptr<FriedChicken>;
+
 public:
     PlayerChickenConnection();
     ~PlayerChickenConnection();
+    void initialize();
     void connect();
-    void setPlayer(const std::shared_ptr<PlayerActor> player);
-    void setChicken(const std::shared_ptr<FriedChicken> chicken);
-    std::shared_ptr<FriedChicken> getChicken() const;
-    void playerJumpTarget(const std::shared_ptr<FriedChicken> chicken);
+    void setPlayer(const PlayerPtr player);
+    void setChicken(const ChickenPtr chicken);
+    ChickenPtr getChicken() const;
+    void playerJumpTarget(const ChickenPtr chicken);
 
 private:
-    std::shared_ptr<PlayerActor> mPlayer;
+    PlayerPtr mPlayer;
     //プレイヤーの足元の唐揚げ
-    std::shared_ptr<FriedChicken> mChicken;
+    ChickenPtr mChicken;
     //プレイヤーのジャンプターゲット
-    std::shared_ptr<FriedChicken> mJumpTarget;
+    ChickenPtr mJumpTarget;
+
+    //プレイヤーと唐揚げのメッシュ半径
+    float mPlayerRadius;
+    float mChickenRadius;
 };

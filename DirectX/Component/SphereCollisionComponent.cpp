@@ -24,7 +24,8 @@ SphereCollisionComponent::~SphereCollisionComponent() {
 void SphereCollisionComponent::startCollider() {
     auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
     if (mesh) {
-        mesh->getMesh()->createSphere(&mSphere);
+        mSphere->center = mesh->getCenter();
+        mSphere->radius = mesh->getRadius();
         mDefaultCenter = mSphere->center;
         mDefaultRadius = mSphere->radius;
 #ifdef _DEBUG //デバッグ時のみ当たり判定表示

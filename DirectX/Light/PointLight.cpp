@@ -4,7 +4,6 @@
 #include "../Mesh/Mesh.h"
 #include "../Shader/Shader.h"
 #include "../System/InputElement.h"
-#include "../Utility/Collision.h"
 
 PointLight::PointLight() :
     mesh(nullptr),
@@ -17,9 +16,7 @@ PointLight::~PointLight() = default;
 void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
     //メッシュ描画されるとだるいから自己管理
     mesh = std::make_shared<Mesh>(renderer, "Shape/Sphere.obj");
-    auto sphere = std::make_shared<Sphere>();
-    mesh->createSphere(&sphere);
-    radius = sphere->radius;
+    radius = mesh->getRadius();
     shader = renderer->getAssetsManager()->createShader("PointLight.hlsl");
 
     //コンスタントバッファ生成

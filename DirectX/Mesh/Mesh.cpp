@@ -18,7 +18,9 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     mMesh(renderer->getAssetsManager()->createMesh(fileName)),
     mTransform(nullptr),
     mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
-    mState(State::ACTIVE) {
+    mState(State::ACTIVE),
+    mRadius(0.f),
+    mCenter(Vector3::zero) {
 
     //メッシュ用コンスタントバッファの作成
     mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);
@@ -32,6 +34,10 @@ Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
     };
     constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
     mShader->createInputLayout(layout, numElements);
+
+    //半径と中心座標の取得
+    mCenter = mMesh->getCenter();
+    mRadius = mMesh->getRadius();
 }
 
 Mesh::~Mesh() = default;
@@ -40,10 +46,6 @@ void Mesh::addToManager() {
     if (mMeshManager) {
         mMeshManager->add(shared_from_this());
     }
-}
-
-void Mesh::createSphere(std::shared_ptr<Sphere> * sphere) const {
-    mMesh->createSphere(sphere);
 }
 
 void Mesh::draw(std::shared_ptr<Camera> camera) const {
@@ -114,6 +116,14 @@ void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {
 
 std::shared_ptr<IMeshLoader> Mesh::getMeshData() const {
     return mMesh;
+}
+
+float Mesh::getRadius() const {
+    return mRadius;
+}
+
+const Vector3& Mesh::getCenter() const {
+    return mCenter;
 }
 
 void Mesh::destroy() {

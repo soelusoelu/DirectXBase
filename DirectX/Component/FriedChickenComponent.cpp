@@ -1,7 +1,6 @@
 ﻿#include "FriedChickenComponent.h"
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
-#include "../Utility/StringUtil.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Utility/LevelLoader.h"

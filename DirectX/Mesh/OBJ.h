@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "IMeshLoader.h"
-#include "../Utility/Collision.h"
 #include "../Utility/Math.h"
 #include <fstream>
 #include <memory>
@@ -23,7 +22,8 @@ public:
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
     virtual size_t getNumMaterial() const override;
-    virtual void createSphere(std::shared_ptr<Sphere>* sphere) const override;
+    virtual Vector3 getCenter() const override;
+    virtual float getRadius() const override;
 
 private:
     bool preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath); //事前に頂点数などを調べる
