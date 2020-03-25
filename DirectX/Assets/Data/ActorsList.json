@@ -77,7 +77,7 @@
           "properties": {
             "randomRangePositionX": [ -5.0, 5.0 ],
             "randomRangePositionZ": [ -5.0, 5.0 ],
-            "randomRangeScale": [ 0.3, 1.0 ]
+            "randomRangeScale": [ 0.5, 1.0 ]
           }
         }
       ]

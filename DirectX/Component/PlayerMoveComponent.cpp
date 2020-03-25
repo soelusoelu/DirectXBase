@@ -2,7 +2,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
-#include "../Component/SoundComponent.h"
+#include "../Component/MeshComponent.h"
 #include "../Device/Time.h"
 #include "../Input/Input.h"
 #include "../Input/Keyboard.h"
@@ -11,7 +11,7 @@
 
 PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
     Component(owner, "PlayerMoveComponent", 10),
-    mSound(nullptr),
+    mMesh(nullptr),
     mState(State::WALK),
     mJumpTargetPosition(Vector3::zero),
     mMoveSpeed(1.f) {
@@ -20,7 +20,7 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
 PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
-    mSound = owner()->componentManager()->getComponent<SoundComponent>();
+    mMesh = owner()->componentManager()->getComponent<MeshComponent>();
 }
 
 void PlayerMoveComponent::update() {
@@ -59,6 +59,10 @@ void PlayerMoveComponent::setTargetPosition(const Vector3 & pos) {
         return;
     }
     mJumpTargetPosition = pos;
+    //唐揚げの真上ではなく、プレイヤーの位置
+    if (mMesh) {
+        mJumpTargetPosition.y += owner()->transform()->getScale().y * mMesh->getRadius();
+    }
 }
 
 void PlayerMoveComponent::jump() {

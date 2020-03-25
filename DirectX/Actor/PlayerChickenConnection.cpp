@@ -40,11 +40,12 @@ void PlayerChickenConnection::connect() {
     }
     auto pt = mPlayer->transform();
     auto ct = mChicken->transform();
-    auto pPos = pt->getPosition();
-    //pPos.y += pt->getScale().y * mPlayerRadius;
-    //pPos.y += ct->getScale().y * mChickenRadius;
-    mPlayer->transform()->setPosition(pPos);
-    mChicken->transform()->setPosition(pt->getPosition());
+    auto pos = pt->getPosition();
+    pos.y = pt->getScale().y * mPlayerRadius;
+    pos.y += ct->getScale().y * mChickenRadius;
+    pt->setPosition(pos);
+    pos.y = 0;
+    ct->setPosition(pos);
 }
 
 void PlayerChickenConnection::setPlayer(const PlayerPtr player) {

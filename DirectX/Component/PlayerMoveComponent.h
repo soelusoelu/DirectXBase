@@ -5,7 +5,7 @@
 #include <memory>
 
 class Actor;
-class SoundComponent;
+class MeshComponent;
 
 class PlayerMoveComponent : public Component {
     enum class State {
@@ -36,7 +36,7 @@ private:
     void jumpStop();
 
 private:
-    std::shared_ptr<SoundComponent> mSound;
+    std::shared_ptr<MeshComponent> mMesh;
     State mState;
     Vector3 mJumpTargetPosition;
     float mMoveSpeed;
