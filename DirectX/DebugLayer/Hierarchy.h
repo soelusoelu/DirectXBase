@@ -26,6 +26,8 @@ private:
     std::list<std::pair<std::unique_ptr<UIButton>, std::weak_ptr<Actor>>> mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;
+    //行間
+    float mLineSpace;
     //Inspectorの位置
     float mInspectorPositionX;
     //表示する位置

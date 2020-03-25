@@ -9,10 +9,13 @@
 #include "../System/Window.h"
 #include "../UI/UIButton.h"
 #include "../Utility/LevelLoader.h"
+#include "Log.h"
+#include "../Utility/StringUtil.h"
 
 Hierarchy::Hierarchy(DrawString* drawString) :
     mDrawString(drawString),
     mNumRowsToDisplay(0),
+    mLineSpace(0.f),
     mInspectorPositionX(0.f),
     mPosition(Vector2::zero),
     mScale(Vector2::one),
@@ -44,15 +47,16 @@ void Hierarchy::initialize() {
     mPosition = Vector2(Window::width(), 0.f);
     mPosition += Vector2(mOffsetCharCountX * mCharWidth, mOffsetCharCountY * mCharHeight);
 
+    mLineSpace = mCharHeight / 2.f;
     //画面内に収まる行数
-    mNumRowsToDisplay = (Window::debugHeight() - mPosition.y) / mCharHeight;
+    mNumRowsToDisplay = (Window::debugHeight() - mPosition.y) / (mCharHeight + mLineSpace);
 
     mButtons.resize(mNumRowsToDisplay);
     auto pos = mPosition;
     for (auto&& b : mButtons) {
         //全ボタンに当たり判定をつける
         b.first = std::make_unique<UIButton>(nullptr, pos, Vector2(mInspectorPositionX - pos.x, mCharHeight));
-        pos.y += mCharHeight;
+        pos.y += mCharHeight + mLineSpace;
     }
 }
 
@@ -68,6 +72,7 @@ void Hierarchy::update(const std::list<std::shared_ptr<Actor>> actors) {
     }
 
     const auto& mousePos = Input::mouse()->getMousePosition();
+    Debug::log()->log(StringUtil::vector2ToString(mousePos));
     if (Input::mouse()->getMouseDown(MouseCode::LeftButton)) {
         for (const auto& b : mButtons) {
             if (!b.first->containsPoint(mousePos)) {
@@ -83,7 +88,6 @@ void Hierarchy::update(const std::list<std::shared_ptr<Actor>> actors) {
 }
 
 void Hierarchy::drawActors() const {
-    auto drawPos = mPosition;
     for (const auto& b : mButtons) {
         auto actor = b.second.lock();
         //アクターが登録されてなかったら終了
@@ -91,7 +95,6 @@ void Hierarchy::drawActors() const {
             break;
         }
 
-        mDrawString->drawString(actor->tag(), drawPos, mScale);
-        drawPos.y += mCharHeight;
+        mDrawString->drawString(actor->tag(), b.first->getPosition(), mScale);
     }
 }
