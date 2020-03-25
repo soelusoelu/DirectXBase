@@ -53,6 +53,7 @@ void Debug::windowMessage(const std::string& message) {
 void Debug::draw(const Matrix4& proj) {
 #ifdef _DEBUG
     mLog->drawLogs(mDrawString);
+    mFixedDebugInfo->draw();
     mHierarchy->drawActors();
     mInspector->drawInspect();
     mDrawString->drawAll(proj);

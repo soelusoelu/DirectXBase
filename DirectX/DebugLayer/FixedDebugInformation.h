@@ -15,15 +15,16 @@ public:
     ~FixedDebugInformation();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
+    void draw() const;
     //フレームレート表示
-    void drawFPS(float fps) const;
+    void drawFPS(float fps);
 
 private:
     DrawString* mDrawString;
     //文字のスケール
     Vector2 mScale;
-    //画面に表示するログの行数
-    int mNumRowsToDisplay;
     //FPSを表示する位置 固定
     Vector2 mFPSPos;
+    //フレームレート
+    float mFPS;
 };

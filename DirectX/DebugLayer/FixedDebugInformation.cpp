@@ -7,8 +7,8 @@
 FixedDebugInformation::FixedDebugInformation(DrawString* drawString) :
     mDrawString(drawString),
     mScale(Vector2::one),
-    mNumRowsToDisplay(0),
-    mFPSPos(Vector2::zero) {
+    mFPSPos(Vector2::zero),
+    mFPS(0.f) {
 }
 
 FixedDebugInformation::~FixedDebugInformation() = default;
@@ -22,15 +22,16 @@ void FixedDebugInformation::loadProperties(const rapidjson::Value & inObj) {
 
 void FixedDebugInformation::initialize() {
     mFPSPos = Vector2(Window::width() / 2.f, Window::height());
-    mNumRowsToDisplay = (Window::debugWidth() - Window::height()) / (DrawString::HEIGHT * mScale.y);
 }
 
-void FixedDebugInformation::drawFPS(float fps) const {
-#ifdef _DEBUG
+void FixedDebugInformation::draw() const {
     auto drawPos = mFPSPos;
     std::string str = "fps";
     mDrawString->drawString(str, drawPos, mScale);
     drawPos.x += DrawString::WIDTH * (str.length() + 1) * mScale.x;
-    mDrawString->drawString(StringUtil::floatToString(fps, 2), drawPos, mScale);
-#endif // _DEBUG
+    mDrawString->drawString(StringUtil::floatToString(mFPS, 2), drawPos, mScale);
+}
+
+void FixedDebugInformation::drawFPS(float fps) {
+    mFPS = fps;
 }
