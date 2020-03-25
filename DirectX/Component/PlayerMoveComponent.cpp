@@ -21,6 +21,9 @@ PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
     mMesh = owner()->componentManager()->getComponent<MeshComponent>();
+    if (mMesh) {
+        owner()->transform()->setPivot(Vector3::down * mMesh->getRadius());
+    }
 }
 
 void PlayerMoveComponent::update() {
@@ -59,10 +62,6 @@ void PlayerMoveComponent::setTargetPosition(const Vector3 & pos) {
         return;
     }
     mJumpTargetPosition = pos;
-    //唐揚げの真上ではなく、プレイヤーの位置
-    if (mMesh) {
-        mJumpTargetPosition.y += owner()->transform()->getScale().y * mMesh->getRadius();
-    }
 }
 
 void PlayerMoveComponent::jump() {
