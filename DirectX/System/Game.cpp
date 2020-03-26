@@ -75,6 +75,7 @@ void Game::mainLoop() {
     Singleton<DirectX>::instance().clearDepthStencilView();
 
     Input::update();
+    mWindow->update();
 
     mSceneManager->update();
     mSceneManager->draw();

@@ -49,6 +49,8 @@ void Mouse::update() {
     ScreenToClient(mhWnd, &point);
     mMousePosition.x = point.x;
     mMousePosition.y = point.y;
+    mMousePosition.x *= Window::windowToClientSize().x;
+    mMousePosition.y *= Window::windowToClientSize().y;
 
     //マウス座標をウィンドウ幅でクランプ
 #ifdef _DEBUG

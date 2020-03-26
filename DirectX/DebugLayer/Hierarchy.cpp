@@ -9,8 +9,6 @@
 #include "../System/Window.h"
 #include "../UI/UIButton.h"
 #include "../Utility/LevelLoader.h"
-#include "Log.h"
-#include "../Utility/StringUtil.h"
 
 Hierarchy::Hierarchy(DrawString* drawString) :
     mDrawString(drawString),
@@ -72,7 +70,6 @@ void Hierarchy::update(const std::list<std::shared_ptr<Actor>> actors) {
     }
 
     const auto& mousePos = Input::mouse()->getMousePosition();
-    Debug::log()->log(StringUtil::vector2ToString(mousePos));
     if (Input::mouse()->getMouseDown(MouseCode::LeftButton)) {
         for (const auto& b : mButtons) {
             if (!b.first->containsPoint(mousePos)) {

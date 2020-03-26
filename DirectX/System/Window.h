@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "DirectXIncLib.h"
+#include "../Utility/Math.h"
 #include <rapidjson/document.h>
 
 #define TITLE L"DirectX"
@@ -10,11 +11,16 @@ public:
     HRESULT initWindow(HINSTANCE, INT, INT);
     LRESULT msgProc(HWND, UINT, WPARAM, LPARAM);
     HWND gethWnd() const;
+    void update();
     static int width();
     static int height();
     static int debugWidth();
     static int debugHeight();
+    static Vector2 windowToClientSize();
     void loadProperties(const rapidjson::Value& inObj);
+
+private:
+    void updateWindowToClientSize();
 
 private:
     HWND mhWnd;
@@ -22,5 +28,6 @@ private:
     static int mHeight;
     static int mDebugWidth;
     static int mDebugHeight;
+    static Vector2 mWindowToClientSize;
 };
 
