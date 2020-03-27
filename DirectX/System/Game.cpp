@@ -11,6 +11,7 @@
 #include "../Device/Time.h"
 #include "../Input/Input.h"
 #include "../Scene/SceneManager.h"
+#include "../UI/UICreater.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/LevelLoader.h"
@@ -52,6 +53,7 @@ bool Game::initialize() {
     mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>(mRenderer);
     Singleton<ActorFactory>::instance().initialize(mRenderer);
+    Singleton<UIFactory>::instance().initialize(mRenderer);
     Debug::create();
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");

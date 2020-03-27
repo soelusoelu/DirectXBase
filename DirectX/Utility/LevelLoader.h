@@ -14,41 +14,31 @@ class ActorManager;
 class Game;
 class Renderer;
 class UI;
-class UIManager;
 
 class LevelLoader {
     friend class Singleton<LevelLoader>;
 
-    using UIFunc = std::function<std::shared_ptr<UI>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
+private:
+    LevelLoader();
+    ~LevelLoader();
 
 public:
     //jsonファイルの読み込み
     bool loadJSON(const std::string& fileName, rapidjson::Document* outDoc) const;
     //グローバルデータを読み込む
     void loadGlobal(Game* root, const std::string& fileName) const;
-    //指定のUIを読み込む
-    std::shared_ptr<UI> loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string& fileName, const std::string& type) const;
     //保存
     void saveLevel(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
     //UI情報の保存
     void saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string& fileName) const;
 
 private:
-    LevelLoader();
-    ~LevelLoader();
-
-    //指定のUIの読み込み
-    std::shared_ptr<UI> loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inArray, const std::string& type) const;
-
     //グローバルプロパティの保存
     void saveGlobalProperties(rapidjson::Document::AllocatorType& alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value* inObject) const;
     //アクターの保存
     void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
     //コンポーネントの保存
     void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
-
-private:
-    std::unordered_map<std::string, UIFunc> mUIs;
 };
 
 class JsonHelper {

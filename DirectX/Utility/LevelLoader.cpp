@@ -6,17 +6,13 @@
 #include "../Device/Renderer.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
-#include "../UI/Score.h"
+#include "../UI/UI.h"
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <fstream>
 #include <vector>
 
-LevelLoader::LevelLoader() {
-    mUIs = {
-        { "Score", &UI::create<Score> }
-    };
-}
+LevelLoader::LevelLoader() = default;
 
 LevelLoader::~LevelLoader() = default;
 
@@ -63,22 +59,6 @@ void LevelLoader::loadGlobal(Game* root, const std::string & fileName) const {
     }
 
     root->loadProperties(globals);
-}
-
-std::shared_ptr<UI> LevelLoader::loadSpecifiedUI(std::shared_ptr<Renderer> renderer, const std::string & fileName, const std::string & type) const {
-    rapidjson::Document doc;
-    if (!loadJSON(fileName, &doc)) {
-        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
-        return nullptr;
-    }
-
-    std::shared_ptr<UI> ui = nullptr;
-    const rapidjson::Value& uis = doc["UIs"];
-    if (uis.IsArray()) {
-        ui = loadSpecifiedUIProperties(renderer, uis, type);
-    }
-
-    return ui;
 }
 
 void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::string & fileName) const {
@@ -129,7 +109,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
         rapidjson::Value props(rapidjson::kObjectType);
         //プロパティを保存
         ui->saveProperties(doc.GetAllocator(), &props);
-        //プロパティをアクターのjsonオブジェクトに追加
+        //プロパティをUIのjsonオブジェクトに追加
         obj.AddMember("properties", props, doc.GetAllocator());
 
         //UIを配列に追加
@@ -150,38 +130,6 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
     if (outFile.is_open()) {
         outFile << output;
     }
-}
-
-std::shared_ptr<UI> LevelLoader::loadSpecifiedUIProperties(std::shared_ptr<Renderer> renderer, const rapidjson::Value & inArray, const std::string & type) const {
-    //そもそも指定のtypeが存在しているかチェック
-    auto itr = mUIs.find(type);
-    if (itr == mUIs.end()) {
-        Debug::windowMessage(type + "は有効な型ではありません");
-        return nullptr;
-    }
-
-    std::shared_ptr<UI> ui = nullptr;
-    //UIの配列をループ
-    for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
-        //有効なオブジェクトか
-        const rapidjson::Value& uiObj = inArray[i];
-        if (!uiObj.IsObject()) {
-            continue;
-        }
-        //有効な型名か
-        std::string t;
-        if (!JsonHelper::getString(uiObj, "type", &t)) {
-            continue;
-        }
-        //指定のタイプと一致するか
-        if (t != type) {
-            continue;
-        }
-        //mapからUIを生成
-        ui = itr->second(renderer, uiObj["properties"]);
-    }
-
-    return ui;
 }
 
 void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value * inObject) const {

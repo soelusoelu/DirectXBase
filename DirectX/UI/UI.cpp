@@ -25,12 +25,6 @@ void UI::close() {
     mState = State::CLOSING;
 }
 
-void UI::addSprite(SpritePtr sprite) {
-    //スプライトをスプライトマネージャーに登録
-    sprite->addToManager();
-    mSprites.emplace_back(sprite);
-}
-
 void UI::setActive(bool value) {
     mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
 
@@ -59,6 +53,12 @@ const std::string& UI::getTypeName() const {
 
 void UI::setUIManager(UIManager* manager) {
     mUIManager = manager;
+}
+
+void UI::addSprite(SpritePtr sprite) {
+    //スプライトをスプライトマネージャーに登録
+    sprite->addToManager();
+    mSprites.emplace_back(sprite);
 }
 
 void UI::addToManager() {

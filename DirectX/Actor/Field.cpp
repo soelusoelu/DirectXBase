@@ -1,7 +1,5 @@
 #include "Field.h"
 #include "Transform3D.h"
-#include "../Component/ComponentManager.h"
-#include "../Component/MeshComponent.h"
 #include "../Device/Time.h"
 #include "../Input/Input.h"
 #include "../Input/Keyboard.h"
@@ -13,17 +11,14 @@ Field::Field(std::shared_ptr<Renderer> renderer) :
 Field::~Field() = default;
 
 void Field::start() {
-    auto mesh = std::make_shared<MeshComponent>(shared_from_this());
-    mesh->setMesh("BackGround/test.obj");
-    mComponentManager->addComponent(mesh);
+    mTransform->setRotation(Vector3::up, 90.f);
 }
 
 void Field::updateActor() {
     if (Input::keyboard()->getKey(KeyCode::Q)) {
-        transform()->rotate(Vector3::up, -60.f * Time::deltaTime);
+        mTransform->rotate(Vector3::up, -60.f * Time::deltaTime);
     }
     if (Input::keyboard()->getKey(KeyCode::E)) {
-        transform()->rotate(Vector3::up, 60.f * Time::deltaTime);
+        mTransform->rotate(Vector3::up, 60.f * Time::deltaTime);
     }
-    //transform()->rotate(Vector3::up, 60.f * Time::deltaTime);
 }

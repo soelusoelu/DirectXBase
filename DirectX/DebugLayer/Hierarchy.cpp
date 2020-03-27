@@ -31,6 +31,7 @@ void Hierarchy::loadProperties(const rapidjson::Value & inObj) {
         JsonHelper::getVector2(obj, "scale", &mScale);
         JsonHelper::getInt(obj, "offsetCharCountX", &mOffsetCharCountX);
         JsonHelper::getInt(obj, "offsetCharCountY", &mOffsetCharCountY);
+        JsonHelper::getFloat(obj, "lineSpace", &mLineSpace);
     }
     const auto& inspector = inObj["inspector"];
     if (inspector.IsObject()) {
@@ -45,7 +46,6 @@ void Hierarchy::initialize() {
     mPosition = Vector2(Window::width(), 0.f);
     mPosition += Vector2(mOffsetCharCountX * mCharWidth, mOffsetCharCountY * mCharHeight);
 
-    mLineSpace = mCharHeight / 2.f;
     //画面内に収まる行数
     mNumRowsToDisplay = (Window::debugHeight() - mPosition.y) / (mCharHeight + mLineSpace);
 

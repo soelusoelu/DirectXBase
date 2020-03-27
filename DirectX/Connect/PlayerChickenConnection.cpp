@@ -1,7 +1,7 @@
 ﻿#include "PlayerChickenConnection.h"
-#include "FriedChicken.h"
-#include "PlayerActor.h"
-#include "Transform3D.h"
+#include "../Actor/FriedChicken.h"
+#include "../Actor/PlayerActor.h"
+#include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/MeshComponent.h"
 
@@ -9,20 +9,13 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
-    mPlayerRadius(0.f),
     mChickenRadius(0.f) {
 }
 
 PlayerChickenConnection::~PlayerChickenConnection() = default;
 
 void PlayerChickenConnection::initialize() {
-    //メッシュ形状が変わらない前提で
-    if (mPlayer) {
-        auto mesh = mPlayer->componentManager()->getComponent<MeshComponent>();
-        if (mesh) {
-            mPlayerRadius = mesh->getRadius();
-        }
-    }
+    //メッシュ形状が変わらない・統一前提で
     if (mChicken) {
         auto mesh = mChicken->componentManager()->getComponent<MeshComponent>();
         if (mesh) {

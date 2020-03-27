@@ -11,6 +11,7 @@ public:
     virtual void updateUI() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
+    void addScore(int score);
 
 private:
     Vector2 mDrawPosition;

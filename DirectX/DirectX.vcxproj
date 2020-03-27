@@ -158,7 +158,9 @@
     <ClCompile Include="Actor\EmptyActor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
+    <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="DebugLayer\FixedDebugInformation.cpp" />
@@ -168,7 +170,7 @@
     <ClCompile Include="Actor\FriedChicken.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
-    <ClCompile Include="Actor\PlayerChickenConnection.cpp" />
+    <ClCompile Include="UI\UICreater.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
@@ -247,7 +249,9 @@
     <ClInclude Include="Actor\EmptyActor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Connect\ChickenScoreConnection.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
+    <ClInclude Include="Connect\PlayerChickenConnection.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="DebugLayer\FixedDebugInformation.h" />
@@ -257,7 +261,7 @@
     <ClInclude Include="Actor\FriedChicken.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
-    <ClInclude Include="Actor\PlayerChickenConnection.h" />
+    <ClInclude Include="UI\UICreater.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />

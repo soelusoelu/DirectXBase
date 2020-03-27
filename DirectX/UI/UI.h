@@ -25,16 +25,12 @@ public:
     virtual ~UI();
     void update();
     virtual void updateUI() = 0;
+    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
     void close();
-    void addSprite(SpritePtr sprite);
     void setActive(bool value);
     bool getActive() const;
     bool isClosing() const;
     const std::string& getTypeName() const;
-
-    //ロード/セーブ
-    virtual void loadProperties(const rapidjson::Value& inObj) {};
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};
 
     //指定されたプロパティでアクターを生成
     template <typename T>
@@ -46,6 +42,11 @@ public:
     }
 
     static void setUIManager(UIManager* manager);
+
+protected:
+    void addSprite(SpritePtr sprite);
+    //ロード/セーブ
+    virtual void loadProperties(const rapidjson::Value& inObj) {};
 
 private:
     void addToManager();

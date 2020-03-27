@@ -1,8 +1,6 @@
 ﻿#include "Score.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
-#include "../Input/Input.h"
-#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
 Score::Score(std::shared_ptr<Renderer> renderer) :
@@ -16,9 +14,6 @@ Score::Score(std::shared_ptr<Renderer> renderer) :
 Score::~Score() = default;
 
 void Score::updateUI() {
-    if (Input::keyboard()->getKeyDown(KeyCode::U)) {
-        mScore += 10;
-    }
     if (mScore > mHighScore) {
         mHighScore = mScore;
     }
@@ -43,4 +38,8 @@ void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
     JsonHelper::setVector2(alloc, inObj, "position", mDrawPosition);
     JsonHelper::setVector2(alloc, inObj, "scale", mDrawScale);
     JsonHelper::setInt(alloc, inObj, "highScore", mHighScore);
+}
+
+void Score::addScore(int score) {
+    mScore += score;
 }

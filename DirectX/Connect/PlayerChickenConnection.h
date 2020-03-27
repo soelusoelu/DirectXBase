@@ -27,7 +27,6 @@ private:
     //プレイヤーのジャンプターゲット
     ChickenPtr mJumpTarget;
 
-    //プレイヤーと唐揚げのメッシュ半径
-    float mPlayerRadius;
+    //唐揚げのメッシュ半径
     float mChickenRadius;
 };

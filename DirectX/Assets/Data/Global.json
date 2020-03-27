@@ -34,7 +34,8 @@
     "hierarchy": {
       "scale": [ 0.3, 0.3 ],
       "offsetCharCountX": 2,
-      "offsetCharCountY": 3
+      "offsetCharCountY": 3,
+      "lineSpace": 8.0
     },
     "inspector": {
       "inspectorPositionX": 1400.0,

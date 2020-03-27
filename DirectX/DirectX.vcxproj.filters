@@ -95,7 +95,9 @@
     <ClCompile Include="Actor\FriedChicken.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
-    <ClCompile Include="Actor\PlayerChickenConnection.cpp" />
+    <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
+    <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
+    <ClCompile Include="UI\UICreater.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -196,6 +198,8 @@
     <ClInclude Include="Actor\FriedChicken.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
-    <ClInclude Include="Actor\PlayerChickenConnection.h" />
+    <ClInclude Include="Connect\ChickenScoreConnection.h" />
+    <ClInclude Include="Connect\PlayerChickenConnection.h" />
+    <ClInclude Include="UI\UICreater.h" />
   </ItemGroup>
 </Project>
