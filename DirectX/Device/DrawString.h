@@ -51,6 +51,7 @@ public:
         const Vector2& position,
         const Vector2& scale = Vector2::one,
         const Vector3& color = ColorPalette::white,
+        float alpha = 1.f,
         Pivot pivot = Pivot::LEFT_TOP
     );
     void drawStringRightJustified(
@@ -58,6 +59,7 @@ public:
         const Vector2& position,
         const Vector2& scale = Vector2::one,
         const Vector3& color = ColorPalette::white,
+        float alpha = 1.f,
         Pivot pivot = Pivot::RIGHT_TOP
     );
 
@@ -80,6 +82,7 @@ private:
         Vector2 position;
         Vector2 scale;
         Vector3 color;
+        float alpha;
         Pivot pivot;
     };
 

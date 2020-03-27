@@ -46,6 +46,12 @@ void ComponentManager::onUpdateWorldTransform() {
     }
 }
 
+void ComponentManager::onSetActive(bool value) {
+    for (auto&& comp : mComponents) {
+        comp->onSetActive(value);
+    }
+}
+
 std::list<std::shared_ptr<Component>> ComponentManager::getAllComponents() const {
     return mComponents;
 }

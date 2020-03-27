@@ -13,6 +13,10 @@ MeshComponent::~MeshComponent() {
     mMesh->destroy();
 }
 
+void MeshComponent::onSetActive(bool value) {
+    setActive(value);
+}
+
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 

@@ -17,7 +17,7 @@ Actor::~Actor() = default;
 
 void Actor::update() {
     mComponentManager->start();
-    if (mState == State::ACTIVE) {
+    if (getActive()) {
         mComponentManager->update();
         updateActor();
 
@@ -48,6 +48,16 @@ std::shared_ptr<ComponentManager> Actor::componentManager() const {
 
 std::shared_ptr<Transform3D> Actor::transform() const {
     return mTransform;
+}
+
+void Actor::setActive(bool value) {
+    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+
+    mComponentManager->onSetActive(value);
+}
+
+bool Actor::getActive() const {
+    return mState == State::ACTIVE;
 }
 
 bool Actor::isDead() const {

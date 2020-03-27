@@ -21,6 +21,8 @@ public:
     const Vector2& getScale() const;
     void setColor(const Vector3& color);
     const Vector3& getColor() const;
+    void setAlpha(float alpha);
+    float getAlpha() const;
     void setPivot(Pivot pivot);
     Pivot getPivot() const;
     //文字を右詰めにするか
@@ -32,6 +34,7 @@ protected:
     Vector2 mPosition;
     Vector2 mScale;
     Vector3 mColor;
+    float mAlpha;
     Pivot mPivot;
     bool mIsRightJustified;
 };

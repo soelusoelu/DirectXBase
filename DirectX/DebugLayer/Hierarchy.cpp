@@ -32,6 +32,7 @@ void Hierarchy::loadProperties(const rapidjson::Value & inObj) {
         JsonHelper::getInt(obj, "offsetCharCountX", &mOffsetCharCountX);
         JsonHelper::getInt(obj, "offsetCharCountY", &mOffsetCharCountY);
         JsonHelper::getFloat(obj, "lineSpace", &mLineSpace);
+        JsonHelper::getFloat(obj, "nonActiveAlpha", &mNonActiveAlpha);
     }
     const auto& inspector = inObj["inspector"];
     if (inspector.IsObject()) {
@@ -92,6 +93,10 @@ void Hierarchy::drawActors() const {
             break;
         }
 
-        mDrawString->drawString(actor->tag(), b.first->getPosition(), mScale);
+        float alpha = 1.f;
+        if (!actor->getActive()) {
+            alpha = mNonActiveAlpha;
+        }
+        mDrawString->drawString(actor->tag(), b.first->getPosition(), mScale, ColorPalette::white, alpha);
     }
 }

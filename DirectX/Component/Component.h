@@ -22,6 +22,8 @@ public:
     virtual void update() {};
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};
+    //アクティブ・非アクティブ時の切り替え
+    virtual void onSetActive(bool value) {};
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj) {};
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {};

@@ -14,6 +14,7 @@ class Transform3D;
 class Actor : public std::enable_shared_from_this<Actor> {
     enum class State {
         ACTIVE,
+        NON_ACTIVE,
         DEAD
     };
 
@@ -33,6 +34,8 @@ public:
     std::shared_ptr<Renderer> renderer() const;
     std::shared_ptr<ComponentManager> componentManager() const;
     std::shared_ptr<Transform3D> transform() const;
+    void setActive(bool value);
+    bool getActive() const;
     bool isDead() const;
     const std::string& tag() const;
 

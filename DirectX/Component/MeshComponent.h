@@ -13,6 +13,7 @@ class MeshComponent : public Component {
 public:
     MeshComponent(std::shared_ptr<Actor> owner);
     ~MeshComponent();
+    virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     void setMesh(const std::string& fileName);
     const Vector3& getCenter() const;

@@ -89,21 +89,22 @@ void DrawString::drawNumberRightJustified(float number, const Vector2 & position
     drawNumber(number, pos, scale, decimalDigits, Pivot::LEFT_TOP);
 }
 
-void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, Pivot pivot) {
+void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot pivot) {
     ParamString param;
     param.alphabet = alphabet;
     param.position = position;
     param.scale = scale;
     param.color = color;
+    param.alpha = alpha;
     param.pivot = pivot;
 
     mParamsString.emplace_back(param);
 }
 
-void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, Pivot pivot) {
+void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot pivot) {
     auto pos = position;
     pos.x -= alphabet.length() * WIDTH * scale.x;
-    drawString(alphabet, pos, scale, color, Pivot::LEFT_TOP);
+    drawString(alphabet, pos, scale, color, alpha, Pivot::LEFT_TOP);
 }
 
 void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
@@ -196,6 +197,7 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     auto pos = param.position;
     auto scale = param.scale;
     auto color = param.color;
+    auto alpha = param.alpha;
     auto pivot = param.pivot;
 
     const float width = WIDTH * scale.x;
@@ -204,6 +206,7 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
         mFontSprite->transform()->setPosition(pos);
         mFontSprite->transform()->setScale(scale);
         mFontSprite->setColor(color);
+        mFontSprite->setAlpha(alpha);
 
         int t = c;
         t = Math::clamp<int>(t, 32, 127);

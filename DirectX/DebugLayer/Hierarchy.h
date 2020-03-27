@@ -40,4 +40,6 @@ private:
     //1文字の大きさ
     float mCharWidth;
     float mCharHeight;
+    //非アクティブ時の文字の透過度
+    float mNonActiveAlpha;
 };

@@ -28,6 +28,8 @@ public:
 
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
     void onUpdateWorldTransform();
+    //所有するすべてのコンポーネントのonSetActiveを実行
+    void onSetActive(bool value);
 
     //全コンポーネントの取得
     ComponentPtrList getAllComponents() const;

@@ -9,6 +9,7 @@ Text::Text(std::shared_ptr<Renderer> renderer) :
     mPosition(Vector2::zero),
     mScale(Vector2::one),
     mColor(ColorPalette::white),
+    mAlpha(1.f),
     mPivot(Pivot::LEFT_TOP),
     mIsRightJustified(false) {
 }
@@ -22,12 +23,12 @@ void Text::updateUI() {
 
     if (mIsRightJustified) {
         for (const auto& s : split) {
-            mRenderer->getDrawString()->drawStringRightJustified(s, pos, mScale, mColor, mPivot);
+            mRenderer->getDrawString()->drawStringRightJustified(s, pos, mScale, mColor, mAlpha, mPivot);
             pos.y += DrawString::HEIGHT * mScale.y;
         }
     } else {
         for (const auto& s : split) {
-            mRenderer->getDrawString()->drawString(s, pos, mScale, mColor, mPivot);
+            mRenderer->getDrawString()->drawString(s, pos, mScale, mColor, mAlpha, mPivot);
             pos.y += DrawString::HEIGHT * mScale.y;
         }
     }
@@ -63,6 +64,14 @@ void Text::setColor(const Vector3 & color) {
 
 const Vector3& Text::getColor() const {
     return mColor;
+}
+
+void Text::setAlpha(float alpha) {
+    mAlpha = alpha;
+}
+
+float Text::getAlpha() const {
+    return mAlpha;
 }
 
 void Text::setPivot(Pivot pivot) {
