@@ -2,9 +2,7 @@
 #include "../Actor/Actor.h"
 #include "../Actor/ActorCreater.h"
 #include "../Actor/ActorManager.h"
-#include "../Actor/Field.h"
 #include "../Actor/FriedChickenManager.h"
-#include "../Actor/PlayerActor.h"
 #include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
@@ -44,8 +42,7 @@ GamePlay::~GamePlay() {
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
-    auto p = ActorCreater::create<PlayerActor>("Player");
-    //auto f = ActorCreater::create<Field>("Field");
+    auto p = ActorCreater::create("Player");
     mFriedChickenManager->initialize();
     auto c = mFriedChickenManager->FindNearestChicken(p);
     mPCConnection->setPlayer(p);

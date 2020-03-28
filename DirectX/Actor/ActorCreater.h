@@ -10,26 +10,12 @@
 //練習がてら、ちょい楽できるように
 #define ADD_COMPONENT(className) { mComponents.emplace((#className), &Component::create<className>); }
 
-class ActorFactory;
-
-class ActorCreater {
-public:
-    template<typename T>
-    static std::shared_ptr<T> create(const std::string& type) {
-        return Singleton<ActorFactory>::instance().create<T>(type);
-    }
-
-    ActorCreater() = delete;
-    ~ActorCreater() = delete;
-};
-
 class Actor;
 class Component;
 class Renderer;
 
 class ActorFactory {
     friend class Singleton<ActorFactory>;
-    using ActorFunc = std::function<std::shared_ptr<Actor>(std::shared_ptr<Renderer>, const rapidjson::Value&)>;
     using ComponentFunc = std::function<std::shared_ptr<Component>(std::shared_ptr<Actor>, const rapidjson::Value&)>;
 
 private:
@@ -39,15 +25,9 @@ private:
 public:
     void initialize(const std::shared_ptr<Renderer> renderer);
 
-    template<typename T>
-    std::shared_ptr<T> create(const std::string& type) {
-        auto itr = mCreatedActors.find(type);
-        if (itr == mCreatedActors.end()) {
-            mCreatedActors.emplace(type, &Actor::create<T>);
-        }
+    std::shared_ptr<Actor> create(const std::string& type) {
         auto actor = loadActors(type);
-        std::shared_ptr<T> ret = std::dynamic_pointer_cast<T>(actor);
-        return ret;
+        return actor;
     }
 
 private:
@@ -59,8 +39,17 @@ private:
     void loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) const;
 
 private:
-    std::unordered_map<std::string, ActorFunc> mCreatedActors;
     std::unordered_map<std::string, ComponentFunc> mComponents;
     std::shared_ptr<Renderer> mRenderer;
-    rapidjson::Document mDoc;
+    rapidjson::Document mDocument;
+};
+
+class ActorCreater {
+public:
+    static std::shared_ptr<Actor> create(const std::string& type) {
+        return Singleton<ActorFactory>::instance().create(type);
+    }
+
+    ActorCreater() = delete;
+    ~ActorCreater() = delete;
 };

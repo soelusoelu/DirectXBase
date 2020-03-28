@@ -1,6 +1,5 @@
 ﻿#include "ActorManager.h"
 #include "Actor.h"
-#include "PlayerActor.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Hierarchy.h"
 #include <algorithm>
@@ -39,16 +38,15 @@ void ActorManager::clear() {
     mActors.clear();
 }
 
-std::shared_ptr<PlayerActor> ActorManager::getPlayer() const {
-    std::shared_ptr<PlayerActor> p = nullptr;
+std::shared_ptr<Actor> ActorManager::getPlayer() const {
     for (const auto& actor : mActors) {
-        p = std::dynamic_pointer_cast<PlayerActor>(actor);
-        if (p) {
-            return p;
+        //タグでプレイヤーか判断
+        if (actor->tag() == "Player") {
+            return actor;
         }
     }
     //最後まで見つからなければnullptrを返す
-    return p;
+    return nullptr;
 }
 
 void ActorManager::remove() {

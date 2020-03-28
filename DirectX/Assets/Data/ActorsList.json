@@ -38,31 +38,6 @@
       ]
     },
     {
-      "type": "Empty",
-      "properties": {
-        "position": [ 0.0, 2.0, 0.0 ],
-        "rotation": [ 0.0, 0.0, 0.0, 1.0 ],
-        "scale": [ 2.0, 2.0, 2.0 ]
-      },
-      "components": [
-        {
-          "type": "MeshComponent",
-          "properties": {
-            "fileName": "Chips/Chips.fbx"
-          }
-        },
-        {
-          "type": "PointLightComponent",
-          "properties": {
-            "color": [ 0.0, 1.0, 0.0 ],
-            "innerRadius": 0.5,
-            "outerRadius": 1.0,
-            "intensity": 2.5
-          }
-        }
-      ]
-    },
-    {
       "type": "FriedChicken",
       "properties": {
       },

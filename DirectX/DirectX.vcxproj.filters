@@ -20,7 +20,6 @@
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="Actor\Transform2D.cpp" />
-    <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
@@ -45,7 +44,6 @@
     <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
-    <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="Utility\StringUtil.cpp" />
@@ -70,7 +68,6 @@
     <ClCompile Include="Utility\LevelLoader.cpp" />
     <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
-    <ClCompile Include="Actor\EmptyActor.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="UI\Score.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
@@ -91,7 +88,6 @@
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
     <ClCompile Include="Actor\ActorCreater.cpp" />
-    <ClCompile Include="Actor\FriedChicken.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
     <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
@@ -117,7 +113,6 @@
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="Actor\Transform2D.h" />
-    <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Sprite\Sprite.h" />
@@ -146,7 +141,6 @@
     <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Camera\Camera.h" />
-    <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="Mesh\Material.h" />
@@ -178,7 +172,6 @@
     <ClInclude Include="Utility\LevelLoader.h" />
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="System\DirectX.h" />
-    <ClInclude Include="Actor\EmptyActor.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="UI\Score.h" />
     <ClInclude Include="Mesh\FBX.h" />
@@ -200,7 +193,6 @@
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
     <ClInclude Include="Actor\ActorCreater.h" />
-    <ClInclude Include="Actor\FriedChicken.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
     <ClInclude Include="Connect\ChickenScoreConnection.h" />

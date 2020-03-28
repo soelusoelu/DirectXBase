@@ -19,7 +19,6 @@ void Actor::update() {
     mComponentManager->start();
     if (getActive()) {
         mComponentManager->update();
-        updateActor();
 
         computeWorldTransform();
 
@@ -91,8 +90,6 @@ void Actor::initialize(const rapidjson::Value& inObj) {
 
     mComponentManager = std::make_shared<ComponentManager>(shared_from_this());
     mTransform = std::make_shared<Transform3D>(shared_from_this());
-
-    start();
 
     loadProperties(inObj);
 

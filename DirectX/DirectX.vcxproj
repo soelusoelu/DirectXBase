@@ -155,7 +155,6 @@
     <ClCompile Include="Actor\ActorCreater.cpp" />
     <ClCompile Include="Actor\ActorManager.cpp" />
     <ClCompile Include="Actor\Actor.cpp" />
-    <ClCompile Include="Actor\EmptyActor.cpp" />
     <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
@@ -167,7 +166,6 @@
     <ClCompile Include="DebugLayer\Log.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="DebugLayer\Inspector.cpp" />
-    <ClCompile Include="Actor\FriedChicken.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
@@ -201,9 +199,7 @@
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="Actor\Transform2D.cpp" />
-    <ClCompile Include="Actor\PlayerActor.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
-    <ClCompile Include="Actor\Field.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="Device\DrawString.cpp" />
     <ClCompile Include="System\Sampler.cpp" />
@@ -252,7 +248,6 @@
     <ClInclude Include="Actor\ActorCreater.h" />
     <ClInclude Include="Actor\ActorManager.h" />
     <ClInclude Include="Actor\Actor.h" />
-    <ClInclude Include="Actor\EmptyActor.h" />
     <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Connect\ChickenScoreConnection.h" />
@@ -264,7 +259,6 @@
     <ClInclude Include="DebugLayer\Log.h" />
     <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="DebugLayer\Inspector.h" />
-    <ClInclude Include="Actor\FriedChicken.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
     <ClInclude Include="Math\MathUtility.h" />
@@ -301,9 +295,7 @@
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="Actor\Transform2D.h" />
-    <ClInclude Include="Actor\PlayerActor.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
-    <ClInclude Include="Actor\Field.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="Device\DrawString.h" />
     <ClInclude Include="System\RenderTargetViewDesc.h" />

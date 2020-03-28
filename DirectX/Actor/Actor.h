@@ -18,9 +18,8 @@ class Actor : public std::enable_shared_from_this<Actor> {
         DEAD
     };
 
-protected:
-    Actor(std::shared_ptr<Renderer> renderer, const std::string& tag);
 public:
+    Actor(std::shared_ptr<Renderer> renderer, const std::string& tag);
     virtual ~Actor();
 
     //すべての更新
@@ -40,9 +39,8 @@ public:
     const std::string& tag() const;
 
     //指定されたプロパティでアクターを生成
-    template <typename T>
-    static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
-        auto t = std::make_shared<T>(renderer);
+    static std::shared_ptr<Actor> create(std::shared_ptr<Renderer> renderer, const std::string& tag, const rapidjson::Value& inObj) {
+        auto t = std::make_shared<Actor>(renderer, tag);
         t->initialize(inObj);
         return t;
     }
@@ -52,10 +50,6 @@ public:
     ActorManager* getActorManager();
 
 protected:
-    //初期化用
-    virtual void start() = 0;
-    //アクター固有の更新
-    virtual void updateActor() = 0;
     //ロード/セーブ
     virtual void loadProperties(const rapidjson::Value& inObj);
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;

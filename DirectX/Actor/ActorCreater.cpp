@@ -29,14 +29,14 @@ void ActorFactory::initialize(const std::shared_ptr<Renderer> renderer) {
     mRenderer = renderer;
 
     const std::string fileName = "ActorsList.json";
-    if (!Singleton<LevelLoader>::instance().loadJSON(fileName, &mDoc)) {
+    if (!Singleton<LevelLoader>::instance().loadJSON(fileName, &mDocument)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
     }
 }
 
 std::shared_ptr<Actor> ActorFactory::loadActors(const std::string& type) const {
     std::shared_ptr<Actor> actor = nullptr;
-    const auto& actors = mDoc["actors"];
+    const auto& actors = mDocument["actors"];
     if (actors.IsArray()) {
         actor = loadActorProperties(actors, type);
     }
@@ -63,7 +63,7 @@ std::shared_ptr<Actor> ActorFactory::loadActorProperties(const rapidjson::Value 
             continue;
         }
         //mapからアクターを生成
-        actor = mCreatedActors.at(type)(mRenderer, actorObj["properties"]);
+        actor = Actor::create(mRenderer, type, actorObj["properties"]);
         //コンポーネントプロパティがあれば取得
         if (!actorObj.HasMember("components")) {
             break;

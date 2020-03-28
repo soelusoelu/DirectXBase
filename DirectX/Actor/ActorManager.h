@@ -4,7 +4,6 @@
 #include <list>
 
 class Actor;
-class PlayerActor;
 
 class ActorManager {
     using ActorPtr = std::shared_ptr<Actor>;
@@ -17,7 +16,7 @@ public:
     void add(ActorPtr add);
     void clear();
     //アクター配列の中からプレイヤーを取得
-    std::shared_ptr<PlayerActor> getPlayer() const;
+    std::shared_ptr<Actor> getPlayer() const;
 
     //一番最初に見つかったActorの取得
     template<typename T>

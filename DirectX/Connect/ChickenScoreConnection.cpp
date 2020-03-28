@@ -12,7 +12,7 @@ void ChickenScoreConnection::connect() {
     //mScore->addScore(1);
 }
 
-void ChickenScoreConnection::setChicken(const ChickenPtr chicken) {
+void ChickenScoreConnection::setChicken(const ActorPtr chicken) {
     mChicken = chicken;
 }
 
