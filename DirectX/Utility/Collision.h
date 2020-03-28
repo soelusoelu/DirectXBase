@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Math.h"
+#include "../Math/Math.h"
 
 struct Ray {
     Ray(const Vector3& origin, const Vector3& direction, float maxDistance = Math::infinity);

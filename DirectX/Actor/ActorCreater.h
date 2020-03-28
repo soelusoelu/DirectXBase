@@ -18,6 +18,9 @@ public:
     static std::shared_ptr<T> create(const std::string& type) {
         return Singleton<ActorFactory>::instance().create<T>(type);
     }
+
+    ActorCreater() = delete;
+    ~ActorCreater() = delete;
 };
 
 class Actor;

@@ -52,6 +52,27 @@ void Camera::lookAt(const Vector3& position) {
     mLookAt = position;
 }
 
+Vector3 Camera::screenToWorldPoint(const Vector2& position, float z) {
+    // äeçsóÒÇÃãtçsóÒÇéZèo
+    auto invView = mView;
+    auto invProj = mProjection;
+    auto viewport = Matrix4::identity;
+    invView.inverse();
+    invProj.inverse();
+    viewport.m[0][0] = Window::width() / 2.f;
+    viewport.m[1][1] = -Window::height() / 2.f;
+    viewport.m[3][0] = Window::width() / 2.f;
+    viewport.m[3][1] = Window::height() / 2.f;
+    viewport.inverse();
+
+    // ãtïœä∑
+    auto temp = viewport * invProj * invView;
+    Vector3 out = Vector3::zero;
+    //out = Vector3(position, z) * temp;
+
+    return out;
+}
+
 void Camera::calcLookAt() {
     Vector3 zaxis = Vector3::normalize(mLookAt - mPosition);
     Vector3 xaxis = Vector3::normalize(Vector3::cross(mUp, zaxis));

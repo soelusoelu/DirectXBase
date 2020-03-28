@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
 

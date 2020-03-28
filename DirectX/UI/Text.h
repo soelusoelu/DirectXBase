@@ -2,7 +2,7 @@
 
 #include "UI.h"
 #include "../Actor/Transform2D.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <memory>
 #include <string>
 

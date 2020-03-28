@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "IMeshLoader.h"
+#include "../Math/Math.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/Game.h"
 #include "../Utility/Collision.h"
-#include "../Utility/Math.h"
 #include <memory>
 #include <string>
 #include <vector>

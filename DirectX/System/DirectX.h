@@ -5,7 +5,6 @@
 #include "SamplerDesc.h"
 #include "SubResourceDesc.h"
 #include "Texture2DDesc.h"
-#include "../Utility/Math.h"
 #include "../Utility/Singleton.h"
 #include <memory>
 

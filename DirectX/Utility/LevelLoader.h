@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Math.h"
 #include "Singleton.h"
+#include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <functional>
 #include <list>

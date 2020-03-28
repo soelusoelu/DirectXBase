@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "../Math/Math.h"
 #include "../System/Game.h"
-#include "../Utility/Math.h"
 #include <memory>
 
 class Mesh;

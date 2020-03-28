@@ -12,6 +12,9 @@ class UIFactory;
 
 class UICreater {
 public:
+    UICreater() = delete;
+    ~UICreater() = delete;
+
     template<typename T>
     static std::shared_ptr<T> create(const std::string& type) {
         return Singleton<UIFactory>::instance().create<T>(type);

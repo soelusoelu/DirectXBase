@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "IMeshLoader.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <fstream>
 #include <memory>
 #include <string>

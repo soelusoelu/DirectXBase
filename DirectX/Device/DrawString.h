@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../Actor/Transform2D.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <list>
 #include <memory>

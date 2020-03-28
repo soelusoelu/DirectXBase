@@ -2,7 +2,7 @@
 
 #include "DirectXIncLib.h"
 #include "TextureDesc.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <memory>
 #include <string>
 

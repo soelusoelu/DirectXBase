@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "DirectXIncLib.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <rapidjson/document.h>
 
 #define TITLE L"DirectX"

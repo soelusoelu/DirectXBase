@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
 
@@ -17,6 +17,8 @@ public:
     const Matrix4& getView() const;
     const Matrix4& getProjection() const;
     void lookAt(const Vector3& position);
+    //スクリーン座標をワールド座標に変換
+    Vector3 screenToWorldPoint(const Vector2& position, float z);
 
 private:
     void calcLookAt();

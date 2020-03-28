@@ -4,7 +4,7 @@
 #include "FriedChicken.h"
 #include "Transform3D.h"
 #include "../Device/Time.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 
 FriedChickenManager::FriedChickenManager() :
     mSpawnTimer(std::make_unique<Time>(2.f)),

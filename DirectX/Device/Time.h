@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-class Time
-{
+class Time {
 public:
     Time(float sec);
     ~Time();

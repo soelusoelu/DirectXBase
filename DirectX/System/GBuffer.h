@@ -2,7 +2,7 @@
 
 #include "DirectXIncLib.h"
 #include "Game.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <memory>
 #include <vector>
 

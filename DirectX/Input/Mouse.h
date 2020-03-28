@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <dinput.h>
 
 enum class MouseCode {

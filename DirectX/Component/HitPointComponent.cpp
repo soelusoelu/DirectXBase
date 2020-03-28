@@ -1,7 +1,7 @@
 ﻿#include "HitPointComponent.h"
 #include "../Actor/Actor.h"
+#include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/Math.h"
 #include "../Utility/StringUtil.h"
 #include <string>
 

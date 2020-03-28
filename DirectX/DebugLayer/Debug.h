@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -14,6 +14,9 @@ class Renderer;
 
 class Debug {
 public:
+    Debug() = delete;
+    ~Debug() = delete;
+
     static void create();
     static void loadProperties(const rapidjson::Value& inObj);
     static void initialize(std::shared_ptr<Renderer> renderer);

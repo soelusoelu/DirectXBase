@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "../Math/Math.h"
 #include "ComparisonFunc.h"
-#include "../Utility/Math.h"
 
 enum class Filter {
     FILTER_MIN_MAG_MIP_POINT,

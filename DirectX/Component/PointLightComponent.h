@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "../Math/Math.h"
 #include "../System/Game.h"
-#include "../Utility/Math.h"
 #include <memory>
 
 class Actor;

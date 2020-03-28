@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Collider.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include "../Utility/Collision.h"
 #include <memory>
 

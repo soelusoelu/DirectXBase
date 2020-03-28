@@ -3,7 +3,7 @@
 //何でも文字列に変換
 #define TO_STRING(X) # X;
 
-#include "Math.h"
+#include "../Math/Math.h"
 #include <string>
 #include <vector>
 
@@ -11,6 +11,9 @@ class StringUtil {
     using StringArray = std::vector<std::string>;
 
 public:
+    StringUtil() = delete;
+    ~StringUtil() = delete;
+
     //デリミタごとに文字列作成
     static StringArray split(const std::string& src, const char delimiter);
     //charからWcharへの文字変換

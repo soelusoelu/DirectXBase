@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "../System/DirectXIncLib.h"
-#include "../System/SubResourceDesc.h"
 #include "../System/InputElementDesc.h"
+#include "../System/SubResourceDesc.h"
 #include <memory>
 #include <string>
 #include <vector>

@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "Math.h"
 #include "../System/DirectXIncLib.h"
 #include <dinput.h>
 #pragma comment(lib,"dxguid.lib")
