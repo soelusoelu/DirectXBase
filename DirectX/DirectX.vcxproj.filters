@@ -30,7 +30,6 @@
     <ClCompile Include="UI\UI.cpp" />
     <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
-    <ClCompile Include="Utility\Math.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
@@ -99,6 +98,12 @@
     <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
     <ClCompile Include="UI\UICreater.cpp" />
     <ClCompile Include="UI\JumpTarget.cpp" />
+    <ClCompile Include="Math\Vector2.cpp" />
+    <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="Math\Matrix3.cpp" />
+    <ClCompile Include="Math\Matrix4.cpp" />
+    <ClCompile Include="Math\Quaternion.cpp" />
+    <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -126,7 +131,6 @@
     <ClInclude Include="UI\UI.h" />
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />
-    <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
@@ -203,5 +207,13 @@
     <ClInclude Include="Connect\PlayerChickenConnection.h" />
     <ClInclude Include="UI\UICreater.h" />
     <ClInclude Include="UI\JumpTarget.h" />
+    <ClInclude Include="Math\Vector2.h" />
+    <ClInclude Include="Math\Math.h" />
+    <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Math\Matrix3.h" />
+    <ClInclude Include="Math\Matrix4.h" />
+    <ClInclude Include="Math\Quaternion.h" />
+    <ClInclude Include="Math\Vector4.h" />
+    <ClInclude Include="Math\MathUtility.h" />
   </ItemGroup>
 </Project>

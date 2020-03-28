@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "UI.h"
-#include "../Utility/Math.h"
+#include "../Math/Math.h"
 #include <memory>
 
 class Renderer;

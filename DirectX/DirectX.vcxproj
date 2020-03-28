@@ -170,6 +170,10 @@
     <ClCompile Include="Actor\FriedChicken.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
+    <ClCompile Include="Math\Vector2.cpp" />
+    <ClCompile Include="Math\Matrix3.cpp" />
+    <ClCompile Include="Math\Matrix4.cpp" />
+    <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="UI\JumpTarget.cpp" />
     <ClCompile Include="UI\UICreater.cpp" />
     <ClCompile Include="UI\Text.cpp" />
@@ -236,12 +240,13 @@
     <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="Input\Input.cpp" />
-    <ClCompile Include="Utility\Math.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="System\VertexBuffer.cpp" />
+    <ClCompile Include="Math\Vector3.cpp" />
+    <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorCreater.h" />
@@ -262,6 +267,12 @@
     <ClInclude Include="Actor\FriedChicken.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
+    <ClInclude Include="Math\MathUtility.h" />
+    <ClInclude Include="Math\Math.h" />
+    <ClInclude Include="Math\Vector2.h" />
+    <ClInclude Include="Math\Matrix3.h" />
+    <ClInclude Include="Math\Matrix4.h" />
+    <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="UI\JumpTarget.h" />
     <ClInclude Include="UI\UICreater.h" />
     <ClInclude Include="UI\Text.h" />
@@ -340,12 +351,13 @@
     <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="Utility\Math.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="System\VertexBuffer.h" />
+    <ClInclude Include="Math\Vector3.h" />
+    <ClInclude Include="Math\Vector4.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shader\Deferred.hlsl">
