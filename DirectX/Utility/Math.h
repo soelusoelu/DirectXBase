@@ -874,25 +874,6 @@ public:
         return Matrix4(temp);
     }
 
-    static Matrix4 createLookAt(const Vector3& eye, const Vector3& target, const Vector3& up) {
-        Vector3 zaxis = Vector3::normalize(target - eye);
-        Vector3 xaxis = Vector3::normalize(Vector3::cross(up, zaxis));
-        Vector3 yaxis = Vector3::normalize(Vector3::cross(zaxis, xaxis));
-        Vector3 trans;
-        trans.x = -Vector3::dot(xaxis, eye);
-        trans.y = -Vector3::dot(yaxis, eye);
-        trans.z = -Vector3::dot(zaxis, eye);
-
-        float temp[4][4] =
-        {
-            { xaxis.x, yaxis.x, zaxis.x, 0.0f },
-            { xaxis.y, yaxis.y, zaxis.y, 0.0f },
-            { xaxis.z, yaxis.z, zaxis.z, 0.0f },
-            { trans.x, trans.y, trans.z, 1.0f }
-        };
-        return Matrix4(temp);
-    }
-
     static Matrix4 createOrtho(float width, float height, float _near, float _far) {
         float temp[4][4] =
         {
@@ -900,19 +881,6 @@ public:
             { 0.0f, -2.0f / height, 0.0f, 0.0f },
             { 0.0f, 0.0f, 1.0f / (_far - _near), 0.0f },
             { -1.0f, 1.0f, _near / (_near - _far), 1.0f }
-        };
-        return Matrix4(temp);
-    }
-
-    static Matrix4 createPerspectiveFOV(float fovY, float width, float height, float _near, float _far) {
-        float yScale = Math::cot(fovY / 2.0f);
-        float xScale = yScale * height / width;
-        float temp[4][4] =
-        {
-            { xScale, 0.0f, 0.0f, 0.0f },
-            { 0.0f, yScale, 0.0f, 0.0f },
-            { 0.0f, 0.0f, _far / (_far - _near), 1.0f },
-            { 0.0f, 0.0f, -_near * _far / (_far - _near), 0.0f }
         };
         return Matrix4(temp);
     }

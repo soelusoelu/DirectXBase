@@ -98,6 +98,7 @@
     <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
     <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
     <ClCompile Include="UI\UICreater.cpp" />
+    <ClCompile Include="UI\JumpTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor\ActorManager.h" />
@@ -201,5 +202,6 @@
     <ClInclude Include="Connect\ChickenScoreConnection.h" />
     <ClInclude Include="Connect\PlayerChickenConnection.h" />
     <ClInclude Include="UI\UICreater.h" />
+    <ClInclude Include="UI\JumpTarget.h" />
   </ItemGroup>
 </Project>

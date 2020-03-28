@@ -61,10 +61,13 @@ void UI::addSprite(SpritePtr sprite) {
     mSprites.emplace_back(sprite);
 }
 
-void UI::addToManager() {
+void UI::initialize(const rapidjson::Value& inObj) {
     if (mUIManager) {
         mUIManager->add(shared_from_this());
     }
+
+    loadProperties(inObj);
+    start();
 }
 
 UIManager* UI::mUIManager = nullptr;

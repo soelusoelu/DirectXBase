@@ -19,6 +19,10 @@ public:
     void lookAt(const Vector3& position);
 
 private:
+    void calcLookAt();
+    void calcPerspectiveFOV(float width, float height);
+
+private:
     Vector3 mPosition;
     Vector3 mLookAt;
     Vector3 mUp;

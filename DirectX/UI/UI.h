@@ -36,20 +36,19 @@ public:
     template <typename T>
     static std::shared_ptr<UI> create(std::shared_ptr<Renderer> renderer, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>(renderer);
-        t->addToManager();
-        t->loadProperties(inObj);
+        t->initialize(inObj);
         return t;
     }
 
     static void setUIManager(UIManager* manager);
 
 protected:
-    void addSprite(SpritePtr sprite);
-    //ロード/セーブ
+    virtual void start() {};
     virtual void loadProperties(const rapidjson::Value& inObj) {};
+    void addSprite(SpritePtr sprite);
 
 private:
-    void addToManager();
+    void initialize(const rapidjson::Value& inObj);
 
 protected:
     std::shared_ptr<Renderer> mRenderer;

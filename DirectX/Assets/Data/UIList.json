@@ -13,6 +13,15 @@
                 ],
                 "highScore": 340
             }
+        },
+        {
+            "type": "JumpTarget",
+            "properties": {
+                "textureScale": [
+                    1.0,
+                    1.0
+                ]
+            }
         }
     ]
 }

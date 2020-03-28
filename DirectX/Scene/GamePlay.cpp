@@ -19,6 +19,7 @@
 #include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../System/Game.h"
+#include "../UI/JumpTarget.h"
 #include "../UI/Score.h"
 #include "../UI/UICreater.h"
 
@@ -51,6 +52,7 @@ void GamePlay::start() {
     mPCConnection->setChicken(c);
     mPCConnection->initialize();
     auto score = UICreater::create<Score>("Score");
+    auto jt = UICreater::create<JumpTarget>("JumpTarget");
     mCSConnection->setChicken(c);
     mCSConnection->setScore(score);
 

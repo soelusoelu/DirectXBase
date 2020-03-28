@@ -170,6 +170,7 @@
     <ClCompile Include="Actor\FriedChicken.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
+    <ClCompile Include="UI\JumpTarget.cpp" />
     <ClCompile Include="UI\UICreater.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
@@ -261,6 +262,7 @@
     <ClInclude Include="Actor\FriedChicken.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
+    <ClInclude Include="UI\JumpTarget.h" />
     <ClInclude Include="UI\UICreater.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
