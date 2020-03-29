@@ -3,6 +3,7 @@
 #include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/MeshComponent.h"
+#include "../Component/PlayerMoveComponent.h"
 
 PlayerChickenConnection::PlayerChickenConnection() :
     mPlayer(nullptr),
@@ -24,13 +25,13 @@ void PlayerChickenConnection::initialize() {
 }
 
 void PlayerChickenConnection::connect() {
-    //if (mPlayer->isJump()) {
-    //    if (mChicken != mJumpTarget) {
-    //        mChicken = mJumpTarget;
-    //    }
-    //    return;
-    //}
-    auto pt = mPlayer->transform();
+    if (mPlayer->isJump()) {
+        if (mChicken != mJumpTarget) {
+            mChicken = mJumpTarget;
+        }
+        return;
+    }
+    auto pt = mPlayer->owner()->transform();
     auto ct = mChicken->transform();
     auto pos = pt->getPosition();
     pos.y = ct->getScale().y * mChickenRadius;
@@ -40,7 +41,7 @@ void PlayerChickenConnection::connect() {
 }
 
 void PlayerChickenConnection::setPlayer(const ActorPtr player) {
-    mPlayer = player;
+    mPlayer = player->componentManager()->getComponent<PlayerMoveComponent>();
 }
 
 void PlayerChickenConnection::setChicken(const ActorPtr chicken) {
@@ -55,5 +56,5 @@ void PlayerChickenConnection::playerJumpTarget(const ActorPtr chicken) {
     mJumpTarget = chicken;
     auto pos = mJumpTarget->transform()->getPosition();
     pos.y += mJumpTarget->transform()->getScale().y * mChickenRadius;
-    //mPlayer->setTargetPosition(pos);
+    mPlayer->setTargetPosition(pos);
 }

@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 class Actor;
+class PlayerMoveComponent;
 
 #include <memory>
 
@@ -19,7 +20,7 @@ public:
     void playerJumpTarget(const ActorPtr chicken);
 
 private:
-    ActorPtr mPlayer;
+    std::shared_ptr<PlayerMoveComponent> mPlayer;
     //プレイヤーの足元の唐揚げ
     ActorPtr mChicken;
     //プレイヤーのジャンプターゲット

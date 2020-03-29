@@ -34,7 +34,7 @@ void ActorFactory::initialize(const std::shared_ptr<Renderer> renderer) {
     }
 }
 
-std::shared_ptr<Actor> ActorFactory::loadActors(const std::string& type) const {
+std::shared_ptr<Actor> ActorFactory::loadActors(const std::string & type) const {
     std::shared_ptr<Actor> actor = nullptr;
     const auto& actors = mDocument["actors"];
     if (actors.IsArray()) {
@@ -78,7 +78,7 @@ std::shared_ptr<Actor> ActorFactory::loadActorProperties(const rapidjson::Value 
     return actor;
 }
 
-void ActorFactory::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value& inArray) const {
+void ActorFactory::loadComponents(std::shared_ptr<Actor> actor, const rapidjson::Value & inArray) const {
     //コンポーネントの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
         //有効なオブジェクトか
@@ -97,14 +97,7 @@ void ActorFactory::loadComponents(std::shared_ptr<Actor> actor, const rapidjson:
             Debug::windowMessage(type + "は有効な型ではありません");
             continue;
         }
-        //アクターがそのコンポーネントを保持しているか
-        auto comp = actor->componentManager()->getComponent(itr->first);
-        if (comp) {
-            //プロパティをロード
-            comp->loadProperties(compObj["properties"]);
-        } else {
-            //新規コンポーネントを生成
-            comp = itr->second(actor, compObj["properties"]);
-        }
+        //新規コンポーネントを生成
+        itr->second(actor, compObj["properties"]);
     }
 }

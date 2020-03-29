@@ -16,7 +16,7 @@ class Renderer;
 
 class ActorFactory {
     friend class Singleton<ActorFactory>;
-    using ComponentFunc = std::function<std::shared_ptr<Component>(std::shared_ptr<Actor>, const rapidjson::Value&)>;
+    using ComponentFunc = std::function<void(std::shared_ptr<Actor>, const rapidjson::Value&)>;
 
 private:
     ActorFactory();

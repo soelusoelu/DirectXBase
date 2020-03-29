@@ -38,11 +38,10 @@ public:
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
-    static std::shared_ptr<Component> create(std::shared_ptr<Actor> actor, const rapidjson::Value& inObj) {
+    static void create(std::shared_ptr<Actor> actor, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>(actor);
         t->owner()->componentManager()->addComponent(t);
         t->loadProperties(inObj);
-        return t;
     }
 
 private:
