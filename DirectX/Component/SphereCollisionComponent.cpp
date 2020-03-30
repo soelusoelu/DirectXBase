@@ -1,12 +1,13 @@
 ﻿#include "SphereCollisionComponent.h"
 #include "MeshComponent.h"
-#include "../Mesh/Mesh.h"
-#include "../Actor/Actor.h"
-#include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
+#include "../Mesh/Mesh.h"
+#include "../Utility/StringUtil.h"
 
-SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<Actor> owner) :
+SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<GameObject> owner) :
     Collider(owner, "SphereCollisionComponent"),
     mSphere(std::make_shared<Sphere>(Vector3::zero, 0.f)),
     mDefaultCenter(Vector3::zero),

@@ -1,27 +1,34 @@
 {
-    "UIs": [
+  "UIs": [
+    {
+      "type": "Score",
+      "components": [
         {
-            "type": "Score",
-            "properties": {
-                "position": [
-                    1920.0,
-                    0.0
-                ],
-                "scale": [
-                    1.0,
-                    1.0
-                ],
-                "highScore": 340
-            }
+          "type": "Score",
+          "properties": {
+            "position": [ 1920.0, 0.0 ],
+            "scale": [ 1.0, 1.0 ],
+            "highScore": 340
+          }
+        }
+      ]
+    },
+    {
+      "type": "JumpTarget",
+      "components": [
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "circleP.png"
+          }
         },
         {
-            "type": "JumpTarget",
-            "properties": {
-                "textureScale": [
-                    1.0,
-                    1.0
-                ]
-            }
+          "type": "JumpTarget",
+          "properties": {
+            "textureScale": [ 1.0, 1.0 ]
+          }
         }
-    ]
+      ]
+    }
+  ]
 }

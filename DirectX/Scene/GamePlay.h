@@ -3,7 +3,6 @@
 #include "SceneBase.h"
 #include <memory>
 
-class ActorManager;
 class FriedChickenManager;
 class PlayerChickenConnection;
 class ChickenScoreConnection;
@@ -22,7 +21,6 @@ public:
     virtual void update() override;
 
 private:
-    ActorManager* mActorManager;
     std::unique_ptr<FriedChickenManager> mFriedChickenManager;
     std::unique_ptr<PlayerChickenConnection> mPCConnection;
     std::unique_ptr<ChickenScoreConnection> mCSConnection;

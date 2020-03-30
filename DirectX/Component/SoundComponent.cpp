@@ -1,10 +1,10 @@
 #include "SoundComponent.h"
-#include "../Actor/Actor.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../Device/Sound.h"
+#include "../GameObject/GameObject.h"
 
-SoundComponent::SoundComponent(std::shared_ptr<Actor> owner) :
+SoundComponent::SoundComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "SoundComponent") {
 }
 

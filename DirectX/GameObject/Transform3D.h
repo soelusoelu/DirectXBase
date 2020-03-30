@@ -6,15 +6,15 @@
 #include <memory>
 #include <string>
 
-class Actor;
+class GameObject;
 
 class Transform3D : public std::enable_shared_from_this<Transform3D> {
 public:
-    Transform3D(std::shared_ptr<Actor> owner = nullptr);
+    Transform3D(std::shared_ptr<GameObject> owner = nullptr);
     ~Transform3D();
 
     //アタッチ元のアクターを返す
-    std::shared_ptr<Actor> owner() const;
+    std::shared_ptr<GameObject> owner() const;
 
     //ワールド行列更新
     bool computeWorldTransform();
@@ -34,7 +34,7 @@ public:
     void rotate(const Vector3& axis, float angle);
     void rotate(const Vector3& eulers);
 
-    //回転縮小ピボット位置
+    //ピボット位置
     void setPivot(const Vector3& pivot);
     const Vector3& getPivot() const;
 
@@ -52,7 +52,7 @@ public:
     void addChild(std::shared_ptr<Transform3D> child);
     void removeChild(std::shared_ptr<Transform3D> child);
     void removeChild(const std::string& tag);
-    std::shared_ptr<Transform3D> getChild(const char* tag) const;
+    std::shared_ptr<Transform3D> getChild(const std::string& tag) const;
     std::shared_ptr<Transform3D> parent() const;
     std::shared_ptr<Transform3D> root() const;
     size_t getChildCount() const;
@@ -66,7 +66,7 @@ private:
     void shouldRecomputeTransform();
 
 private:
-    std::weak_ptr<Actor> mOwner;
+    std::weak_ptr<GameObject> mOwner;
     Matrix4 mWorldTransform;
     Vector3 mPosition;
     Quaternion mRotation;

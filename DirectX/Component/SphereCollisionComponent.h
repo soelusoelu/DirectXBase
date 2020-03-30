@@ -5,13 +5,13 @@
 #include "../Utility/Collision.h"
 #include <memory>
 
-class Actor;
+class GameObject;
 class Mesh;
 class Transform3D;
 
 class SphereCollisionComponent : public Collider {
 public:
-    SphereCollisionComponent(std::shared_ptr<Actor> owner);
+    SphereCollisionComponent(std::shared_ptr<GameObject> owner);
     ~SphereCollisionComponent();
     virtual void startCollider() override;
     virtual void updateCollider() override;

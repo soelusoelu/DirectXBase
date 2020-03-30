@@ -1,40 +1,35 @@
 ﻿#include "GamePlay.h"
-#include "../Actor/Actor.h"
-#include "../Actor/ActorCreater.h"
-#include "../Actor/ActorManager.h"
 #include "../Actor/FriedChickenManager.h"
-#include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
+#include "../Component/JumpTarget.h"
 #include "../Connect/ChickenScoreConnection.h"
 #include "../Connect/PlayerChickenConnection.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectFactory.h"
+#include "../GameObject/GameObjectManager.h"
+#include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
 #include "../Input/Keyboard.h"
 #include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../System/Game.h"
-#include "../UI/JumpTarget.h"
-#include "../UI/Score.h"
-#include "../UI/UICreater.h"
 
 GamePlay::GamePlay() :
     SceneBase(),
-    mActorManager(new ActorManager()),
     mFriedChickenManager(std::make_unique<FriedChickenManager>()),
     mPCConnection(std::make_unique<PlayerChickenConnection>()),
     mCSConnection(std::make_unique<ChickenScoreConnection>()),
     mPhysics(new Physics()),
     mState(State::PLAY) {
-    Actor::setActorManager(mActorManager);
     Collider::setPhysics(mPhysics);
 }
 
 GamePlay::~GamePlay() {
-    SAFE_DELETE(mActorManager);
     SAFE_DELETE(mPhysics);
     //なぜかColliderのPhysicsが生きてるから
     Collider::setPhysics(nullptr);
@@ -42,14 +37,14 @@ GamePlay::~GamePlay() {
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
-    auto p = ActorCreater::create("Player");
+    auto p = GameObjectCreater::create("Player");
     mFriedChickenManager->initialize();
     auto c = mFriedChickenManager->FindNearestChicken(p);
     mPCConnection->setPlayer(p);
     mPCConnection->setChicken(c);
     mPCConnection->initialize();
-    auto score = UICreater::create<Score>("Score");
-    auto jt = UICreater::create<JumpTarget>("JumpTarget");
+    auto score = GameObjectCreater::createUI("Score");
+    auto jt = GameObjectCreater::createUI("JumpTarget");
     mCSConnection->setChicken(c);
     mCSConnection->setScore(score);
 
@@ -59,13 +54,11 @@ void GamePlay::start() {
 
 void GamePlay::update() {
     if (mState == State::PLAY) {
-        auto p = mActorManager->getPlayer();
+        auto p = mGameObjectManager->getPlayer();
         //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
         auto c = mFriedChickenManager->FindNearestChicken(p, mPCConnection->getChicken());
         mPCConnection->playerJumpTarget(c);
         mCSConnection->setChicken(mPCConnection->getChicken());
-        //総アクターアップデート
-        mActorManager->update();
         //連結クラス
         mPCConnection->connect();
         mCSConnection->connect();

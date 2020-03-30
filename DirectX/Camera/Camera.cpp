@@ -1,5 +1,5 @@
 #include "Camera.h"
-#include "../Actor/Transform3D.h"
+#include "../GameObject/Transform3D.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 

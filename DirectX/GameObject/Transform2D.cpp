@@ -1,5 +1,5 @@
 ﻿#include "Transform2D.h"
-#include "Actor.h"
+#include "GameObject.h"
 #include "../System/Window.h"
 
 Transform2D::Transform2D() :

@@ -5,13 +5,13 @@
 #include "../System/Game.h"
 #include <memory>
 
-class Actor;
+class GameObject;
 class Camera;
 struct PointLight;
 
 class PointLightComponent : public Component, public std::enable_shared_from_this<PointLightComponent> {
 public:
-    PointLightComponent(std::shared_ptr<Actor> owner);
+    PointLightComponent(std::shared_ptr<GameObject> owner);
     ~PointLightComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

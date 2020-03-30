@@ -1,30 +1,30 @@
 ﻿#pragma once
 
-class Actor;
+class GameObject;
 class PlayerMoveComponent;
 
 #include <memory>
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection {
-    using ActorPtr = std::shared_ptr<Actor>;
+    using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:
     PlayerChickenConnection();
     ~PlayerChickenConnection();
     void initialize();
     void connect();
-    void setPlayer(const ActorPtr player);
-    void setChicken(const ActorPtr chicken);
-    ActorPtr getChicken() const;
-    void playerJumpTarget(const ActorPtr chicken);
+    void setPlayer(const GameObjectPtr player);
+    void setChicken(const GameObjectPtr chicken);
+    GameObjectPtr getChicken() const;
+    void playerJumpTarget(const GameObjectPtr chicken);
 
 private:
     std::shared_ptr<PlayerMoveComponent> mPlayer;
     //プレイヤーの足元の唐揚げ
-    ActorPtr mChicken;
+    GameObjectPtr mChicken;
     //プレイヤーのジャンプターゲット
-    ActorPtr mJumpTarget;
+    GameObjectPtr mJumpTarget;
 
     //唐揚げのメッシュ半径
     float mChickenRadius;

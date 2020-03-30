@@ -1,9 +1,9 @@
 ﻿#include "Inspector.h"
-#include "../Actor/Actor.h"
-#include "../Actor/Transform3D.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Device/DrawString.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
@@ -52,7 +52,7 @@ void Inspector::initialize() {
     mMaxElementCharCount = (mValuePositionX - mElementPositionX) / mCharWidth - 1;
 }
 
-void Inspector::setTarget(const ActorPtr target) {
+void Inspector::setTarget(const GameObjectPtr target) {
     mTarget = target;
 }
 
@@ -62,8 +62,8 @@ void Inspector::drawInspect() const {
         return;
     }
 
-    drawActorTag(actor);
-    drawActorTransform(actor->transform());
+    drawTag(actor);
+    drawTransform(actor->transform());
 
     auto compList = actor->componentManager()->getAllComponents();
     //アクターがコンポーネントを所持していなければ終了
@@ -80,14 +80,14 @@ void Inspector::drawInspect() const {
     }
 }
 
-void Inspector::drawActorTag(const ActorPtr target) const {
+void Inspector::drawTag(const GameObjectPtr target) const {
     auto tag = target->tag();
     auto pos = Vector2(mInspectorPositionX + (Window::debugWidth() - mInspectorPositionX) / 2.f, 0.f);
     pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
     mDrawString->drawString(tag, pos, mTagScale);
 }
 
-void Inspector::drawActorTransform(const TransformPtr target) const {
+void Inspector::drawTransform(const TransformPtr target) const {
     auto pos = mTransformPosition;
     mDrawString->drawString("Transform", pos, mElementScale);
     pos.x = mElementPositionX;

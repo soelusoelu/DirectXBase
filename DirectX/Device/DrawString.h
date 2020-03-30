@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../Actor/Transform2D.h"
+#include "../GameObject/Transform2D.h"
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <list>

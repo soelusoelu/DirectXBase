@@ -1,8 +1,8 @@
 ﻿#include "FriedChickenManager.h"
-#include "Actor.h"
-#include "ActorCreater.h"
-#include "Transform3D.h"
 #include "../Device/Time.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectFactory.h"
+#include "../GameObject/Transform3D.h"
 #include "../Math/Math.h"
 
 FriedChickenManager::FriedChickenManager() :
@@ -14,18 +14,18 @@ FriedChickenManager::~FriedChickenManager() = default;
 
 void FriedChickenManager::initialize() {
     for (size_t i = 0; i < mMaxDrawNum; i++) {
-        auto f = ActorCreater::create("FriedChicken");
+        auto f = GameObjectCreater::create("FriedChicken");
         mChickens.emplace_back(f);
     }
 }
 
-std::shared_ptr<Actor> FriedChickenManager::FindNearestChicken(const ActorPtr target) {
+std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target) {
     return FindNearestChicken(target, nullptr);
 }
 
-std::shared_ptr<Actor> FriedChickenManager::FindNearestChicken(const ActorPtr target, const ActorPtr exclude) {
+std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude) {
     float nearest = Math::infinity;
-    ActorPtr chicken = nullptr;
+    GameObjectPtr chicken = nullptr;
     for (const auto& c : mChickens) {
         if (c == exclude) {
             continue;

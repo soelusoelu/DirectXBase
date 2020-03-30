@@ -2,21 +2,21 @@
 
 #include <memory>
 
-class Actor;
+class GameObject;
 class Score;
 
 class ChickenScoreConnection {
-    using ActorPtr = std::shared_ptr<Actor>;
+    using GameObjectPtr = std::shared_ptr<GameObject>;
     using ScorePtr = std::shared_ptr<Score>;
 
 public:
     ChickenScoreConnection();
     ~ChickenScoreConnection();
     void connect();
-    void setChicken(const ActorPtr chicken);
-    void setScore(const ScorePtr score);
+    void setChicken(const GameObjectPtr chicken);
+    void setScore(const GameObjectPtr score);
 
 private:
-    ActorPtr mChicken;
+    GameObjectPtr mChicken;
     ScorePtr mScore;
 };

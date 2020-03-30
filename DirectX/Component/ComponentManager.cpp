@@ -1,7 +1,7 @@
 ﻿#include "ComponentManager.h"
 #include "Component.h"
 
-ComponentManager::ComponentManager(std::shared_ptr<Actor> owner) :
+ComponentManager::ComponentManager(std::shared_ptr<GameObject> owner) :
     mOwner(owner) {
 }
 
@@ -54,20 +54,4 @@ void ComponentManager::onSetActive(bool value) {
 
 std::list<std::shared_ptr<Component>> ComponentManager::getAllComponents() const {
     return mComponents;
-}
-
-std::shared_ptr<Component> ComponentManager::getComponent(const std::string& type) const {
-    for (const auto& c : mStartComponents) {
-        if (c->getTypeName() == type) {
-            return c;
-        }
-    }
-    for (const auto& c : mComponents) {
-        if (c->getTypeName() == type) {
-            return c;
-        }
-    }
-
-    //最後まで見つからなければnullptrを返す
-    return nullptr;
 }

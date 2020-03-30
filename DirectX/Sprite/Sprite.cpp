@@ -1,8 +1,8 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
-#include "../Actor/Transform2D.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/Transform2D.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/DirectX.h"
@@ -83,12 +83,6 @@ void Sprite::draw(const Matrix4& proj) {
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
     Singleton<DirectX>::instance().drawIndexed(6);
-}
-
-std::shared_ptr<Sprite> Sprite::copy() const {
-    auto s = std::make_shared<Sprite>(*this);
-    mSpriteManager->add(s);
-    return s;
 }
 
 std::shared_ptr<Transform2D> Sprite::transform() const {

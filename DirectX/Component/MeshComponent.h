@@ -6,12 +6,12 @@
 #include <memory>
 #include <string>
 
-class Actor;
+class GameObject;
 class Mesh;
 
 class MeshComponent : public Component {
 public:
-    MeshComponent(std::shared_ptr<Actor> owner);
+    MeshComponent(std::shared_ptr<GameObject> owner);
     ~MeshComponent();
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

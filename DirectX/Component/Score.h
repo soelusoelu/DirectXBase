@@ -1,14 +1,16 @@
 ﻿#pragma once
 
-#include "UI.h"
+#include "Component.h"
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 
-class Score : public UI {
+class GameObject;
+
+class Score : public Component {
 public:
-    Score(std::shared_ptr<Renderer> renderer);
+    Score(std::shared_ptr<GameObject> owner);
     ~Score();
-    virtual void updateUI() override;
+    virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
     void addScore(int score);

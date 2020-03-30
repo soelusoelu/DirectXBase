@@ -9,11 +9,9 @@
 #include <string>
 #include <unordered_map>
 
-class Actor;
-class ActorManager;
 class Game;
+class GameObject;
 class Renderer;
-class UI;
 
 class LevelLoader {
     friend class Singleton<LevelLoader>;
@@ -30,15 +28,15 @@ public:
     //保存
     void saveLevel(std::shared_ptr<Renderer> renderer, const std::string& fileName) const;
     //UI情報の保存
-    void saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string& fileName) const;
+    void saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string& fileName) const;
 
 private:
     //グローバルプロパティの保存
     void saveGlobalProperties(rapidjson::Document::AllocatorType& alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value* inObject) const;
     //アクターの保存
-    void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
+    //void saveActors(rapidjson::Document::AllocatorType& alloc, ActorManager* manager, rapidjson::Value* inArray) const;
     //コンポーネントの保存
-    void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
+    //void saveComponents(rapidjson::Document::AllocatorType& alloc, const std::shared_ptr<Actor> actor, rapidjson::Value* inArray) const;
 };
 
 class JsonHelper {

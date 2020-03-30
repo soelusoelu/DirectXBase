@@ -1,7 +1,7 @@
 ﻿#include "PointLightComponent.h"
-#include "../Actor/Actor.h"
-#include "../Actor/Transform3D.h"
 #include "../Camera/Camera.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Renderer.h"
 #include "../Light/PointLight.h"
@@ -16,7 +16,7 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-PointLightComponent::PointLightComponent(std::shared_ptr<Actor> owner) :
+PointLightComponent::PointLightComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "PointLightComponent"),
     mColor(ColorPalette::white),
     mInnerRadius(0.5f),

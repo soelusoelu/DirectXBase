@@ -1,8 +1,8 @@
 ﻿#include "Transform3D.h"
-#include "Actor.h"
+#include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
 
-Transform3D::Transform3D(std::shared_ptr<Actor> owner) :
+Transform3D::Transform3D(std::shared_ptr<GameObject> owner) :
     mOwner(owner),
     mWorldTransform(Matrix4::identity),
     mPosition(Vector3::zero),
@@ -18,7 +18,7 @@ Transform3D::~Transform3D() {
     }
 }
 
-std::shared_ptr<Actor> Transform3D::owner() const {
+std::shared_ptr<GameObject> Transform3D::owner() const {
     return mOwner.lock();
 }
 
@@ -180,7 +180,7 @@ void Transform3D::removeChild(const std::string& tag) {
     }
 }
 
-std::shared_ptr<Transform3D> Transform3D::getChild(const char* tag) const {
+std::shared_ptr<Transform3D> Transform3D::getChild(const std::string& tag) const {
     std::shared_ptr<Transform3D> child = nullptr;
     for (const auto& c : mChildren) {
         if (c->owner()->tag() == tag) {

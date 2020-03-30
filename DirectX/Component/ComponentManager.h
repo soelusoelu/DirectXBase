@@ -4,15 +4,15 @@
 #include <memory>
 #include <string>
 
-class Actor;
 class Component;
+class GameObject;
 
 class ComponentManager {
     using ComponentPtr = std::shared_ptr<Component>;
     using ComponentPtrList = std::list<ComponentPtr>;
 
 public:
-    ComponentManager(std::shared_ptr<Actor> owner);
+    ComponentManager(std::shared_ptr<GameObject> owner);
     ~ComponentManager();
     //各コンポーネントのstartを一度だけ実行
     void start();
@@ -53,11 +53,8 @@ public:
         return comp;
     }
 
-    //コンポーネントを文字列から取得
-    std::shared_ptr<Component> getComponent(const std::string& type) const;
-
 private:
-    std::weak_ptr<Actor> mOwner;
+    std::weak_ptr<GameObject> mOwner;
     ComponentPtrList mStartComponents;
     ComponentPtrList mComponents;
 };

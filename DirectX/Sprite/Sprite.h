@@ -26,8 +26,6 @@ public:
     void update();
     //描画
     void draw(const Matrix4& proj);
-    //自身のコピーを作成
-    std::shared_ptr<Sprite> copy() const;
     //Transform
     std::shared_ptr<Transform2D> transform() const;
     //色味、たぶん0～1

@@ -1,12 +1,9 @@
 ﻿#include "DirectionalLight.h"
-#include "../Actor/Transform3D.h"
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
+#include "../GameObject/Transform3D.h"
 #include "../Mesh/Mesh.h"
 #include "../Utility/LevelLoader.h"
-#include "../DebugLayer/Debug.h"
-#include "../DebugLayer/Log.h"
-#include "../Utility/StringUtil.h"
 
 DirectionalLight::DirectionalLight() :
     mMesh(nullptr),

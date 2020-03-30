@@ -1,16 +1,15 @@
 ﻿#include "Component.h"
 #include "ComponentManager.h"
-#include "../Actor/Actor.h"
 
-Component::Component(std::shared_ptr<Actor> owner, const std::string& typeName, int updateOrder) :
+Component::Component(GameObjectPtr owner, const std::string& type, int updateOrder) :
     mOwner(owner),
     mUpdateOrder(updateOrder),
-    mTypeName(typeName) {
+    mType(type) {
 }
 
 Component::~Component() = default;
 
-std::shared_ptr<Actor> Component::owner() const {
+std::shared_ptr<GameObject> Component::owner() const {
     return mOwner.lock();
 }
 
@@ -19,5 +18,5 @@ int Component::getUpdateOrder() const {
 }
 
 const std::string& Component::getTypeName() const {
-    return mTypeName;
+    return mType;
 }

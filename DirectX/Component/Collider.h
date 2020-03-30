@@ -5,12 +5,16 @@
 #include <memory>
 #include <string>
 
-class Actor;
+class GameObject;
 class Physics;
 
 class Collider : public Component, public std::enable_shared_from_this<Collider> {
     using CollPtr = std::shared_ptr<Collider>;
     using CollPtrList = std::list<CollPtr>;
+
+protected:
+    Collider(std::shared_ptr<GameObject> owner, const std::string& type);
+    virtual ~Collider();
 
 public:
     virtual void start() override;
@@ -29,10 +33,6 @@ public:
     CollPtrList onCollisionExit();
 
     static void setPhysics(Physics* physics);
-
-protected:
-    Collider(std::shared_ptr<Actor> owner, const std::string& typeName);
-    virtual ~Collider();
 
 protected:
     bool mIsAutoUpdate;

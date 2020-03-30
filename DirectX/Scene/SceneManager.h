@@ -4,11 +4,11 @@
 #include <memory>
 
 class Camera;
+class GameObjectManager;
 class MeshManager;
 class Renderer;
 class SceneBase;
 class SpriteManager;
-class UIManager;
 
 class SceneManager {
 public:
@@ -26,7 +26,7 @@ private:
     std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<SceneBase> mCurrentScene;
     std::shared_ptr<Camera> mCamera;
+    GameObjectManager* mGameObjectManager;
     MeshManager* mMeshManager;
     SpriteManager* mSpriteManager;
-    UIManager* mUIManager;
 };

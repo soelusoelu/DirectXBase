@@ -15,9 +15,10 @@ void SceneBase::nextScene(std::shared_ptr<SceneBase> next) {
     mNext = next;
 }
 
-void SceneBase::set(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) {
+void SceneBase::set(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera, GameObjectManager* gameObjectManager) {
     mRenderer = renderer;
     mCamera = camera;
+    mGameObjectManager = gameObjectManager;
 }
 
 std::shared_ptr<SceneBase> SceneBase::getNextScene() const {

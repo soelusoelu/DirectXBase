@@ -6,15 +6,16 @@
 #include <string>
 #include <utility>
 
-class Actor;
+class GameObject;
 
 class Component {
+    using GameObjectPtr = std::shared_ptr<GameObject>;
 protected:
     using debugInfo = std::pair<std::string, std::string>;
     using debugInfoList = std::list<debugInfo>;
 
 protected:
-    Component(std::shared_ptr<Actor> owner, const std::string& typeName, int updateOrder = 100);
+    Component(GameObjectPtr owner, const std::string& type, int updateOrder = 100);
 public:
     virtual ~Component();
     //getComponentはここでして
@@ -32,21 +33,20 @@ public:
     //second: 値
     virtual void drawDebugInfo(debugInfoList* inspect) const {};
 
-    std::shared_ptr<Actor> owner() const;
+    GameObjectPtr owner() const;
     int getUpdateOrder() const;
     const std::string& getTypeName() const;
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
-    static void create(std::shared_ptr<Actor> actor, const rapidjson::Value& inObj) {
-        auto t = std::make_shared<T>(actor);
+    static void create(GameObjectPtr gameObject, const rapidjson::Value& inObj) {
+        auto t = std::make_shared<T>(gameObject);
         t->owner()->componentManager()->addComponent(t);
         t->loadProperties(inObj);
     }
 
 private:
-    std::weak_ptr<Actor> mOwner;
+    std::weak_ptr<GameObject> mOwner;
     int mUpdateOrder;
-    std::string mTypeName;
+    std::string mType;
 };
-

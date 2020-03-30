@@ -4,8 +4,6 @@
 #include <rapidjson/document.h>
 #include <memory>
 
-class PlayerActor;
-
 class Camera {
 public:
     Camera();

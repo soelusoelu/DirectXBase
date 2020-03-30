@@ -1,10 +1,10 @@
 #include "MeshComponent.h"
-#include "../Mesh/Mesh.h"
-#include "../Actor/Actor.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
+#include "../Mesh/Mesh.h"
 #include "../Utility/LevelLoader.h"
 
-MeshComponent::MeshComponent(std::shared_ptr<Actor> owner) :
+MeshComponent::MeshComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "MeshComponent"),
     mMesh(nullptr) {
 }

@@ -4,7 +4,7 @@
 #include "../Math/Math.h"
 #include <memory>
 
-class Actor;
+class GameObject;
 class MeshComponent;
 
 class PlayerMoveComponent : public Component {
@@ -14,7 +14,7 @@ class PlayerMoveComponent : public Component {
     };
 
 public:
-    PlayerMoveComponent(std::shared_ptr<Actor> owner);
+    PlayerMoveComponent(std::shared_ptr<GameObject> owner);
     ~PlayerMoveComponent();
     virtual void start() override;
     virtual void update() override;

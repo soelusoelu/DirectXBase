@@ -5,11 +5,11 @@
 #include <rapidjson/document.h>
 #include <memory>
 
-class Actor;
+class GameObject;
 
 class FriedChickenComponent : public Component {
 public:
-    FriedChickenComponent(std::shared_ptr<Actor> owner);
+    FriedChickenComponent(std::shared_ptr<GameObject> owner);
     ~FriedChickenComponent();
     virtual void start() override;
     virtual void update() override;

@@ -1,11 +1,11 @@
 ﻿#include "FriedChickenComponent.h"
-#include "../Actor/Actor.h"
-#include "../Actor/Transform3D.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-FriedChickenComponent::FriedChickenComponent(std::shared_ptr<Actor> owner) :
+FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),

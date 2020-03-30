@@ -1,15 +1,15 @@
 ﻿#include "PlayerMoveComponent.h"
-#include "../Actor/Actor.h"
-#include "../Actor/Transform3D.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/MeshComponent.h"
 #include "../Device/Time.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<Actor> owner) :
+PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerMoveComponent", 10),
     mMesh(nullptr),
     mState(State::WALK),

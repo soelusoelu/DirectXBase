@@ -6,9 +6,8 @@
 #include <memory>
 #include <utility>
 
-class Actor;
-class ActorManager;
 class DrawString;
+class GameObject;
 class UIButton;
 
 class Hierarchy {
@@ -17,13 +16,13 @@ public:
     ~Hierarchy();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
-    void update(const std::list<std::shared_ptr<Actor>> actors);
+    void update(const std::list<std::shared_ptr<GameObject>> gameObjects);
     //マネージャーに登録されてる全アクターを表示
     void drawActors() const;
 
 private:
     DrawString* mDrawString;
-    std::list<std::pair<std::unique_ptr<UIButton>, std::weak_ptr<Actor>>> mButtons;
+    std::list<std::pair<std::unique_ptr<UIButton>, std::weak_ptr<GameObject>>> mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;
     //行間

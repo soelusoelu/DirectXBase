@@ -1,10 +1,8 @@
 {
-  "version": 1,
-  "actors": [
+  "gameObjects": [
     {
       "type": "Player",
       "properties": {
-        "position": [ 0.0, 0.0, 0.0 ],
         "scale": [ 5.0, 5.0, 5.0 ]
       },
       "components": [
@@ -25,7 +23,6 @@
     {
       "type": "Field",
       "properties": {
-        "position": [ 0.0, 0.0, 0.0 ],
         "scale": [ 5.0, 1.0, 5.0 ]
       },
       "components": [
@@ -39,8 +36,6 @@
     },
     {
       "type": "FriedChicken",
-      "properties": {
-      },
       "components": [
         {
           "type": "MeshComponent",

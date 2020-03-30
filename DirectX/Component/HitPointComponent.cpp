@@ -1,11 +1,11 @@
 ﻿#include "HitPointComponent.h"
-#include "../Actor/Actor.h"
+#include "../GameObject/GameObject.h"
 #include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 #include <string>
 
-HitPointComponent::HitPointComponent(std::shared_ptr<Actor> onwer) :
+HitPointComponent::HitPointComponent(std::shared_ptr<GameObject> onwer) :
     Component(onwer, "HitPointComponent"),
     mHP(0),
     mMaxHP(0) {

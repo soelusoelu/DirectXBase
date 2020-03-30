@@ -1,7 +1,7 @@
 ﻿#include "SpriteManager.h"
 #include "Sprite.h"
-#include "../Actor/Transform2D.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/Transform2D.h"
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
 #include "../System/DepthStencilState.h"

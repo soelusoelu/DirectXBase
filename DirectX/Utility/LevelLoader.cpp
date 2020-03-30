@@ -1,12 +1,10 @@
 ﻿#include "LevelLoader.h"
 #include "Directory.h"
-#include "../Actor/Actor.h"
-#include "../Actor/ActorManager.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
 #include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
-#include "../UI/UI.h"
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <fstream>
@@ -93,7 +91,7 @@ void LevelLoader::saveLevel(std::shared_ptr<Renderer> renderer, const std::strin
     //}
 }
 
-void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::string & fileName) const {
+void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const std::string & fileName) const {
     //ドキュメントとルートオブジェクトを生成
     rapidjson::Document doc;
     doc.SetObject();
@@ -103,7 +101,7 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<UI>> uiList, const std::strin
         //UI用のjsonオブジェクトを作る
         rapidjson::Value obj(rapidjson::kObjectType);
         //タイプを追加
-        JsonHelper::setString(doc.GetAllocator(), &obj, "type", ui->getTypeName());
+        JsonHelper::setString(doc.GetAllocator(), &obj, "type", ui->tag());
 
         //プロパティ用のjsonオブジェクトを作る
         rapidjson::Value props(rapidjson::kObjectType);
@@ -144,49 +142,49 @@ void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & allo
     inObject->AddMember("directionalLight", dirObj, alloc);
 }
 
-void LevelLoader::saveActors(rapidjson::Document::AllocatorType & alloc, ActorManager * manager, rapidjson::Value * inArray) const {
-    //for (const auto& actor : manager->getActors()) {
-    //    //アクター用のjsonオブジェクトを作る
-    //    rapidjson::Value obj(rapidjson::kObjectType);
-    //    //タイプを追加
-    //    JsonHelper::setString(alloc, &obj, "type", actor->tag());
-
-    //    //プロパティ用のjsonオブジェクトを作る
-    //    rapidjson::Value props(rapidjson::kObjectType);
-    //    //プロパティを保存
-    //    actor->saveProperties(alloc, &props);
-    //    //プロパティをアクターのjsonオブジェクトに追加
-    //    obj.AddMember("properties", props, alloc);
-
-    //    //コンポーネントを保存
-    //    rapidjson::Value components(rapidjson::kArrayType);
-    //    saveComponents(alloc, actor, &components);
-    //    obj.AddMember("components", components, alloc);
-
-    //    //アクターを配列に追加
-    //    inArray->PushBack(obj, alloc);
-    //}
-}
-
-void LevelLoader::saveComponents(rapidjson::Document::AllocatorType & alloc, const std::shared_ptr<Actor> actor, rapidjson::Value * inArray) const {
-    //const auto& components = actor->getComponents();
-    //for (const Component& comp : components) {
-    //    // Make a JSON object
-    //    rapidjson::Value obj(rapidjson::kObjectType);
-    //    // Add type
-    //    JsonHelper::setString(alloc, &obj, "type", comp->get());
-
-    //    // Make an object for properties
-    //    rapidjson::Value props(rapidjson::kObjectType);
-    //    // Save rest of properties
-    //    comp->SaveProperties(alloc, props);
-    //    // Add the member
-    //    obj.AddMember("properties", props, alloc);
-
-    //    // Add component to array
-    //    inArray.PushBack(obj, alloc);
-    //}
-}
+//void LevelLoader::saveActors(rapidjson::Document::AllocatorType & alloc, ActorManager * manager, rapidjson::Value * inArray) const {
+//    //for (const auto& actor : manager->getActors()) {
+//    //    //アクター用のjsonオブジェクトを作る
+//    //    rapidjson::Value obj(rapidjson::kObjectType);
+//    //    //タイプを追加
+//    //    JsonHelper::setString(alloc, &obj, "type", actor->tag());
+//
+//    //    //プロパティ用のjsonオブジェクトを作る
+//    //    rapidjson::Value props(rapidjson::kObjectType);
+//    //    //プロパティを保存
+//    //    actor->saveProperties(alloc, &props);
+//    //    //プロパティをアクターのjsonオブジェクトに追加
+//    //    obj.AddMember("properties", props, alloc);
+//
+//    //    //コンポーネントを保存
+//    //    rapidjson::Value components(rapidjson::kArrayType);
+//    //    saveComponents(alloc, actor, &components);
+//    //    obj.AddMember("components", components, alloc);
+//
+//    //    //アクターを配列に追加
+//    //    inArray->PushBack(obj, alloc);
+//    //}
+//}
+//
+//void LevelLoader::saveComponents(rapidjson::Document::AllocatorType & alloc, const std::shared_ptr<Actor> actor, rapidjson::Value * inArray) const {
+//    //const auto& components = actor->getComponents();
+//    //for (const Component& comp : components) {
+//    //    // Make a JSON object
+//    //    rapidjson::Value obj(rapidjson::kObjectType);
+//    //    // Add type
+//    //    JsonHelper::setString(alloc, &obj, "type", comp->get());
+//
+//    //    // Make an object for properties
+//    //    rapidjson::Value props(rapidjson::kObjectType);
+//    //    // Save rest of properties
+//    //    comp->SaveProperties(alloc, props);
+//    //    // Add the member
+//    //    obj.AddMember("properties", props, alloc);
+//
+//    //    // Add component to array
+//    //    inArray.PushBack(obj, alloc);
+//    //}
+//}
 
 bool JsonHelper::getInt(const rapidjson::Value & inObject, const char* inProperty, int* out) {
     //プロパティが存在するか

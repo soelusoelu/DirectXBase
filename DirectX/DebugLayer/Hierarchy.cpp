@@ -1,9 +1,8 @@
 ﻿#include "Hierarchy.h"
-#include "../Actor/Actor.h"
-#include "../Actor/ActorManager.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/DrawString.h"
+#include "../GameObject/GameObject.h"
 #include "../Input/Input.h"
 #include "../Input/Mouse.h"
 #include "../System/Window.h"
@@ -59,14 +58,14 @@ void Hierarchy::initialize() {
     }
 }
 
-void Hierarchy::update(const std::list<std::shared_ptr<Actor>> actors) {
+void Hierarchy::update(const std::list<std::shared_ptr<GameObject>> gameObjects) {
     auto itr = mButtons.begin();
-    for (const auto& actor : actors) {
+    for (const auto& obj : gameObjects) {
         //アクターの数がボタンの数より多いときは無視
         if (itr == mButtons.end()) {
             break;
         }
-        itr->second = actor;
+        itr->second = obj;
         ++itr;
     }
 
@@ -76,9 +75,9 @@ void Hierarchy::update(const std::list<std::shared_ptr<Actor>> actors) {
             if (!b.first->containsPoint(mousePos)) {
                 continue;
             }
-            auto actor = b.second.lock();
-            if (actor) {
-                Debug::inspector()->setTarget(actor);
+            auto obj = b.second.lock();
+            if (obj) {
+                Debug::inspector()->setTarget(obj);
                 break;
             }
         }

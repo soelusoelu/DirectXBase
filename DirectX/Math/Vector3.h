@@ -87,7 +87,7 @@ public:
     static Vector3 transformWithPerspDiv(const Vector3& vec, const Matrix4& mat, float w = 1.0f);
 
     // Transform a Vector3 by a quaternion
-    static Vector3 transform(const Vector3& v, const class Quaternion& q);
+    static Vector3 transform(const Vector3& v, const Quaternion& q);
 
     static const Vector3 zero;
     static const Vector3 right;

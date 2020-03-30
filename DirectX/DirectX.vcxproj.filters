@@ -9,8 +9,6 @@
     <FxCompile Include="Shader\PointLight.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Actor\ActorManager.cpp" />
-    <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Component\Collider.cpp" />
     <ClCompile Include="Component\ComponentManager.cpp" />
     <ClCompile Include="Component\Component.cpp" />
@@ -19,15 +17,12 @@
     <ClCompile Include="Device\Random.cpp" />
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
-    <ClCompile Include="Actor\Transform2D.cpp" />
     <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
     <ClCompile Include="System\Buffer.cpp" />
     <ClCompile Include="System\InputElement.cpp" />
-    <ClCompile Include="UI\UI.cpp" />
-    <ClCompile Include="UI\UIManager.cpp" />
     <ClCompile Include="Utility\Collision.cpp" />
     <ClCompile Include="System\Entry.cpp" />
     <ClCompile Include="System\Game.cpp" />
@@ -38,7 +33,6 @@
     <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Scene\Title.cpp" />
-    <ClCompile Include="Actor\Transform3D.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Mesh\Mesh.cpp" />
@@ -69,7 +63,6 @@
     <ClCompile Include="Utility\Singleton.cpp" />
     <ClCompile Include="System\DirectX.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
-    <ClCompile Include="UI\Score.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
     <ClCompile Include="Utility\FileUtil.cpp" />
     <ClCompile Include="Mesh\VertexArray.cpp" />
@@ -87,23 +80,26 @@
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
-    <ClCompile Include="Actor\ActorCreater.cpp" />
     <ClCompile Include="Actor\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
     <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
     <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
-    <ClCompile Include="UI\UICreater.cpp" />
-    <ClCompile Include="UI\JumpTarget.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Vector3.cpp" />
     <ClCompile Include="Math\Matrix3.cpp" />
     <ClCompile Include="Math\Matrix4.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Math\Vector4.cpp" />
+    <ClCompile Include="GameObject\GameObject.cpp" />
+    <ClCompile Include="GameObject\GameObjectManager.cpp" />
+    <ClCompile Include="GameObject\GameObjectFactory.cpp" />
+    <ClCompile Include="Component\Score.cpp" />
+    <ClCompile Include="GameObject\Transform2D.cpp" />
+    <ClCompile Include="GameObject\Transform3D.cpp" />
+    <ClCompile Include="Component\JumpTarget.cpp" />
+    <ClCompile Include="Component\SpriteComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Actor\ActorManager.h" />
-    <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Component\Collider.h" />
     <ClInclude Include="Component\ComponentManager.h" />
     <ClInclude Include="Component\Component.h" />
@@ -112,7 +108,6 @@
     <ClInclude Include="Device\Random.h" />
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
-    <ClInclude Include="Actor\Transform2D.h" />
     <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Sprite\Sprite.h" />
@@ -123,8 +118,6 @@
     <ClInclude Include="System\InputElementDesc.h" />
     <ClInclude Include="System\SubResourceDesc.h" />
     <ClInclude Include="System\TextureDesc.h" />
-    <ClInclude Include="UI\UI.h" />
-    <ClInclude Include="UI\UIManager.h" />
     <ClInclude Include="Utility\Collision.h" />
     <ClInclude Include="System\DirectXIncLib.h" />
     <ClInclude Include="System\Game.h" />
@@ -135,7 +128,6 @@
     <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Scene\Title.h" />
-    <ClInclude Include="Actor\Transform3D.h" />
     <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Mesh\Mesh.h" />
@@ -173,7 +165,6 @@
     <ClInclude Include="Utility\Singleton.h" />
     <ClInclude Include="System\DirectX.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
-    <ClInclude Include="UI\Score.h" />
     <ClInclude Include="Mesh\FBX.h" />
     <ClInclude Include="Mesh\IMeshLoader.h" />
     <ClInclude Include="Utility\FileUtil.h" />
@@ -192,13 +183,10 @@
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
-    <ClInclude Include="Actor\ActorCreater.h" />
     <ClInclude Include="Actor\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
     <ClInclude Include="Connect\ChickenScoreConnection.h" />
     <ClInclude Include="Connect\PlayerChickenConnection.h" />
-    <ClInclude Include="UI\UICreater.h" />
-    <ClInclude Include="UI\JumpTarget.h" />
     <ClInclude Include="Math\Vector2.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Vector3.h" />
@@ -207,5 +195,13 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Math\Vector4.h" />
     <ClInclude Include="Math\MathUtility.h" />
+    <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="GameObject\GameObjectManager.h" />
+    <ClInclude Include="GameObject\GameObjectFactory.h" />
+    <ClInclude Include="Component\Score.h" />
+    <ClInclude Include="GameObject\Transform2D.h" />
+    <ClInclude Include="GameObject\Transform3D.h" />
+    <ClInclude Include="Component\JumpTarget.h" />
+    <ClInclude Include="Component\SpriteComponent.h" />
   </ItemGroup>
 </Project>

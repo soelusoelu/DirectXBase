@@ -1,6 +1,5 @@
 ﻿#include "Sound.h"
 #include "Renderer.h"
-#include "../Actor/Actor.h"
 #include "../System/Game.h"
 #include "../Utility/Directory.h"
 

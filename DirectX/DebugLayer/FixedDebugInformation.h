@@ -6,7 +6,6 @@
 #include <memory>
 #include <string>
 
-class Actor;
 class DrawString;
 
 class FixedDebugInformation {
