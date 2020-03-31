@@ -9,6 +9,7 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
+    mPlayerPreviousPos(Vector3::zero),
     mChickenRadius(0.f) {
 }
 
@@ -22,22 +23,27 @@ void PlayerChickenConnection::initialize() {
             mChickenRadius = mesh->getRadius();
         }
     }
+    mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 
 void PlayerChickenConnection::connect() {
-    if (mPlayer->isJump()) {
-        if (mChicken != mJumpTarget) {
-            mChicken = mJumpTarget;
-        }
-        return;
+    if (mPlayer->isJumpStart()) {
+        mChicken->transform()->rotate(Vector3::right * 90.f);
     }
-    auto pt = mPlayer->owner()->transform();
-    auto ct = mChicken->transform();
-    auto pos = pt->getPosition();
-    pos.y = ct->getScale().y * mChickenRadius;
-    pt->setPosition(pos);
-    pos.y = 0;
-    ct->setPosition(pos);
+    if (mPlayer->isJumpEnd()) {
+        mChicken = mJumpTarget;
+    }
+    if (mPlayer->isWalking()) {
+        auto pt = mPlayer->owner()->transform();
+        auto ct = mChicken->transform();
+        auto pos = pt->getPosition();
+        pos.y = ct->getScale().y * mChickenRadius;
+        pt->setPosition(pos);
+        pos.y = 0;
+        ct->setPosition(pos);
+    }
+
+    mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 
 void PlayerChickenConnection::setPlayer(const GameObjectPtr player) {
@@ -53,8 +59,10 @@ std::shared_ptr<GameObject> PlayerChickenConnection::getChicken() const {
 }
 
 void PlayerChickenConnection::playerJumpTarget(const GameObjectPtr chicken) {
-    mJumpTarget = chicken;
-    auto pos = mJumpTarget->transform()->getPosition();
-    pos.y += mJumpTarget->transform()->getScale().y * mChickenRadius;
-    mPlayer->setTargetPosition(pos);
+    if (mPlayer->isWalking()) {
+        mJumpTarget = chicken;
+        auto pos = mJumpTarget->transform()->getPosition();
+        pos.y += mJumpTarget->transform()->getScale().y * mChickenRadius;
+        mPlayer->setTargetPosition(pos);
+    }
 }

@@ -14,7 +14,10 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     mMesh(nullptr),
     mState(State::WALK),
     mJumpTargetPosition(Vector3::zero),
-    mMoveSpeed(1.f) {
+    mMoveSpeed(1.f),
+    mJumpStart(false),
+    mJumpEnd(false)
+{
 }
 
 PlayerMoveComponent::~PlayerMoveComponent() = default;
@@ -27,6 +30,12 @@ void PlayerMoveComponent::start() {
 }
 
 void PlayerMoveComponent::update() {
+    if (mJumpStart) {
+        mJumpStart = false;
+    }
+    if (mJumpEnd) {
+        mJumpEnd = false;
+    }
     jump();
     move();
     jumpMove();
@@ -53,8 +62,20 @@ void PlayerMoveComponent::drawDebugInfo(debugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-bool PlayerMoveComponent::isJump() const {
+bool PlayerMoveComponent::isWalking() const {
+    return mState == State::WALK;
+}
+
+bool PlayerMoveComponent::isJumpStart() const {
+    return mJumpStart;
+}
+
+bool PlayerMoveComponent::isJumping() const {
     return mState == State::JUMP;
+}
+
+bool PlayerMoveComponent::isJumpEnd() const {
+    return mJumpEnd;
 }
 
 void PlayerMoveComponent::setTargetPosition(const Vector3 & pos) {
@@ -69,6 +90,7 @@ void PlayerMoveComponent::jump() {
         return;
     }
     if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
+        mJumpStart = true;
         mState = State::JUMP;
     }
 }
@@ -99,6 +121,7 @@ void PlayerMoveComponent::jumpStop() {
     }
     auto l = (owner()->transform()->getPosition() - mJumpTargetPosition).lengthSq();
     if (l < 0.01f) {
+        mJumpEnd = true;
         mState = State::WALK;
     }
 }

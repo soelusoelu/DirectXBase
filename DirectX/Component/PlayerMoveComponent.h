@@ -20,8 +20,14 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    //歩行中か
+    bool isWalking() const;
+    //ジャンプした瞬間か
+    bool isJumpStart() const;
     //ジャンプ中か
-    bool isJump() const;
+    bool isJumping() const;
+    //着地した瞬間か
+    bool isJumpEnd() const;
     //ターゲットの位置をセット
     void setTargetPosition(const Vector3& pos);
 
@@ -40,4 +46,6 @@ private:
     State mState;
     Vector3 mJumpTargetPosition;
     float mMoveSpeed;
+    bool mJumpStart;
+    bool mJumpEnd;
 };

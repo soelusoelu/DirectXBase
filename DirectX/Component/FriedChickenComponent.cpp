@@ -19,7 +19,6 @@ void FriedChickenComponent::start() {
 }
 
 void FriedChickenComponent::update() {
-    owner()->transform()->rotate(Vector3::up, 3.f);
 }
 
 void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {

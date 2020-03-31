@@ -3,6 +3,7 @@
 class GameObject;
 class PlayerMoveComponent;
 
+#include "../Math/Math.h"
 #include <memory>
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
@@ -25,6 +26,9 @@ private:
     GameObjectPtr mChicken;
     //プレイヤーのジャンプターゲット
     GameObjectPtr mJumpTarget;
+
+    //プレイヤーの前フレーム位置
+    Vector3 mPlayerPreviousPos;
 
     //唐揚げのメッシュ半径
     float mChickenRadius;
