@@ -1,5 +1,6 @@
 ﻿#include "ChickenScoreConnection.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/FriedChickenComponent.h"
 #include "../Component/Score.h"
 #include "../GameObject/GameObject.h"
 
@@ -11,7 +12,10 @@ ChickenScoreConnection::ChickenScoreConnection() :
 ChickenScoreConnection::~ChickenScoreConnection() = default;
 
 void ChickenScoreConnection::connect() {
-    //mScore->addScore(1);
+    auto c = mChicken->componentManager()->getComponent<FriedChickenComponent>();
+    if (c->successFrying()) {
+        mScore->addScore(10);
+    }
 }
 
 void ChickenScoreConnection::setChicken(const GameObjectPtr chicken) {

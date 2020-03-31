@@ -5,7 +5,6 @@
 #include <memory>
 
 class GameObject;
-class MeshComponent;
 
 class PlayerMoveComponent : public Component {
     enum class State {
@@ -42,7 +41,6 @@ private:
     void jumpStop();
 
 private:
-    std::shared_ptr<MeshComponent> mMesh;
     State mState;
     Vector3 mJumpTargetPosition;
     float mMoveSpeed;

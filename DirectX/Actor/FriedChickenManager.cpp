@@ -1,4 +1,7 @@
 ﻿#include "FriedChickenManager.h"
+#include "../Component/ComponentManager.h"
+#include "../Component/FriedChickenComponent.h"
+#include "../Component/Score.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -7,7 +10,8 @@
 
 FriedChickenManager::FriedChickenManager() :
     mSpawnTimer(std::make_unique<Time>(2.f)),
-    mMaxDrawNum(5) {
+    mMaxDrawNum(10),
+    mScore(nullptr) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
@@ -16,6 +20,20 @@ void FriedChickenManager::initialize() {
     for (size_t i = 0; i < mMaxDrawNum; i++) {
         auto f = GameObjectCreater::create("FriedChicken");
         mChickens.emplace_back(f);
+    }
+}
+
+void FriedChickenManager::update() {
+    for (const auto& chicken : mChickens) {
+        auto c = chicken->componentManager()->getComponent<FriedChickenComponent>();
+        if (!c->successFrying()) {
+            continue;
+        }
+        if (mScore) {
+            mScore->addScore(10);
+            mWaitingChickens.emplace_back(chicken);
+            chicken->setActive(false);
+        }
     }
 }
 
@@ -37,4 +55,19 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
         }
     }
     return chicken;
+}
+
+void FriedChickenManager::setScore(const GameObjectPtr score) {
+    mScore = score->componentManager()->getComponent<Score>();
+}
+
+void FriedChickenManager::moveToWait() {
+    //auto itr = mChickens.begin();
+    //while (itr != mChickens.end()) {
+    //    if ((*itr)->isDead()) {
+    //        itr = mChickens.erase(itr);
+    //    } else {
+    //        ++itr;
+    //    }
+    //}
 }

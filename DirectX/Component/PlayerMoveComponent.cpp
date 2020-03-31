@@ -11,7 +11,6 @@
 
 PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerMoveComponent", 10),
-    mMesh(nullptr),
     mState(State::WALK),
     mJumpTargetPosition(Vector3::zero),
     mMoveSpeed(1.f),
@@ -23,9 +22,9 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
 PlayerMoveComponent::~PlayerMoveComponent() = default;
 
 void PlayerMoveComponent::start() {
-    mMesh = owner()->componentManager()->getComponent<MeshComponent>();
-    if (mMesh) {
-        owner()->transform()->setPivot(Vector3::down * mMesh->getRadius());
+    auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
+    if (mesh) {
+        owner()->transform()->setPivot(Vector3::down * mesh->getRadius());
     }
 }
 

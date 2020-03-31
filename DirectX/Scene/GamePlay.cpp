@@ -48,6 +48,7 @@ void GamePlay::start() {
     auto jt = GameObjectCreater::createUI("JumpTarget");
     mCSConnection->setChicken(c);
     mCSConnection->setScore(score);
+    mFriedChickenManager->setScore(score);
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
     Debug::inspector()->setTarget(p);
@@ -63,6 +64,7 @@ void GamePlay::update() {
         //連結クラス
         mPCConnection->connect();
         mCSConnection->connect();
+        mFriedChickenManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();
 

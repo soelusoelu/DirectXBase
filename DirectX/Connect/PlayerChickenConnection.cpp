@@ -1,5 +1,6 @@
 ﻿#include "PlayerChickenConnection.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/FriedChickenComponent.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/PlayerMoveComponent.h"
 #include "../GameObject/GameObject.h"
@@ -28,7 +29,9 @@ void PlayerChickenConnection::initialize() {
 
 void PlayerChickenConnection::connect() {
     if (mPlayer->isJumpStart()) {
-        mChicken->transform()->rotate(Vector3::right * 90.f);
+        auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
+        chickenComp->changeSurface();
+        mChicken->transform()->rotate(Vector3::right * 180.f);
     }
     if (mPlayer->isJumpEnd()) {
         mChicken = mJumpTarget;
