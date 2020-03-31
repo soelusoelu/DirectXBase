@@ -38,6 +38,7 @@ GamePlay::~GamePlay() {
 void GamePlay::start() {
     //ファイルからアクターを読み込む
     auto p = GameObjectCreater::create("Player");
+    auto f = GameObjectCreater::create("Field");
     mFriedChickenManager->initialize();
     auto c = mFriedChickenManager->FindNearestChicken(p);
     mPCConnection->setPlayer(p);

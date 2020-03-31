@@ -77,6 +77,8 @@ void SceneManager::draw() const {
     mRenderer->renderFromTexture(mCamera);
     //ポイントライトの一括描画
     mRenderer->drawPointLights(mCamera);
+    //透明メッシュの描画
+    mMeshManager->drawTransparent(mRenderer, mCamera);
 
     //スプライト描画準備
     Matrix4 proj = Matrix4::identity;

@@ -13,10 +13,9 @@ cbuffer global_0 : register(b0)
 
 cbuffer global_1 : register(b1)
 {
-    float4 g_Ambient : packoffset(c0) = float4(0, 0, 0, 0); //アンビエント光
-    float4 g_Diffuse : packoffset(c1) = float4(1, 0, 0, 0); //拡散反射(色）
-    float4 g_Specular : packoffset(c2) = float4(1, 1, 1, 1); //鏡面反射
-    float g_Texture : packoffset(c3) = 0; //テクスチャーが貼られているメッシュかどうかのフラグ
+    float4 g_Diffuse : packoffset(c0) = float4(1, 0, 0, 0); //拡散反射(色）
+    float4 g_Specular : packoffset(c1) = float4(1, 1, 1, 1); //鏡面反射
+    float g_Texture : packoffset(c2) = 0; //テクスチャーが貼られているメッシュかどうかのフラグ
 };
 
 //バーテックスバッファー出力構造体
@@ -32,7 +31,7 @@ struct VS_OUTPUT
 //
 //バーテックスシェーダー
 //
-VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
+VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
 	//射影変換（ワールド→ビュー→プロジェクション）
@@ -57,10 +56,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 Tex : TEXCOORD)
     output.Color = g_Diffuse * NL + specular * g_Specular;
 	
 	//テクスチャー座標
-    if (g_Texture == 1)
-    {
-        output.Tex = Tex;
-    }
+    output.Tex = UV;
 
     return output;
 }
@@ -75,7 +71,7 @@ float4 PS(VS_OUTPUT input) : SV_Target
     {
         color = g_texDecal.Sample(g_samLinear, input.Tex);
     }
-    color += input.Color;
+    //color += input.Color;
     color.a = g_Diffuse.a;
 
     return color;

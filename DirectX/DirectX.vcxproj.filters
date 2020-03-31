@@ -98,6 +98,8 @@
     <ClCompile Include="GameObject\Transform3D.cpp" />
     <ClCompile Include="Component\JumpTarget.cpp" />
     <ClCompile Include="Component\SpriteComponent.cpp" />
+    <ClCompile Include="Mesh\TransparentMesh.cpp" />
+    <ClCompile Include="Component\TransparentMeshComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -203,5 +205,7 @@
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\JumpTarget.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
+    <ClInclude Include="Mesh\TransparentMesh.h" />
+    <ClInclude Include="Component\TransparentMeshComponent.h" />
   </ItemGroup>
 </Project>

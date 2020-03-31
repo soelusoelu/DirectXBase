@@ -20,7 +20,7 @@
       "font": "font2.png"
     },
     "camera": {
-      "position": [ 0.0, 7.0, -15.0 ],
+      "position": [ 0.0, 8.0, -10.0 ],
       "fov": 45.0,
       "nearClip": 0.1,
       "farClip": 1000.0

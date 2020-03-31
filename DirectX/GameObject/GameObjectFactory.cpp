@@ -12,6 +12,7 @@
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
 #include "../Component/SpriteComponent.h"
+#include "../Component/TransparentMeshComponent.h"
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
 
@@ -27,6 +28,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(SoundComponent);
     ADD_COMPONENT(SphereCollisionComponent);
     ADD_COMPONENT(SpriteComponent);
+    ADD_COMPONENT(TransparentMeshComponent);
 }
 
 GameObjectFactory::~GameObjectFactory() = default;
