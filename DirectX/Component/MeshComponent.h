@@ -11,16 +11,16 @@ class Mesh;
 
 class MeshComponent : public Component {
 public:
-    MeshComponent(std::shared_ptr<GameObject> owner);
+    MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type = "MeshComponent");
     ~MeshComponent();
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    void setMesh(const std::string& fileName);
+    virtual void setMesh(const std::string& fileName);
     const Vector3& getCenter() const;
     float getRadius() const;
     void setActive(bool value);
     bool getActive() const;
 
-private:
+protected:
     std::shared_ptr<Mesh> mMesh;
 };

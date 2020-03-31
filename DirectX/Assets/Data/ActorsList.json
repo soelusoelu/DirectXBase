@@ -7,7 +7,7 @@
       },
       "components": [
         {
-          "type": "MeshComponent",
+          "type": "TransparentMeshComponent",
           "properties": {
             "fileName": "Chips/Chips.fbx"
           }
@@ -39,7 +39,7 @@
       "type": "FriedChicken",
       "components": [
         {
-          "type": "MeshComponent",
+          "type": "TransparentMeshComponent",
           "properties": {
             "fileName": "Shape/Sphere.obj"
           }

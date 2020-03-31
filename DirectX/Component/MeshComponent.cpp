@@ -4,8 +4,8 @@
 #include "../Mesh/Mesh.h"
 #include "../Utility/LevelLoader.h"
 
-MeshComponent::MeshComponent(std::shared_ptr<GameObject> owner) :
-    Component(owner, "MeshComponent"),
+MeshComponent::MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type) :
+    Component(owner, type),
     mMesh(nullptr) {
 }
 
