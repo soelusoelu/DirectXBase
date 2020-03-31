@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Hierarchy.h"
+#include "../Utility/LevelLoader.h"
 #include <algorithm>
 #include <iterator>
 
@@ -9,7 +10,9 @@ GameObjectManager::GameObjectManager() :
     mUpdatingGameObjects(false) {
 }
 
-GameObjectManager::~GameObjectManager() = default;
+GameObjectManager::~GameObjectManager() {
+    Singleton<LevelLoader>::instance().saveUI(mGameObjects, "a.json");
+}
 
 void GameObjectManager::update() {
     mUpdatingGameObjects = true;

@@ -3,13 +3,15 @@
 #include <list>
 #include <memory>
 
+class FriedChickenComponent;
 class GameObject;
 class Score;
 class Time;
 
 class FriedChickenManager {
+    using ChickenPtr = std::shared_ptr<FriedChickenComponent>;
+    using ChickenPtrList = std::list<ChickenPtr>;
     using GameObjectPtr = std::shared_ptr<GameObject>;
-    using GameObjectPtrList = std::list<GameObjectPtr>;
 
 public:
     FriedChickenManager();
@@ -28,9 +30,9 @@ private:
 
 private:
     //揚げてる最中の唐揚げ
-    GameObjectPtrList mChickens;
+    ChickenPtrList mChickens;
     //待機中の唐揚げ
-    GameObjectPtrList mWaitingChickens;
+    ChickenPtrList mWaitingChickens;
     std::unique_ptr<Time> mSpawnTimer;
     //一度に画面内に表示する最大数
     int mMaxDrawNum;

@@ -19,22 +19,21 @@ FriedChickenManager::~FriedChickenManager() = default;
 void FriedChickenManager::initialize() {
     for (size_t i = 0; i < mMaxDrawNum; i++) {
         auto f = GameObjectCreater::create("FriedChicken");
-        mChickens.emplace_back(f);
+        auto c = f->componentManager()->getComponent<FriedChickenComponent>();
+        mChickens.emplace_back(c);
     }
 }
 
 void FriedChickenManager::update() {
     for (const auto& chicken : mChickens) {
-        auto c = chicken->componentManager()->getComponent<FriedChickenComponent>();
-        if (!c->successFrying()) {
+        if (!chicken->successFrying()) {
             continue;
         }
         if (mScore) {
             mScore->addScore(10);
-            mWaitingChickens.emplace_back(chicken);
-            chicken->setActive(false);
         }
     }
+    moveToWait();
 }
 
 std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target) {
@@ -45,13 +44,13 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
     float nearest = Math::infinity;
     GameObjectPtr chicken = nullptr;
     for (const auto& c : mChickens) {
-        if (c == exclude) {
+        if (c->owner() == exclude) {
             continue;
         }
-        auto l = (c->transform()->getPosition() - target->transform()->getPosition()).lengthSq();
+        auto l = (c->owner()->transform()->getPosition() - target->transform()->getPosition()).lengthSq();
         if (l < nearest) {
             nearest = l;
-            chicken = c;
+            chicken = c->owner();
         }
     }
     return chicken;
@@ -62,12 +61,14 @@ void FriedChickenManager::setScore(const GameObjectPtr score) {
 }
 
 void FriedChickenManager::moveToWait() {
-    //auto itr = mChickens.begin();
-    //while (itr != mChickens.end()) {
-    //    if ((*itr)->isDead()) {
-    //        itr = mChickens.erase(itr);
-    //    } else {
-    //        ++itr;
-    //    }
-    //}
+    auto itr = mChickens.begin();
+    while (itr != mChickens.end()) {
+        if ((*itr)->successFrying()) {
+            mWaitingChickens.emplace_back(*itr);
+            (*itr)->owner()->setActive(false);
+            itr = mChickens.erase(itr);
+        } else {
+            ++itr;
+        }
+    }
 }

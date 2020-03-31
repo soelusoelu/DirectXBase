@@ -14,7 +14,7 @@ LevelLoader::LevelLoader() = default;
 
 LevelLoader::~LevelLoader() = default;
 
-bool LevelLoader::loadJSON(const std::string& fileName, rapidjson::Document* outDoc) const {
+bool LevelLoader::loadJSON(const std::string & fileName, rapidjson::Document * outDoc) const {
     //フォルダ階層の移動
     Singleton<Directory>::instance().setDataDirectory();
 
@@ -45,7 +45,7 @@ bool LevelLoader::loadJSON(const std::string& fileName, rapidjson::Document* out
     return true;
 }
 
-void LevelLoader::loadGlobal(Game* root, const std::string & fileName) const {
+void LevelLoader::loadGlobal(Game * root, const std::string & fileName) const {
     rapidjson::Document doc;
     if (!loadJSON(fileName, &doc)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
@@ -110,6 +110,11 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const st
         //プロパティをUIのjsonオブジェクトに追加
         obj.AddMember("properties", props, doc.GetAllocator());
 
+        //コンポーネントを保存
+        //rapidjson::Value components(rapidjson::kArrayType);
+        //saveComponents(alloc, actor, &components);
+        //obj.AddMember("components", components, alloc);
+
         //UIを配列に追加
         uis.PushBack(obj, doc.GetAllocator());
     }
@@ -165,7 +170,7 @@ void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & allo
 //    //    inArray->PushBack(obj, alloc);
 //    //}
 //}
-//
+
 //void LevelLoader::saveComponents(rapidjson::Document::AllocatorType & alloc, const std::shared_ptr<Actor> actor, rapidjson::Value * inArray) const {
 //    //const auto& components = actor->getComponents();
 //    //for (const Component& comp : components) {

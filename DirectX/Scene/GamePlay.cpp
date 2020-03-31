@@ -3,7 +3,6 @@
 #include "../Camera/Camera.h"
 #include "../Component/Collider.h"
 #include "../Component/JumpTarget.h"
-#include "../Connect/ChickenScoreConnection.h"
 #include "../Connect/PlayerChickenConnection.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
@@ -23,7 +22,6 @@ GamePlay::GamePlay() :
     SceneBase(),
     mFriedChickenManager(std::make_unique<FriedChickenManager>()),
     mPCConnection(std::make_unique<PlayerChickenConnection>()),
-    mCSConnection(std::make_unique<ChickenScoreConnection>()),
     mPhysics(new Physics()),
     mState(State::PLAY) {
     Collider::setPhysics(mPhysics);
@@ -46,8 +44,6 @@ void GamePlay::start() {
     mPCConnection->initialize();
     auto score = GameObjectCreater::createUI("Score");
     auto jt = GameObjectCreater::createUI("JumpTarget");
-    mCSConnection->setChicken(c);
-    mCSConnection->setScore(score);
     mFriedChickenManager->setScore(score);
 
     mRenderer->getDirectionalLight()->createMesh(mRenderer);
@@ -60,10 +56,8 @@ void GamePlay::update() {
         //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
         auto c = mFriedChickenManager->FindNearestChicken(p, mPCConnection->getChicken());
         mPCConnection->playerJumpTarget(c);
-        mCSConnection->setChicken(mPCConnection->getChicken());
         //連結クラス
         mPCConnection->connect();
-        mCSConnection->connect();
         mFriedChickenManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();

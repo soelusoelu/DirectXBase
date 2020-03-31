@@ -1,6 +1,7 @@
 ﻿#include "GameObject.h"
 #include "GameObjectManager.h"
 #include "Transform3D.h"
+#include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Device/Time.h"
 
@@ -42,6 +43,7 @@ void GameObject::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void GameObject::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+    mTransform->saveProperties(alloc, inObj);
 }
 
 void GameObject::setActive(bool value) {

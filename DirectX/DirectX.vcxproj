@@ -154,7 +154,6 @@
   <ItemGroup>
     <ClCompile Include="GameObject\Transform3D.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
-    <ClCompile Include="Connect\ChickenScoreConnection.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
     <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
@@ -247,7 +246,6 @@
   <ItemGroup>
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Camera\Camera.h" />
-    <ClInclude Include="Connect\ChickenScoreConnection.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
     <ClInclude Include="Connect\PlayerChickenConnection.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />

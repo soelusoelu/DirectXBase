@@ -5,7 +5,6 @@
 
 class FriedChickenManager;
 class PlayerChickenConnection;
-class ChickenScoreConnection;
 class Physics;
 
 class GamePlay : public SceneBase {
@@ -23,7 +22,6 @@ public:
 private:
     std::unique_ptr<FriedChickenManager> mFriedChickenManager;
     std::unique_ptr<PlayerChickenConnection> mPCConnection;
-    std::unique_ptr<ChickenScoreConnection> mCSConnection;
     Physics* mPhysics;
     State mState;
 };
