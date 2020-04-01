@@ -4,6 +4,7 @@
 #include <memory>
 
 class Camera;
+class DirectionalLight;
 class GameObjectManager;
 class MeshManager;
 class Renderer;
@@ -26,6 +27,7 @@ private:
     std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<SceneBase> mCurrentScene;
     std::shared_ptr<Camera> mCamera;
+    std::shared_ptr<DirectionalLight> mDirectionalLight;
     GameObjectManager* mGameObjectManager;
     MeshManager* mMeshManager;
     SpriteManager* mSpriteManager;

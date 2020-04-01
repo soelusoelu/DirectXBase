@@ -207,7 +207,7 @@
     <ClCompile Include="System\IndexBuffer.cpp" />
     <ClCompile Include="System\ShaderResourceView.cpp" />
     <ClCompile Include="System\Format.cpp" />
-    <ClCompile Include="Light\DirectionalLight.cpp" />
+    <ClCompile Include="Component\DirectionalLight.cpp" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Mesh\OBJ.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
@@ -301,7 +301,7 @@
     <ClInclude Include="System\RenderTargetViewDesc.h" />
     <ClInclude Include="System\Sampler.h" />
     <ClInclude Include="System\IndexBuffer.h" />
-    <ClInclude Include="Light\DirectionalLight.h" />
+    <ClInclude Include="Component\DirectionalLight.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Mesh\Material.h" />
     <ClInclude Include="Mesh\OBJ.h" />

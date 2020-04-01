@@ -10,6 +10,7 @@
 #include <vector>
 
 class Camera;
+class DirectionalLight;
 class MeshManager;
 class Renderer;
 class Transform3D;
@@ -45,7 +46,7 @@ public:
     ~Mesh();
     void addToManager(bool isTransparent = false);
     void draw(std::shared_ptr<Camera> camera) const;
-    void drawTransparent(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
+    void drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const;
     void setTransform(std::shared_ptr<Transform3D> transform);
     std::shared_ptr<IMeshLoader> getMeshData() const;
     //半径の取得

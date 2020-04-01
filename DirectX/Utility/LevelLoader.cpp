@@ -3,7 +3,6 @@
 #include "../DebugLayer/Debug.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
-#include "../Light/DirectionalLight.h"
 #include "../System/Game.h"
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
@@ -136,15 +135,6 @@ void LevelLoader::saveUI(std::list<std::shared_ptr<GameObject>> uiList, const st
 }
 
 void LevelLoader::saveGlobalProperties(rapidjson::Document::AllocatorType & alloc, std::shared_ptr<Renderer> renderer, rapidjson::Value * inObject) const {
-    //環境光
-    JsonHelper::setVector3(alloc, inObject, "ambientLight", renderer->getAmbientLight());
-
-    //ディレクショナルライト
-    auto dirLight = renderer->getDirectionalLight();
-    rapidjson::Value dirObj(rapidjson::kObjectType);
-    JsonHelper::setVector3(alloc, &dirObj, "direction", dirLight->getDirection());
-    JsonHelper::setVector3(alloc, &dirObj, "color", dirLight->getColor());
-    inObject->AddMember("directionalLight", dirObj, alloc);
 }
 
 //void LevelLoader::saveActors(rapidjson::Document::AllocatorType & alloc, ActorManager * manager, rapidjson::Value * inArray) const {

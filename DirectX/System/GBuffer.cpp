@@ -19,11 +19,11 @@
 #include "VertexBuffer.h"
 #include "Window.h"
 #include "../Component/Camera.h"
+#include "../Component/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Light/DirectionalLight.h"
 #include "../Mesh/OBJ.h"
 #include "../Shader/Shader.h"
 

@@ -3,6 +3,7 @@
 #include "Title.h"
 #include "../Component/Camera.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/DirectionalLight.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
@@ -40,6 +41,8 @@ void SceneManager::initialize() {
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager()->getComponent<Camera>();
+    auto dirLight = GameObjectCreater::create("DirectionalLight");
+    mDirectionalLight = dirLight->componentManager()->getComponent<DirectionalLight>();
 
     change();
 }
@@ -74,11 +77,11 @@ void SceneManager::draw() const {
     //メッシュの一括描画
     mMeshManager->draw(mCamera);
     //各テクスチャを参照してレンダリング
-    mRenderer->renderFromTexture(mCamera);
+    mRenderer->renderFromTexture(mCamera, mDirectionalLight);
     //ポイントライトの一括描画
     mRenderer->drawPointLights();
     //透明メッシュの描画
-    mMeshManager->drawTransparent(mRenderer, mCamera);
+    mMeshManager->drawTransparent(mCamera, mDirectionalLight);
 
     //スプライト描画準備
     Matrix4 proj = Matrix4::identity;

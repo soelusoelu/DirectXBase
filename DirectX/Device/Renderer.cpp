@@ -3,7 +3,6 @@
 #include "DrawString.h"
 #include "Sound.h"
 #include "../Component/PointLightComponent.h"
-#include "../Light/DirectionalLight.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/OBJ.h"
@@ -32,7 +31,6 @@ Renderer::Renderer() :
     mDrawString(std::make_shared<DrawString>()),
     mGBuffer(std::make_unique<GBuffer>()),
     mAmbientLight(Vector3::zero),
-    mDirectionalLight(std::make_shared<DirectionalLight>()),
     mPointLight(std::make_shared<PointLight>()) {
 }
 
@@ -40,7 +38,6 @@ Renderer::~Renderer() = default;
 
 void Renderer::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector3(inObj, "ambientLight", &mAmbientLight);
-    mDirectionalLight->loadProperties(inObj);
     mDrawString->loadProperties(inObj);
 }
 
@@ -51,7 +48,6 @@ void Renderer::initialize() {
 }
 
 void Renderer::update() {
-    mDirectionalLight->update();
     removePointLight();
 }
 
@@ -69,10 +65,6 @@ const Vector3& Renderer::getAmbientLight() const {
 
 void Renderer::setAmbientLight(const Vector3 & ambient) {
     mAmbientLight = ambient;
-}
-
-std::shared_ptr<DirectionalLight> Renderer::getDirectionalLight() const {
-    return mDirectionalLight;
 }
 
 void Renderer::addPointLight(std::shared_ptr<PointLightComponent> light) {
@@ -123,8 +115,8 @@ void Renderer::renderToTexture() {
     mGBuffer->renderToTexture();
 }
 
-void Renderer::renderFromTexture(std::shared_ptr<Camera> camera) {
-    mGBuffer->renderFromTexture(camera, mDirectionalLight, mAmbientLight);
+void Renderer::renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) {
+    mGBuffer->renderFromTexture(camera, dirLight, mAmbientLight);
 }
 
 void Renderer::renderSprite(Matrix4* proj) {

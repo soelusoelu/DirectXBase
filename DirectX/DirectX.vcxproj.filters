@@ -43,7 +43,6 @@
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="System\BlendState.cpp" />
     <ClCompile Include="System\DepthStencilState.cpp" />
-    <ClCompile Include="Light\DirectionalLight.cpp" />
     <ClCompile Include="System\RasterizerState.cpp" />
     <ClCompile Include="System\Texture.cpp" />
     <ClCompile Include="System\Texture2D.cpp" />
@@ -99,6 +98,7 @@
     <ClCompile Include="Mesh\TransparentMesh.cpp" />
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
+    <ClCompile Include="Component\DirectionalLight.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -142,7 +142,6 @@
     <ClInclude Include="System\BlendDesc.h" />
     <ClInclude Include="System\DepthStencilState.h" />
     <ClInclude Include="System\DepthStencilDesc.h" />
-    <ClInclude Include="Light\DirectionalLight.h" />
     <ClInclude Include="System\RasterizerState.h" />
     <ClInclude Include="System\RasterizerDesc.h" />
     <ClInclude Include="System\Texture.h" />
@@ -205,5 +204,6 @@
     <ClInclude Include="Mesh\TransparentMesh.h" />
     <ClInclude Include="Component\TransparentMeshComponent.h" />
     <ClInclude Include="Component\Camera.h" />
+    <ClInclude Include="Component\DirectionalLight.h" />
   </ItemGroup>
 </Project>

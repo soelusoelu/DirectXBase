@@ -3,11 +3,11 @@
 #include "MeshManager.h"
 #include "VertexArray.h"
 #include "../Component/Camera.h"
+#include "../Component/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Light/DirectionalLight.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
 #include "../System/DirectX.h"
@@ -123,7 +123,7 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
     }
 }
 
-void Mesh::drawTransparent(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+void Mesh::drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const {
     //使用するシェーダーの登録
     mShaderTransparent->setVSShader();
     mShaderTransparent->setPSShader();
@@ -143,7 +143,7 @@ void Mesh::drawTransparent(std::shared_ptr<Renderer> renderer, std::shared_ptr<C
         //ワールド、カメラ、射影行列を渡す
         cb.WVP = mTransform->getWorldTransform() * camera->getViewProjection();
         cb.WVP.transpose();
-        cb.lightDir = renderer->getDirectionalLight()->getDirection();
+        cb.lightDir = dirLight->getDirection();
         cb.cameraPos = camera->owner()->transform()->getPosition();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));

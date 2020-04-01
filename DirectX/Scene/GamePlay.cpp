@@ -13,7 +13,6 @@
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
 #include "../Input/Keyboard.h"
-#include "../Light/DirectionalLight.h"
 #include "../Scene/Title.h"
 #include "../System/Game.h"
 
@@ -45,7 +44,6 @@ void GamePlay::start() {
     auto jt = GameObjectCreater::createUI("JumpTarget");
     mFriedChickenManager->setScore(score);
 
-    mRenderer->getDirectionalLight()->createMesh(mRenderer);
     Debug::inspector()->setTarget(p);
 }
 

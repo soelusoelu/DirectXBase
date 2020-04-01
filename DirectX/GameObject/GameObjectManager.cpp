@@ -39,7 +39,7 @@ void GameObjectManager::add(GameObjectPtr add) {
 void GameObjectManager::clear() {
     auto itr = mGameObjects.begin();
     while (itr != mGameObjects.end()) {
-        if ((*itr)->tag() != "Camera") {
+        if ((*itr)->tag() != "Camera" && (*itr)->tag() != "DirectionalLight") {
             itr = mGameObjects.erase(itr);
         } else {
             ++itr;

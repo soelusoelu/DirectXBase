@@ -27,12 +27,11 @@ public:
 
     const Vector3& getAmbientLight() const;
     void setAmbientLight(const Vector3& ambient);
-    std::shared_ptr<DirectionalLight> getDirectionalLight() const;
     void addPointLight(std::shared_ptr<PointLightComponent> light);
     void drawPointLights();
 
     void renderToTexture();
-    void renderFromTexture(std::shared_ptr<Camera> camera);
+    void renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight);
     void renderSprite(Matrix4* proj);
     void renderToDebug(Matrix4* proj);
 
@@ -45,7 +44,6 @@ private:
     std::unique_ptr<GBuffer> mGBuffer;
 
     Vector3 mAmbientLight;
-    std::shared_ptr<DirectionalLight> mDirectionalLight;
     std::shared_ptr<PointLight> mPointLight;
 
     std::list<std::weak_ptr<PointLightComponent>> mPointLights;

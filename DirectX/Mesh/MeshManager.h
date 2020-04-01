@@ -5,7 +5,7 @@
 
 class Mesh;
 class Camera;
-class Renderer;
+class DirectionalLight;
 
 class MeshManager {
     using MeshPtr = std::shared_ptr<Mesh>;
@@ -16,7 +16,7 @@ public:
     ~MeshManager();
     void update();
     void draw(std::shared_ptr<Camera> camera) const;
-    void drawTransparent(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const;
+    void drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const;
     void add(MeshPtr mesh);
     void addTransparent(MeshPtr mesh);
     void clear();

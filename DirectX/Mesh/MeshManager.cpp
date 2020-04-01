@@ -41,7 +41,7 @@ void MeshManager::draw(std::shared_ptr<Camera> camera) const {
     }
 }
 
-void MeshManager::drawTransparent(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera) const {
+void MeshManager::drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const {
     if (mTransparentMeshes.empty()) {
         return;
     }
@@ -67,11 +67,11 @@ void MeshManager::drawTransparent(std::shared_ptr<Renderer> renderer, std::share
 
         rd.cullMode = CullMode::FRONT;
         Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
-        mesh->drawTransparent(renderer, camera);
+        mesh->drawTransparent(camera, dirLight);
 
         rd.cullMode = CullMode::BACK;
         Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
-        mesh->drawTransparent(renderer, camera);
+        mesh->drawTransparent(camera, dirLight);
     }
 }
 
