@@ -3,7 +3,7 @@
 #include <algorithm>
 
 Collider::Collider(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type, 1000),
+    Component(owner, type, 500),
     mIsAutoUpdate(true),
     mEnable(false) {
 }
@@ -15,7 +15,6 @@ Collider::~Collider() {
 }
 
 void Collider::start() {
-    startCollider();
     if (mPhysics) {
         mPhysics->add(shared_from_this());
         mEnable = true;
@@ -23,18 +22,13 @@ void Collider::start() {
 }
 
 void Collider::update() {
-    updateCollider();
-
     mPreviousCollider.resize(mCurrentCollider.size());
     std::copy(mCurrentCollider.begin(), mCurrentCollider.end(), mPreviousCollider.begin());
     mCurrentCollider.clear();
 }
 
-void Collider::onUpdateWorldTransform() {
-    if (!mIsAutoUpdate) {
-        return;
-    }
-    onUpdateWorldTransformCollider();
+void Collider::onSetActive(bool value) {
+    (value) ? enabled() : disabled();
 }
 
 void Collider::enabled() {

@@ -22,7 +22,9 @@ SphereCollisionComponent::~SphereCollisionComponent() {
     }
 }
 
-void SphereCollisionComponent::startCollider() {
+void SphereCollisionComponent::start() {
+    Collider::start();
+
     auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
     if (mesh) {
         mSphere->center = mesh->getCenter();
@@ -38,10 +40,13 @@ void SphereCollisionComponent::startCollider() {
     }
 }
 
-void SphereCollisionComponent::updateCollider() {
-}
+void SphereCollisionComponent::onUpdateWorldTransform() {
+    Collider::onUpdateWorldTransform();
 
-void SphereCollisionComponent::onUpdateWorldTransformCollider() {
+    if (!mIsAutoUpdate) {
+        return;
+    }
+
     auto center = mDefaultCenter + owner()->transform()->getPosition();
     auto radius = mDefaultRadius * owner()->transform()->getScale().y;
 

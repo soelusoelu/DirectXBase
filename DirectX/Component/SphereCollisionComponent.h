@@ -13,9 +13,8 @@ class SphereCollisionComponent : public Collider {
 public:
     SphereCollisionComponent(std::shared_ptr<GameObject> owner);
     ~SphereCollisionComponent();
-    virtual void startCollider() override;
-    virtual void updateCollider() override;
-    virtual void onUpdateWorldTransformCollider() override;
+    virtual void start() override;
+    virtual void onUpdateWorldTransform() override;
     void set(const Vector3& center, float radius);
     std::shared_ptr<Sphere> getSphere() const;
 

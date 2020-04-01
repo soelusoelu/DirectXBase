@@ -6,7 +6,7 @@
 #include "../Utility/StringUtil.h"
 
 Camera::Camera(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Camera"),
+    Component(owner, "Camera", 1000),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
     mFOV(45.f),

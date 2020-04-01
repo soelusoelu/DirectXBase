@@ -18,15 +18,17 @@ protected:
 
 public:
     virtual void start() override;
-    virtual void startCollider() = 0;
     virtual void update() override;
-    virtual void updateCollider() = 0;
-    virtual void onUpdateWorldTransform() override;
-    virtual void onUpdateWorldTransformCollider() = 0;
+    virtual void onSetActive(bool value) override;
+    //当たり判定を有効化
     void enabled();
+    //当たり判定を無効化
     void disabled();
+    //当たり判定が有効か
     bool getEnable() const;
+    //衝突判定の自動化
     void automation();
+    //コライダーを追加
     void addHitCollider(CollPtr hit);
     CollPtrList onCollisionEnter();
     CollPtrList onCollisionStay();
