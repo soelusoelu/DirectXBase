@@ -2,9 +2,10 @@
 #include "Material.h"
 #include "MeshManager.h"
 #include "VertexArray.h"
-#include "../Camera/Camera.h"
+#include "../Component/Camera.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Light/DirectionalLight.h"
 #include "../Shader/Shader.h"
@@ -78,7 +79,7 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
+        cb.WVP = mTransform->getWorldTransform() * camera->getViewProjection();
         cb.WVP.transpose();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
@@ -140,10 +141,10 @@ void Mesh::drawTransparent(std::shared_ptr<Renderer> renderer, std::shared_ptr<C
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = mTransform->getWorldTransform() * camera->getView() * camera->getProjection();
+        cb.WVP = mTransform->getWorldTransform() * camera->getViewProjection();
         cb.WVP.transpose();
         cb.lightDir = renderer->getDirectionalLight()->getDirection();
-        cb.cameraPos = camera->getPosition();
+        cb.cameraPos = camera->owner()->transform()->getPosition();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShaderTransparent->unmap(0);

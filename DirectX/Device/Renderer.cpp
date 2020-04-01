@@ -2,7 +2,6 @@
 #include "AssetsManager.h"
 #include "DrawString.h"
 #include "Sound.h"
-#include "../Camera/Camera.h"
 #include "../Component/PointLightComponent.h"
 #include "../Light/DirectionalLight.h"
 #include "../Light/PointLight.h"
@@ -80,7 +79,7 @@ void Renderer::addPointLight(std::shared_ptr<PointLightComponent> light) {
     mPointLights.emplace_back(light);
 }
 
-void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
+void Renderer::drawPointLights() {
     if (mPointLights.empty()) {
         return;
     }
@@ -114,7 +113,7 @@ void Renderer::drawPointLights(std::shared_ptr<Camera> camera) {
 
     for (auto&& pointLight : mPointLights) {
         if (auto p = pointLight.lock()) {
-            p->draw(mPointLight, camera);
+            p->draw(mPointLight);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿#include "GamePlay.h"
 #include "../Actor/FriedChickenManager.h"
-#include "../Camera/Camera.h"
 #include "../Component/Collider.h"
 #include "../Component/JumpTarget.h"
 #include "../Connect/PlayerChickenConnection.h"

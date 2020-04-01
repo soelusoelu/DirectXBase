@@ -1,5 +1,6 @@
 ﻿#include "GameObjectFactory.h"
 #include "GameObject.h"
+#include "../Component/Camera.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/FriedChickenComponent.h"
@@ -18,6 +19,7 @@
 
 GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
+    ADD_COMPONENT(Camera);
     ADD_COMPONENT(FriedChickenComponent);
     ADD_COMPONENT(HitPointComponent);
     ADD_COMPONENT(JumpTarget);

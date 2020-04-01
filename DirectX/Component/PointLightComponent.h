@@ -5,8 +5,8 @@
 #include "../System/Game.h"
 #include <memory>
 
-class GameObject;
 class Camera;
+class GameObject;
 struct PointLight;
 
 class PointLightComponent : public Component, public std::enable_shared_from_this<PointLightComponent> {
@@ -16,13 +16,14 @@ public:
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(debugInfoList* inspect) const override;
-    void draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const;
+    void draw(std::shared_ptr<PointLight> pointLight) const;
     void setColor(const Vector3& color);
     void setInnerRadius(float radius);
     void setOuterRadius(float radius);
     void setIntensity(float value);
 
 private:
+    std::shared_ptr<Camera> mCamera;
     Vector3 mColor; //色
     float mInnerRadius; //この半径以内だと完全な輝度で照らす
     float mOuterRadius; //光の届く半径

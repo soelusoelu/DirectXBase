@@ -1,11 +1,13 @@
 ﻿#include "SceneManager.h"
 #include "GamePlay.h"
 #include "Title.h"
-#include "../Camera/Camera.h"
+#include "../Component/Camera.h"
+#include "../Component/ComponentManager.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
@@ -16,7 +18,7 @@
 SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mRenderer(renderer),
     mCurrentScene(std::make_shared<GamePlay>()),
-    mCamera(std::make_shared<Camera>()),
+    mCamera(nullptr),
     mGameObjectManager(new GameObjectManager()),
     mMeshManager(new MeshManager()),
     mSpriteManager(new SpriteManager()) {
@@ -29,7 +31,6 @@ SceneManager::~SceneManager() {
 }
 
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
-    mCamera->loadProperties(inObj);
 }
 
 void SceneManager::initialize() {
@@ -37,7 +38,8 @@ void SceneManager::initialize() {
     Mesh::setMeshManager(mMeshManager);
     Sprite::setSpriteManager(mSpriteManager);
 
-    mCamera->initialize();
+    auto cam = GameObjectCreater::create("Camera");
+    mCamera = cam->componentManager()->getComponent<Camera>();
 
     change();
 }
@@ -52,8 +54,6 @@ void SceneManager::update() {
     mCurrentScene->update();
     //レンダラーの更新
     mRenderer->update();
-    //カメラ更新
-    mCamera->update();
     //各マネージャークラスを更新
     mMeshManager->update();
     mSpriteManager->update();
@@ -76,7 +76,7 @@ void SceneManager::draw() const {
     //各テクスチャを参照してレンダリング
     mRenderer->renderFromTexture(mCamera);
     //ポイントライトの一括描画
-    mRenderer->drawPointLights(mCamera);
+    mRenderer->drawPointLights();
     //透明メッシュの描画
     mMeshManager->drawTransparent(mRenderer, mCamera);
 
@@ -100,6 +100,6 @@ void SceneManager::change() {
     mGameObjectManager->clear();
     mMeshManager->clear();
     mSpriteManager->clear();
-    mCurrentScene->set(mRenderer, mCamera, mGameObjectManager);
+    mCurrentScene->set(mRenderer, mGameObjectManager);
     mCurrentScene->start();
 }

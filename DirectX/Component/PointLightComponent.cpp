@@ -1,6 +1,8 @@
 ﻿#include "PointLightComponent.h"
-#include "../Camera/Camera.h"
+#include "Camera.h"
+#include "ComponentManager.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Renderer.h"
@@ -18,6 +20,7 @@
 
 PointLightComponent::PointLightComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "PointLightComponent"),
+    mCamera(nullptr),
     mColor(ColorPalette::white),
     mInnerRadius(0.5f),
     mOuterRadius(1.f),
@@ -27,6 +30,8 @@ PointLightComponent::PointLightComponent(std::shared_ptr<GameObject> owner) :
 PointLightComponent::~PointLightComponent() = default;
 
 void PointLightComponent::start() {
+    auto camera = owner()->getGameObjectManager()->find("Camera");
+    mCamera = camera->componentManager()->getComponent<Camera>();
     owner()->renderer()->addPointLight(shared_from_this());
 }
 
@@ -39,9 +44,7 @@ void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
     }
 
     float f;
-    if (JsonHelper::getFloat(inObj, "innerRadius", &f)) {
-        mInnerRadius = f;
-    }
+    JsonHelper::getFloat(inObj, "innerRadius", &mInnerRadius);
     if (JsonHelper::getFloat(inObj, "outerRadius", &f)) {
         mOuterRadius = f;
     }
@@ -66,7 +69,7 @@ void PointLightComponent::drawDebugInfo(debugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shared_ptr<Camera> camera) const {
+void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight) const {
     auto scale = Matrix4::createScale(owner()->transform()->getScale() * mOuterRadius / pointLight->radius);
     auto trans = Matrix4::createTranslation(owner()->transform()->getPosition());
     auto world = scale * trans;
@@ -78,10 +81,10 @@ void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight, std::shar
     MappedSubResourceDesc msrd;
     if (shader->map(&msrd)) {
         PointLightConstantBuffer cb;
-        cb.wvp = world * camera->getView() * camera->getProjection();
+        cb.wvp = world * mCamera->getViewProjection();
         cb.wvp.transpose();
         cb.worldPos = owner()->transform()->getPosition();
-        cb.cameraPos = camera->getPosition();
+        cb.cameraPos = mCamera->owner()->transform()->getPosition();
         cb.windowSize = Vector2(Window::width(), Window::height());
         cb.diffuseColor = mColor;
         cb.innerRadius = mInnerRadius;

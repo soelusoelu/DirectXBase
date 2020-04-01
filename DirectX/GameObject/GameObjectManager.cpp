@@ -37,8 +37,15 @@ void GameObjectManager::add(GameObjectPtr add) {
 }
 
 void GameObjectManager::clear() {
+    auto itr = mGameObjects.begin();
+    while (itr != mGameObjects.end()) {
+        if ((*itr)->tag() != "Camera") {
+            itr = mGameObjects.erase(itr);
+        } else {
+            ++itr;
+        }
+    }
     mPendingGameObjects.clear();
-    mGameObjects.clear();
 }
 
 std::shared_ptr<GameObject> GameObjectManager::find(const std::string& tag) const {

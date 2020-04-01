@@ -4,7 +4,6 @@
 
 class GameObjectManager;
 class Renderer;
-class Camera;
 
 class SceneBase {
     friend class SceneManager;
@@ -18,12 +17,11 @@ public:
 
 private:
     //SceneManagerがアクセスするよう
-    void set(std::shared_ptr<Renderer> renderer, std::shared_ptr<Camera> camera, GameObjectManager* gameObjectManager);
+    void set(std::shared_ptr<Renderer> renderer, GameObjectManager* gameObjectManager);
     std::shared_ptr<SceneBase> getNextScene() const;
 
 protected:
     std::shared_ptr<Renderer> mRenderer;
-    std::shared_ptr<Camera> mCamera;
     GameObjectManager* mGameObjectManager;
 
 private:

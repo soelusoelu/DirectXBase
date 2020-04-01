@@ -1,10 +1,12 @@
-#include "Camera.h"
+ï»¿#include "Camera.h"
+#include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
+#include "../Utility/StringUtil.h"
 
-Camera::Camera() :
-    mPosition(Vector3::zero),
+Camera::Camera(std::shared_ptr<GameObject> owner) :
+    Component(owner, "Camera"),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
     mFOV(45.f),
@@ -16,17 +18,7 @@ Camera::Camera() :
 
 Camera::~Camera() = default;
 
-void Camera::loadProperties(const rapidjson::Value & inObj) {
-    const auto& obj = inObj["camera"];
-    if (obj.IsObject()) {
-        JsonHelper::getVector3(obj, "position", &mPosition);
-        JsonHelper::getFloat(obj, "fov", &mFOV);
-        JsonHelper::getFloat(obj, "nearClip", &mNearClip);
-        JsonHelper::getFloat(obj, "farClip", &mFarClip);
-    }
-}
-
-void Camera::initialize() {
+void Camera::start() {
     calcLookAt();
     calcPerspectiveFOV(Window::width(), Window::height());
 }
@@ -35,8 +27,25 @@ void Camera::update() {
     calcLookAt();
 }
 
-const Vector3& Camera::getPosition() const {
-    return mPosition;
+void Camera::loadProperties(const rapidjson::Value & inObj) {
+    Component::loadProperties(inObj);
+
+    JsonHelper::getFloat(inObj, "fov", &mFOV);
+    JsonHelper::getFloat(inObj, "nearClip", &mNearClip);
+    JsonHelper::getFloat(inObj, "farClip", &mFarClip);
+}
+
+void Camera::drawDebugInfo(debugInfoList* inspect) const {
+    debugInfo info;
+    info.first = "FOV";
+    info.second = StringUtil::floatToString(mFOV);
+    inspect->emplace_back(info);
+    info.first = "NearClip";
+    info.second = StringUtil::floatToString(mNearClip);
+    inspect->emplace_back(info);
+    info.first = "FarClip";
+    info.second = StringUtil::floatToString(mFarClip);
+    inspect->emplace_back(info);
 }
 
 const Matrix4& Camera::getView() const {
@@ -47,12 +56,16 @@ const Matrix4& Camera::getProjection() const {
     return mProjection;
 }
 
-void Camera::lookAt(const Vector3& position) {
+Matrix4 Camera::getViewProjection() const {
+    return mView * mProjection;
+}
+
+void Camera::lookAt(const Vector3 & position) {
     mLookAt = position;
 }
 
-Vector3 Camera::screenToWorldPoint(const Vector2& position, float z) {
-    // Šes—ñ‚Ì‹ts—ñ‚ðŽZo
+Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
+    //å„è¡Œåˆ—ã®é€†è¡Œåˆ—ã‚’ç®—å‡º
     auto invView = mView;
     auto invProj = mProjection;
     auto viewport = Matrix4::identity;
@@ -64,7 +77,7 @@ Vector3 Camera::screenToWorldPoint(const Vector2& position, float z) {
     viewport.m[3][1] = Window::height() / 2.f;
     viewport.inverse();
 
-    // ‹t•ÏŠ·
+    //é€†å¤‰æ›
     auto temp = viewport * invProj * invView;
     Vector3 out = Vector3::zero;
     //out = Vector3(position, z) * temp;
@@ -73,13 +86,14 @@ Vector3 Camera::screenToWorldPoint(const Vector2& position, float z) {
 }
 
 void Camera::calcLookAt() {
-    Vector3 zaxis = Vector3::normalize(mLookAt - mPosition);
+    auto pos = owner()->transform()->getPosition();
+    Vector3 zaxis = Vector3::normalize(mLookAt - pos);
     Vector3 xaxis = Vector3::normalize(Vector3::cross(mUp, zaxis));
     Vector3 yaxis = Vector3::normalize(Vector3::cross(zaxis, xaxis));
     Vector3 trans;
-    trans.x = -Vector3::dot(xaxis, mPosition);
-    trans.y = -Vector3::dot(yaxis, mPosition);
-    trans.z = -Vector3::dot(zaxis, mPosition);
+    trans.x = -Vector3::dot(xaxis, pos);
+    trans.y = -Vector3::dot(yaxis, pos);
+    trans.z = -Vector3::dot(zaxis, pos);
 
     float temp[4][4] = {
         { xaxis.x, yaxis.x, zaxis.x, 0.f },

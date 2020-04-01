@@ -29,7 +29,7 @@ public:
     void setAmbientLight(const Vector3& ambient);
     std::shared_ptr<DirectionalLight> getDirectionalLight() const;
     void addPointLight(std::shared_ptr<PointLightComponent> light);
-    void drawPointLights(std::shared_ptr<Camera> camera);
+    void drawPointLights();
 
     void renderToTexture();
     void renderFromTexture(std::shared_ptr<Camera> camera);

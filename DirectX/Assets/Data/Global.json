@@ -19,12 +19,6 @@
       "number": "number.png",
       "font": "font2.png"
     },
-    "camera": {
-      "position": [ 0.0, 8.0, -10.0 ],
-      "fov": 45.0,
-      "nearClip": 0.1,
-      "farClip": 1000.0
-    },
     "log": {
       "scale": [ 0.3125, 0.3125 ]
     },

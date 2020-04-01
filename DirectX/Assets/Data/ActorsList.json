@@ -1,6 +1,22 @@
 {
   "gameObjects": [
     {
+      "type": "Camera",
+      "properties": {
+        "position": [ 0.0, 8.0, -10.0 ]
+      },
+      "components": [
+        {
+          "type": "Camera",
+          "properties": {
+            "fov": 45.0,
+            "nearClip": 0.1,
+            "farClip": 1000.0
+          }
+        }
+      ]
+    },
+    {
       "type": "Player",
       "properties": {
         "scale": [ 5.0, 5.0, 5.0 ]

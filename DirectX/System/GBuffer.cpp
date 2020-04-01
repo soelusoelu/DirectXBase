@@ -18,9 +18,11 @@
 #include "Usage.h"
 #include "VertexBuffer.h"
 #include "Window.h"
-#include "../Camera/Camera.h"
+#include "../Component/Camera.h"
 #include "../Device/AssetsManager.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 #include "../Light/DirectionalLight.h"
 #include "../Mesh/OBJ.h"
 #include "../Shader/Shader.h"
@@ -140,7 +142,7 @@ void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<
         GBufferShaderConstantBuffer cb;
         cb.dirLightDir = dirLight->getDirection();
         cb.dirLightColor = dirLight->getColor();
-        cb.cameraPos = camera->getPosition();
+        cb.cameraPos = camera->owner()->transform()->getPosition();
         cb.ambientLight = ambient;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));

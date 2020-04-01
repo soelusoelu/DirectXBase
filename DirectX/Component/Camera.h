@@ -1,21 +1,24 @@
-#pragma once
+ï»¿#pragma once
 
+#include "Component.h"
 #include "../Math/Math.h"
-#include <rapidjson/document.h>
-#include <memory>
 
-class Camera {
+class GameObject;
+
+class Camera : public Component {
 public:
-    Camera();
+    Camera(std::shared_ptr<GameObject> owner);
     ~Camera();
-    void loadProperties(const rapidjson::Value& inObj);
-    void initialize();
-    void update();
-    const Vector3& getPosition() const;
+    virtual void start() override;
+    virtual void update() override;
+    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void drawDebugInfo(debugInfoList* inspect) const override;
     const Matrix4& getView() const;
     const Matrix4& getProjection() const;
+    // View * Projection
+    Matrix4 getViewProjection() const;
     void lookAt(const Vector3& position);
-    //ƒXƒNƒŠ[ƒ“À•W‚ğƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·
+    //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã«å¤‰æ›
     Vector3 screenToWorldPoint(const Vector2& position, float z);
 
 private:
@@ -23,7 +26,6 @@ private:
     void calcPerspectiveFOV(float width, float height);
 
 private:
-    Vector3 mPosition;
     Vector3 mLookAt;
     Vector3 mUp;
 

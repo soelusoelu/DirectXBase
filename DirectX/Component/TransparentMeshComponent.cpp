@@ -21,7 +21,7 @@ void TransparentMeshComponent::loadProperties(const rapidjson::Value& inObj) {
 
 void TransparentMeshComponent::drawDebugInfo(debugInfoList* inspect) const {
     debugInfo info;
-    info.first = "alpha";
+    info.first = "Alpha";
     info.second = StringUtil::floatToString(mMesh->getAlpha());
     inspect->emplace_back(info);
 }
