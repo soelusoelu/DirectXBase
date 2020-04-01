@@ -85,6 +85,17 @@
           }
         }
       ]
+    },
+    {
+      "type": "FriedChickenManager",
+      "components": [
+        {
+          "type": "FriedChickenManager",
+          "properties": {
+            "maxDrawNum": 10
+          }
+        }
+      ]
     }
   ]
 }

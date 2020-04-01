@@ -5,6 +5,7 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
 #include "../Component/FriedChickenComponent.h"
+#include "../Component/FriedChickenManager.h"
 #include "../Component/HitPointComponent.h"
 #include "../Component/JumpTarget.h"
 #include "../Component/MeshComponent.h"
@@ -23,6 +24,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(Camera);
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(FriedChickenComponent);
+    ADD_COMPONENT(FriedChickenManager);
     ADD_COMPONENT(HitPointComponent);
     ADD_COMPONENT(JumpTarget);
     ADD_COMPONENT(MeshComponent);

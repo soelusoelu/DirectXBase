@@ -1,14 +1,17 @@
 ﻿#include "FriedChickenManager.h"
-#include "../Component/ComponentManager.h"
-#include "../Component/FriedChickenComponent.h"
-#include "../Component/Score.h"
+#include "ComponentManager.h"
+#include "FriedChickenComponent.h"
+#include "Score.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/Transform3D.h"
 #include "../Math/Math.h"
+#include "../Utility/LevelLoader.h"
+#include "../Utility/StringUtil.h"
 
-FriedChickenManager::FriedChickenManager() :
+FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
+    Component(owner, "FriedChickenManager", 200),
     mSpawnTimer(std::make_unique<Time>(2.f)),
     mMaxDrawNum(10),
     mScore(nullptr) {
@@ -16,7 +19,7 @@ FriedChickenManager::FriedChickenManager() :
 
 FriedChickenManager::~FriedChickenManager() = default;
 
-void FriedChickenManager::initialize() {
+void FriedChickenManager::awake() {
     for (size_t i = 0; i < mMaxDrawNum; i++) {
         auto f = GameObjectCreater::create("FriedChicken");
         auto c = f->componentManager()->getComponent<FriedChickenComponent>();
@@ -34,6 +37,19 @@ void FriedChickenManager::update() {
         }
     }
     moveToWait();
+}
+
+void FriedChickenManager::loadProperties(const rapidjson::Value& inObj) {
+    Component::loadProperties(inObj);
+
+    JsonHelper::getInt(inObj, "maxDrawNum", &mMaxDrawNum);
+}
+
+void FriedChickenManager::drawDebugInfo(debugInfoList* inspect) const {
+    debugInfo info;
+    info.first = "MaxDrawNum";
+    info.second = StringUtil::intToString(mMaxDrawNum);
+    inspect->emplace_back(info);
 }
 
 std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target) {

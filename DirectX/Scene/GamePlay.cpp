@@ -1,6 +1,7 @@
 ﻿#include "GamePlay.h"
-#include "../Actor/FriedChickenManager.h"
 #include "../Component/Collider.h"
+#include "../Component/ComponentManager.h"
+#include "../Component/FriedChickenManager.h"
 #include "../Component/JumpTarget.h"
 #include "../Connect/PlayerChickenConnection.h"
 #include "../DebugLayer/Debug.h"
@@ -18,7 +19,7 @@
 
 GamePlay::GamePlay() :
     SceneBase(),
-    mFriedChickenManager(std::make_unique<FriedChickenManager>()),
+    mFriedChickenManager(nullptr),
     mPCConnection(std::make_unique<PlayerChickenConnection>()),
     mPhysics(new Physics()),
     mState(State::PLAY) {
@@ -35,7 +36,8 @@ void GamePlay::start() {
     //ファイルからアクターを読み込む
     auto p = GameObjectCreater::create("Player");
     auto f = GameObjectCreater::create("Field");
-    mFriedChickenManager->initialize();
+    auto fcm = GameObjectCreater::create("FriedChickenManager");
+    mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
     auto c = mFriedChickenManager->FindNearestChicken(p);
     mPCConnection->setPlayer(p);
     mPCConnection->setChicken(c);
@@ -55,7 +57,6 @@ void GamePlay::update() {
         mPCConnection->playerJumpTarget(c);
         //連結クラス
         mPCConnection->connect();
-        mFriedChickenManager->update();
         //総当たり判定
         mPhysics->sweepAndPrune();
 

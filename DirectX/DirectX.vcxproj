@@ -162,7 +162,7 @@
     <ClCompile Include="DebugLayer\Log.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
     <ClCompile Include="DebugLayer\Inspector.cpp" />
-    <ClCompile Include="Actor\FriedChickenManager.cpp" />
+    <ClCompile Include="Component\FriedChickenManager.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
     <ClCompile Include="GameObject\GameObjectFactory.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
@@ -254,7 +254,7 @@
     <ClInclude Include="DebugLayer\Log.h" />
     <ClInclude Include="Device\FPSCounter.h" />
     <ClInclude Include="DebugLayer\Inspector.h" />
-    <ClInclude Include="Actor\FriedChickenManager.h" />
+    <ClInclude Include="Component\FriedChickenManager.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
     <ClInclude Include="GameObject\GameObjectFactory.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />

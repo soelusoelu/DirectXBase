@@ -20,7 +20,7 @@ public:
     virtual void update() override;
 
 private:
-    std::unique_ptr<FriedChickenManager> mFriedChickenManager;
+    std::shared_ptr<FriedChickenManager> mFriedChickenManager;
     std::unique_ptr<PlayerChickenConnection> mPCConnection;
     Physics* mPhysics;
     State mState;

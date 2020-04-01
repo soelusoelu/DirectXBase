@@ -21,6 +21,8 @@ public:
     //getComponentはここでして
     virtual void start() {};
     virtual void update() {};
+    //loadPropertiesの直後に呼び出される
+    virtual void awake() {};
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};
     //アクティブ・非アクティブ時の切り替え
@@ -43,6 +45,7 @@ public:
         auto t = std::make_shared<T>(gameObject);
         t->owner()->componentManager()->addComponent(t);
         t->loadProperties(inObj);
+        t->awake();
     }
 
 private:

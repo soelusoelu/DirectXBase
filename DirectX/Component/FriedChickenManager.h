@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Component.h"
 #include <list>
 #include <memory>
 
@@ -8,16 +9,18 @@ class GameObject;
 class Score;
 class Time;
 
-class FriedChickenManager {
+class FriedChickenManager : public Component {
     using ChickenPtr = std::shared_ptr<FriedChickenComponent>;
     using ChickenPtrList = std::list<ChickenPtr>;
     using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:
-    FriedChickenManager();
+    FriedChickenManager(std::shared_ptr<GameObject> owner);
     ~FriedChickenManager();
-    void initialize();
-    void update();
+    virtual void awake() override;
+    virtual void update() override;
+    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void drawDebugInfo(debugInfoList* inspect) const override;
     //ターゲットから一番近い唐揚げを検索
     GameObjectPtr FindNearestChicken(const GameObjectPtr target);
     //excludeを除くターゲットから一番近い唐揚げを検索
