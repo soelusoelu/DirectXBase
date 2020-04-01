@@ -5,7 +5,6 @@
 
 class FriedChickenManager;
 class PlayerChickenConnection;
-class Physics;
 
 class GamePlay : public SceneBase {
     enum class State {
@@ -22,6 +21,5 @@ public:
 private:
     std::shared_ptr<FriedChickenManager> mFriedChickenManager;
     std::unique_ptr<PlayerChickenConnection> mPCConnection;
-    Physics* mPhysics;
     State mState;
 };

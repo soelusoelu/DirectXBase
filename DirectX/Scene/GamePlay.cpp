@@ -1,12 +1,10 @@
 ﻿#include "GamePlay.h"
-#include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/FriedChickenManager.h"
 #include "../Component/JumpTarget.h"
 #include "../Connect/PlayerChickenConnection.h"
 #include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
-#include "../Device/Physics.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -21,16 +19,10 @@ GamePlay::GamePlay() :
     SceneBase(),
     mFriedChickenManager(nullptr),
     mPCConnection(std::make_unique<PlayerChickenConnection>()),
-    mPhysics(new Physics()),
     mState(State::PLAY) {
-    Collider::setPhysics(mPhysics);
 }
 
-GamePlay::~GamePlay() {
-    SAFE_DELETE(mPhysics);
-    //なぜかColliderのPhysicsが生きてるから
-    Collider::setPhysics(nullptr);
-}
+GamePlay::~GamePlay() = default;
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
@@ -57,8 +49,6 @@ void GamePlay::update() {
         mPCConnection->playerJumpTarget(c);
         //連結クラス
         mPCConnection->connect();
-        //総当たり判定
-        mPhysics->sweepAndPrune();
 
         if (Input::keyboard()->getKeyDown(KeyCode::Z)) {
             nextScene(std::make_shared<Title>());

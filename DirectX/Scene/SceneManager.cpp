@@ -2,10 +2,12 @@
 #include "GamePlay.h"
 #include "Title.h"
 #include "../Component/Camera.h"
+#include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
+#include "../Device/Physics.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -22,13 +24,15 @@ SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
     mCamera(nullptr),
     mGameObjectManager(new GameObjectManager()),
     mMeshManager(new MeshManager()),
-    mSpriteManager(new SpriteManager()) {
+    mSpriteManager(new SpriteManager()),
+    mPhysics(new Physics()) {
 }
 
 SceneManager::~SceneManager() {
     SAFE_DELETE(mGameObjectManager);
     SAFE_DELETE(mMeshManager);
     SAFE_DELETE(mSpriteManager);
+    SAFE_DELETE(mPhysics);
 }
 
 void SceneManager::loadProperties(const rapidjson::Value& inObj) {
@@ -38,6 +42,7 @@ void SceneManager::initialize() {
     GameObject::setGameObjectManager(mGameObjectManager);
     Mesh::setMeshManager(mMeshManager);
     Sprite::setSpriteManager(mSpriteManager);
+    Collider::setPhysics(mPhysics);
 
     auto cam = GameObjectCreater::create("Camera");
     mCamera = cam->componentManager()->getComponent<Camera>();
@@ -55,6 +60,8 @@ void SceneManager::update() {
     mGameObjectManager->update();
     //現在のシーンを更新
     mCurrentScene->update();
+    //総当たり判定
+    mPhysics->sweepAndPrune();
     //レンダラーの更新
     mRenderer->update();
     //各マネージャークラスを更新

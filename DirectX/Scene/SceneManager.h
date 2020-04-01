@@ -7,6 +7,7 @@ class Camera;
 class DirectionalLight;
 class GameObjectManager;
 class MeshManager;
+class Physics;
 class Renderer;
 class SceneBase;
 class SpriteManager;
@@ -31,4 +32,5 @@ private:
     GameObjectManager* mGameObjectManager;
     MeshManager* mMeshManager;
     SpriteManager* mSpriteManager;
+    Physics* mPhysics;
 };
