@@ -38,7 +38,7 @@ void GameObjectManager::clear() {
     for (auto&& gameObject : mGameObjects) {
         gameObject->finalize();
     }
-    for (auto&& gameObject : mGameObjects) {
+    for (auto&& gameObject : mPendingGameObjects) {
         gameObject->finalize();
     }
 
