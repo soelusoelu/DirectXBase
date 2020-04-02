@@ -1,6 +1,6 @@
 ﻿#include "GameObjectManager.h"
 #include "GameObject.h"
-#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Hierarchy.h"
 #include "../Utility/LevelLoader.h"
 #include <algorithm>
@@ -25,7 +25,7 @@ void GameObjectManager::update() {
 
     remove();
 
-    Debug::hierarchy()->update(mGameObjects);
+    DebugUtility::hierarchy()->update(mGameObjects);
 }
 
 void GameObjectManager::add(GameObjectPtr add) {

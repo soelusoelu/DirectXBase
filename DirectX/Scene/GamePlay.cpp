@@ -3,9 +3,8 @@
 #include "../Component/FriedChickenManager.h"
 #include "../Component/JumpTarget.h"
 #include "../Connect/PlayerChickenConnection.h"
-#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Inspector.h"
-#include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
@@ -38,7 +37,7 @@ void GamePlay::start() {
     auto jt = GameObjectCreater::createUI("JumpTarget");
     mFriedChickenManager->setScore(score);
 
-    Debug::inspector()->setTarget(p);
+    DebugUtility::inspector()->setTarget(p);
 }
 
 void GamePlay::update() {

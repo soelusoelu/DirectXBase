@@ -5,7 +5,7 @@
 #include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
-#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/DebugUtility.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
@@ -55,7 +55,7 @@ void SceneManager::initialize() {
 void SceneManager::update() {
     //アップデートの最初で文字列削除
     mRenderer->getDrawString()->clear();
-    Debug::drawStringClear();
+    DebugUtility::drawStringClear();
 
     mGameObjectManager->update();
     //現在のシーンを更新
@@ -68,7 +68,7 @@ void SceneManager::update() {
     mMeshManager->update();
     mSpriteManager->update();
     //デバッグ
-    Debug::update();
+    DebugUtility::update();
 
     //nullptrじゃなければシーン移行
     auto next = mCurrentScene->getNextScene();
@@ -102,7 +102,7 @@ void SceneManager::draw() const {
     //レンダリング領域をデバッグに変更
     mRenderer->renderToDebug(&proj);
     //デバッグ表示
-    Debug::draw(proj);
+    DebugUtility::draw(proj);
 #endif // _DEBUG
 }
 

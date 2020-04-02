@@ -99,6 +99,7 @@
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\DirectionalLight.cpp" />
     <ClCompile Include="Component\FriedChickenManager.cpp" />
+    <ClCompile Include="DebugLayer\DebugUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -205,5 +206,6 @@
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\DirectionalLight.h" />
     <ClInclude Include="Component\FriedChickenManager.h" />
+    <ClInclude Include="DebugLayer\DebugUtility.h" />
   </ItemGroup>
 </Project>

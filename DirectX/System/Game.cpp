@@ -2,7 +2,7 @@
 #include "DirectX.h"
 #include "Texture.h"
 #include "Window.h"
-#include "../DebugLayer/Debug.h"
+#include "../DebugLayer/DebugUtility.h"
 #include "../Device/DrawString.h"
 #include "../Device/FPSCounter.h"
 #include "../Device/Random.h"
@@ -22,7 +22,7 @@ Game::Game() {
 Game::~Game() {
     Input::end();
     Texture::end();
-    Debug::finalize();
+    DebugUtility::finalize();
 }
 
 void Game::run(HINSTANCE hInstance) {
@@ -52,7 +52,7 @@ bool Game::initialize() {
     mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>(mRenderer);
     Singleton<GameObjectFactory>::instance().initialize(mRenderer);
-    Debug::create();
+    DebugUtility::create();
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
 
@@ -64,7 +64,7 @@ bool Game::initialize() {
 
     Random::initialize();
     Input::initialize(mhWnd);
-    Debug::initialize(mRenderer);
+    DebugUtility::initialize(mRenderer);
     mSceneManager->initialize();
 
     return true;
@@ -88,7 +88,7 @@ void Game::loadProperties(const rapidjson::Value& inObj) {
     mWindow->loadProperties(inObj);
     mRenderer->loadProperties(inObj);
     mFPSCounter->loadProperties(inObj);
-    Debug::loadProperties(inObj);
+    DebugUtility::loadProperties(inObj);
     mSceneManager->loadProperties(inObj);
 }
 

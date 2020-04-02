@@ -3,7 +3,6 @@
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <list>
-#include <memory>
 #include <string>
 #include <utility>
 

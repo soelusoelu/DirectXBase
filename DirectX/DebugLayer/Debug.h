@@ -1,42 +1,14 @@
 ﻿#pragma once
 
-#include "../Math/Math.h"
-#include <rapidjson/document.h>
-#include <memory>
 #include <string>
 
-class DrawString;
-class FixedDebugInformation;
-class Hierarchy;
-class Inspector;
-class Log;
-class Renderer;
-
 class Debug {
-public:
     Debug() = delete;
     ~Debug() = delete;
 
-    static void create();
-    static void loadProperties(const rapidjson::Value& inObj);
-    static void initialize(std::shared_ptr<Renderer> renderer);
-    static void finalize();
-    static void update();
-    //messageを新規ウィンドウに表示
-    //重大なバグを表示する用
+public:
     static void windowMessage(const std::string& message);
-    static void draw(const Matrix4& proj);
-    //DrawStringが保持する文字列をすべて削除
-    static void drawStringClear();
-    static Log* log();
-    static FixedDebugInformation* fixedDebugInfo();
-    static Hierarchy* hierarchy();
-    static Inspector* inspector();
-
-private:
-    static DrawString* mDrawString;
-    static Log* mLog;
-    static FixedDebugInformation* mFixedDebugInfo;
-    static Hierarchy* mHierarchy;
-    static Inspector* mInspector;
+    static void log(const std::string& message);
+    static void logError(const std::string& message);
+    static void logWarning(const std::string& message);
 };
