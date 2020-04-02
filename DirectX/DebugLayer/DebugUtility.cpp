@@ -41,6 +41,7 @@ void DebugUtility::finalize() {
 }
 
 void DebugUtility::update() {
+    mHierarchy->update();
     mLog->update();
 }
 

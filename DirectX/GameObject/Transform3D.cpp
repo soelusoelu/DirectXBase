@@ -161,12 +161,12 @@ Vector3 Transform3D::right() const {
     return Vector3::transform(Vector3::right, mRotation);
 }
 
-void Transform3D::addChild(std::shared_ptr<Transform3D> child) {
+void Transform3D::addChild(TransformPtr child) {
     mChildren.emplace_back(child);
     child->setParent(shared_from_this());
 }
 
-void Transform3D::removeChild(std::shared_ptr<Transform3D> child) {
+void Transform3D::removeChild(TransformPtr child) {
     removeChild(child->owner()->tag());
 }
 
@@ -181,13 +181,17 @@ void Transform3D::removeChild(const std::string& tag) {
 }
 
 std::shared_ptr<Transform3D> Transform3D::getChild(const std::string& tag) const {
-    std::shared_ptr<Transform3D> child = nullptr;
+    TransformPtr child = nullptr;
     for (const auto& c : mChildren) {
         if (c->owner()->tag() == tag) {
             child = c;
         }
     }
     return child;
+}
+
+std::list<std::shared_ptr<Transform3D>> Transform3D::getChildren() const {
+    return mChildren;
 }
 
 std::shared_ptr<Transform3D> Transform3D::parent() const {
@@ -225,7 +229,7 @@ void Transform3D::saveProperties(rapidjson::Document::AllocatorType& alloc, rapi
     JsonHelper::setVector3(alloc, inObj, "scale", mScale);
 }
 
-void Transform3D::setParent(std::shared_ptr<Transform3D> parent) {
+void Transform3D::setParent(TransformPtr parent) {
     mParent = parent;
 }
 

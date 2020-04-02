@@ -9,6 +9,9 @@
 class GameObject;
 
 class Transform3D : public std::enable_shared_from_this<Transform3D> {
+    using TransformPtr = std::shared_ptr<Transform3D>;
+    using TransformPtrList = std::list<TransformPtr>;
+
 public:
     Transform3D(std::shared_ptr<GameObject> owner = nullptr);
     ~Transform3D();
@@ -49,12 +52,13 @@ public:
     Vector3 right() const;
 
     //親子関係
-    void addChild(std::shared_ptr<Transform3D> child);
-    void removeChild(std::shared_ptr<Transform3D> child);
+    void addChild(TransformPtr child);
+    void removeChild(TransformPtr child);
     void removeChild(const std::string& tag);
-    std::shared_ptr<Transform3D> getChild(const std::string& tag) const;
-    std::shared_ptr<Transform3D> parent() const;
-    std::shared_ptr<Transform3D> root() const;
+    TransformPtr getChild(const std::string& tag) const;
+    TransformPtrList getChildren() const;
+    TransformPtr parent() const;
+    TransformPtr root() const;
     size_t getChildCount() const;
 
     //ロード/セーブ
@@ -62,7 +66,7 @@ public:
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
 
 private:
-    void setParent(std::shared_ptr<Transform3D> parent);
+    void setParent(TransformPtr parent);
     void shouldRecomputeTransform();
 
 private:
@@ -73,6 +77,6 @@ private:
     Vector3 mPivot;
     Vector3 mScale;
     std::weak_ptr<Transform3D> mParent;
-    std::list<std::shared_ptr<Transform3D>> mChildren;
+    TransformPtrList mChildren;
     bool mIsRecomputeTransform;
 };

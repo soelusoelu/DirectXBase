@@ -10,9 +10,7 @@ GameObjectManager::GameObjectManager() :
     mUpdatingGameObjects(false) {
 }
 
-GameObjectManager::~GameObjectManager() {
-    Singleton<LevelLoader>::instance().saveUI(mGameObjects, "a.json");
-}
+GameObjectManager::~GameObjectManager() = default;
 
 void GameObjectManager::update() {
     mUpdatingGameObjects = true;
@@ -25,7 +23,7 @@ void GameObjectManager::update() {
 
     remove();
 
-    DebugUtility::hierarchy()->update(mGameObjects);
+    DebugUtility::hierarchy()->setGameObjectToButton(mGameObjects);
 }
 
 void GameObjectManager::add(GameObjectPtr add) {

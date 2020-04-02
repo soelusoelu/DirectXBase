@@ -19,7 +19,8 @@ Hierarchy::Hierarchy(DrawString* drawString) :
     mOffsetCharCountX(0),
     mOffsetCharCountY(0),
     mCharWidth(0.f),
-    mCharHeight(0.f) {
+    mCharHeight(0.f),
+    mNonActiveAlpha(0.5f) {
 }
 
 Hierarchy::~Hierarchy() = default;
@@ -54,30 +55,36 @@ void Hierarchy::initialize() {
     for (auto&& b : mButtons) {
         //全ボタンに当たり判定をつける
         b.first = std::make_unique<UIButton>(nullptr, pos, Vector2(mInspectorPositionX - pos.x, mCharHeight));
+        b.second = nullptr;
         pos.y += mCharHeight + mLineSpace;
     }
 }
 
-void Hierarchy::update(const std::list<std::shared_ptr<GameObject>> gameObjects) {
+void Hierarchy::setGameObjectToButton(const GameObjectPtrList gameObjects) {
+    for (auto&& b : mButtons) {
+        b.second = nullptr;
+    }
+
     auto itr = mButtons.begin();
     for (const auto& obj : gameObjects) {
-        //アクターの数がボタンの数より多いときは無視
+        //オブジェクトの数がボタンの数より多いときは無視
         if (itr == mButtons.end()) {
-            break;
+            return;
         }
         itr->second = obj;
         ++itr;
     }
+}
 
+void Hierarchy::update() {
     const auto& mousePos = Input::mouse()->getMousePosition();
     if (Input::mouse()->getMouseDown(MouseCode::LeftButton)) {
         for (const auto& b : mButtons) {
             if (!b.first->containsPoint(mousePos)) {
                 continue;
             }
-            auto obj = b.second.lock();
-            if (obj) {
-                DebugUtility::inspector()->setTarget(obj);
+            if (b.second) {
+                DebugUtility::inspector()->setTarget(b.second);
                 break;
             }
         }
@@ -86,16 +93,16 @@ void Hierarchy::update(const std::list<std::shared_ptr<GameObject>> gameObjects)
 
 void Hierarchy::drawActors() const {
     for (const auto& b : mButtons) {
-        auto actor = b.second.lock();
-        //アクターが登録されてなかったら終了
-        if (!actor) {
+        auto obj = b.second;
+        //オブジェクトが登録されてなかったら終了
+        if (!obj) {
             break;
         }
 
         float alpha = 1.f;
-        if (!actor->getActive()) {
+        if (!obj->getActive()) {
             alpha = mNonActiveAlpha;
         }
-        mDrawString->drawString(actor->tag(), b.first->getPosition(), mScale, ColorPalette::white, alpha);
+        mDrawString->drawString(obj->tag(), b.first->getPosition(), mScale, ColorPalette::white, alpha);
     }
 }

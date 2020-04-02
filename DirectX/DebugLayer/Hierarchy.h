@@ -11,18 +11,22 @@ class GameObject;
 class UIButton;
 
 class Hierarchy {
+    using GameObjectPtr = std::shared_ptr<GameObject>;
+    using GameObjectPtrList = std::list<GameObjectPtr>;
+
 public:
     Hierarchy(DrawString* drawString);
     ~Hierarchy();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
-    void update(const std::list<std::shared_ptr<GameObject>> gameObjects);
+    void update();
+    void setGameObjectToButton(const GameObjectPtrList gameObjects);
     //マネージャーに登録されてる全アクターを表示
     void drawActors() const;
 
 private:
     DrawString* mDrawString;
-    std::list<std::pair<std::unique_ptr<UIButton>, std::weak_ptr<GameObject>>> mButtons;
+    std::list<std::pair<std::unique_ptr<UIButton>, GameObjectPtr>> mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;
     //行間
