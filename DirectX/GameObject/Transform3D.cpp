@@ -8,12 +8,21 @@ Transform3D::Transform3D(std::shared_ptr<GameObject> owner) :
     mPosition(Vector3::zero),
     mRotation(Quaternion::identity),
     mPivot(Vector3::zero),
-    mScale(Vector3::one),
+    mScale(Vector3::one), 
+    mParent(nullptr),
     mIsRecomputeTransform(true) {
 }
 
-Transform3D::~Transform3D() {
-    for (auto&& child : mChildren) {
+Transform3D::~Transform3D() = default;
+
+void Transform3D::finalize() {
+    if (mParent) {
+        mParent.reset();
+    }
+    if (mChildren.empty()) {
+        return;
+    }
+    for (const auto& child : mChildren) {
         child->owner()->destroy();
     }
 }
@@ -46,11 +55,11 @@ void Transform3D::setPosition(const Vector3& pos) {
 }
 
 Vector3 Transform3D::getPosition() const {
-    auto root = mParent.lock();
+    auto root = mParent;
     auto pos = mPosition;
     while (root) {
         pos += root->mPosition;
-        root = root->mParent.lock();
+        root = root->mParent;
     }
     return pos;
 }
@@ -82,11 +91,11 @@ void Transform3D::setRotation(const Vector3& axis, float angle) {
 }
 
 Quaternion Transform3D::getRotation() const {
-    auto root = mParent.lock();
+    auto root = mParent;
     auto rotation = mRotation;
     while (root) {
         rotation = Quaternion::concatenate(rotation, root->mRotation);
-        root = root->mParent.lock();
+        root = root->mParent;
     }
     return rotation;
 }
@@ -138,13 +147,13 @@ void Transform3D::setScale(float scale) {
 }
 
 Vector3 Transform3D::getScale() const {
-    auto root = mParent.lock();
+    auto root = mParent;
     auto scale = mScale;
     while (root) {
         scale.x *= root->mScale.x;
         scale.y *= root->mScale.y;
         scale.z *= root->mScale.z;
-        root = root->mParent.lock();
+        root = root->mParent;
     }
     return scale;
 }
@@ -195,13 +204,13 @@ std::list<std::shared_ptr<Transform3D>> Transform3D::getChildren() const {
 }
 
 std::shared_ptr<Transform3D> Transform3D::parent() const {
-    return mParent.lock();
+    return mParent;
 }
 
 std::shared_ptr<Transform3D> Transform3D::root() const {
-    auto root = mParent.lock();
+    auto root = mParent;
     while (root) {
-        auto p = root->mParent.lock();
+        auto p = root->mParent;
         if (!p) {
             break;
         }

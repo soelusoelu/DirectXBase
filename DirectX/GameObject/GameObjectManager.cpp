@@ -35,6 +35,13 @@ void GameObjectManager::add(GameObjectPtr add) {
 }
 
 void GameObjectManager::clear() {
+    for (auto&& gameObject : mGameObjects) {
+        gameObject->finalize();
+    }
+    for (auto&& gameObject : mGameObjects) {
+        gameObject->finalize();
+    }
+
     auto itr = mGameObjects.begin();
     while (itr != mGameObjects.end()) {
         if ((*itr)->tag() != "Camera" && (*itr)->tag() != "DirectionalLight") {
@@ -71,6 +78,7 @@ void GameObjectManager::remove() {
     auto itr = mGameObjects.begin();
     while (itr != mGameObjects.end()) {
         if ((*itr)->isDead()) {
+            (*itr)->finalize();
             itr = mGameObjects.erase(itr);
         } else {
             ++itr;

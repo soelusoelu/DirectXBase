@@ -62,7 +62,7 @@ void Hierarchy::initialize() {
 
 void Hierarchy::setGameObjectToButton(const GameObjectPtrList gameObjects) {
     for (auto&& b : mButtons) {
-        b.second = nullptr;
+        b.second.reset();
     }
 
     auto itr = mButtons.begin();

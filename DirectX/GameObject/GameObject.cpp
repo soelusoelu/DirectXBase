@@ -16,6 +16,10 @@ GameObject::GameObject(std::shared_ptr<Renderer> renderer) :
 
 GameObject::~GameObject() = default;
 
+void GameObject::finalize() {
+    mTransform->finalize();
+}
+
 void GameObject::update() {
     mComponentManager->start();
     if (getActive()) {

@@ -26,6 +26,7 @@ void FriedChickenManager::awake() {
         mChickens.emplace_back(c);
     }
     auto f = GameObjectCreater::create("FriedChicken");
+    owner()->transform()->addChild(f->transform());
     f->destroy(2.f);
 }
 
