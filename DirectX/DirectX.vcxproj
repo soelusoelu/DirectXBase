@@ -176,6 +176,7 @@
     <ClCompile Include="Component\SpriteComponent.cpp" />
     <ClCompile Include="Mesh\TransparentMesh.cpp" />
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
+    <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
@@ -271,6 +272,7 @@
     <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Mesh\TransparentMesh.h" />
     <ClInclude Include="Component\TransparentMeshComponent.h" />
+    <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />

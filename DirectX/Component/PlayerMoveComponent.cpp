@@ -12,11 +12,12 @@
 PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerMoveComponent", 10),
     mState(State::WALK),
+    mJumpStartPosition(Vector3::zero),
     mJumpTargetPosition(Vector3::zero),
     mMoveSpeed(1.f),
+    mJumpMoveRate(0.f),
     mJumpStart(false),
-    mJumpEnd(false)
-{
+    mJumpEnd(false) {
 }
 
 PlayerMoveComponent::~PlayerMoveComponent() = default;
@@ -35,10 +36,13 @@ void PlayerMoveComponent::update() {
     if (mJumpEnd) {
         mJumpEnd = false;
     }
-    jump();
-    move();
-    jumpMove();
-    jumpStop();
+    if (isWalking()) {
+        jump();
+        walk();
+    } else if (isJumping()) {
+        jumpMove();
+        jumpStop();
+    }
 }
 
 void PlayerMoveComponent::loadProperties(const rapidjson::Value & inObj) {
@@ -85,19 +89,13 @@ void PlayerMoveComponent::setTargetPosition(const Vector3 & pos) {
 }
 
 void PlayerMoveComponent::jump() {
-    if (mState != State::WALK) {
-        return;
-    }
     if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
-        mJumpStart = true;
+        jumpStartInitialize();
         mState = State::JUMP;
     }
 }
 
-void PlayerMoveComponent::move() {
-    if (mState != State::WALK) {
-        return;
-    }
+void PlayerMoveComponent::walk() {
     auto h = Input::keyboard()->horizontal();
     auto v = Input::keyboard()->vertical();
     if (!Math::nearZero(h) || !Math::nearZero(v)) {
@@ -106,21 +104,21 @@ void PlayerMoveComponent::move() {
 }
 
 void PlayerMoveComponent::jumpMove() {
-    if (mState != State::JUMP) {
-        return;
-    }
+    mJumpMoveRate += Time::deltaTime;
+    auto l = Vector3::lerp(mJumpStartPosition, mJumpTargetPosition, mJumpMoveRate);
     auto t = owner()->transform();
-    auto l = Vector3::lerp(t->getPosition(), mJumpTargetPosition, Time::deltaTime);
     t->setPosition(l);
 }
 
 void PlayerMoveComponent::jumpStop() {
-    if (mState != State::JUMP) {
-        return;
-    }
-    auto l = (owner()->transform()->getPosition() - mJumpTargetPosition).lengthSq();
-    if (l < 0.01f) {
+    if (mJumpMoveRate >= 1.f) {
         mJumpEnd = true;
         mState = State::WALK;
     }
+}
+
+void PlayerMoveComponent::jumpStartInitialize() {
+    mJumpStart = true;
+    mJumpStartPosition = owner()->transform()->getPosition();
+    mJumpMoveRate = 0.f;
 }

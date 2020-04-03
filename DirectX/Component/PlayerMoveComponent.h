@@ -34,16 +34,20 @@ private:
     //ジャンプするか
     void jump();
     //移動
-    void move();
+    void walk();
     //ジャンプ時の移動
     void jumpMove();
     //ジャンプから着地したか
     void jumpStop();
+    //ジャンプ時の初期化
+    void jumpStartInitialize();
 
 private:
     State mState;
+    Vector3 mJumpStartPosition;
     Vector3 mJumpTargetPosition;
     float mMoveSpeed;
+    float mJumpMoveRate;
     bool mJumpStart;
     bool mJumpEnd;
 };
