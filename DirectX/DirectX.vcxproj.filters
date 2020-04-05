@@ -100,6 +100,7 @@
     <ClCompile Include="Component\FriedChickenManager.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
+    <ClCompile Include="Event\Subject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -207,5 +208,7 @@
     <ClInclude Include="Component\FriedChickenManager.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="Math\Plane.h" />
+    <ClInclude Include="Event\Subject.h" />
+    <ClInclude Include="Event\IObserver.h" />
   </ItemGroup>
 </Project>

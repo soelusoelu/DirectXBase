@@ -176,6 +176,7 @@
     <ClCompile Include="Component\SpriteComponent.cpp" />
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
+    <ClCompile Include="Event\Subject.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
@@ -246,6 +247,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DebugLayer\DebugUtility.h" />
+    <ClInclude Include="Event\IObserver.h" />
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
@@ -271,6 +273,7 @@
     <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Component\TransparentMeshComponent.h" />
     <ClInclude Include="Math\Plane.h" />
+    <ClInclude Include="Event\Subject.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
