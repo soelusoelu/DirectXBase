@@ -16,7 +16,7 @@ public:
     ~SpriteManager();
     void update();
     void draw(const Matrix4& proj);
-    void add(SpritePtr add);
+    void add(const SpritePtr& add);
     void clear();
 
 private:

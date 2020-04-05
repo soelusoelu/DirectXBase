@@ -32,7 +32,7 @@ void SpriteComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, 
 }
 
 void SpriteComponent::setSprite(const std::string& fileName) {
-    mSprite = std::make_shared<Sprite>(owner()->renderer(), fileName);
+    mSprite = std::make_shared<Sprite>(fileName);
     mSprite->addToManager();
 }
 

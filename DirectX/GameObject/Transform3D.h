@@ -54,8 +54,8 @@ public:
     Vector3 right() const;
 
     //親子関係
-    void addChild(TransformPtr child);
-    void removeChild(TransformPtr child);
+    void addChild(const TransformPtr& child);
+    void removeChild(const TransformPtr& child);
     void removeChild(const std::string& tag);
     TransformPtr getChild(const std::string& tag) const;
     TransformPtrList getChildren() const;
@@ -68,7 +68,7 @@ public:
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
 
 private:
-    void setParent(TransformPtr parent);
+    void setParent(const TransformPtr& parent);
     void shouldRecomputeTransform();
 
 private:

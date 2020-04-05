@@ -16,7 +16,7 @@ public:
     //登録済みの全ゲームオブジェクトの更新
     void update();
     //ゲームオブジェクトの登録
-    void add(GameObjectPtr add);
+    void add(const GameObjectPtr& add);
     //登録済みの全ゲームオブジェクトの削除
     void clear();
     GameObjectPtr find(const std::string& tag) const;

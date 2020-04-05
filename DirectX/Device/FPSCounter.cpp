@@ -1,13 +1,10 @@
 ﻿#include "FPSCounter.h"
-#include "DrawString.h"
-#include "Renderer.h"
 #include "Time.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/FixedDebugInformation.h"
 #include "../Utility/LevelLoader.h"
 
-FPSCounter::FPSCounter(std::shared_ptr<Renderer> renderer) :
-    mDrawString(renderer->getDrawString()),
+FPSCounter::FPSCounter() :
     mDrawUpdateTimer(std::make_unique<Time>(0.5f)),
     mFixedFrame(60.f),
     mCurrentFPS(60.f),

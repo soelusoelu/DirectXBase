@@ -67,7 +67,7 @@ std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileN
         } else if (ext == ".fbx") {
             mesh = std::make_shared<FBX>();
         }
-        mesh->perse(shared_from_this(), fileName);
+        mesh->perse(fileName);
         mMeshLoaders.emplace(fileName, mesh);
     }
     return mesh;

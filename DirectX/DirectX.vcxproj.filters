@@ -94,7 +94,6 @@
     <ClCompile Include="GameObject\Transform3D.cpp" />
     <ClCompile Include="Component\JumpTarget.cpp" />
     <ClCompile Include="Component\SpriteComponent.cpp" />
-    <ClCompile Include="Mesh\TransparentMesh.cpp" />
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\DirectionalLight.cpp" />
@@ -202,7 +201,6 @@
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\JumpTarget.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
-    <ClInclude Include="Mesh\TransparentMesh.h" />
     <ClInclude Include="Component\TransparentMeshComponent.h" />
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\DirectionalLight.h" />

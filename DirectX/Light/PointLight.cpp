@@ -1,6 +1,5 @@
 ﻿#include "PointLight.h"
 #include "../Device/AssetsManager.h"
-#include "../Device/Renderer.h"
 #include "../Mesh/Mesh.h"
 #include "../Shader/Shader.h"
 #include "../System/InputElement.h"
@@ -13,11 +12,11 @@ PointLight::PointLight() :
 
 PointLight::~PointLight() = default;
 
-void PointLight::initialize(std::shared_ptr<Renderer> renderer) {
+void PointLight::initialize() {
     //メッシュ描画されるとだるいから自己管理
-    mesh = std::make_shared<Mesh>(renderer, "Shape/Sphere.obj");
+    mesh = std::make_shared<Mesh>("Shape/Sphere.obj");
     radius = mesh->getRadius();
-    shader = renderer->getAssetsManager()->createShader("PointLight.hlsl");
+    shader = Singleton<AssetsManager>::instance().createShader("PointLight.hlsl");
 
     //コンスタントバッファ生成
     shader->createConstantBuffer(sizeof(PointLightConstantBuffer));

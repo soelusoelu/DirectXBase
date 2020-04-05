@@ -9,7 +9,6 @@
 class Camera;
 class DirectionalLight;
 class IndexBuffer;
-class Renderer;
 class RenderTargetView;
 class Sampler;
 class Shader;
@@ -42,11 +41,11 @@ public:
     ~GBuffer();
 
     //Gバッファの生成
-    void create(std::shared_ptr<Renderer> renderer);
+    void create();
 
     //GBufferテクスチャ上にレンダリング
     void renderToTexture();
-    void renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight, const Vector3& ambient);
+    void renderFromTexture(const Camera& camera, const DirectionalLight& dirLight, const Vector3& ambient);
 
     //全シェーダーリソースの登録
     void setVSShaderResources() const;
@@ -54,7 +53,7 @@ public:
 
 private:
     void createSampler();
-    void createShader(std::shared_ptr<Renderer> renderer);
+    void createShader();
     void createVertexBuffer();
     void createIndexBuffer();
 

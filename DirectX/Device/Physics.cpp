@@ -1,6 +1,4 @@
 ﻿#include "Physics.h"
-#include "../Actor/Actor.h"
-#include "../Actor/ActorManager.h"
 #include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/SphereCollisionComponent.h"
@@ -10,11 +8,11 @@
 Physics::Physics() = default;
 Physics::~Physics() = default;
 
-void Physics::add(CollPtr circle) {
+void Physics::add(const CollPtr& circle) {
     mColliders.emplace_back(circle);
 }
 
-void Physics::remove(CollPtr circle) {
+void Physics::remove(const CollPtr& circle) {
     auto itr = std::find(mColliders.begin(), mColliders.end(), circle);
     if (itr != mColliders.end()) {
         std::iter_swap(itr, mColliders.end() - 1);

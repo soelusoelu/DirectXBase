@@ -6,18 +6,18 @@
 class CSVReader {
 public:
     CSVReader();
-    CSVReader(const char* fileName);
+    CSVReader(const std::string& fileName);
     ~CSVReader();
-    std::vector<int> load(const char* fileName);
-    std::vector<std::string> loadString(const char* fileName);
+    std::vector<int> load(const std::string& fileName);
+    std::vector<std::string> loadString(const std::string& fileName);
     std::vector<int> getParseData() const;
     std::vector<std::string> getParseStringData() const;
     int getWidth();
     int getHeight();
 
 private:
-    void parse(const char* fileName);
-    void parseString(const char* fileName);
+    void parse(const std::string& fileName);
+    void parseString(const std::string& fileName);
 
 private:
     std::vector<int> mCSV;

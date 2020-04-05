@@ -62,7 +62,7 @@ void DirectionalLight::setColor(const Vector3& color) {
 
 void DirectionalLight::createMesh() {
 #ifdef _DEBUG //デバッグ時のみメッシュ描画
-    mMesh = std::make_shared<Mesh>(owner()->renderer(), "Light/DLight.obj");
+    mMesh = std::make_shared<Mesh>("Light/DLight.obj");
     mMesh->addToManager();
     mMesh->setTransform(owner()->transform());
 #endif // _DEBUG

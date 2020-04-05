@@ -60,7 +60,7 @@ void Hierarchy::initialize() {
     }
 }
 
-void Hierarchy::setGameObjectToButton(const GameObjectPtrList gameObjects) {
+void Hierarchy::setGameObjectToButton(const GameObjectPtrList& gameObjects) {
     for (auto&& b : mButtons) {
         b.second.reset();
     }

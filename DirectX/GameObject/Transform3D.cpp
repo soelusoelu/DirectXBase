@@ -170,12 +170,12 @@ Vector3 Transform3D::right() const {
     return Vector3::transform(Vector3::right, mRotation);
 }
 
-void Transform3D::addChild(TransformPtr child) {
+void Transform3D::addChild(const TransformPtr& child) {
     mChildren.emplace_back(child);
     child->setParent(shared_from_this());
 }
 
-void Transform3D::removeChild(TransformPtr child) {
+void Transform3D::removeChild(const TransformPtr& child) {
     removeChild(child->owner()->tag());
 }
 
@@ -238,7 +238,7 @@ void Transform3D::saveProperties(rapidjson::Document::AllocatorType& alloc, rapi
     JsonHelper::setVector3(alloc, inObj, "scale", mScale);
 }
 
-void Transform3D::setParent(TransformPtr parent) {
+void Transform3D::setParent(const TransformPtr& parent) {
     mParent = parent;
 }
 

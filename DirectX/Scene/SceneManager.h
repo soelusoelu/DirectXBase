@@ -14,7 +14,7 @@ class SpriteManager;
 
 class SceneManager {
 public:
-    SceneManager(std::shared_ptr<Renderer> renderer);
+    SceneManager(const std::shared_ptr<Renderer>& renderer);
     ~SceneManager();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();

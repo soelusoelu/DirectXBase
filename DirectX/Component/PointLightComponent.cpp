@@ -69,13 +69,13 @@ void PointLightComponent::drawDebugInfo(debugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-void PointLightComponent::draw(std::shared_ptr<PointLight> pointLight) const {
-    auto scale = Matrix4::createScale(owner()->transform()->getScale() * mOuterRadius / pointLight->radius);
+void PointLightComponent::draw(const PointLight& pointLight) const {
+    auto scale = Matrix4::createScale(owner()->transform()->getScale() * mOuterRadius / pointLight.radius);
     auto trans = Matrix4::createTranslation(owner()->transform()->getPosition());
     auto world = scale * trans;
 
-    auto mesh = pointLight->mesh;
-    auto shader = pointLight->shader;
+    auto mesh = pointLight.mesh;
+    auto shader = pointLight.shader;
 
     //シェーダーのコンスタントバッファーに各種データを渡す
     MappedSubResourceDesc msrd;

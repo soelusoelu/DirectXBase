@@ -1,6 +1,4 @@
 ﻿#include "DrawString.h"
-#include "AssetsManager.h"
-#include "../Device/Renderer.h"
 #include "../Sprite/Sprite.h"
 #include "../System/Game.h"
 #include "../Utility/LevelLoader.h"
@@ -13,9 +11,9 @@ DrawString::DrawString() :
 
 DrawString::~DrawString() = default;
 
-void DrawString::initialize(std::shared_ptr<Renderer> renderer) {
-    mNumberSprite = std::make_unique<Sprite>(renderer, mNumberFileName);
-    mFontSprite = std::make_unique<Sprite>(renderer, mFontFileName);
+void DrawString::initialize() {
+    mNumberSprite = std::make_unique<Sprite>(mNumberFileName);
+    mFontSprite = std::make_unique<Sprite>(mFontFileName);
 }
 
 void DrawString::loadProperties(const rapidjson::Value & inObj) {

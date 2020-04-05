@@ -14,8 +14,8 @@ public:
     Physics();
     ~Physics();
     //ボックスコンポーネントの追加・削除
-    void add(CollPtr circle);
-    void remove(CollPtr circle);
+    void add(const CollPtr& circle);
+    void remove(const CollPtr& circle);
     //全削除
     void clear();
     //総当たり判定

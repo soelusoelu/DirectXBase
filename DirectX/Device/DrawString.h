@@ -7,14 +7,13 @@
 #include <memory>
 #include <string>
 
-class Renderer;
 class Sprite;
 
 class DrawString {
 public:
     DrawString();
     ~DrawString();
-    void initialize(std::shared_ptr<Renderer> renderer);
+    void initialize();
     void loadProperties(const rapidjson::Value& inObj);
     //保持してる文字列を一括描画
     void drawAll(const Matrix4& proj) const;

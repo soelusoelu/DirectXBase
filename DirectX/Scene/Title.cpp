@@ -11,7 +11,7 @@ Title::Title() :
 Title::~Title() = default;
 
 void Title::start() {
-    auto title = std::make_shared<Sprite>(mRenderer, "12Title.png");
+    auto title = std::make_shared<Sprite>("12Title.png");
     title->addToManager();
 }
 

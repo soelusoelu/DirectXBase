@@ -27,7 +27,7 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void MeshComponent::setMesh(const std::string& fileName) {
-    mMesh = std::make_shared<Mesh>(owner()->renderer(), fileName);
+    mMesh = std::make_shared<Mesh>(fileName);
     mMesh->addToManager();
     mMesh->setTransform(owner()->transform());
 }

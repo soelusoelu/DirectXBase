@@ -12,7 +12,6 @@
 class Camera;
 class DirectionalLight;
 class MeshManager;
-class Renderer;
 class Transform3D;
 class Shader;
 
@@ -42,12 +41,12 @@ public:
         DEAD
     };
 
-    Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    Mesh(const std::string& fileName);
     ~Mesh();
     void addToManager(bool isTransparent = false);
-    void draw(std::shared_ptr<Camera> camera) const;
-    void drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const;
-    void setTransform(std::shared_ptr<Transform3D> transform);
+    void draw(const Camera& camera) const;
+    void drawTransparent(const Camera& camera, const DirectionalLight& dirLight) const;
+    void setTransform(const std::shared_ptr<Transform3D>& transform);
     std::shared_ptr<IMeshLoader> getMeshData() const;
     //半径の取得
     float getRadius() const;

@@ -15,10 +15,10 @@ public:
     ~PlayerChickenConnection();
     void initialize();
     void connect();
-    void setPlayer(const GameObjectPtr player);
-    void setChicken(const GameObjectPtr chicken);
+    void setPlayer(const GameObjectPtr& player);
+    void setChicken(const GameObjectPtr& chicken);
     GameObjectPtr getChicken() const;
-    void playerJumpTarget(const GameObjectPtr chicken);
+    void playerJumpTarget(const GameObjectPtr& chicken);
 
 private:
     std::shared_ptr<PlayerMoveComponent> mPlayer;

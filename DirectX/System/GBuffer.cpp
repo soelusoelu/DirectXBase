@@ -21,7 +21,6 @@
 #include "../Component/Camera.h"
 #include "../Component/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
-#include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Mesh/OBJ.h"
@@ -36,7 +35,7 @@ GBuffer::GBuffer() :
 
 GBuffer::~GBuffer() = default;
 
-void GBuffer::create(std::shared_ptr<Renderer> renderer) {
+void GBuffer::create() {
     Texture2DDesc desc;
     ShaderResourceViewDesc srvDesc;
     RenderTargetViewDesc rtvDesc;
@@ -89,7 +88,7 @@ void GBuffer::create(std::shared_ptr<Renderer> renderer) {
 
     //各種生成
     createSampler();
-    createShader(renderer);
+    createShader();
     createVertexBuffer();
     createIndexBuffer();
 }
@@ -120,7 +119,7 @@ void GBuffer::renderToTexture() {
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 }
 
-void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight, const Vector3& ambient) {
+void GBuffer::renderFromTexture(const Camera& camera, const DirectionalLight& dirLight, const Vector3& ambient) {
     //レンダーターゲットを通常に戻す
     Singleton<DirectX>::instance().setRenderTarget();
     //クリア
@@ -140,9 +139,9 @@ void GBuffer::renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd)) {
         GBufferShaderConstantBuffer cb;
-        cb.dirLightDir = dirLight->getDirection();
-        cb.dirLightColor = dirLight->getColor();
-        cb.cameraPos = camera->owner()->transform()->getPosition();
+        cb.dirLightDir = dirLight.getDirection();
+        cb.dirLightColor = dirLight.getColor();
+        cb.cameraPos = camera.owner()->transform()->getPosition();
         cb.ambientLight = ambient;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
@@ -180,9 +179,9 @@ void GBuffer::createSampler() {
     mSampler = std::make_unique<Sampler>(sd);
 }
 
-void GBuffer::createShader(std::shared_ptr<Renderer> renderer) {
+void GBuffer::createShader() {
     //シェーダー生成
-    mShader = renderer->getAssetsManager()->createShader("Deferred.hlsl");
+    mShader = Singleton<AssetsManager>::instance().createShader("Deferred.hlsl");
     mShader->createConstantBuffer(sizeof(GBufferShaderConstantBuffer));
 }
 

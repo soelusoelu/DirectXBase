@@ -52,7 +52,7 @@ void Inspector::initialize() {
     mMaxElementCharCount = (mValuePositionX - mElementPositionX) / mCharWidth - 1;
 }
 
-void Inspector::setTarget(const GameObjectPtr target) {
+void Inspector::setTarget(const GameObjectPtr& target) {
     mTarget = target;
 }
 
@@ -80,14 +80,14 @@ void Inspector::drawInspect() const {
     }
 }
 
-void Inspector::drawTag(const GameObjectPtr target) const {
+void Inspector::drawTag(const GameObjectPtr& target) const {
     auto tag = target->tag();
     auto pos = Vector2(mInspectorPositionX + (Window::debugWidth() - mInspectorPositionX) / 2.f, 0.f);
     pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
     mDrawString->drawString(tag, pos, mTagScale);
 }
 
-void Inspector::drawTransform(const TransformPtr target) const {
+void Inspector::drawTransform(const TransformPtr& target) const {
     auto pos = mTransformPosition;
     mDrawString->drawString("Transform", pos, mElementScale);
     pos.x = mElementPositionX;
@@ -100,7 +100,7 @@ void Inspector::drawTransform(const TransformPtr target) const {
     drawScale(target, pos);
 }
 
-void Inspector::drawPosition(const TransformPtr target, const Vector2 & position) const {
+void Inspector::drawPosition(const TransformPtr& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Position", pos, mElementScale);
     pos.x = mValuePositionX;
@@ -108,7 +108,7 @@ void Inspector::drawPosition(const TransformPtr target, const Vector2 & position
     mDrawString->drawString(InspectHelper::vector3ToString(tPos), pos, mElementScale);
 }
 
-void Inspector::drawRotation(const TransformPtr target, const Vector2 & position) const {
+void Inspector::drawRotation(const TransformPtr& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Rotation", pos, mElementScale);
     pos.x = mValuePositionX;
@@ -116,7 +116,7 @@ void Inspector::drawRotation(const TransformPtr target, const Vector2 & position
     mDrawString->drawString(InspectHelper::quaternionToString(rot), pos, mElementScale);
 }
 
-void Inspector::drawScale(const TransformPtr target, const Vector2 & position) const {
+void Inspector::drawScale(const TransformPtr& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Scale", pos, mElementScale);
     pos.x = mValuePositionX;
@@ -124,7 +124,7 @@ void Inspector::drawScale(const TransformPtr target, const Vector2 & position) c
     mDrawString->drawString(InspectHelper::vector3ToString(scale), pos, mElementScale);
 }
 
-void Inspector::drawComponent(const ComponentPtr component, Vector2 * position) const {
+void Inspector::drawComponent(const ComponentPtr& component, Vector2 * position) const {
     auto pos = *position;
     mDrawString->drawString(component->getTypeName(), pos, mElementScale);
 

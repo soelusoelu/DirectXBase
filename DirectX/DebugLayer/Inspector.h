@@ -22,16 +22,16 @@ public:
     ~Inspector();
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
-    void setTarget(const GameObjectPtr target);
+    void setTarget(const GameObjectPtr& target);
     void drawInspect() const;
 
 private:
-    void drawTag(const GameObjectPtr target) const;
-    void drawTransform(const TransformPtr target) const;
-    void drawPosition(const TransformPtr target, const Vector2& position) const;
-    void drawRotation(const TransformPtr target, const Vector2& position) const;
-    void drawScale(const TransformPtr target, const Vector2& position) const;
-    void drawComponent(const ComponentPtr component, Vector2* position) const;
+    void drawTag(const GameObjectPtr& target) const;
+    void drawTransform(const TransformPtr& target) const;
+    void drawPosition(const TransformPtr& target, const Vector2& position) const;
+    void drawRotation(const TransformPtr& target, const Vector2& position) const;
+    void drawScale(const TransformPtr& target, const Vector2& position) const;
+    void drawComponent(const ComponentPtr& component, Vector2* position) const;
 
 private:
     DrawString* mDrawString;

@@ -18,7 +18,7 @@
 #include "../Sprite/SpriteManager.h"
 #include "../System/Game.h"
 
-SceneManager::SceneManager(std::shared_ptr<Renderer> renderer) :
+SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
     mCurrentScene(std::make_shared<GamePlay>()),
     mCamera(nullptr),
@@ -82,13 +82,13 @@ void SceneManager::draw() const {
     //各テクスチャ上にレンダリング
     mRenderer->renderToTexture();
     //メッシュの一括描画
-    mMeshManager->draw(mCamera);
+    mMeshManager->draw(*mCamera);
     //各テクスチャを参照してレンダリング
-    mRenderer->renderFromTexture(mCamera, mDirectionalLight);
+    mRenderer->renderFromTexture(*mCamera, *mDirectionalLight);
     //ポイントライトの一括描画
     mRenderer->drawPointLights();
     //透明メッシュの描画
-    mMeshManager->drawTransparent(mCamera, mDirectionalLight);
+    mMeshManager->drawTransparent(*mCamera, *mDirectionalLight);
 
     //スプライト描画準備
     Matrix4 proj = Matrix4::identity;

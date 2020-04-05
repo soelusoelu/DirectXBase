@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-class AssetsManager;
 struct Material;
 class VertexArray;
 
@@ -18,7 +17,7 @@ class OBJ : public IMeshLoader {
 public:
     OBJ();
     ~OBJ();
-    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) override;
+    virtual void perse(const std::string& filePath) override;
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
     virtual size_t getNumMaterial() const override;
@@ -26,8 +25,8 @@ public:
     virtual float getRadius() const override;
 
 private:
-    bool preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath); //事前に頂点数などを調べる
-    bool materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath);
+    bool preload(std::ifstream& stream, const std::string& filePath); //事前に頂点数などを調べる
+    bool materialLoad(const std::string& fileName, const std::string& filePath);
     void materialPreload(std::ifstream& stream);
 
 private:

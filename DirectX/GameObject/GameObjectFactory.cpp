@@ -110,7 +110,7 @@ std::shared_ptr<GameObject> GameObjectFactory::loadGameObjectProperties(const ra
     return gameObj;
 }
 
-void GameObjectFactory::loadComponents(GameObjectPtr gameObject, const rapidjson::Value& inArray) const {
+void GameObjectFactory::loadComponents(const GameObjectPtr& gameObject, const rapidjson::Value& inArray) const {
     //コンポーネントの配列をループ
     for (rapidjson::SizeType i = 0; i < inArray.Size(); i++) {
         //有効なオブジェクトか

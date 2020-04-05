@@ -1,22 +1,24 @@
 ﻿#pragma once
 
 #include "../Mesh/IMeshLoader.h"
-#include <list>
+#include "../Utility/Singleton.h"
 #include <memory>
 #include <string>
 #include <unordered_map>
 
-class Camera;
-class Renderer;
 class Shader;
 class Sound;
 class SoundBase;
 class Texture;
 
-class AssetsManager : public std::enable_shared_from_this<AssetsManager> {
-public:
+class AssetsManager {
+    friend class Singleton<AssetsManager>;
+
+private:
     AssetsManager();
     ~AssetsManager();
+
+public:
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
     std::shared_ptr<Sound> createBGM(const std::string& fileName);

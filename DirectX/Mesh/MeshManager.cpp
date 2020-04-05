@@ -16,7 +16,7 @@ void MeshManager::update() {
     remove();
 }
 
-void MeshManager::draw(std::shared_ptr<Camera> camera) const {
+void MeshManager::draw(const Camera& camera) const {
     if (mMeshes.empty()) {
         return;
     }
@@ -41,7 +41,7 @@ void MeshManager::draw(std::shared_ptr<Camera> camera) const {
     }
 }
 
-void MeshManager::drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const {
+void MeshManager::drawTransparent(const Camera& camera, const DirectionalLight& dirLight) const {
     if (mTransparentMeshes.empty()) {
         return;
     }
@@ -75,11 +75,11 @@ void MeshManager::drawTransparent(std::shared_ptr<Camera> camera, std::shared_pt
     }
 }
 
-void MeshManager::add(MeshPtr mesh) {
+void MeshManager::add(const MeshPtr& mesh) {
     mMeshes.emplace_back(mesh);
 }
 
-void MeshManager::addTransparent(MeshPtr mesh) {
+void MeshManager::addTransparent(const MeshPtr& mesh) {
     mTransparentMeshes.emplace_back(mesh);
 }
 

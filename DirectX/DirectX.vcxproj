@@ -174,7 +174,6 @@
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Component\JumpTarget.cpp" />
     <ClCompile Include="Component\SpriteComponent.cpp" />
-    <ClCompile Include="Mesh\TransparentMesh.cpp" />
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="UI\Text.cpp" />
@@ -270,7 +269,6 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Component\JumpTarget.h" />
     <ClInclude Include="Component\SpriteComponent.h" />
-    <ClInclude Include="Mesh\TransparentMesh.h" />
     <ClInclude Include="Component\TransparentMeshComponent.h" />
     <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="UI\Text.h" />

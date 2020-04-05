@@ -27,7 +27,7 @@ void TransparentMeshComponent::drawDebugInfo(debugInfoList* inspect) const {
 }
 
 void TransparentMeshComponent::setMesh(const std::string& fileName) {
-    mMesh = std::make_shared<Mesh>(owner()->renderer(), fileName);
+    mMesh = std::make_shared<Mesh>(fileName);
     mMesh->addToManager(true);
     mMesh->setTransform(owner()->transform());
 }

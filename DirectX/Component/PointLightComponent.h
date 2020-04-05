@@ -16,7 +16,7 @@ public:
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(debugInfoList* inspect) const override;
-    void draw(std::shared_ptr<PointLight> pointLight) const;
+    void draw(const PointLight& pointLight) const;
     void setColor(const Vector3& color);
     void setInnerRadius(float radius);
     void setOuterRadius(float radius);

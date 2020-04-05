@@ -5,7 +5,6 @@
 #include <memory>
 
 class Mesh;
-class Renderer;
 class Shader;
 
 struct PointLightConstantBuffer {
@@ -26,5 +25,5 @@ struct PointLight {
 
     PointLight();
     ~PointLight();
-    void initialize(std::shared_ptr<Renderer> renderer);
+    void initialize();
 };

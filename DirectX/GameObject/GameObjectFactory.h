@@ -33,7 +33,7 @@ private:
     //アクターの読み込み
     GameObjectPtr loadGameObjectProperties(const rapidjson::Value& inArray, const std::string& type) const;
     //コンポーネントの読み込み
-    void loadComponents(GameObjectPtr gameObject, const rapidjson::Value& inArray) const;
+    void loadComponents(const GameObjectPtr& gameObject, const rapidjson::Value& inArray) const;
 
 private:
     std::unordered_map<std::string, ComponentFunc> mComponents;

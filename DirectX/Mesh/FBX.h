@@ -7,7 +7,6 @@
 #include <string>
 #include <vector>
 
-class AssetsManager;
 struct Material;
 class VertexArray;
 
@@ -18,7 +17,7 @@ class FBX : public IMeshLoader {
 public:
     FBX();
     ~FBX();
-    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) override;
+    virtual void perse(const std::string& filePath) override;
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
     virtual size_t getNumMaterial() const override;
@@ -26,12 +25,12 @@ public:
     virtual float getRadius() const override;
 
 private:
-    void perse(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxNode* node, int indent);
+    void perse(const std::string& filePath, FbxNode* node, int indent);
     void getIndex(FbxMesh* mesh);
     void getVertex(FbxMesh* mesh);
     void getNormals(FbxMesh* mesh);
     void getUV(FbxMesh* mesh);
-    void getMaterial(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxMesh* mesh);
+    void getMaterial(const std::string& filePath, FbxMesh* mesh);
 
 private:
     FbxManager* mManager;

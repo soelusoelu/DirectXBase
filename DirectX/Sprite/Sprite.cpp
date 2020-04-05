@@ -1,7 +1,6 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
 #include "../Device/AssetsManager.h"
-#include "../Device/Renderer.h"
 #include "../GameObject/Transform2D.h"
 #include "../Shader/Shader.h"
 #include "../System/Buffer.h"
@@ -12,10 +11,10 @@
 #include "../System/TextureDesc.h"
 #include <cassert>
 
-Sprite::Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
+Sprite::Sprite(const std::string& fileName) :
     mTransform(std::make_shared<Transform2D>()),
-    mTexture(renderer->getAssetsManager()->createTexture(fileName)),
-    mShader(renderer->getAssetsManager()->createShader("Texture.hlsl")),
+    mTexture(Singleton<AssetsManager>::instance().createTexture(fileName)),
+    mShader(Singleton<AssetsManager>::instance().createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),

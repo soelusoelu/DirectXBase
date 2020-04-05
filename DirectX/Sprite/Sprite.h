@@ -4,7 +4,6 @@
 #include <memory>
 #include <string>
 
-class Renderer;
 class Shader;
 class SpriteManager;
 class Texture;
@@ -18,7 +17,7 @@ class Sprite : public std::enable_shared_from_this<Sprite> {
     };
 
 public:
-    Sprite(std::shared_ptr<Renderer> renderer, const std::string& fileName);
+    Sprite(const std::string& fileName);
     ~Sprite();
     //マネージャークラスへの登録
     void addToManager();

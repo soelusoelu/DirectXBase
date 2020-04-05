@@ -26,7 +26,7 @@ void GameObjectManager::update() {
     DebugUtility::hierarchy()->setGameObjectToButton(mGameObjects);
 }
 
-void GameObjectManager::add(GameObjectPtr add) {
+void GameObjectManager::add(const GameObjectPtr& add) {
     if (mUpdatingGameObjects) {
         mPendingGameObjects.emplace_back(add);
     } else {

@@ -36,7 +36,7 @@ void SpriteManager::draw(const Matrix4& proj) {
     }
 }
 
-void SpriteManager::add(SpritePtr add) {
+void SpriteManager::add(const SpritePtr& add) {
     mSprites.emplace_back(add);
 }
 

@@ -21,7 +21,7 @@ FBX::~FBX() {
     }
 }
 
-void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
+void FBX::perse(const std::string& filePath) {
     Singleton<Directory>::instance().setModelDirectory(filePath);
 
     //マネージャーを生成
@@ -51,7 +51,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     //Scene解析
     FbxNode* root = scene->GetRootNode();
     if (root) {
-        perse(assetsManager, filePath, root, 0);
+        perse(filePath, root, 0);
     }
 
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
@@ -122,7 +122,7 @@ float FBX::getRadius() const {
     return (max - min) / 2.f;
 }
 
-void FBX::perse(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxNode* node, int indent) {
+void FBX::perse(const std::string& filePath, FbxNode* node, int indent) {
     int attrCount = node->GetNodeAttributeCount();
 
     for (size_t i = 0; i < attrCount; i++) {
@@ -137,7 +137,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assets, const std::string& filePa
                 getVertex(mesh);
                 getNormals(mesh);
                 getUV(mesh);
-                getMaterial(assets, filePath, mesh);
+                getMaterial(filePath, mesh);
                 break;
             default:
                 break;
@@ -147,7 +147,7 @@ void FBX::perse(std::shared_ptr<AssetsManager> assets, const std::string& filePa
 
     int childCount = node->GetChildCount();
     for (int i = 0; i < childCount; ++i) {
-        perse(assets, filePath, node->GetChild(i), indent + 1);
+        perse(filePath, node->GetChild(i), indent + 1);
     }
 }
 
@@ -412,7 +412,7 @@ void FBX::getUV(FbxMesh* mesh) {
     }
 }
 
-void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, const std::string& filePath, FbxMesh* mesh) {
+void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
     FbxNode* node = mesh->GetNode();
     if (!node) {
         return;
@@ -540,7 +540,7 @@ void FBX::getMaterial(std::shared_ptr<AssetsManager> assets, const std::string& 
                 dir += "/" + mMaterials[i]->textureName;
 
                 //テクスチャーを作成
-                mMaterials[i]->texture = assets->createTexture(dir, false);
+                mMaterials[i]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
 
                 break; //とりあえず今は1枚だけサポート
             }

@@ -4,7 +4,6 @@
 #include <cassert>
 #include <fstream>
 #include <sstream>
-#include <string>
 
 CSVReader::CSVReader() :
     mCSV(0),
@@ -13,7 +12,7 @@ CSVReader::CSVReader() :
     mHeightCount(0) {
 }
 
-CSVReader::CSVReader(const char* fileName) :
+CSVReader::CSVReader(const std::string& fileName) :
     mCSV(0),
     mCSVString(0),
     mWidthCount(0),
@@ -23,13 +22,13 @@ CSVReader::CSVReader(const char* fileName) :
 
 CSVReader::~CSVReader() = default;
 
-std::vector<int> CSVReader::load(const char* fileName) {
+std::vector<int> CSVReader::load(const std::string& fileName) {
     parse(fileName);
 
     return mCSV;
 }
 
-std::vector<std::string> CSVReader::loadString(const char* fileName) {
+std::vector<std::string> CSVReader::loadString(const std::string& fileName) {
     parseString(fileName);
 
     return mCSVString;
@@ -51,7 +50,7 @@ int CSVReader::getHeight() {
     return mHeightCount;
 }
 
-void CSVReader::parse(const char* fileName) {
+void CSVReader::parse(const std::string& fileName) {
     //中身リセット
     mCSV.clear();
 
@@ -81,7 +80,7 @@ void CSVReader::parse(const char* fileName) {
     mHeightCount = mCSV.size() / mWidthCount;
 }
 
-void CSVReader::parseString(const char* fileName) {
+void CSVReader::parseString(const std::string& fileName) {
     //中身リセット
     mCSVString.clear();
 

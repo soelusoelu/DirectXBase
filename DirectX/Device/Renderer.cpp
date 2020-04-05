@@ -1,5 +1,4 @@
 ﻿#include "Renderer.h"
-#include "AssetsManager.h"
 #include "DrawString.h"
 #include "Sound.h"
 #include "../Component/PointLightComponent.h"
@@ -27,7 +26,6 @@
 #include "../Utility/LevelLoader.h"
 
 Renderer::Renderer() :
-    mAssetsManager(std::make_shared<AssetsManager>()),
     mDrawString(std::make_shared<DrawString>()),
     mGBuffer(std::make_unique<GBuffer>()),
     mAmbientLight(Vector3::zero),
@@ -42,17 +40,13 @@ void Renderer::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void Renderer::initialize() {
-    mGBuffer->create(shared_from_this());
-    mPointLight->initialize(shared_from_this());
-    mDrawString->initialize(shared_from_this());
+    mGBuffer->create();
+    mPointLight->initialize();
+    mDrawString->initialize();
 }
 
 void Renderer::update() {
     removePointLight();
-}
-
-std::shared_ptr<AssetsManager> Renderer::getAssetsManager() const {
-    return mAssetsManager;
 }
 
 std::shared_ptr<DrawString> Renderer::getDrawString() const {
@@ -67,7 +61,7 @@ void Renderer::setAmbientLight(const Vector3 & ambient) {
     mAmbientLight = ambient;
 }
 
-void Renderer::addPointLight(std::shared_ptr<PointLightComponent> light) {
+void Renderer::addPointLight(const std::shared_ptr<PointLightComponent>& light) {
     mPointLights.emplace_back(light);
 }
 
@@ -105,7 +99,7 @@ void Renderer::drawPointLights() {
 
     for (auto&& pointLight : mPointLights) {
         if (auto p = pointLight.lock()) {
-            p->draw(mPointLight);
+            p->draw(*mPointLight);
         }
     }
 }
@@ -115,7 +109,7 @@ void Renderer::renderToTexture() {
     mGBuffer->renderToTexture();
 }
 
-void Renderer::renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) {
+void Renderer::renderFromTexture(const Camera& camera, const DirectionalLight& dirLight) {
     mGBuffer->renderFromTexture(camera, dirLight, mAmbientLight);
 }
 

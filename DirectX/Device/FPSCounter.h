@@ -10,7 +10,7 @@ class Time;
 
 class FPSCounter {
 public:
-    FPSCounter(std::shared_ptr<Renderer> renderer);
+    FPSCounter();
     ~FPSCounter();
     void loadProperties(const rapidjson::Value& inObj);
     void fixedFrame();
@@ -20,7 +20,6 @@ private:
     void drawFPS(float time);
 
 private:
-    std::shared_ptr<DrawString> mDrawString;
     std::unique_ptr<Time> mDrawUpdateTimer;
     float mFixedFrame;
     float mCurrentFPS;

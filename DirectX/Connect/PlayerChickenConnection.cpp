@@ -49,11 +49,11 @@ void PlayerChickenConnection::connect() {
     mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 
-void PlayerChickenConnection::setPlayer(const GameObjectPtr player) {
+void PlayerChickenConnection::setPlayer(const GameObjectPtr& player) {
     mPlayer = player->componentManager()->getComponent<PlayerMoveComponent>();
 }
 
-void PlayerChickenConnection::setChicken(const GameObjectPtr chicken) {
+void PlayerChickenConnection::setChicken(const GameObjectPtr& chicken) {
     mChicken = chicken;
 }
 
@@ -61,7 +61,7 @@ std::shared_ptr<GameObject> PlayerChickenConnection::getChicken() const {
     return mChicken;
 }
 
-void PlayerChickenConnection::playerJumpTarget(const GameObjectPtr chicken) {
+void PlayerChickenConnection::playerJumpTarget(const GameObjectPtr& chicken) {
     if (mPlayer->isWalking()) {
         mJumpTarget = chicken;
         auto pos = mJumpTarget->transform()->getPosition();

@@ -4,7 +4,6 @@
 #include "Inspector.h"
 #include "Log.h"
 #include "../Device/DrawString.h"
-#include "../Device/Renderer.h"
 #include "../System/DirectXIncLib.h"
 #include "../System/Game.h"
 
@@ -24,8 +23,8 @@ void DebugUtility::loadProperties(const rapidjson::Value& inObj) {
     mInspector->loadProperties(inObj);
 }
 
-void DebugUtility::initialize(std::shared_ptr<Renderer> renderer) {
-    mDrawString->initialize(renderer);
+void DebugUtility::initialize() {
+    mDrawString->initialize();
     mLog->initialize();
     mFixedDebugInfo->initialize();
     mHierarchy->initialize();

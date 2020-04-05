@@ -4,7 +4,6 @@
 #include <memory>
 #include <string>
 
-class AssetsManager;
 struct Material;
 class VertexArray;
 
@@ -18,7 +17,7 @@ struct MeshVertex {
 class IMeshLoader {
 public:
     virtual ~IMeshLoader() {};
-    virtual void perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName) = 0;
+    virtual void perse(const std::string& fileName) = 0;
     virtual std::shared_ptr<Material> getMaterial(unsigned index) const = 0;
     virtual std::shared_ptr<VertexArray> getVertexArray() const = 0;
     virtual size_t getNumMaterial() const = 0;

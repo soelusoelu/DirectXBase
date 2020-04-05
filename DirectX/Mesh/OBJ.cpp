@@ -17,7 +17,7 @@ OBJ::~OBJ() {
     SAFE_DELETE_ARRAY(mVertices);
 }
 
-void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
+void OBJ::perse(const std::string& filePath) {
     //OBJファイルを開いて内容を読み込む
     Singleton<Directory>::instance().setModelDirectory(filePath);
     auto fileName = FileUtil::getFileNameFromDirectry(filePath);
@@ -28,7 +28,7 @@ void OBJ::perse(std::shared_ptr<AssetsManager> assetsManager, const std::string&
     }
 
     //事前に頂点数などを調べる
-    if (!preload(ifs, assetsManager, fileName)) {
+    if (!preload(ifs, fileName)) {
         Debug::windowMessage(filePath + "ファイルの事前読み込み失敗");
         return;
     }
@@ -230,7 +230,7 @@ float OBJ::getRadius() const {
     return (max - min) / 2.f;
 }
 
-bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsManager, const std::string& filePath) {
+bool OBJ::preload(std::ifstream& stream, const std::string& filePath) {
     //OBJファイルを開いて内容を読み込む
     unsigned numVert = 0;
     unsigned numNormal = 0;
@@ -253,7 +253,7 @@ bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsMa
         //マテリアル読み込み
         if (strcmp(s, "mtllib") == 0) {
             auto mat = line.substr(7); //「mtllib 」の文字数分
-            if (!materialLoad(assetsManager, mat, filePath)) {
+            if (!materialLoad(mat, filePath)) {
                 return false;
             }
         }
@@ -287,7 +287,7 @@ bool OBJ::preload(std::ifstream& stream, std::shared_ptr<AssetsManager> assetsMa
     return true;
 }
 
-bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::string& fileName, const std::string& filePath) {
+bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath) {
     std::ifstream ifs(fileName, std::ios::in);
     if (ifs.fail()) {
         Debug::windowMessage(FileUtil::getDirectryFromFilePath(filePath) + "/" + fileName + "ファイルが存在しません");
@@ -345,7 +345,7 @@ bool OBJ::materialLoad(std::shared_ptr<AssetsManager> assetsManager, const std::
             dir += "/" + mMaterials[matCount]->textureName;
 
             //テクスチャーを作成
-            mMaterials[matCount]->texture = assetsManager->createTexture(dir, false);
+            mMaterials[matCount]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
         }
     }
 

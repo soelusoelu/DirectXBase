@@ -5,7 +5,6 @@
 #include "../Component/Camera.h"
 #include "../Component/DirectionalLight.h"
 #include "../Device/AssetsManager.h"
-#include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Shader/Shader.h"
@@ -16,11 +15,11 @@
 #include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
 
-Mesh::Mesh(std::shared_ptr<Renderer> renderer, const std::string& fileName) :
-    mMesh(renderer->getAssetsManager()->createMesh(fileName)),
+Mesh::Mesh(const std::string& fileName) :
+    mMesh(Singleton<AssetsManager>::instance().createMesh(fileName)),
     mTransform(nullptr),
-    mShader(renderer->getAssetsManager()->createShader("GBuffer.hlsl")),
-    mShaderTransparent(renderer->getAssetsManager()->createShader("Mesh.hlsl")),
+    mShader(Singleton<AssetsManager>::instance().createShader("GBuffer.hlsl")),
+    mShaderTransparent(Singleton<AssetsManager>::instance().createShader("Mesh.hlsl")),
     mState(State::ACTIVE),
     mRadius(0.f),
     mCenter(Vector3::zero),
@@ -61,7 +60,7 @@ void Mesh::addToManager(bool isTransparent) {
     }
 }
 
-void Mesh::draw(std::shared_ptr<Camera> camera) const {
+void Mesh::draw(const Camera& camera) const {
     //使用するシェーダーの登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -79,7 +78,7 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = mTransform->getWorldTransform() * camera->getViewProjection();
+        cb.WVP = mTransform->getWorldTransform() * camera.getViewProjection();
         cb.WVP.transpose();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
@@ -123,7 +122,7 @@ void Mesh::draw(std::shared_ptr<Camera> camera) const {
     }
 }
 
-void Mesh::drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const {
+void Mesh::drawTransparent(const Camera& camera, const DirectionalLight& dirLight) const {
     //使用するシェーダーの登録
     mShaderTransparent->setVSShader();
     mShaderTransparent->setPSShader();
@@ -141,10 +140,10 @@ void Mesh::drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<Direc
         cb.world = mTransform->getWorldTransform();
         cb.world.transpose();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = mTransform->getWorldTransform() * camera->getViewProjection();
+        cb.WVP = mTransform->getWorldTransform() * camera.getViewProjection();
         cb.WVP.transpose();
-        cb.lightDir = dirLight->getDirection();
-        cb.cameraPos = camera->owner()->transform()->getPosition();
+        cb.lightDir = dirLight.getDirection();
+        cb.cameraPos = camera.owner()->transform()->getPosition();
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShaderTransparent->unmap(0);
@@ -189,7 +188,7 @@ void Mesh::drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<Direc
     }
 }
 
-void Mesh::setTransform(std::shared_ptr<Transform3D> transform) {
+void Mesh::setTransform(const std::shared_ptr<Transform3D>& transform) {
     mTransform = transform;
 }
 

@@ -15,10 +15,10 @@ public:
     MeshManager();
     ~MeshManager();
     void update();
-    void draw(std::shared_ptr<Camera> camera) const;
-    void drawTransparent(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight) const;
-    void add(MeshPtr mesh);
-    void addTransparent(MeshPtr mesh);
+    void draw(const Camera& camera) const;
+    void drawTransparent(const Camera& camera, const DirectionalLight& dirLight) const;
+    void add(const MeshPtr& mesh);
+    void addTransparent(const MeshPtr& mesh);
     void clear();
 
 private:

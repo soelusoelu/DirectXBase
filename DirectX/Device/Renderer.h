@@ -6,7 +6,6 @@
 #include <list>
 #include <memory>
 
-class AssetsManager;
 class Camera;
 class DirectionalLight;
 class DrawString;
@@ -22,16 +21,15 @@ public:
     void initialize();
     void update();
 
-    std::shared_ptr<AssetsManager> getAssetsManager() const;
     std::shared_ptr<DrawString> getDrawString() const;
 
     const Vector3& getAmbientLight() const;
     void setAmbientLight(const Vector3& ambient);
-    void addPointLight(std::shared_ptr<PointLightComponent> light);
+    void addPointLight(const std::shared_ptr<PointLightComponent>& light);
     void drawPointLights();
 
     void renderToTexture();
-    void renderFromTexture(std::shared_ptr<Camera> camera, std::shared_ptr<DirectionalLight> dirLight);
+    void renderFromTexture(const Camera& camera, const DirectionalLight& dirLight);
     void renderSprite(Matrix4* proj);
     void renderToDebug(Matrix4* proj);
 
@@ -39,7 +37,6 @@ private:
     void removePointLight();
 
 private:
-    std::shared_ptr<AssetsManager> mAssetsManager;
     std::shared_ptr<DrawString> mDrawString;
     std::unique_ptr<GBuffer> mGBuffer;
 

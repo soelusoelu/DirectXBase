@@ -50,7 +50,7 @@ void Game::run(HINSTANCE hInstance) {
 bool Game::initialize() {
     mWindow = std::make_unique<Window>();
     mRenderer = std::make_shared<Renderer>();
-    mFPSCounter = std::make_unique<FPSCounter>(mRenderer);
+    mFPSCounter = std::make_unique<FPSCounter>();
     Singleton<GameObjectFactory>::instance().initialize(mRenderer);
     DebugUtility::create();
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
@@ -64,7 +64,7 @@ bool Game::initialize() {
 
     Random::initialize();
     Input::initialize(mhWnd);
-    DebugUtility::initialize(mRenderer);
+    DebugUtility::initialize();
     mSceneManager->initialize();
 
     return true;

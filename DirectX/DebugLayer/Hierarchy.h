@@ -20,7 +20,7 @@ public:
     void loadProperties(const rapidjson::Value& inObj);
     void initialize();
     void update();
-    void setGameObjectToButton(const GameObjectPtrList gameObjects);
+    void setGameObjectToButton(const GameObjectPtrList& gameObjects);
     //マネージャーに登録されてる全アクターを表示
     void drawActors() const;
 
