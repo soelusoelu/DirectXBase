@@ -4,7 +4,7 @@
 #include "../System/Game.h"
 #include <memory>
 
-class Mesh;
+class IMeshLoader;
 class Shader;
 
 struct PointLightConstantBuffer {
@@ -19,7 +19,7 @@ struct PointLightConstantBuffer {
 };
 
 struct PointLight {
-    std::shared_ptr<Mesh> mesh;
+    std::shared_ptr<IMeshLoader> mesh;
     std::shared_ptr<Shader> shader;
     float radius;
 

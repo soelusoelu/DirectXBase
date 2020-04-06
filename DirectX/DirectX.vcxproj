@@ -225,7 +225,6 @@
     <ClCompile Include="Utility\StringUtil.cpp" />
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
-    <ClCompile Include="Mesh\Mesh.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Scene\GamePlay.cpp" />
     <ClCompile Include="Scene\SceneBase.cpp" />
@@ -331,7 +330,6 @@
     <ClInclude Include="Utility\StringUtil.h" />
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
-    <ClInclude Include="Mesh\Mesh.h" />
     <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Scene\GamePlay.h" />
     <ClInclude Include="Scene\SceneBase.h" />

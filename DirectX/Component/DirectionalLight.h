@@ -5,7 +5,6 @@
 #include <memory>
 
 class GameObject;
-class Mesh;
 
 class DirectionalLight : public Component {
 public:
@@ -20,7 +19,6 @@ public:
     void setColor(const Vector3& color);
 
 private:
-    std::shared_ptr<Mesh> mMesh;
     Vector3 mDirection;
     Vector3 mColor;
 };

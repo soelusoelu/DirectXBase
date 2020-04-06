@@ -8,7 +8,6 @@
 #include "../Device/Renderer.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Material.h"
-#include "../Mesh/Mesh.h"
 #include "../Mesh/OBJ.h"
 #include "../Mesh/VertexArray.h"
 #include "../Shader/Shader.h"
@@ -96,16 +95,16 @@ void PointLightComponent::draw(const PointLight& pointLight) const {
     }
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < mesh->getMeshData()->getNumMaterial(); i++) {
+    for (size_t i = 0; i < mesh->getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        if (mesh->getMeshData()->getMaterial(i)->numFace == 0) {
+        if (mesh->getMaterial(i)->numFace == 0) {
             continue;
         }
         //インデックスバッファーをセット
-        mesh->getMeshData()->getVertexArray()->setIndexBuffer(i);
+        mesh->getVertexArray()->setIndexBuffer(i);
 
         //プリミティブをレンダリング
-        Singleton<DirectX>::instance().drawIndexed(mesh->getMeshData()->getMaterial(i)->numFace * 3);
+        Singleton<DirectX>::instance().drawIndexed(mesh->getMaterial(i)->numFace * 3);
     }
 }
 

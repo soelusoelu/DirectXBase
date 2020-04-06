@@ -20,11 +20,17 @@ struct MaterialConstantBuffer {
 
 class Camera;
 class GameObject;
-class Mesh;
+class IMeshLoader;
 class MeshManager;
 class Shader;
 
 class MeshComponent : public Component, public std::enable_shared_from_this<MeshComponent> {
+    enum class State {
+        ACTIVE,
+        NON_ACTIVE,
+        DEAD
+    };
+
 public:
     MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type = "MeshComponent");
     ~MeshComponent();
@@ -43,6 +49,7 @@ public:
     void setColor(const Vector3& color);
     const Vector3& getColor() const;
     //èÛë‘
+    void destroy();
     void setActive(bool value);
     bool getActive() const;
     bool isDead();
@@ -53,9 +60,12 @@ protected:
     void addToManager(bool isTransparent = false);
 
 protected:
-    std::shared_ptr<Mesh> mMesh;
+    std::shared_ptr<IMeshLoader> mMesh;
     std::shared_ptr<Shader> mShader;
     std::shared_ptr<Camera> mCamera;
+    State mState;
+    Vector3 mCenter;
+    float mRadius;
     Vector3 mColor;
 
     static MeshManager* mMeshManager;

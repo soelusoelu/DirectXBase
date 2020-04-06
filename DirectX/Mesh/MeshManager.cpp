@@ -1,5 +1,4 @@
 ﻿#include "MeshManager.h"
-#include "Mesh.h"
 #include "../Component/MeshComponent.h"
 #include "../Device/Renderer.h"
 #include "../System/BlendDesc.h"

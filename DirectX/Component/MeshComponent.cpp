@@ -6,8 +6,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
+#include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
-#include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
 #include "../Mesh/VertexArray.h"
 #include "../Shader/Shader.h"
@@ -20,16 +20,21 @@ MeshComponent::MeshComponent(std::shared_ptr<GameObject> owner, const std::strin
     mMesh(nullptr),
     mShader(nullptr),
     mCamera(nullptr),
+    mState(State::ACTIVE),
+    mCenter(Vector3::zero),
+    mRadius(0.f),
     mColor(ColorPalette::white) {
 }
 
-MeshComponent::~MeshComponent() {
-    mMesh->destroy();
-}
+MeshComponent::~MeshComponent() = default;
 
 void MeshComponent::start() {
     auto camera = owner()->getGameObjectManager()->find("Camera");
     mCamera = camera->componentManager()->getComponent<Camera>();
+
+    //半径と中心座標の取得
+    mCenter = mMesh->getCenter();
+    mRadius = mMesh->getRadius();
 
     setShader();
 }
@@ -55,7 +60,7 @@ void MeshComponent::drawDebugInfo(debugInfoList* inspect) const {
 }
 
 void MeshComponent::setMesh(const std::string& fileName) {
-    mMesh = std::make_shared<Mesh>(fileName);
+    mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
     addToManager();
 }
 
@@ -100,23 +105,21 @@ void MeshComponent::draw() {
         mShader->unmap(0);
     }
 
-    auto meshData = mMesh->getMeshData();
-
     //バーテックスバッファーをセット
-    meshData->getVertexArray()->setVertexBuffer();
+    mMesh->getVertexArray()->setVertexBuffer();
 
     //このコンスタントバッファーを使うシェーダーの登録
     mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < meshData->getNumMaterial(); i++) {
+    for (size_t i = 0; i < mMesh->getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        auto mat = meshData->getMaterial(i);
+        auto mat = mMesh->getMaterial(i);
         if (mat->numFace == 0) {
             continue;
         }
         //インデックスバッファーをセット
-        meshData->getVertexArray()->setIndexBuffer(i);
+        mMesh->getVertexArray()->setIndexBuffer(i);
 
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
@@ -148,16 +151,20 @@ float MeshComponent::getRadius() const {
     return mMesh->getRadius();
 }
 
+void MeshComponent::destroy() {
+    mState = State::DEAD;
+}
+
 void MeshComponent::setActive(bool value) {
-    mMesh->setActive(value);
+    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
 }
 
 bool MeshComponent::getActive() const {
-    return mMesh->getActive();
+    return mState == State::ACTIVE;
 }
 
 bool MeshComponent::isDead() {
-    return mMesh->isDead();
+    return mState == State::DEAD;
 }
 
 void MeshComponent::setColor(const Vector3& color) {

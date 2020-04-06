@@ -3,8 +3,7 @@
 #include "Sound.h"
 #include "../Component/PointLightComponent.h"
 #include "../Light/PointLight.h"
-#include "../Mesh/Mesh.h"
-#include "../Mesh/OBJ.h"
+#include "../Mesh/IMeshLoader.h"
 #include "../Mesh/VertexArray.h"
 #include "../Shader/Shader.h"
 #include "../System/BlendState.h"
@@ -80,7 +79,7 @@ void Renderer::drawPointLights() {
     //頂点インプットレイアウトをセット
     shader->setInputLayout();
     //バーテックスバッファーをセット
-    mPointLight->mesh->getMeshData()->getVertexArray()->setVertexBuffer();
+    mPointLight->mesh->getVertexArray()->setVertexBuffer();
     //プリミティブ指定
     Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     //テクスチャ登録

@@ -3,22 +3,16 @@
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Mesh/Mesh.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 DirectionalLight::DirectionalLight(std::shared_ptr<GameObject> owner) :
     Component(owner, "DirectionalLight"),
-    mMesh(nullptr),
     mDirection(Vector3::zero),
     mColor(Vector3::one) {
 }
 
-DirectionalLight::~DirectionalLight() {
-    if (mMesh) {
-        mMesh->destroy();
-    }
-}
+DirectionalLight::~DirectionalLight() = default;
 
 void DirectionalLight::onUpdateWorldTransform() {
     mDirection = Vector3::transform(Vector3::up, owner()->transform()->getRotation());

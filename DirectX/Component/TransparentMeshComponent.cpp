@@ -6,8 +6,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
+#include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
-#include "../Mesh/Mesh.h"
 #include "../Mesh/VertexArray.h"
 #include "../Shader/Shader.h"
 #include "../System/DirectX.h"
@@ -47,7 +47,7 @@ void TransparentMeshComponent::drawDebugInfo(debugInfoList * inspect) const {
 }
 
 void TransparentMeshComponent::setMesh(const std::string & fileName) {
-    mMesh = std::make_shared<Mesh>(fileName);
+    mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
     addToManager(true);
 }
 
@@ -94,8 +94,7 @@ void TransparentMeshComponent::draw() {
         mShader->unmap(0);
     }
 
-    auto meshData = mMesh->getMeshData();
-    auto vertArray = meshData->getVertexArray();
+    auto vertArray = mMesh->getVertexArray();
 
     //バーテックスバッファーをセット
     vertArray->setVertexBuffer();
@@ -105,9 +104,9 @@ void TransparentMeshComponent::draw() {
     mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < meshData->getNumMaterial(); i++) {
+    for (size_t i = 0; i < mMesh->getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        auto mat = meshData->getMaterial(i);
+        auto mat = mMesh->getMaterial(i);
         if (mat->numFace == 0) {
             continue;
         }
