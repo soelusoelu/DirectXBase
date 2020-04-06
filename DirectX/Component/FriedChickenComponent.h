@@ -11,7 +11,7 @@ class GameObject;
 class MeshComponent;
 
 class FriedChickenComponent : public Component {
-    enum class State {
+    enum class Surface {
         FRONT,
         BACK,
 
@@ -35,10 +35,12 @@ public:
 private:
     //下の面を揚げる
     void frying();
+    //揚げ具合によって色を変える
+    void changeFryedColor();
 
 private:
     std::shared_ptr<MeshComponent> mMeshComp;
-    State mState;
+    Surface mState;
     std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;

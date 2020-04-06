@@ -7,6 +7,7 @@
     <FxCompile Include="Shader\Deferred.hlsl" />
     <FxCompile Include="Shader\GBuffer.hlsl" />
     <FxCompile Include="Shader\PointLight.hlsl" />
+    <FxCompile Include="Shader\ChickenMesh.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component\Collider.cpp" />

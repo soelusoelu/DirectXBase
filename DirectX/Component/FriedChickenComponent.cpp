@@ -12,14 +12,14 @@
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
     mMeshComp(nullptr),
-    mState(State::FRONT),
+    mState(Surface::FRONT),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero) {
-    for (size_t i = 0; i < static_cast<int>(State::NUM_SURFACE); i++) {
-        mFryTimer.emplace_back(std::make_unique<Time>(2.f));
+    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
+        mFryTimer.emplace_back(std::make_unique<Time>(10.f));
     }
 }
 
@@ -35,12 +35,8 @@ void FriedChickenComponent::start() {
 }
 
 void FriedChickenComponent::update() {
-    auto rate = mFryTimer.front()->rate();
-    auto color = Vector3::lerp(mInitColor, mFryedColor, rate);
-    if (mMeshComp) {
-        mMeshComp->setColor(color);
-    }
     frying();
+    changeFryedColor();
 }
 
 void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
@@ -65,9 +61,9 @@ void FriedChickenComponent::drawDebugInfo(debugInfoList * inspect) const {
     info.second = InspectHelper::vector2ToString(mRandomRangeScale);
     inspect->emplace_back(info);
     info.first = "State";
-    if (mState == State::FRONT) {
+    if (mState == Surface::FRONT) {
         info.second = "FRONT";
-    } else if (mState == State::BACK) {
+    } else if (mState == Surface::BACK) {
         info.second = "BACK";
     }
     inspect->emplace_back(info);
@@ -83,19 +79,19 @@ void FriedChickenComponent::initialize() {
     auto scale = Random::randomRange(mRandomRangeScale.x, mRandomRangeScale.y);
     t->setScale(scale);
 
-    mState = State::FRONT;
-    for (size_t i = 0; i < static_cast<int>(State::NUM_SURFACE); i++) {
+    mState = Surface::FRONT;
+    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         mFryTimer[i]->reset();
     }
 }
 
 void FriedChickenComponent::changeSurface() {
-    mState = (mState == State::FRONT) ? State::BACK : State::FRONT;
+    mState = (mState == Surface::FRONT) ? Surface::BACK : Surface::FRONT;
 }
 
 bool FriedChickenComponent::successFrying() const {
     bool result = true;
-    for (size_t i = 0; i < static_cast<int>(State::NUM_SURFACE); i++) {
+    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         if (!mFryTimer[i]->isTime()) {
             result = false;
             break;
@@ -107,4 +103,12 @@ bool FriedChickenComponent::successFrying() const {
 
 void FriedChickenComponent::frying() {
     mFryTimer[static_cast<int>(mState)]->update();
+}
+
+void FriedChickenComponent::changeFryedColor() {
+    auto rate = mFryTimer[static_cast<int>(mState)]->rate();
+    auto color = Vector3::lerp(mInitColor, mFryedColor, rate);
+    if (mMeshComp) {
+        mMeshComp->setColor(color);
+    }
 }

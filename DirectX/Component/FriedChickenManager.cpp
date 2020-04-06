@@ -33,7 +33,7 @@ void FriedChickenManager::update() {
             continue;
         }
         if (mScore) {
-            mScore->addScore(10);
+            mScore->addScore(5);
         }
     }
     moveToWait();
