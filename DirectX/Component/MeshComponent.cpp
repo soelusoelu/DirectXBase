@@ -47,3 +47,11 @@ void MeshComponent::setActive(bool value) {
 bool MeshComponent::getActive() const {
     return mMesh->getActive();
 }
+
+void MeshComponent::setColor(const Vector3& color) {
+    mMesh->setColor(color);
+}
+
+const Vector3& MeshComponent::getColor() const {
+    return mMesh->getColor();
+}

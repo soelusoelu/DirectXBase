@@ -57,6 +57,9 @@ public:
     void setActive(bool value);
     bool getActive() const;
     bool isDead() const;
+    //全体的な色
+    void setColor(const Vector3& color);
+    const Vector3& getColor() const;
     //アルファ値 (TransparentMeshComponentのみ)
     void setAlpha(float alpha);
     float getAlpha() const;
@@ -71,6 +74,7 @@ private:
     State mState;
     float mRadius;
     Vector3 mCenter;
+    Vector3 mColor;
     float mAlpha;
 
     static MeshManager* mMeshManager;

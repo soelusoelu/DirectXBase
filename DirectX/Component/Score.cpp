@@ -19,10 +19,10 @@ void Score::update() {
         mHighScore = mScore;
     }
     auto ds = owner()->renderer()->getDrawString();
-    ds->drawString("Score", mDrawPosition - Vector2(32.f * 14, 0.f) * mDrawScale, mDrawScale);
+    ds->drawString("Score", mDrawPosition - Vector2(DrawString::WIDTH * 14, 0.f) * mDrawScale, mDrawScale);
     ds->drawNumberRightJustified(mScore, mDrawPosition, mDrawScale);
-    ds->drawString("HighScore", mDrawPosition + Vector2(-32.f * 14, 64.f) * mDrawScale, mDrawScale);
-    ds->drawNumberRightJustified(mHighScore, mDrawPosition + Vector2(0.f, 64.f) * mDrawScale, mDrawScale);
+    //ds->drawString("HighScore", mDrawPosition + Vector2(-32.f * 14, 64.f) * mDrawScale, mDrawScale);
+    //ds->drawNumberRightJustified(mHighScore, mDrawPosition + Vector2(0.f, 64.f) * mDrawScale, mDrawScale);
 }
 
 void Score::loadProperties(const rapidjson::Value& inObj) {

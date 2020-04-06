@@ -1,4 +1,6 @@
 ﻿#include "FriedChickenComponent.h"
+#include "ComponentManager.h"
+#include "MeshComponent.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
@@ -9,10 +11,13 @@
 
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
+    mMeshComp(nullptr),
     mState(State::FRONT),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
-    mRandomRangeScale(Vector2::one) {
+    mRandomRangeScale(Vector2::one),
+    mInitColor(Vector3::zero),
+    mFryedColor(Vector3::zero) {
     for (size_t i = 0; i < static_cast<int>(State::NUM_SURFACE); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(2.f));
     }
@@ -21,10 +26,20 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
 FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
+    mMeshComp = owner()->componentManager()->getComponent<MeshComponent>();
+    if (mMeshComp) {
+        mMeshComp->setColor(mInitColor);
+    }
+
     initialize();
 }
 
 void FriedChickenComponent::update() {
+    auto rate = mFryTimer.front()->rate();
+    auto color = Vector3::lerp(mInitColor, mFryedColor, rate);
+    if (mMeshComp) {
+        mMeshComp->setColor(color);
+    }
     frying();
 }
 
@@ -34,6 +49,8 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector2(inObj, "randomRangePositionX", &mRandomRangePositionX);
     JsonHelper::getVector2(inObj, "randomRangePositionZ", &mRandomRangePositionZ);
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
+    JsonHelper::getVector3(inObj, "initColor", &mInitColor);
+    JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
 }
 
 void FriedChickenComponent::drawDebugInfo(debugInfoList * inspect) const {

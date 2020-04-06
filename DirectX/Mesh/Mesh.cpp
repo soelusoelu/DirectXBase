@@ -23,6 +23,7 @@ Mesh::Mesh(const std::string& fileName) :
     mState(State::ACTIVE),
     mRadius(0.f),
     mCenter(Vector3::zero),
+    mColor(Vector3::zero),
     mAlpha(1.f) {
 
     //メッシュ用コンスタントバッファの作成
@@ -167,8 +168,8 @@ void Mesh::drawTransparent(const Camera& camera, const DirectionalLight& dirLigh
 
         if (mShaderTransparent->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
-            cb.diffuse = mMesh->getMaterial(i)->diffuse;
-            cb.diffuse.w = mAlpha;
+            //cb.diffuse = mMesh->getMaterial(i)->diffuse;
+            cb.diffuse = Vector4(mColor, mAlpha);
             cb.specular = mMesh->getMaterial(i)->specular;
 
             if (auto t = mMesh->getMaterial(i)->texture) {
@@ -218,6 +219,14 @@ bool Mesh::getActive() const {
 
 bool Mesh::isDead() const {
     return mState == State::DEAD;
+}
+
+void Mesh::setColor(const Vector3& color) {
+    mColor = color;
+}
+
+const Vector3& Mesh::getColor() const {
+    return mColor;
 }
 
 void Mesh::setAlpha(float alpha) {

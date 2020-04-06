@@ -8,6 +8,7 @@
 #include <vector>
 
 class GameObject;
+class MeshComponent;
 
 class FriedChickenComponent : public Component {
     enum class State {
@@ -36,9 +37,12 @@ private:
     void frying();
 
 private:
+    std::shared_ptr<MeshComponent> mMeshComp;
     State mState;
     std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
     Vector2 mRandomRangeScale;
+    Vector3 mInitColor;
+    Vector3 mFryedColor;
 };

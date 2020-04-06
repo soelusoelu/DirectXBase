@@ -66,7 +66,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
 //
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 color = float4(0, 0, 0, 1);
+    float4 color = g_Diffuse;
     if (g_Texture == 1)
     {
         color = g_texDecal.Sample(g_samLinear, input.Tex);

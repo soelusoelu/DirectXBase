@@ -25,9 +25,6 @@ void FriedChickenManager::awake() {
         auto c = f->componentManager()->getComponent<FriedChickenComponent>();
         mChickens.emplace_back(c);
     }
-    auto f = GameObjectCreater::create("FriedChicken");
-    owner()->transform()->addChild(f->transform());
-    f->destroy(2.f);
 }
 
 void FriedChickenManager::update() {

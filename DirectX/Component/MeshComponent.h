@@ -20,6 +20,8 @@ public:
     float getRadius() const;
     void setActive(bool value);
     bool getActive() const;
+    void setColor(const Vector3& color);
+    const Vector3& getColor() const;
 
 protected:
     std::shared_ptr<Mesh> mMesh;
