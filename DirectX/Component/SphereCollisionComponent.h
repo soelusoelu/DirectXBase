@@ -6,8 +6,6 @@
 #include <memory>
 
 class GameObject;
-class Mesh;
-class Transform3D;
 
 class SphereCollisionComponent : public Collider {
 public:
@@ -22,6 +20,4 @@ private:
     std::shared_ptr<Sphere> mSphere;
     Vector3 mDefaultCenter;
     float mDefaultRadius;
-    std::shared_ptr<Mesh> mSphereMesh;
-    std::shared_ptr<Transform3D> mTransform;
 };

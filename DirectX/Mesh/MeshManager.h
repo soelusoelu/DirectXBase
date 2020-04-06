@@ -3,20 +3,20 @@
 #include <memory>
 #include <list>
 
-class Mesh;
+class MeshComponent;
 class Camera;
 class DirectionalLight;
 
 class MeshManager {
-    using MeshPtr = std::shared_ptr<Mesh>;
+    using MeshPtr = std::shared_ptr<MeshComponent>;
     using MeshPtrList = std::list<MeshPtr>;
 
 public:
     MeshManager();
     ~MeshManager();
     void update();
-    void draw(const Camera& camera) const;
-    void drawTransparent(const Camera& camera, const DirectionalLight& dirLight) const;
+    void draw() const;
+    void drawTransparent() const;
     void add(const MeshPtr& mesh);
     void addTransparent(const MeshPtr& mesh);
     void clear();

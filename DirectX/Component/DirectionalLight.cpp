@@ -20,10 +20,6 @@ DirectionalLight::~DirectionalLight() {
     }
 }
 
-void DirectionalLight::start() {
-    createMesh();
-}
-
 void DirectionalLight::onUpdateWorldTransform() {
     mDirection = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
 }
@@ -58,12 +54,4 @@ const Vector3& DirectionalLight::getColor() const {
 
 void DirectionalLight::setColor(const Vector3& color) {
     mColor = color;
-}
-
-void DirectionalLight::createMesh() {
-#ifdef _DEBUG //デバッグ時のみメッシュ描画
-    mMesh = std::make_shared<Mesh>("Light/DLight.obj");
-    mMesh->addToManager();
-    mMesh->setTransform(owner()->transform());
-#endif // _DEBUG
 }

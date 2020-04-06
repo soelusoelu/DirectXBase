@@ -1,5 +1,6 @@
 ﻿#include "MeshManager.h"
 #include "Mesh.h"
+#include "../Component/MeshComponent.h"
 #include "../Device/Renderer.h"
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
@@ -16,7 +17,7 @@ void MeshManager::update() {
     remove();
 }
 
-void MeshManager::draw(const Camera& camera) const {
+void MeshManager::draw() const {
     if (mMeshes.empty()) {
         return;
     }
@@ -33,15 +34,15 @@ void MeshManager::draw(const Camera& camera) const {
 
         rd.cullMode = CullMode::FRONT;
         Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
-        mesh->draw(camera);
+        mesh->draw();
 
         rd.cullMode = CullMode::BACK;
         Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
-        mesh->draw(camera);
+        mesh->draw();
     }
 }
 
-void MeshManager::drawTransparent(const Camera& camera, const DirectionalLight& dirLight) const {
+void MeshManager::drawTransparent() const {
     if (mTransparentMeshes.empty()) {
         return;
     }
@@ -67,11 +68,11 @@ void MeshManager::drawTransparent(const Camera& camera, const DirectionalLight& 
 
         rd.cullMode = CullMode::FRONT;
         Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
-        mesh->drawTransparent(camera, dirLight);
+        mesh->draw();
 
         rd.cullMode = CullMode::BACK;
         Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
-        mesh->drawTransparent(camera, dirLight);
+        mesh->draw();
     }
 }
 

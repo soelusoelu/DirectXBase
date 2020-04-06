@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\ChickenMeshComponent.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="GameObject\Transform3D.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
@@ -246,6 +247,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\ChickenMeshComponent.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="Event\IObserver.h" />
     <ClInclude Include="GameObject\Transform3D.h" />

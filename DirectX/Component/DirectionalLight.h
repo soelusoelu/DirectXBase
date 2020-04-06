@@ -11,7 +11,6 @@ class DirectionalLight : public Component {
 public:
     DirectionalLight(std::shared_ptr<GameObject> owner);
     ~DirectionalLight();
-    virtual void start() override;
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(debugInfoList* inspect) const override;
@@ -19,9 +18,6 @@ public:
     void setDirection(const Vector3& dir);
     const Vector3& getColor() const;
     void setColor(const Vector3& color);
-
-private:
-    void createMesh();
 
 private:
     std::shared_ptr<Mesh> mMesh;

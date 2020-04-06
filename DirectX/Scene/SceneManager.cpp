@@ -5,6 +5,7 @@
 #include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
+#include "../Component/MeshComponent.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
@@ -12,7 +13,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
-#include "../Mesh/Mesh.h"
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
@@ -40,7 +40,7 @@ void SceneManager::loadProperties(const rapidjson::Value& inObj) {
 
 void SceneManager::initialize() {
     GameObject::setGameObjectManager(mGameObjectManager);
-    Mesh::setMeshManager(mMeshManager);
+    MeshComponent::setMeshManager(mMeshManager);
     Sprite::setSpriteManager(mSpriteManager);
     Collider::setPhysics(mPhysics);
 
@@ -82,13 +82,13 @@ void SceneManager::draw() const {
     //各テクスチャ上にレンダリング
     mRenderer->renderToTexture();
     //メッシュの一括描画
-    mMeshManager->draw(*mCamera);
+    mMeshManager->draw();
     //各テクスチャを参照してレンダリング
     mRenderer->renderFromTexture(*mCamera, *mDirectionalLight);
     //ポイントライトの一括描画
     mRenderer->drawPointLights();
     //透明メッシュの描画
-    mMeshManager->drawTransparent(*mCamera, *mDirectionalLight);
+    mMeshManager->drawTransparent();
 
     //スプライト描画準備
     Matrix4 proj = Matrix4::identity;

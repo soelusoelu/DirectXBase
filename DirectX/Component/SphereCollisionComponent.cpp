@@ -4,23 +4,16 @@
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Mesh/Mesh.h"
 #include "../Utility/StringUtil.h"
 
 SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<GameObject> owner) :
     Collider(owner, "SphereCollisionComponent"),
     mSphere(std::make_shared<Sphere>(Vector3::zero, 0.f)),
     mDefaultCenter(Vector3::zero),
-    mDefaultRadius(0.f),
-    mSphereMesh(nullptr),
-    mTransform(std::make_shared<Transform3D>()) {
+    mDefaultRadius(0.f) {
 }
 
-SphereCollisionComponent::~SphereCollisionComponent() {
-    if (mSphereMesh) {
-        mSphereMesh->destroy();
-    }
-}
+SphereCollisionComponent::~SphereCollisionComponent() = default;
 
 void SphereCollisionComponent::start() {
     Collider::start();
@@ -31,12 +24,6 @@ void SphereCollisionComponent::start() {
         mSphere->radius = mesh->getRadius();
         mDefaultCenter = mSphere->center;
         mDefaultRadius = mSphere->radius;
-#ifdef _DEBUG //デバッグ時のみ当たり判定表示
-        mSphereMesh = std::make_shared<Mesh>("Shape/Sphere.obj");
-        mSphereMesh->addToManager();
-        mTransform->setScale(mSphere->radius);
-        mSphereMesh->setTransform(mTransform);
-#endif // _DEBUG
     }
 }
 
@@ -51,12 +38,6 @@ void SphereCollisionComponent::onUpdateWorldTransform() {
     auto radius = mDefaultRadius * owner()->transform()->getScale().y;
 
     mSphere->set(center, radius);
-
-#ifdef _DEBUG
-    mTransform->setPosition(center);
-    mTransform->setScale(radius * 2.f);
-    mTransform->computeWorldTransform();
-#endif // _DEBUG
 }
 
 void SphereCollisionComponent::set(const Vector3 & center, float radius) {
