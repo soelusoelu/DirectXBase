@@ -33,7 +33,7 @@ class MeshComponent : public Component, public std::enable_shared_from_this<Mesh
 
 public:
     MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type = "MeshComponent");
-    ~MeshComponent();
+    virtual ~MeshComponent();
     virtual void start() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

@@ -75,6 +75,7 @@ void SceneManager::update() {
     if (next) {
         mCurrentScene = next;
         change();
+        mGameObjectManager->update();
     }
 }
 
