@@ -77,7 +77,7 @@
       "type": "FriedChicken",
       "components": [
         {
-          "type": "TransparentMeshComponent",
+          "type": "ChickenMeshComponent",
           "properties": {
             "fileName": "Shape/Sphere.obj"
           }

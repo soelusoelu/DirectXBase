@@ -8,12 +8,12 @@
 #include <vector>
 
 class GameObject;
-class MeshComponent;
+class ChickenMeshComponent;
 
 class FriedChickenComponent : public Component {
     enum class Surface {
-        FRONT,
-        BACK,
+        UP,
+        BOTTOM,
 
         NUM_SURFACE
     };
@@ -39,8 +39,8 @@ private:
     void changeFryedColor();
 
 private:
-    std::shared_ptr<MeshComponent> mMeshComp;
-    Surface mState;
+    std::shared_ptr<ChickenMeshComponent> mMeshComp;
+    Surface mSurface;
     std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;

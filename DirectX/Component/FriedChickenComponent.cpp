@@ -1,6 +1,6 @@
 ﻿#include "FriedChickenComponent.h"
+#include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
-#include "MeshComponent.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
@@ -12,7 +12,7 @@
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
     mMeshComp(nullptr),
-    mState(Surface::FRONT),
+    mSurface(Surface::BOTTOM),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
@@ -26,7 +26,7 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
 FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
-    mMeshComp = owner()->componentManager()->getComponent<MeshComponent>();
+    mMeshComp = owner()->componentManager()->getComponent<ChickenMeshComponent>();
     if (mMeshComp) {
         mMeshComp->setColor(mInitColor);
     }
@@ -61,9 +61,9 @@ void FriedChickenComponent::drawDebugInfo(debugInfoList * inspect) const {
     info.second = InspectHelper::vector2ToString(mRandomRangeScale);
     inspect->emplace_back(info);
     info.first = "State";
-    if (mState == Surface::FRONT) {
+    if (mSurface == Surface::UP) {
         info.second = "FRONT";
-    } else if (mState == Surface::BACK) {
+    } else if (mSurface == Surface::BOTTOM) {
         info.second = "BACK";
     }
     inspect->emplace_back(info);
@@ -79,14 +79,14 @@ void FriedChickenComponent::initialize() {
     auto scale = Random::randomRange(mRandomRangeScale.x, mRandomRangeScale.y);
     t->setScale(scale);
 
-    mState = Surface::FRONT;
+    mSurface = Surface::BOTTOM;
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         mFryTimer[i]->reset();
     }
 }
 
 void FriedChickenComponent::changeSurface() {
-    mState = (mState == Surface::FRONT) ? Surface::BACK : Surface::FRONT;
+    mSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
 }
 
 bool FriedChickenComponent::successFrying() const {
@@ -102,13 +102,23 @@ bool FriedChickenComponent::successFrying() const {
 }
 
 void FriedChickenComponent::frying() {
-    mFryTimer[static_cast<int>(mState)]->update();
+    mFryTimer[static_cast<int>(mSurface)]->update();
 }
 
 void FriedChickenComponent::changeFryedColor() {
-    auto rate = mFryTimer[static_cast<int>(mState)]->rate();
-    auto color = Vector3::lerp(mInitColor, mFryedColor, rate);
+    auto upSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
+    auto rate = mFryTimer[static_cast<int>(upSurface)]->rate();
+    if (rate > 1.f) {
+        rate = 1.f;
+    }
+    auto upColor = Vector3::lerp(mInitColor, mFryedColor, rate);
+    rate = mFryTimer[static_cast<int>(mSurface)]->rate();
+    if (rate > 1.f) {
+        rate = 1.f;
+    }
+    auto bottomColor = Vector3::lerp(mInitColor, mFryedColor, rate);
     if (mMeshComp) {
-        mMeshComp->setColor(color);
+        mMeshComp->setUpColor(upColor);
+        mMeshComp->setBottomColor(bottomColor);
     }
 }

@@ -7,11 +7,14 @@ cbuffer global_0 : register(b0)
 {
     matrix g_mW : packoffset(c0); //ワールド行列
     matrix g_mWVP : packoffset(c4); //ワールドから射影までの変換行列
+    float3 mUpColor : packoffset(c8);
+    float3 mBottomColor : packoffset(c9);
 };
 
 cbuffer global_1 : register(b1)
 {
     float4 g_Diffuse : packoffset(c0) = float4(1, 0, 0, 0); //拡散反射(色）
+    float4 g_Specular : packoffset(c1) = float4(1, 1, 1, 1); //使わないけど
     float g_Texture : packoffset(c2) = 0; //テクスチャーが貼られているメッシュかどうかのフラグ
 };
 
@@ -50,13 +53,16 @@ float4 PS(VS_OUTPUT input) : SV_Target
     float4 color = g_Diffuse;
     if (input.WorldPos.y > 0.0)
     {
-        color = float4(0, 0, 0, 1);
+        color.xyz = mUpColor;
     }
-    if (g_Texture == 1)
+    else
     {
-        color = g_texDecal.Sample(g_samLinear, input.Tex);
+        color.xyz = mBottomColor;
     }
-    //color += input.Color;
+    //if (g_Texture == 1)
+    //{
+    //    color = g_texDecal.Sample(g_samLinear, input.Tex);
+    //}
     color.a = g_Diffuse.a;
 
     return color;
