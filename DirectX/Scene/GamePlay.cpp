@@ -35,6 +35,7 @@ void GamePlay::start() {
     mPCConnection->initialize();
     auto score = GameObjectCreater::createUI("Score");
     auto jt = GameObjectCreater::createUI("JumpTarget");
+    auto tl = GameObjectCreater::createUI("TimeLimit");
     mFriedChickenManager->setScore(score);
 
     DebugUtility::inspector()->setTarget(p);

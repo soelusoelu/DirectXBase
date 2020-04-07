@@ -29,6 +29,19 @@
           }
         }
       ]
+    },
+    {
+      "type": "TimeLimit",
+      "components": [
+        {
+          "type": "TimeLimit",
+          "properties": {
+            "limit": 60.0,
+            "position": [ 960.0, 0.0 ],
+            "scale": [ 1.0, 1.0 ]
+          }
+        }
+      ]
     }
   ]
 }
