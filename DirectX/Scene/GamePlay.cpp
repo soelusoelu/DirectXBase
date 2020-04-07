@@ -26,7 +26,6 @@ GamePlay::~GamePlay() = default;
 void GamePlay::start() {
     //ファイルからアクターを読み込む
     auto p = GameObjectCreater::create("Player");
-    //auto f = GameObjectCreater::create("Field");
     auto fcm = GameObjectCreater::create("FriedChickenManager");
     mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
     auto c = mFriedChickenManager->FindNearestChicken(p);
@@ -37,6 +36,7 @@ void GamePlay::start() {
     auto jt = GameObjectCreater::createUI("JumpTarget");
     auto tl = GameObjectCreater::createUI("TimeLimit");
     mFriedChickenManager->setScore(score);
+    auto f = GameObjectCreater::create("Field");
 
     DebugUtility::inspector()->setTarget(p);
 }

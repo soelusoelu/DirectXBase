@@ -11,8 +11,7 @@ TimeLimit::TimeLimit(std::shared_ptr<GameObject> owner) :
     mTimer(std::make_unique<Time>(0.f)),
     mLimit(0.f),
     mDrawPosition(Vector2::zero),
-    mDrawScale(Vector2::one)
-{
+    mDrawScale(Vector2::one) {
 }
 
 TimeLimit::~TimeLimit() = default;
@@ -31,7 +30,7 @@ void TimeLimit::update() {
     ds->drawString(s, pos, mDrawScale);
 }
 
-void TimeLimit::loadProperties(const rapidjson::Value& inObj) {
+void TimeLimit::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getFloat(inObj, "limit", &mLimit);
@@ -39,7 +38,7 @@ void TimeLimit::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector2(inObj, "scale", &mDrawScale);
 }
 
-void TimeLimit::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
+void TimeLimit::saveProperties(rapidjson::Document::AllocatorType & alloc, rapidjson::Value * inObj) const {
     Component::saveProperties(alloc, inObj);
 
     JsonHelper::setFloat(alloc, inObj, "limit", mLimit);
