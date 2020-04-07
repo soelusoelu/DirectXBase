@@ -37,6 +37,7 @@ void FriedChickenManager::update() {
         }
     }
     moveToWait();
+    replenish();
 }
 
 void FriedChickenManager::loadProperties(const rapidjson::Value& inObj) {
@@ -86,5 +87,19 @@ void FriedChickenManager::moveToWait() {
         } else {
             ++itr;
         }
+    }
+}
+
+void FriedChickenManager::replenish() {
+    if (mChickens.size() < mMaxDrawNum) {
+        if (mWaitingChickens.size() == 0) {
+            return;
+        }
+
+        auto itr = mWaitingChickens.begin();
+        auto chicken = (*itr);
+        mWaitingChickens.erase(itr);
+        chicken->initialize();
+        mChickens.emplace_back(chicken);
     }
 }

@@ -18,6 +18,11 @@ class FriedChickenComponent : public Component {
         NUM_SURFACE
     };
 
+    enum class State {
+        FRY,
+        FALL
+    };
+
 public:
     FriedChickenComponent(std::shared_ptr<GameObject> owner);
     ~FriedChickenComponent();
@@ -37,14 +42,20 @@ private:
     void frying();
     //揚げ具合によって色を変える
     void changeFryedColor();
+    //空中から落下させる
+    void fall();
+    //油に浸かったら揚げ始める
+    void soakedInOil();
 
 private:
     std::shared_ptr<ChickenMeshComponent> mMeshComp;
     Surface mSurface;
+    State mState;
     std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
     Vector2 mRandomRangeScale;
     Vector3 mInitColor;
     Vector3 mFryedColor;
+    float mFallSpeed;
 };

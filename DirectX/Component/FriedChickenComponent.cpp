@@ -13,11 +13,13 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     Component(owner, "FriedChickenComponent"),
     mMeshComp(nullptr),
     mSurface(Surface::BOTTOM),
+    mState(State::FRY),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
     mInitColor(Vector3::zero),
-    mFryedColor(Vector3::zero) {
+    mFryedColor(Vector3::zero),
+    mFallSpeed(60.f) {
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(10.f));
     }
@@ -32,11 +34,22 @@ void FriedChickenComponent::start() {
     }
 
     initialize();
+    //y軸を0にして最初から揚げ状態でスタート
+    auto t = owner()->transform();
+    auto pos = t->getPosition();
+    pos.y = 0.f;
+    t->setPosition(pos);
+    mState = State::FRY;
 }
 
 void FriedChickenComponent::update() {
-    frying();
-    changeFryedColor();
+    if (mState == State::FRY) {
+        frying();
+        changeFryedColor();
+    } else if (mState == State::FALL) {
+        fall();
+        soakedInOil();
+    }
 }
 
 void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
@@ -47,6 +60,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
     JsonHelper::getVector3(inObj, "initColor", &mInitColor);
     JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
+    JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
 void FriedChickenComponent::drawDebugInfo(debugInfoList * inspect) const {
@@ -70,19 +84,32 @@ void FriedChickenComponent::drawDebugInfo(debugInfoList * inspect) const {
 }
 
 void FriedChickenComponent::initialize() {
+    //アクティブ化
+    owner()->setActive(true);
+
+    //ランダムで位置を決める
     auto pos = Random::randomRange(
         Vector3(mRandomRangePositionX.x, 0.f, mRandomRangePositionZ.x),
         Vector3(mRandomRangePositionX.y, 0.f, mRandomRangePositionZ.y)
     );
     auto t = owner()->transform();
-    t->setPosition(pos);
+    t->setPosition(pos + Vector3::up * 10.f);
+    //ランダムでスケールを決める
     auto scale = Random::randomRange(mRandomRangeScale.x, mRandomRangeScale.y);
     t->setScale(scale);
 
+    //揚げる面の初期化
     mSurface = Surface::BOTTOM;
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         mFryTimer[i]->reset();
     }
+    if (mMeshComp) {
+        mMeshComp->setUpColor(mInitColor);
+        mMeshComp->setBottomColor(mInitColor);
+    }
+
+    //空中からの落下状態に設定
+    mState = State::FALL;
 }
 
 void FriedChickenComponent::changeSurface() {
@@ -120,5 +147,19 @@ void FriedChickenComponent::changeFryedColor() {
     if (mMeshComp) {
         mMeshComp->setUpColor(upColor);
         mMeshComp->setBottomColor(bottomColor);
+    }
+}
+
+void FriedChickenComponent::fall() {
+    owner()->transform()->translate(Vector3::down * mFallSpeed * Time::deltaTime);
+}
+
+void FriedChickenComponent::soakedInOil() {
+    auto t = owner()->transform();
+    auto pos = t->getPosition();
+    if (pos.y <= 0.f) {
+        pos.y = 0.f;
+        t->setPosition(pos);
+        mState = State::FRY;
     }
 }

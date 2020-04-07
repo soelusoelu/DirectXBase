@@ -29,7 +29,10 @@ public:
     void setScore(const GameObjectPtr score);
 
 private:
+    //揚げ終わった唐揚げを回収する
     void moveToWait();
+    //唐揚げを補充する
+    void replenish();
 
 private:
     //揚げてる最中の唐揚げ

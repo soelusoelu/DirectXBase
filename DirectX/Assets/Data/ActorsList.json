@@ -87,9 +87,10 @@
           "properties": {
             "randomRangePositionX": [ -5.0, 5.0 ],
             "randomRangePositionZ": [ -5.0, 5.0 ],
-            "randomRangeScale": [ 0.5, 1.0 ],
+            "randomRangeScale": [ 1.0, 2.0 ],
             "initColor": [ 1.0, 0.8, 0.8 ],
-            "fryedColor": [ 0.4, 0.2, 0.1 ]
+            "fryedColor": [ 0.4, 0.2, 0.1 ],
+            "fallSpeed": 5.0
           }
         }
       ]
@@ -100,7 +101,7 @@
         {
           "type": "FriedChickenManager",
           "properties": {
-            "maxDrawNum": 10
+            "maxDrawNum": 5
           }
         }
       ]
