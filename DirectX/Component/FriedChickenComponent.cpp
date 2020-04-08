@@ -19,6 +19,7 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mRandomRangeScale(Vector2::one),
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero),
+    mBurntColor(Vector3::zero),
     mFallSpeed(60.f) {
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(10.f));
@@ -61,6 +62,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
     JsonHelper::getVector3(inObj, "initColor", &mInitColor);
     JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
+    JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
@@ -133,25 +135,53 @@ bool FriedChickenComponent::isFinished() const {
     return mState == State::WAITING_COLLECTION;
 }
 
+int FriedChickenComponent::evaluateScore() {
+    int score = 0;
+
+    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
+
+    }
+
+    return score;
+}
+
 void FriedChickenComponent::frying() {
     mFryTimer[static_cast<int>(mSurface)]->update();
 }
 
 void FriedChickenComponent::changeFryedColor() {
     auto upSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
-    auto rate = mFryTimer[static_cast<int>(upSurface)]->rate();
+    changeColor(upSurface);
+    changeColor(mSurface);
+}
+
+void FriedChickenComponent::changeColor(Surface surface) {
+    if (surface == Surface::NUM_SURFACE) {
+        return;
+    }
+
+    //色の変更
+    auto rate = mFryTimer[static_cast<int>(surface)]->rate();
+    auto a = mInitColor;
+    auto b = mFryedColor;
+    if (rate > 1.f) {
+        rate -= 1.f;
+        a = mFryedColor;
+        b = mBurntColor;
+    }
     if (rate > 1.f) {
         rate = 1.f;
     }
-    auto upColor = Vector3::lerp(mInitColor, mFryedColor, rate);
-    rate = mFryTimer[static_cast<int>(mSurface)]->rate();
-    if (rate > 1.f) {
-        rate = 1.f;
+    auto color = Vector3::lerp(a, b, rate);
+
+    if (!mMeshComp) {
+        return;
     }
-    auto bottomColor = Vector3::lerp(mInitColor, mFryedColor, rate);
-    if (mMeshComp) {
-        mMeshComp->setUpColor(upColor);
-        mMeshComp->setBottomColor(bottomColor);
+    //適用する面
+    if (surface == Surface::UP) {
+        mMeshComp->setUpColor(color);
+    } else if (surface == Surface::BOTTOM) {
+        mMeshComp->setBottomColor(color);
     }
 }
 

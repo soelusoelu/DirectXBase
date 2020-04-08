@@ -63,6 +63,10 @@ std::shared_ptr<GameObject> PlayerChickenConnection::getChicken() const {
 }
 
 void PlayerChickenConnection::playerJumpTarget(const GameObjectPtr& chicken) {
+    if (!chicken) {
+        return;
+    }
+
     if (mPlayer->isWalking()) {
         mJumpTarget = chicken;
         auto pos = mJumpTarget->transform()->getPosition();
@@ -86,6 +90,10 @@ void PlayerChickenConnection::setChickenPosUnderThePlayer() {
 
 void PlayerChickenConnection::collection() {
     if (Input::joyPad()->getJoyDown(JoyCode::X) || Input::keyboard()->getKeyDown(KeyCode::E)) {
+        if (!mJumpTarget) {
+            return;
+        }
+
         auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
         chickenComp->finishFryed();
 

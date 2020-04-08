@@ -45,11 +45,15 @@ public:
     //揚げ終わっているか
     bool isFinished() const;
 
+    //揚げ状態によってスコアを評価
+    int evaluateScore();
+
 private:
     //下の面を揚げる
     void frying();
     //揚げ具合によって色を変える
     void changeFryedColor();
+    void changeColor(Surface surface);
     //両面揚げれたか
     void successFrying();
     //空中から落下させる
@@ -67,5 +71,6 @@ private:
     Vector2 mRandomRangeScale;
     Vector3 mInitColor;
     Vector3 mFryedColor;
+    Vector3 mBurntColor;
     float mFallSpeed;
 };
