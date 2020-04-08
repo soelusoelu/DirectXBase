@@ -72,5 +72,12 @@ private:
     Vector3 mInitColor;
     Vector3 mFryedColor;
     Vector3 mBurntColor;
+    float mLittleBad;
+    float mUsually;
+    float mGood;
+    int mLittleBadScore;
+    int mUsuallyScore;
+    int mGoodScore;
+    int mBadScore;
     float mFallSpeed;
 };

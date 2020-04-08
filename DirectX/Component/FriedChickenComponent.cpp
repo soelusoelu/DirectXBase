@@ -1,6 +1,7 @@
 ﻿#include "FriedChickenComponent.h"
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
+#include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
@@ -20,6 +21,13 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero),
     mBurntColor(Vector3::zero),
+    mLittleBad(0.f),
+    mUsually(0.f),
+    mGood(0.f),
+    mLittleBadScore(0),
+    mUsuallyScore(0),
+    mGoodScore(0),
+    mBadScore(0),
     mFallSpeed(60.f) {
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(10.f));
@@ -63,6 +71,13 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector3(inObj, "initColor", &mInitColor);
     JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
     JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
+    JsonHelper::getFloat(inObj, "littleBad", &mLittleBad);
+    JsonHelper::getFloat(inObj, "usually", &mUsually);
+    JsonHelper::getFloat(inObj, "good", &mGood);
+    JsonHelper::getInt(inObj, "littleBadScore", &mLittleBadScore);
+    JsonHelper::getInt(inObj, "usuallyScore", &mUsuallyScore);
+    JsonHelper::getInt(inObj, "goodScore", &mGoodScore);
+    JsonHelper::getInt(inObj, "badScore", &mBadScore);
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
@@ -139,7 +154,20 @@ int FriedChickenComponent::evaluateScore() {
     int score = 0;
 
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
-
+        auto rate = mFryTimer[i]->rate();
+        if (0.f <= rate && rate < mLittleBad) {
+            continue;
+        } else if (mLittleBad <= rate && rate < mUsually) {
+            score += mLittleBadScore;
+        } else if (mUsually <= rate && rate < mGood) {
+            score += mUsuallyScore;
+        } else if (mGood <= rate && rate < 1.f) {
+            score += mGoodScore;
+        } else if (1.f <= rate) {
+            score += mBadScore;
+        } else {
+            Debug::logWarning("Invalid type.");
+        }
     }
 
     return score;
@@ -183,7 +211,7 @@ Vector3 FriedChickenComponent::getChangeColor(Surface surface) {
 void FriedChickenComponent::successFrying() {
     bool result = true;
     for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
-        if (!mFryTimer[i]->isTime()) {
+        if (mFryTimer[i]->rate() < mGood) {
             result = false;
             break;
         }

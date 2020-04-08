@@ -91,6 +91,13 @@
             "initColor": [ 1.0, 0.8, 0.8 ],
             "fryedColor": [ 0.4, 0.2, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ],
+            "littleBad": 0.2,
+            "usually": 0.5,
+            "good": 0.8,
+            "littleBadScore": 2,
+            "usuallyScore": 3,
+            "goodScore": 5,
+            "badScore": -2,
             "fallSpeed": 5.0
           }
         }
