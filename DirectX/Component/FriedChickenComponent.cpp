@@ -151,13 +151,18 @@ void FriedChickenComponent::frying() {
 
 void FriedChickenComponent::changeFryedColor() {
     auto upSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
-    changeColor(upSurface);
-    changeColor(mSurface);
+    auto upColor = getChangeColor(upSurface);
+    auto bottomColor = getChangeColor(mSurface);
+
+    if (mMeshComp) {
+        mMeshComp->setUpColor(upColor);
+        mMeshComp->setBottomColor(bottomColor);
+    }
 }
 
-void FriedChickenComponent::changeColor(Surface surface) {
+Vector3 FriedChickenComponent::getChangeColor(Surface surface) {
     if (surface == Surface::NUM_SURFACE) {
-        return;
+        return Vector3::zero;
     }
 
     //色の変更
@@ -172,17 +177,7 @@ void FriedChickenComponent::changeColor(Surface surface) {
     if (rate > 1.f) {
         rate = 1.f;
     }
-    auto color = Vector3::lerp(a, b, rate);
-
-    if (!mMeshComp) {
-        return;
-    }
-    //適用する面
-    if (surface == Surface::UP) {
-        mMeshComp->setUpColor(color);
-    } else if (surface == Surface::BOTTOM) {
-        mMeshComp->setBottomColor(color);
-    }
+    return Vector3::lerp(a, b, rate);
 }
 
 void FriedChickenComponent::successFrying() {

@@ -53,7 +53,7 @@ private:
     void frying();
     //揚げ具合によって色を変える
     void changeFryedColor();
-    void changeColor(Surface surface);
+    Vector3 getChangeColor(Surface surface);
     //両面揚げれたか
     void successFrying();
     //空中から落下させる
