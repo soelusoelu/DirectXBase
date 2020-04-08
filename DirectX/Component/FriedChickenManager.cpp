@@ -28,14 +28,7 @@ void FriedChickenManager::awake() {
 }
 
 void FriedChickenManager::update() {
-    for (const auto& chicken : mChickens) {
-        if (!chicken->isFinished()) {
-            continue;
-        }
-        if (mScore) {
-            mScore->addScore(5);
-        }
-    }
+    addScore();
     moveToWait();
     replenish();
 }
@@ -78,6 +71,18 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
 
 void FriedChickenManager::setScore(const GameObjectPtr score) {
     mScore = score->componentManager()->getComponent<Score>();
+}
+
+void FriedChickenManager::addScore() {
+    for (const auto& chicken : mChickens) {
+        if (!chicken->isFinished()) {
+            continue;
+        }
+        if (mScore) {
+            auto score = chicken->evaluateScore();
+            mScore->addScore(score);
+        }
+    }
 }
 
 void FriedChickenManager::moveToWait() {

@@ -29,6 +29,8 @@ public:
     void setScore(const GameObjectPtr score);
 
 private:
+    //揚げ終わった唐揚げの状態に応じてスコアを加算
+    void addScore();
     //揚げ終わった唐揚げを回収する
     void moveToWait();
     //唐揚げを補充する
