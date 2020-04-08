@@ -5,6 +5,9 @@
 #include "../Component/PlayerMoveComponent.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
+#include "../Input/Input.h"
+#include "../Input/JoyPad.h"
+#include "../Input/Keyboard.h"
 
 PlayerChickenConnection::PlayerChickenConnection() :
     mPlayer(nullptr),
@@ -37,14 +40,12 @@ void PlayerChickenConnection::connect() {
         mChicken = mJumpTarget;
     }
     if (mPlayer->isWalking()) {
-        auto pt = mPlayer->owner()->transform();
-        auto ct = mChicken->transform();
-        auto pos = pt->getPosition();
-        pos.y = ct->getScale().y * mChickenRadius;
-        pt->setPosition(pos);
-        pos.y = 0;
-        ct->setPosition(pos);
+        setPlayerPosOnTheChicken(*mChicken);
+        setChickenPosUnderThePlayer();
+
+        collection();
     }
+
 
     mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
@@ -67,5 +68,30 @@ void PlayerChickenConnection::playerJumpTarget(const GameObjectPtr& chicken) {
         auto pos = mJumpTarget->transform()->getPosition();
         pos.y += mJumpTarget->transform()->getScale().y * mChickenRadius;
         mPlayer->setTargetPosition(pos);
+    }
+}
+
+void PlayerChickenConnection::setPlayerPosOnTheChicken(const GameObject& chicken) {
+    auto pt = mPlayer->owner()->transform();
+    auto pos = pt->getPosition();
+    pos.y = chicken.transform()->getScale().y * mChickenRadius;
+    mPlayer->owner()->transform()->setPosition(pos);
+}
+
+void PlayerChickenConnection::setChickenPosUnderThePlayer() {
+    auto pos = mPlayer->owner()->transform()->getPosition();
+    pos.y = 0;
+    mChicken->transform()->setPosition(pos);
+}
+
+void PlayerChickenConnection::collection() {
+    if (Input::joyPad()->getJoyDown(JoyCode::X) || Input::keyboard()->getKeyDown(KeyCode::E)) {
+        auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
+        chickenComp->finishFryed();
+
+        auto pos = mJumpTarget->transform()->getPosition();
+        mPlayer->owner()->transform()->setPosition(pos);
+        setPlayerPosOnTheChicken(*mJumpTarget);
+        mChicken = mJumpTarget;
     }
 }

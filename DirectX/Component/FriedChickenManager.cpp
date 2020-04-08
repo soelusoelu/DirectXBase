@@ -29,7 +29,7 @@ void FriedChickenManager::awake() {
 
 void FriedChickenManager::update() {
     for (const auto& chicken : mChickens) {
-        if (!chicken->successFrying()) {
+        if (!chicken->isFinished()) {
             continue;
         }
         if (mScore) {
@@ -64,6 +64,9 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
         if (c->owner() == exclude) {
             continue;
         }
+        if (!c->isFrying()) {
+            continue;
+        }
         auto l = (c->owner()->transform()->getPosition() - target->transform()->getPosition()).lengthSq();
         if (l < nearest) {
             nearest = l;
@@ -80,7 +83,7 @@ void FriedChickenManager::setScore(const GameObjectPtr score) {
 void FriedChickenManager::moveToWait() {
     auto itr = mChickens.begin();
     while (itr != mChickens.end()) {
-        if ((*itr)->successFrying()) {
+        if ((*itr)->isFinished()) {
             mWaitingChickens.emplace_back(*itr);
             (*itr)->owner()->setActive(false);
             itr = mChickens.erase(itr);

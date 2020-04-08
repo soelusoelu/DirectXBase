@@ -46,6 +46,7 @@ void FriedChickenComponent::update() {
     if (mState == State::FRY) {
         frying();
         changeFryedColor();
+        successFrying();
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
@@ -116,16 +117,20 @@ void FriedChickenComponent::changeSurface() {
     mSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
 }
 
-bool FriedChickenComponent::successFrying() const {
-    bool result = true;
-    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
-        if (!mFryTimer[i]->isTime()) {
-            result = false;
-            break;
-        }
-    }
+void FriedChickenComponent::finishFryed() {
+    mState = State::WAITING_COLLECTION;
+}
 
-    return result;
+bool FriedChickenComponent::isFrying() const {
+    return mState == State::FRY;
+}
+
+bool FriedChickenComponent::isFalling() const {
+    return mState == State::FALL;
+}
+
+bool FriedChickenComponent::isFinished() const {
+    return mState == State::WAITING_COLLECTION;
 }
 
 void FriedChickenComponent::frying() {
@@ -148,6 +153,18 @@ void FriedChickenComponent::changeFryedColor() {
         mMeshComp->setUpColor(upColor);
         mMeshComp->setBottomColor(bottomColor);
     }
+}
+
+void FriedChickenComponent::successFrying() {
+    bool result = true;
+    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
+        if (!mFryTimer[i]->isTime()) {
+            result = false;
+            break;
+        }
+    }
+
+    mState = (result) ? State::WAITING_COLLECTION : State::FRY;
 }
 
 void FriedChickenComponent::fall() {

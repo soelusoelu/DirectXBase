@@ -5,6 +5,7 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
+#include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
@@ -89,13 +90,19 @@ void PlayerMoveComponent::setTargetPosition(const Vector3 & pos) {
 }
 
 void PlayerMoveComponent::jump() {
-    if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
+    if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::joyPad()->getJoyDown(JoyCode::A)) {
         jumpStartInitialize();
         mState = State::JUMP;
     }
 }
 
 void PlayerMoveComponent::walk() {
+    auto left = Input::joyPad()->leftStick();
+    if (!Math::nearZero(left.x) || !Math::nearZero(left.y)) {
+        owner()->transform()->translate(Vector3(left.x, 0.f, left.y) * Time::deltaTime * mMoveSpeed);
+        return;
+    }
+
     auto h = Input::keyboard()->horizontal();
     auto v = Input::keyboard()->vertical();
     if (!Math::nearZero(h) || !Math::nearZero(v)) {

@@ -68,7 +68,7 @@
           "type": "TransparentMeshComponent",
           "properties": {
             "fileName": "BackGround/test.obj",
-            "alpha": 0.5
+            "alpha": 0.3
           }
         }
       ]

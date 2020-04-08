@@ -21,6 +21,11 @@ public:
     void playerJumpTarget(const GameObjectPtr& chicken);
 
 private:
+    void setPlayerPosOnTheChicken(const GameObject& chicken);
+    void setChickenPosUnderThePlayer();
+    void collection();
+
+private:
     std::shared_ptr<PlayerMoveComponent> mPlayer;
     //プレイヤーの足元の唐揚げ
     GameObjectPtr mChicken;

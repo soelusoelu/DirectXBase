@@ -20,7 +20,8 @@ class FriedChickenComponent : public Component {
 
     enum class State {
         FRY,
-        FALL
+        FALL,
+        WAITING_COLLECTION
     };
 
 public:
@@ -34,14 +35,23 @@ public:
     void initialize();
     //揚げる面を変更
     void changeSurface();
-    //両面揚げれたか
-    bool successFrying() const;
+    //強制的に揚げ終わる
+    void finishFryed();
+
+    //揚げている途中か
+    bool isFrying() const;
+    //落ちている途中か
+    bool isFalling() const;
+    //揚げ終わっているか
+    bool isFinished() const;
 
 private:
     //下の面を揚げる
     void frying();
     //揚げ具合によって色を変える
     void changeFryedColor();
+    //両面揚げれたか
+    void successFrying();
     //空中から落下させる
     void fall();
     //油に浸かったら揚げ始める
