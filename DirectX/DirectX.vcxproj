@@ -179,6 +179,7 @@
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="Event\Subject.cpp" />
+    <ClCompile Include="Component\ScoreEvaluation.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
@@ -277,6 +278,7 @@
     <ClInclude Include="Component\TransparentMeshComponent.h" />
     <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="Event\Subject.h" />
+    <ClInclude Include="Component\ScoreEvaluation.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />

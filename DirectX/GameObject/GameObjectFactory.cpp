@@ -14,6 +14,7 @@
 #include "../Component/PlayerMoveComponent.h"
 #include "../Component/PointLightComponent.h"
 #include "../Component/Score.h"
+#include "../Component/ScoreEvaluation.h"
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
 #include "../Component/SpriteComponent.h"
@@ -36,6 +37,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(PlayerMoveComponent);
     ADD_COMPONENT(PointLightComponent);
     ADD_COMPONENT(Score);
+    ADD_COMPONENT(ScoreEvaluation);
     ADD_COMPONENT(SoundComponent);
     ADD_COMPONENT(SphereCollisionComponent);
     ADD_COMPONENT(SpriteComponent);

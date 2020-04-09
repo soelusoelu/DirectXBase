@@ -7,6 +7,7 @@
 class FriedChickenComponent;
 class GameObject;
 class Score;
+class ScoreEvaluation;
 class Time;
 
 class FriedChickenManager : public Component {
@@ -18,6 +19,7 @@ public:
     FriedChickenManager(std::shared_ptr<GameObject> owner);
     ~FriedChickenManager();
     virtual void awake() override;
+    virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(debugInfoList* inspect) const override;
@@ -44,6 +46,8 @@ private:
     std::unique_ptr<Time> mSpawnTimer;
     //一度に画面内に表示する最大数
     int mMaxDrawNum;
+
     //スコア
     std::shared_ptr<Score> mScore;
+    std::shared_ptr<ScoreEvaluation> mScoreEvaluation;
 };

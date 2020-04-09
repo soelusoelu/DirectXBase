@@ -2,6 +2,7 @@
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "Score.h"
+#include "ScoreEvaluation.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -14,7 +15,8 @@ FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
     mSpawnTimer(std::make_unique<Time>(2.f)),
     mMaxDrawNum(10),
-    mScore(nullptr) {
+    mScore(nullptr),
+    mScoreEvaluation(nullptr) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
@@ -27,19 +29,27 @@ void FriedChickenManager::awake() {
     }
 }
 
+void FriedChickenManager::start() {
+    mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
+
+    for (auto&& chicken : mChickens) {
+        chicken->firstSet(mScoreEvaluation->getGood());
+    }
+}
+
 void FriedChickenManager::update() {
     addScore();
     moveToWait();
     replenish();
 }
 
-void FriedChickenManager::loadProperties(const rapidjson::Value& inObj) {
+void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getInt(inObj, "maxDrawNum", &mMaxDrawNum);
 }
 
-void FriedChickenManager::drawDebugInfo(debugInfoList* inspect) const {
+void FriedChickenManager::drawDebugInfo(debugInfoList * inspect) const {
     debugInfo info;
     info.first = "MaxDrawNum";
     info.second = StringUtil::intToString(mMaxDrawNum);
@@ -74,14 +84,19 @@ void FriedChickenManager::setScore(const GameObjectPtr score) {
 }
 
 void FriedChickenManager::addScore() {
+    if (!mScore) {
+        return;
+    }
+    if (!mScoreEvaluation) {
+        return;
+    }
+
     for (const auto& chicken : mChickens) {
         if (!chicken->isFinished()) {
             continue;
         }
-        if (mScore) {
-            auto score = chicken->evaluateScore();
-            mScore->addScore(score);
-        }
+        auto score = mScoreEvaluation->evaluateScore(*chicken);
+        mScore->addScore(score);
     }
 }
 

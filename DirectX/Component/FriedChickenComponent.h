@@ -31,12 +31,18 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    //マネージャーから必要な値をもらう
+    void firstSet(float good);
     //揚げ直す前の状態に戻す
     void initialize();
     //揚げる面を変更
     void changeSurface();
     //強制的に揚げ終わる
     void finishFryed();
+    //面の数の取得
+    int getNumSurface() const;
+    //揚げ終わるまでの時間比率の取得
+    float getFryRate(int surfaceIndex) const;
 
     //揚げている途中か
     bool isFrying() const;
@@ -44,9 +50,6 @@ public:
     bool isFalling() const;
     //揚げ終わっているか
     bool isFinished() const;
-
-    //揚げ状態によってスコアを評価
-    int evaluateScore();
 
 private:
     //下の面を揚げる
@@ -72,12 +75,6 @@ private:
     Vector3 mInitColor;
     Vector3 mFryedColor;
     Vector3 mBurntColor;
-    float mLittleBad;
-    float mUsually;
     float mGood;
-    int mLittleBadScore;
-    int mUsuallyScore;
-    int mGoodScore;
-    int mBadScore;
     float mFallSpeed;
 };
