@@ -20,6 +20,6 @@ public:
 
 private:
     std::shared_ptr<FriedChickenManager> mFriedChickenManager;
-    std::unique_ptr<PlayerChickenConnection> mPCConnection;
+    std::shared_ptr<PlayerChickenConnection> mPCConnection;
     State mState;
 };

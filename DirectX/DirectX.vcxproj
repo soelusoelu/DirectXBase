@@ -158,7 +158,7 @@
     <ClCompile Include="GameObject\Transform3D.cpp" />
     <ClCompile Include="Component\Camera.cpp" />
     <ClCompile Include="Component\HitPointComponent.cpp" />
-    <ClCompile Include="Connect\PlayerChickenConnection.cpp" />
+    <ClCompile Include="Component\PlayerChickenConnection.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
     <ClCompile Include="Device\AssetsManager.cpp" />
     <ClCompile Include="DebugLayer\FixedDebugInformation.cpp" />
@@ -254,7 +254,7 @@
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\HitPointComponent.h" />
-    <ClInclude Include="Connect\PlayerChickenConnection.h" />
+    <ClInclude Include="Component\PlayerChickenConnection.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
     <ClInclude Include="Device\AssetsManager.h" />
     <ClInclude Include="DebugLayer\FixedDebugInformation.h" />

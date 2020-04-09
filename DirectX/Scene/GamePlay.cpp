@@ -2,7 +2,7 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/FriedChickenManager.h"
 #include "../Component/JumpTarget.h"
-#include "../Connect/PlayerChickenConnection.h"
+#include "../Component/PlayerChickenConnection.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Inspector.h"
 #include "../GameObject/GameObject.h"
@@ -17,7 +17,7 @@
 GamePlay::GamePlay() :
     SceneBase(),
     mFriedChickenManager(nullptr),
-    mPCConnection(std::make_unique<PlayerChickenConnection>()),
+    mPCConnection(nullptr),
     mState(State::PLAY) {
 }
 
@@ -29,9 +29,10 @@ void GamePlay::start() {
     auto fcm = GameObjectCreater::create("FriedChickenManager");
     mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
     auto c = mFriedChickenManager->FindNearestChicken(p);
+    auto pcc = GameObjectCreater::create("PlayerChickenConnection");
+    mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
     mPCConnection->setPlayer(p);
     mPCConnection->setChicken(c);
-    mPCConnection->initialize();
     auto score = GameObjectCreater::createUI("Score");
     auto jt = GameObjectCreater::createUI("JumpTarget");
     auto tl = GameObjectCreater::createUI("TimeLimit");
@@ -47,8 +48,6 @@ void GamePlay::update() {
         //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
         auto c = mFriedChickenManager->FindNearestChicken(p, mPCConnection->getChicken());
         mPCConnection->playerJumpTarget(c);
-        //連結クラス
-        mPCConnection->connect();
 
         if (Input::keyboard()->getKeyDown(KeyCode::Z)) {
             nextScene(std::make_shared<Title>());
@@ -56,10 +55,11 @@ void GamePlay::update() {
         if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
             Game::quit();
         }
-        if (Input::keyboard()->getKeyDown(KeyCode::R)) {
-            nextScene(std::make_shared<GamePlay>());
-        }
     } else if (mState == State::PAUSED) {
 
+    }
+    //リセット
+    if (Input::keyboard()->getKeyDown(KeyCode::R)) {
+        nextScene(std::make_shared<GamePlay>());
     }
 }

@@ -3,18 +3,19 @@
 class GameObject;
 class PlayerMoveComponent;
 
+#include "Component.h"
 #include "../Math/Math.h"
 #include <memory>
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
-class PlayerChickenConnection {
+class PlayerChickenConnection : public Component {
     using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:
-    PlayerChickenConnection();
+    PlayerChickenConnection(std::shared_ptr<GameObject> owner);
     ~PlayerChickenConnection();
-    void initialize();
-    void connect();
+    virtual void start() override;
+    virtual void update() override;
     void setPlayer(const GameObjectPtr& player);
     void setChicken(const GameObjectPtr& chicken);
     GameObjectPtr getChicken() const;

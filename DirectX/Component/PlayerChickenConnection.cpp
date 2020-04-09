@@ -1,15 +1,16 @@
 ﻿#include "PlayerChickenConnection.h"
-#include "../Component/ComponentManager.h"
-#include "../Component/FriedChickenComponent.h"
-#include "../Component/MeshComponent.h"
-#include "../Component/PlayerMoveComponent.h"
+#include "ComponentManager.h"
+#include "FriedChickenComponent.h"
+#include "MeshComponent.h"
+#include "PlayerMoveComponent.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 
-PlayerChickenConnection::PlayerChickenConnection() :
+PlayerChickenConnection::PlayerChickenConnection(std::shared_ptr<GameObject> owner) :
+    Component(owner, "PlayerChickenConnection", 150),
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
@@ -19,7 +20,7 @@ PlayerChickenConnection::PlayerChickenConnection() :
 
 PlayerChickenConnection::~PlayerChickenConnection() = default;
 
-void PlayerChickenConnection::initialize() {
+void PlayerChickenConnection::start() {
     //メッシュ形状が変わらない・統一前提で
     if (mChicken) {
         auto mesh = mChicken->componentManager()->getComponent<MeshComponent>();
@@ -30,7 +31,7 @@ void PlayerChickenConnection::initialize() {
     mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 
-void PlayerChickenConnection::connect() {
+void PlayerChickenConnection::update() {
     if (mPlayer->isJumpStart()) {
         auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
         chickenComp->changeSurface();
