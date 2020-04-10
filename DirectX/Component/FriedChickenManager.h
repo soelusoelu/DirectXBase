@@ -6,7 +6,6 @@
 
 class FriedChickenComponent;
 class GameObject;
-class Score;
 class ScoreEvaluation;
 class Time;
 
@@ -27,8 +26,6 @@ public:
     GameObjectPtr FindNearestChicken(const GameObjectPtr target);
     //excludeを除くターゲットから一番近い唐揚げを検索
     GameObjectPtr FindNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude);
-    //スコアコンポーネントをセット
-    void setScore(const GameObjectPtr score);
 
 private:
     //揚げ終わった唐揚げの状態に応じてスコアを加算
@@ -39,6 +36,7 @@ private:
     void replenish();
 
 private:
+    std::shared_ptr<ScoreEvaluation> mScoreEvaluation;
     //揚げてる最中の唐揚げ
     ChickenPtrList mChickens;
     //待機中の唐揚げ
@@ -46,8 +44,4 @@ private:
     std::unique_ptr<Time> mSpawnTimer;
     //一度に画面内に表示する最大数
     int mMaxDrawNum;
-
-    //スコア
-    std::shared_ptr<Score> mScore;
-    std::shared_ptr<ScoreEvaluation> mScoreEvaluation;
 };

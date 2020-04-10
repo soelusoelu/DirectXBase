@@ -1,7 +1,6 @@
 ﻿#include "FriedChickenManager.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
-#include "Score.h"
 #include "ScoreEvaluation.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
@@ -13,10 +12,9 @@
 
 FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
+    mScoreEvaluation(nullptr),
     mSpawnTimer(std::make_unique<Time>(2.f)),
-    mMaxDrawNum(10),
-    mScore(nullptr),
-    mScoreEvaluation(nullptr) {
+    mMaxDrawNum(10) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
@@ -79,14 +77,7 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
     return chicken;
 }
 
-void FriedChickenManager::setScore(const GameObjectPtr score) {
-    mScore = score->componentManager()->getComponent<Score>();
-}
-
 void FriedChickenManager::addScore() {
-    if (!mScore) {
-        return;
-    }
     if (!mScoreEvaluation) {
         return;
     }
@@ -95,8 +86,7 @@ void FriedChickenManager::addScore() {
         if (!chicken->isFinished()) {
             continue;
         }
-        auto score = mScoreEvaluation->evaluateScore(*chicken);
-        mScore->addScore(score);
+        mScoreEvaluation->evaluateScore(*chicken);
     }
 }
 
