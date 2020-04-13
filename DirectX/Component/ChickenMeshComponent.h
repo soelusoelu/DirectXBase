@@ -5,7 +5,8 @@
 
 struct ChickenMeshConstantBuffer {
     ALIGN16 Matrix4 world; //ワールド行列
-    ALIGN16 Matrix4 WVP; //ワールドから射影までの変換行列
+    ALIGN16 Matrix4 wvp; //ワールドから射影までの変換行列
+    ALIGN16 Vector3 pos;
     ALIGN16 Vector3 upColor;
     ALIGN16 Vector3 bottomColor;
 };

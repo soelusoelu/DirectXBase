@@ -56,9 +56,10 @@ void ChickenMeshComponent::draw() {
         auto trans = owner()->transform();
         cb.world = trans->getWorldTransform();
         cb.world.transpose();
+        cb.pos = trans->getPosition();
         //ワールド、カメラ、射影行列を渡す
-        cb.WVP = trans->getWorldTransform() * mCamera->getViewProjection();
-        cb.WVP.transpose();
+        cb.wvp = trans->getWorldTransform() * mCamera->getViewProjection();
+        cb.wvp.transpose();
         //色
         cb.upColor = mUpColor;
         cb.bottomColor = mBottomColor;
