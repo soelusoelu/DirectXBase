@@ -5,7 +5,7 @@
 #include "../Component/JumpTarget.h"
 #include "../Component/PlayerChickenConnection.h"
 #include "../Component/Score.h"
-#include "../Component/TimeLimit.h"
+#include "../Component/Timer.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Inspector.h"
 #include "../GameObject/GameObject.h"
@@ -22,7 +22,7 @@ GamePlay::GamePlay() :
     mFriedChickenManager(nullptr),
     mPCConnection(nullptr),
     mScore(nullptr),
-    mTimeLimit(nullptr),
+    mTimeLimitTimer(nullptr),
     mState(State::PLAY) {
 }
 
@@ -41,7 +41,7 @@ void GamePlay::start() {
     auto score = GameObjectCreater::createUI("Score");
     mScore = score->componentManager()->getComponent<Score>();
     auto tl = GameObjectCreater::createUI("TimeLimit");
-    mTimeLimit = tl->componentManager()->getComponent<TimeLimit>();
+    mTimeLimitTimer = tl->componentManager()->getComponent<Timer>();
     auto jt = GameObjectCreater::createUI("JumpTarget");
     auto f = GameObjectCreater::create("Field");
 
@@ -55,7 +55,7 @@ void GamePlay::update() {
         auto c = mFriedChickenManager->FindNearestChicken(p, mPCConnection->getChicken());
         mPCConnection->playerJumpTarget(c);
 
-        if (mTimeLimit->isOverLimit()) {
+        if (mTimeLimitTimer->isTime()) {
             nextScene(std::make_shared<ResultScene>(mScore->getScore()));
         }
         if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {

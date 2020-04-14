@@ -183,6 +183,7 @@
     <ClCompile Include="Event\Subject.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
     <ClCompile Include="Scene\ResultScene.cpp" />
+    <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -284,6 +285,7 @@
     <ClInclude Include="Event\Subject.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
     <ClInclude Include="Scene\ResultScene.h" />
+    <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />

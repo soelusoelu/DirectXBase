@@ -55,7 +55,6 @@
         {
           "type": "TimeLimit",
           "properties": {
-            "limit": 60.0
           }
         },
         {
@@ -65,6 +64,12 @@
             "color": [ 1.0, 1.0, 1.0 ],
             "alpha": 1.0,
             "rightJustified": false
+          }
+        },
+        {
+          "type": "Timer",
+          "properties": {
+            "limit": 60.0
           }
         }
       ]

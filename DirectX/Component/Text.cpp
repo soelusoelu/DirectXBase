@@ -7,7 +7,7 @@
 #include "../Utility/StringUtil.h"
 
 Text::Text(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Text"),
+    Component(owner, "Text", 500),
     mText(""),
     mPosition(Vector2::zero),
     mScale(Vector2::one),
@@ -61,22 +61,22 @@ void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::
 
 void Text::drawDebugInfo(debugInfoList* inspect) const {
     debugInfo info;
-    info.first = "text";
+    info.first = "Text";
     info.second = mText;
     inspect->emplace_back(info);
-    info.first = "position";
+    info.first = "Position";
     info.second = InspectHelper::vector2ToString(mPosition);
     inspect->emplace_back(info);
-    info.first = "scale";
+    info.first = "Scale";
     info.second = InspectHelper::vector2ToString(mScale);
     inspect->emplace_back(info);
-    info.first = "color";
+    info.first = "Color";
     info.second = InspectHelper::vector3ToString(mColor);
     inspect->emplace_back(info);
-    info.first = "alpha";
+    info.first = "Alpha";
     info.second = StringUtil::floatToString(mAlpha);
     inspect->emplace_back(info);
-    info.first = "rightJustified";
+    info.first = "RightJustified";
     info.second = StringUtil::boolToString(mIsRightJustified);
     inspect->emplace_back(info);
 }

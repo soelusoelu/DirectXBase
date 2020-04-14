@@ -47,7 +47,6 @@ void PlayerChickenConnection::update() {
         collection();
     }
 
-
     mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 

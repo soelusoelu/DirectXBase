@@ -3,6 +3,7 @@
 #include "Text.h"
 #include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
+#include "../Utility/StringUtil.h"
 
 Score::Score(std::shared_ptr<GameObject> owner) :
     Component(owner, "Score"),
@@ -36,6 +37,16 @@ void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
     Component::saveProperties(alloc, inObj);
 
     JsonHelper::setInt(alloc, inObj, "highScore", mHighScore);
+}
+
+void Score::drawDebugInfo(debugInfoList* inspect) const {
+    debugInfo info;
+    info.first = "Score";
+    info.second = StringUtil::intToString(mScore);
+    inspect->emplace_back(info);
+    info.first = "HighScore";
+    info.second = StringUtil::intToString(mHighScore);
+    inspect->emplace_back(info);
 }
 
 void Score::addScore(int score) {
