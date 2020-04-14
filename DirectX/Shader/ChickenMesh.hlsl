@@ -1,8 +1,6 @@
-//グローバル
 Texture2D g_texDecal : register(t0);
 SamplerState g_samLinear : register(s0);
 
-//グローバル
 cbuffer global_0 : register(b0)
 {
     matrix mW : packoffset(c0); //ワールド行列
@@ -10,6 +8,10 @@ cbuffer global_0 : register(b0)
     float3 mPos : packoffset(c8);
     float3 mUpColor : packoffset(c9);
     float3 mBottomColor : packoffset(c10);
+    float3 mLeftColor : packoffset(c11);
+    float3 mRightColor : packoffset(c12);
+    float3 mForeColor : packoffset(c13);
+    float3 mBackColor : packoffset(c14);
 };
 
 cbuffer global_1 : register(b1)
@@ -25,30 +27,21 @@ struct VS_OUTPUT
     float4 Pos : SV_POSITION;
     float4 WorldPos : POSITION;
     float3 Normal : TEXCOORD1;
-    float2 Tex : TEXCOORD3;
 };
-//
-//バーテックスシェーダー
-//
-VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL, float2 UV : TEXCOORD)
+
+VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
-	//射影変換（ワールド→ビュー→プロジェクション）
-	//法線をワールド空間に
+    //射影変換（ワールド→ビュー→プロジェクション）
+    //法線をワールド空間に
     Norm.w = 0; //移動成分を反映させない
     output.Normal = mul(Norm, mW);
     output.Pos = mul(Pos, mWVP);
     output.WorldPos = mul(Pos, mW);
-	
-	//テクスチャー座標
-    output.Tex = UV;
 
     return output;
 }
 
-//
-//ピクセルシェーダー
-//
 float4 PS(VS_OUTPUT input) : SV_Target
 {
     float4 color = g_Diffuse;
@@ -61,24 +54,24 @@ float4 PS(VS_OUTPUT input) : SV_Target
         color.xyz = mBottomColor;
     }
     //右
-    if (mPos.x + 0.4 < input.WorldPos.x)
+    if (input.WorldPos.x > mPos.x + 0.4)
     {
-        color.xyz = float3(1.0, 0.8, 0.8);
+        color.xyz = mRightColor;
     }
     //左
-    else if (mPos.x - 0.4 > input.WorldPos.x)
+    else if (input.WorldPos.x < mPos.x - 0.4)
     {
-        color.xyz = float3(0.2, 0.2, 0.2);
+        color.xyz = mLeftColor;
     }
     //手前
-    if (mPos.z - 0.5 > input.WorldPos.z)
+    if (input.WorldPos.z < mPos.z - 0.5)
     {
-        color.xyz = float3(0.4, 0.2, 0.1);
+        color.xyz = mForeColor;
     }
     //奥
-    else if (mPos.z + 0.5 < input.WorldPos.z)
+    else if (input.WorldPos.z > mPos.z + 0.5)
     {
-        color.xyz = float3(0.9, 0.7, 0.7);
+        color.xyz = mBackColor;
     }
     color = saturate(color);
     //if (g_Texture == 1)

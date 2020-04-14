@@ -380,6 +380,9 @@ void FBX::getUV(FbxMesh* mesh) {
     //}
 
     FbxLayerElementUV* uvElement = mesh->GetLayer(0)->GetUVs();
+    if (!uvElement) {
+        return;
+    }
     bool moreUVs = mVertexArray->getNumTex() > mVertexArray->getNumVerts();
     if (uvElement->GetMappingMode() == FbxGeometryElement::eByPolygonVertex) {
         for (int i = 0; i < mesh->GetPolygonCount(); i++) {

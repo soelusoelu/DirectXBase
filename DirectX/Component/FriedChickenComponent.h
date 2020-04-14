@@ -12,8 +12,12 @@ class ChickenMeshComponent;
 
 class FriedChickenComponent : public Component {
     enum class Surface {
-        UP,
         BOTTOM,
+        UP,
+        LEFT,
+        RIGHT,
+        FORE,
+        BACK,
 
         NUM_SURFACE
     };
@@ -75,6 +79,14 @@ private:
     Vector3 mInitColor;
     Vector3 mFryedColor;
     Vector3 mBurntColor;
+
+    Vector3 mUpColor;
+    Vector3 mBottomColor;
+    Vector3 mLeftColor;
+    Vector3 mRightColor;
+    Vector3 mForeColor;
+    Vector3 mBackColor;
+
     float mGood;
     float mFallSpeed;
 };

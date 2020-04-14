@@ -21,9 +21,15 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero),
     mBurntColor(Vector3::zero),
+    mUpColor(ColorPalette::white),
+    mBottomColor(ColorPalette::white),
+    mLeftColor(ColorPalette::white),
+    mRightColor(ColorPalette::white),
+    mForeColor(ColorPalette::white),
+    mBackColor(ColorPalette::white),
     mGood(0.f),
     mFallSpeed(60.f) {
-    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
+    for (size_t i = 0; i < getNumSurface(); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(10.f));
     }
 }
@@ -79,13 +85,6 @@ void FriedChickenComponent::drawDebugInfo(debugInfoList * inspect) const {
     info.first = "RandomRangeScale";
     info.second = InspectHelper::vector2ToString(mRandomRangeScale);
     inspect->emplace_back(info);
-    info.first = "State";
-    if (mSurface == Surface::UP) {
-        info.second = "FRONT";
-    } else if (mSurface == Surface::BOTTOM) {
-        info.second = "BACK";
-    }
-    inspect->emplace_back(info);
 }
 
 void FriedChickenComponent::firstSet(float good) {
@@ -108,13 +107,16 @@ void FriedChickenComponent::initialize() {
     t->setScale(scale);
 
     //揚げる面の初期化
-    mSurface = Surface::BOTTOM;
-    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
+    for (size_t i = 0; i < getNumSurface(); i++) {
         mFryTimer[i]->reset();
     }
     if (mMeshComp) {
         mMeshComp->setUpColor(mInitColor);
         mMeshComp->setBottomColor(mInitColor);
+        mMeshComp->setLeftColor(mInitColor);
+        mMeshComp->setRightColor(mInitColor);
+        mMeshComp->setForeColor(mInitColor);
+        mMeshComp->setBackColor(mInitColor);
     }
 
     //空中からの落下状態に設定
@@ -122,7 +124,12 @@ void FriedChickenComponent::initialize() {
 }
 
 void FriedChickenComponent::changeSurface() {
-    mSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
+    auto color = mUpColor;
+    mUpColor = mBottomColor;
+    mBottomColor = color;
+    color = mForeColor;
+    mForeColor = mBackColor;
+    mBackColor = color;
 }
 
 void FriedChickenComponent::finishFryed() {
@@ -150,16 +157,15 @@ bool FriedChickenComponent::isFinished() const {
 }
 
 void FriedChickenComponent::frying() {
-    mFryTimer[static_cast<int>(mSurface)]->update();
+    mFryTimer[static_cast<int>(Surface::BOTTOM)]->update();
 }
 
 void FriedChickenComponent::changeFryedColor() {
-    auto upSurface = (mSurface == Surface::UP) ? Surface::BOTTOM : Surface::UP;
-    auto upColor = getChangeColor(upSurface);
+    //auto upColor = getChangeColor(upSurface);
     auto bottomColor = getChangeColor(mSurface);
 
     if (mMeshComp) {
-        mMeshComp->setUpColor(upColor);
+        //mMeshComp->setUpColor(upColor);
         mMeshComp->setBottomColor(bottomColor);
     }
 }
@@ -186,7 +192,7 @@ Vector3 FriedChickenComponent::getChangeColor(Surface surface) {
 
 void FriedChickenComponent::successFrying() {
     bool result = true;
-    for (size_t i = 0; i < static_cast<int>(Surface::NUM_SURFACE); i++) {
+    for (size_t i = 0; i < getNumSurface(); i++) {
         if (mFryTimer[i]->rate() < mGood) {
             result = false;
             break;

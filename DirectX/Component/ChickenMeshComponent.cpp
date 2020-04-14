@@ -13,7 +13,11 @@
 ChickenMeshComponent::ChickenMeshComponent(std::shared_ptr<GameObject> owner) :
     MeshComponent(owner, "ChickenMeshComponent"),
     mUpColor(ColorPalette::white),
-    mBottomColor(ColorPalette::white) {
+    mBottomColor(ColorPalette::white),
+    mLeftColor(ColorPalette::white),
+    mRightColor(ColorPalette::white),
+    mForeColor(ColorPalette::white),
+    mBackColor(ColorPalette::white) {
 }
 
 ChickenMeshComponent::~ChickenMeshComponent() = default;
@@ -32,7 +36,7 @@ void ChickenMeshComponent::setShader() {
     constexpr InputElementDesc layout[] = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
-        { "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
+        //{ "TEXCOORD", 0, VertexType::VERTEX_TYPE_FLOAT2, 0, sizeof(float) * 6, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
     };
     constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
     mShader->createInputLayout(layout, numElements);
@@ -63,6 +67,10 @@ void ChickenMeshComponent::draw() {
         //色
         cb.upColor = mUpColor;
         cb.bottomColor = mBottomColor;
+        cb.leftColor = mLeftColor;
+        cb.rightColor = mRightColor;
+        cb.foreColor = mForeColor;
+        cb.backColor = mBackColor;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShader->unmap(0);
@@ -115,4 +123,20 @@ void ChickenMeshComponent::setUpColor(const Vector3 & color) {
 
 void ChickenMeshComponent::setBottomColor(const Vector3 & color) {
     mBottomColor = color;
+}
+
+void ChickenMeshComponent::setLeftColor(const Vector3 & color) {
+    mLeftColor = color;
+}
+
+void ChickenMeshComponent::setRightColor(const Vector3 & color) {
+    mRightColor = color;
+}
+
+void ChickenMeshComponent::setForeColor(const Vector3 & color) {
+    mForeColor = color;
+}
+
+void ChickenMeshComponent::setBackColor(const Vector3 & color) {
+    mBackColor = color;
 }

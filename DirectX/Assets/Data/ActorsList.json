@@ -79,7 +79,7 @@
         {
           "type": "ChickenMeshComponent",
           "properties": {
-            "fileName": "Shape/Sphere.obj"
+            "fileName": "Chicken/karaage1.fbx"
           }
         },
         {
