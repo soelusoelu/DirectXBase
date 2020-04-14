@@ -52,8 +52,8 @@ void PlayerMoveComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
 }
 
-void PlayerMoveComponent::drawDebugInfo(debugInfoList * inspect) const {
-    debugInfo info;
+void PlayerMoveComponent::drawDebugInfo(DebugInfoList * inspect) const {
+    DebugInfo info;
     info.first = "State";
     if (mState == State::WALK) {
         info.second = "WALK";

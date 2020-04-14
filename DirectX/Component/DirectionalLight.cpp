@@ -27,8 +27,8 @@ void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
     owner()->transform()->rotate(mDirection);
 }
 
-void DirectionalLight::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void DirectionalLight::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "Color";
     info.second = StringUtil::vector3ToString(mColor);
     inspect->emplace_back(info);

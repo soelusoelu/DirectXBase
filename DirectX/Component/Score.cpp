@@ -39,8 +39,8 @@ void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
     JsonHelper::setInt(alloc, inObj, "highScore", mHighScore);
 }
 
-void Score::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void Score::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "Score";
     info.second = StringUtil::intToString(mScore);
     inspect->emplace_back(info);

@@ -11,8 +11,8 @@ class GameObject;
 class Component {
     using GameObjectPtr = std::shared_ptr<GameObject>;
 protected:
-    using debugInfo = std::pair<std::string, std::string>;
-    using debugInfoList = std::list<debugInfo>;
+    using DebugInfo = std::pair<std::string, std::string>;
+    using DebugInfoList = std::list<DebugInfo>;
 
 protected:
     Component(GameObjectPtr owner, const std::string& type, int updateOrder = 100);
@@ -33,7 +33,7 @@ public:
     //Inspectorに表示する情報
     //first: 変数名
     //second: 値
-    virtual void drawDebugInfo(debugInfoList* inspect) const {};
+    virtual void drawDebugInfo(DebugInfoList* inspect) const {};
 
     GameObjectPtr owner() const;
     int getUpdateOrder() const;

@@ -39,8 +39,8 @@ void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getInt(inObj, "badScore", &mBadScore);
 }
 
-void ScoreEvaluation::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "LittleBad";
     info.second = StringUtil::floatToString(mLittleBad);
     inspect->emplace_back(info);

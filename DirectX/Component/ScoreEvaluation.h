@@ -12,7 +12,7 @@ public:
     ~ScoreEvaluation();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     //揚げ状態によってスコアを評価
     void evaluateScore(const FriedChickenComponent& chicken);
     //good時間比率の取得

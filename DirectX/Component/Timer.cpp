@@ -32,8 +32,8 @@ void Timer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
     JsonHelper::setFloat(alloc, inObj, "limit", mLimitTime);
 }
 
-void Timer::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void Timer::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "CurrentTime";
     info.second = StringUtil::floatToString(mCurrentTime);
     inspect->emplace_back(info);

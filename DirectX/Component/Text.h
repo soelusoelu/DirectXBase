@@ -13,7 +13,7 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
-    virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     void setText(const std::string& text);
     void setText(int number);
     const std::string& text() const;

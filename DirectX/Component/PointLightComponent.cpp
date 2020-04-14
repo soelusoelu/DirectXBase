@@ -52,8 +52,8 @@ void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
-void PointLightComponent::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void PointLightComponent::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "Color";
     info.second = InspectHelper::vector3ToString(mColor);
     inspect->emplace_back(info);

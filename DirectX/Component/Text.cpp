@@ -59,8 +59,8 @@ void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::
     JsonHelper::setBool(alloc, inObj, "rightJustified", mIsRightJustified);
 }
 
-void Text::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void Text::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "Text";
     info.second = mText;
     inspect->emplace_back(info);

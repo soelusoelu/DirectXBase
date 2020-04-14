@@ -47,8 +47,8 @@ void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getInt(inObj, "maxDrawNum", &mMaxDrawNum);
 }
 
-void FriedChickenManager::drawDebugInfo(debugInfoList * inspect) const {
-    debugInfo info;
+void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
+    DebugInfo info;
     info.first = "MaxDrawNum";
     info.second = StringUtil::intToString(mMaxDrawNum);
     inspect->emplace_back(info);

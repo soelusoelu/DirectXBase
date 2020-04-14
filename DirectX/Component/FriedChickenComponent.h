@@ -34,7 +34,7 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     //マネージャーから必要な値をもらう
     void firstSet(float good);
     //揚げ直す前の状態に戻す

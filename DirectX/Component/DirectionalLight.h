@@ -12,7 +12,7 @@ public:
     ~DirectionalLight();
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     const Vector3& getDirection() const;
     void setDirection(const Vector3& dir);
     const Vector3& getColor() const;

@@ -37,10 +37,10 @@ void TransparentMeshComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "alpha", &mAlpha);
 }
 
-void TransparentMeshComponent::drawDebugInfo(debugInfoList * inspect) const {
+void TransparentMeshComponent::drawDebugInfo(DebugInfoList * inspect) const {
     MeshComponent::drawDebugInfo(inspect);
 
-    debugInfo info;
+    DebugInfo info;
     info.first = "Alpha";
     info.second = StringUtil::floatToString(mAlpha);
     inspect->emplace_back(info);

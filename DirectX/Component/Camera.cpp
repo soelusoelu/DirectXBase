@@ -35,8 +35,8 @@ void Camera::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "farClip", &mFarClip);
 }
 
-void Camera::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void Camera::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "FOV";
     info.second = StringUtil::floatToString(mFOV);
     inspect->emplace_back(info);

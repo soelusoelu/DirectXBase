@@ -20,8 +20,8 @@ void HitPointComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getInt(inObj, "maxHP", &mMaxHP);
 }
 
-void HitPointComponent::drawDebugInfo(debugInfoList* inspect) const {
-    debugInfo info;
+void HitPointComponent::drawDebugInfo(DebugInfoList* inspect) const {
+    DebugInfo info;
     info.first = "HP";
     info.second = StringUtil::intToString(mHP);
     inspect->emplace_back(info);

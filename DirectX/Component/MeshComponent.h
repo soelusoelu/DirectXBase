@@ -37,7 +37,7 @@ public:
     virtual void start() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(debugInfoList* inspect) const override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     virtual void setMesh(const std::string& fileName);
     virtual void setShader();
     virtual void draw();
