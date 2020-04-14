@@ -76,7 +76,6 @@
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Input\Mouse.cpp" />
     <ClCompile Include="Input\Input.cpp" />
-    <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="DebugLayer\Hierarchy.cpp" />
     <ClCompile Include="Component\FriedChickenComponent.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
@@ -106,6 +105,7 @@
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Component\Result.cpp" />
+    <ClCompile Include="Component\Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -186,7 +186,6 @@
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Input\Mouse.h" />
     <ClInclude Include="Input\Input.h" />
-    <ClInclude Include="UI\Text.h" />
     <ClInclude Include="DebugLayer\Hierarchy.h" />
     <ClInclude Include="Component\FriedChickenComponent.h" />
     <ClInclude Include="Math\Vector2.h" />
@@ -219,5 +218,6 @@
     <ClInclude Include="Component\ScoreEvaluation.h" />
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Component\Result.h" />
+    <ClInclude Include="Component\Text.h" />
   </ItemGroup>
 </Project>

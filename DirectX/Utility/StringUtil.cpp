@@ -27,6 +27,10 @@ wchar_t* StringUtil::charToWchar(const char* src) {
     return dst;
 }
 
+std::string StringUtil::boolToString(bool value) {
+    return (value) ? "true" : "false";
+}
+
 std::string StringUtil::intToString(int number) {
     return std::to_string(number);
 }

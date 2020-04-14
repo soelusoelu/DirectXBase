@@ -19,6 +19,7 @@
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
 #include "../Component/SpriteComponent.h"
+#include "../Component/Text.h"
 #include "../Component/TimeLimit.h"
 #include "../Component/TransparentMeshComponent.h"
 #include "../DebugLayer/Debug.h"
@@ -43,6 +44,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(SoundComponent);
     ADD_COMPONENT(SphereCollisionComponent);
     ADD_COMPONENT(SpriteComponent);
+    ADD_COMPONENT(Text);
     ADD_COMPONENT(TimeLimit);
     ADD_COMPONENT(TransparentMeshComponent);
 }

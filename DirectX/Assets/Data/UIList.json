@@ -6,9 +6,28 @@
         {
           "type": "Score",
           "properties": {
+            "highScore": 340
+          }
+        },
+        {
+          "type": "Text",
+          "properties": {
             "position": [ 1920.0, 0.0 ],
             "scale": [ 1.0, 1.0 ],
-            "highScore": 340
+            "color": [ 1.0, 1.0, 1.0 ],
+            "alpha": 1.0,
+            "rightJustified": true
+          }
+        },
+        {
+          "type": "Text",
+          "properties": {
+            "text": "Score",
+            "position": [ 1600.0, 0.0 ],
+            "scale": [ 1.0, 1.0 ],
+            "color": [ 1.0, 1.0, 1.0 ],
+            "alpha": 1.0,
+            "rightJustified": false
           }
         }
       ]
@@ -36,9 +55,16 @@
         {
           "type": "TimeLimit",
           "properties": {
-            "limit": 60.0,
-            "position": [ 960.0, 0.0 ],
-            "scale": [ 1.0, 1.0 ]
+            "limit": 60.0
+          }
+        },
+        {
+          "type": "Text",
+          "properties": {
+            "scale": [ 1.0, 1.0 ],
+            "color": [ 1.0, 1.0, 1.0 ],
+            "alpha": 1.0,
+            "rightJustified": false
           }
         }
       ]
@@ -49,6 +75,12 @@
         {
           "type": "Result",
           "properties": {
+          }
+        },
+        {
+          "type": "Text",
+          "properties": {
+            "position": [ 800.0, 400.0 ]
           }
         }
       ]

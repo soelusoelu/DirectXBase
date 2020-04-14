@@ -52,6 +52,25 @@ public:
         //最後まで見つからなければnullptrを返す
         return comp;
     }
+    //指定した型のコンポーネントをすべて取得
+    template<typename T>
+    std::list<std::shared_ptr<T>> getComponents() const {
+        std::list<std::shared_ptr<T>> components;
+        for (const auto& c : mStartComponents) {
+            auto comp = std::dynamic_pointer_cast<T>(c);
+            if (comp) {
+                components.emplace_back(comp);
+            }
+        }
+        for (const auto& c : mComponents) {
+            auto comp = std::dynamic_pointer_cast<T>(c);
+            if (comp) {
+                components.emplace_back(comp);
+            }
+        }
+        //最後まで見つからなければnullptrを返す
+        return components;
+    }
 
 private:
     std::weak_ptr<GameObject> mOwner;

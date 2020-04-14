@@ -1,20 +1,25 @@
 ﻿#include "Result.h"
-#include "../Device/DrawString.h"
-#include "../Device/Renderer.h"
+#include "ComponentManager.h"
+#include "Text.h"
 #include "../GameObject/GameObject.h"
-#include "../Math/Math.h"
+#include "../Utility/StringUtil.h"
 
 Result::Result(std::shared_ptr<GameObject> owner) :
     Component(owner, "Result"),
+    mText(nullptr),
     mScore(0) {
 }
 
 Result::~Result() = default;
 
+void Result::start() {
+    mText = owner()->componentManager()->getComponent<Text>();
+}
+
 void Result::update() {
-    auto ds = owner()->renderer()->getDrawString();
-    ds->drawString("Score", Vector2(500.f, 400.f));
-    ds->drawNumber(mScore, Vector2(500.f, 500.f));
+    if (mText) {
+        mText->setText("Score\n" + StringUtil::intToString(mScore));
+    }
 }
 
 void Result::setScore(int score) {

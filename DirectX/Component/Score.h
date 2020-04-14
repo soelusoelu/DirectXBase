@@ -1,15 +1,14 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "../Math/Math.h"
-#include <rapidjson/document.h>
 
-class GameObject;
+class Text;
 
 class Score : public Component {
 public:
     Score(std::shared_ptr<GameObject> owner);
     ~Score();
+    virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
@@ -17,8 +16,7 @@ public:
     int getScore() const;
 
 private:
-    Vector2 mDrawPosition;
-    Vector2 mDrawScale;
+    std::shared_ptr<Text> mText;
     int mScore;
     int mHighScore;
 };

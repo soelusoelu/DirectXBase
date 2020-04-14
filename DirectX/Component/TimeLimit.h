@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "../Math/Math.h"
 #include <memory>
 
 class Time;
+class Text;
 
 class TimeLimit : public Component {
 public:
@@ -18,7 +18,6 @@ public:
 
 private:
     std::unique_ptr<Time> mTimer;
+    std::shared_ptr<Text> mText;
     float mLimit;
-    Vector2 mDrawPosition;
-    Vector2 mDrawScale;
 };
