@@ -45,3 +45,7 @@ void TimeLimit::saveProperties(rapidjson::Document::AllocatorType & alloc, rapid
     JsonHelper::setVector2(alloc, inObj, "position", mDrawPosition);
     JsonHelper::setVector2(alloc, inObj, "scale", mDrawScale);
 }
+
+bool TimeLimit::isOverLimit() const {
+    return mTimer->isTime();
+}

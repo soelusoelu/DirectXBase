@@ -5,11 +5,13 @@
 
 class FriedChickenManager;
 class PlayerChickenConnection;
+class Score;
+class TimeLimit;
 
 class GamePlay : public SceneBase {
     enum class State {
         PLAY,
-        PAUSED
+        PAUSE,
     };
 
 public:
@@ -21,5 +23,7 @@ public:
 private:
     std::shared_ptr<FriedChickenManager> mFriedChickenManager;
     std::shared_ptr<PlayerChickenConnection> mPCConnection;
+    std::shared_ptr<Score> mScore;
+    std::shared_ptr<TimeLimit> mTimeLimit;
     State mState;
 };

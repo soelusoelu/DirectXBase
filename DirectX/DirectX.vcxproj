@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
+    <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
     <ClCompile Include="GameObject\Transform3D.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="Event\Subject.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
+    <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="UI\Text.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
@@ -249,6 +251,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\ChickenMeshComponent.h" />
+    <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="Event\IObserver.h" />
@@ -279,6 +282,7 @@
     <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="Event\Subject.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
+    <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="UI\Text.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />

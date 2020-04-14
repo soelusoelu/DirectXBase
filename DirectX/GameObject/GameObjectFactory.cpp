@@ -13,6 +13,7 @@
 #include "../Component/PlayerChickenConnection.h"
 #include "../Component/PlayerMoveComponent.h"
 #include "../Component/PointLightComponent.h"
+#include "../Component/Result.h"
 #include "../Component/Score.h"
 #include "../Component/ScoreEvaluation.h"
 #include "../Component/SoundComponent.h"
@@ -36,6 +37,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(PlayerChickenConnection);
     ADD_COMPONENT(PlayerMoveComponent);
     ADD_COMPONENT(PointLightComponent);
+    ADD_COMPONENT(Result);
     ADD_COMPONENT(Score);
     ADD_COMPONENT(ScoreEvaluation);
     ADD_COMPONENT(SoundComponent);

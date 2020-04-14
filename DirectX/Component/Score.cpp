@@ -44,3 +44,7 @@ void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
 void Score::addScore(int score) {
     mScore += score;
 }
+
+int Score::getScore() const {
+    return mScore;
+}

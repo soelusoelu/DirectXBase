@@ -104,6 +104,8 @@
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="Component\PlayerChickenConnection.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
+    <ClCompile Include="Scene\ResultScene.cpp" />
+    <ClCompile Include="Component\Result.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -215,5 +217,7 @@
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="Component\PlayerChickenConnection.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
+    <ClInclude Include="Scene\ResultScene.h" />
+    <ClInclude Include="Component\Result.h" />
   </ItemGroup>
 </Project>

@@ -111,6 +111,6 @@ void SceneManager::change() {
     mGameObjectManager->clear();
     mMeshManager->clear();
     mSpriteManager->clear();
-    mCurrentScene->set(mRenderer, mGameObjectManager);
+    mCurrentScene->set(mGameObjectManager);
     mCurrentScene->start();
 }

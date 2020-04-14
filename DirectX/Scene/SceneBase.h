@@ -3,7 +3,6 @@
 #include <memory>
 
 class GameObjectManager;
-class Renderer;
 
 class SceneBase {
     friend class SceneManager;
@@ -11,17 +10,16 @@ protected:
     SceneBase();
     virtual ~SceneBase();
 public:
-    virtual void start() = 0;
-    virtual void update() = 0;
+    virtual void start() {};
+    virtual void update() {};
     void nextScene(std::shared_ptr<SceneBase> next);
 
 private:
     //SceneManagerがアクセスするよう
-    void set(std::shared_ptr<Renderer> renderer, GameObjectManager* gameObjectManager);
+    void set(GameObjectManager* gameObjectManager);
     std::shared_ptr<SceneBase> getNextScene() const;
 
 protected:
-    std::shared_ptr<Renderer> mRenderer;
     GameObjectManager* mGameObjectManager;
 
 private:

@@ -3,7 +3,6 @@
 #include "../System/Game.h"
 
 SceneBase::SceneBase() :
-    mRenderer(nullptr),
     mGameObjectManager(nullptr),
     mNext(nullptr) {
 }
@@ -14,8 +13,7 @@ void SceneBase::nextScene(std::shared_ptr<SceneBase> next) {
     mNext = next;
 }
 
-void SceneBase::set(std::shared_ptr<Renderer> renderer, GameObjectManager* gameObjectManager) {
-    mRenderer = renderer;
+void SceneBase::set(GameObjectManager* gameObjectManager) {
     mGameObjectManager = gameObjectManager;
 }
 
