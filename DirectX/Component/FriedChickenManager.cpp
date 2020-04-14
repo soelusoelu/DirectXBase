@@ -2,7 +2,6 @@
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "ScoreEvaluation.h"
-#include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/Transform3D.h"
@@ -13,7 +12,6 @@
 FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
     mScoreEvaluation(nullptr),
-    mSpawnTimer(std::make_unique<Time>(2.f)),
     mMaxDrawNum(10) {
 }
 

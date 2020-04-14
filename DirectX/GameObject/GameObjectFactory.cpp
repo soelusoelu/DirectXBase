@@ -1,5 +1,6 @@
 ﻿#include "GameObjectFactory.h"
 #include "GameObject.h"
+#include "../Component/Bird.h"
 #include "../Component/Camera.h"
 #include "../Component/ChickenMeshComponent.h"
 #include "../Component/Component.h"
@@ -28,6 +29,7 @@
 
 GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
+    ADD_COMPONENT(Bird);
     ADD_COMPONENT(Camera);
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(DirectionalLight);

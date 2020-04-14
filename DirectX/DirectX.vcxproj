@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
     <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
@@ -251,6 +252,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\ChickenMeshComponent.h" />
     <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />

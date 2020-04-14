@@ -7,7 +7,6 @@
 class FriedChickenComponent;
 class GameObject;
 class ScoreEvaluation;
-class Time;
 
 class FriedChickenManager : public Component {
     using ChickenPtr = std::shared_ptr<FriedChickenComponent>;
@@ -41,7 +40,6 @@ private:
     ChickenPtrList mChickens;
     //待機中の唐揚げ
     ChickenPtrList mWaitingChickens;
-    std::unique_ptr<Time> mSpawnTimer;
     //一度に画面内に表示する最大数
     int mMaxDrawNum;
 };
