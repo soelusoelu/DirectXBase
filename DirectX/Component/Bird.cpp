@@ -112,7 +112,7 @@ void Bird::isEndMoving() {
 }
 
 void Bird::initialize() {
-    mTarget = owner()->getGameObjectManager()->find("FriedChicken");
+    mTarget = owner()->getGameObjectManager()->randomFind("FriedChicken");
     auto posZ = mTarget->transform()->getPosition().z;
     owner()->transform()->setPosition(Vector3(10.f, 0.f, posZ));
 }

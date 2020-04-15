@@ -19,7 +19,10 @@ public:
     void add(const GameObjectPtr& add);
     //登録済みの全ゲームオブジェクトの削除
     void clear();
+    //ゲームオブジェクトの検索
     GameObjectPtr find(const std::string& tag) const;
+    //ゲームオブジェクトのランダム検索
+    GameObjectPtr randomFind(const std::string& tag) const;
     //リストの中からプレイヤーを取得
     GameObjectPtr getPlayer() const;
 
