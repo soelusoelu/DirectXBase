@@ -28,6 +28,9 @@ void PlayerMoveComponent::start() {
     if (mesh) {
         owner()->transform()->setPivot(Vector3::down * mesh->getRadius());
     }
+
+    //操作の関係上少しだけ眠っててもらう
+    owner()->sleep(0.1f);
 }
 
 void PlayerMoveComponent::update() {

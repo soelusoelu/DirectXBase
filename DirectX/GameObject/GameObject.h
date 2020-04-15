@@ -14,6 +14,7 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
     enum class State {
         ACTIVE,
         NON_ACTIVE,
+        SLEEP,
         DEAD
     };
 
@@ -38,6 +39,8 @@ public:
     virtual void setActive(bool value);
     bool getActive() const;
     bool isDead() const;
+    void sleep(float sec);
+    bool isSleeping() const;
 
     //タグ
     void setTag(const std::string& tag);
@@ -66,6 +69,8 @@ private:
     void initialize();
     //DestroyTimerの更新
     void updateDestroyTimer();
+    //SleepTimerの更新
+    void updateSleepTimer();
 
 protected:
     std::shared_ptr<Renderer> mRenderer;
@@ -75,6 +80,7 @@ protected:
 
 private:
     std::unique_ptr<Time> mDestroyTimer;
+    std::unique_ptr<Time> mSleepTimer;
     State mState;
 
     static GameObjectManager* mGameObjectManager;
