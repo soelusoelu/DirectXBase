@@ -50,4 +50,5 @@ private:
     float mJumpMoveRate;
     bool mJumpStart;
     bool mJumpEnd;
+    bool mIsWaitFirstFrame;
 };

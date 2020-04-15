@@ -18,7 +18,8 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     mMoveSpeed(1.f),
     mJumpMoveRate(0.f),
     mJumpStart(false),
-    mJumpEnd(false) {
+    mJumpEnd(false),
+    mIsWaitFirstFrame(false) {
 }
 
 PlayerMoveComponent::~PlayerMoveComponent() = default;
@@ -28,12 +29,14 @@ void PlayerMoveComponent::start() {
     if (mesh) {
         owner()->transform()->setPivot(Vector3::down * mesh->getRadius());
     }
-
-    //操作の関係上少しだけ眠っててもらう
-    owner()->sleep(0.1f);
 }
 
 void PlayerMoveComponent::update() {
+    if (!mIsWaitFirstFrame) {
+        mIsWaitFirstFrame = true;
+        return;
+    }
+
     if (mJumpStart) {
         mJumpStart = false;
     }
