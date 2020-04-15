@@ -1,5 +1,6 @@
 ﻿#include "Bird.h"
 #include "ComponentManager.h"
+#include "FriedChickenComponent.h"
 #include "MeshComponent.h"
 #include "Timer.h"
 #include "../GameObject/GameObject.h"
@@ -8,7 +9,6 @@
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
-#include "../DebugLayer/Debug.h"
 
 Bird::Bird(std::shared_ptr<GameObject> owner) :
     Component(owner, "Bird"),
@@ -91,8 +91,6 @@ void Bird::takeChicken() {
         return;
     }
     //鳥と唐揚げの距離が近いときのみ
-    auto l = Math::abs(birdPos.x - targetPos.x);
-    Debug::log(StringUtil::floatToString(l, 6));
     if (Math::abs(birdPos.x - targetPos.x) > 1.f) {
         return;
     }
@@ -100,7 +98,10 @@ void Bird::takeChicken() {
         return;
     }
 
-    mTarget->setActive(false);
+    auto fc = mTarget->componentManager()->getComponent<FriedChickenComponent>();
+    if (fc) {
+        fc->eaten();
+    }
 }
 
 void Bird::isEndMoving() {

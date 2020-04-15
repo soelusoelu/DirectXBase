@@ -25,7 +25,8 @@ class FriedChickenComponent : public Component {
     enum class State {
         FRY,
         FALL,
-        WAITING_COLLECTION
+        WAITING_COLLECTION,
+        EATEN
     };
 
 public:
@@ -43,6 +44,8 @@ public:
     void changeSurface();
     //強制的に揚げ終わる
     void finishFryed();
+    //食われる
+    void eaten();
     //面の数の取得
     int getNumSurface() const;
     //揚げ終わるまでの時間比率の取得
@@ -54,6 +57,8 @@ public:
     bool isFalling() const;
     //揚げ終わっているか
     bool isFinished() const;
+    //食われたか
+    bool isEaten() const;
 
 private:
     //下の面を揚げる

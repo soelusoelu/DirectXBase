@@ -91,7 +91,7 @@ void FriedChickenManager::addScore() {
 void FriedChickenManager::moveToWait() {
     auto itr = mChickens.begin();
     while (itr != mChickens.end()) {
-        if ((*itr)->isFinished()) {
+        if ((*itr)->isFinished() || (*itr)->isEaten()) {
             mWaitingChickens.emplace_back(*itr);
             (*itr)->owner()->setActive(false);
             itr = mChickens.erase(itr);

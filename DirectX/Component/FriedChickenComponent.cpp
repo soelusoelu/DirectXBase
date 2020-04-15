@@ -136,6 +136,10 @@ void FriedChickenComponent::finishFryed() {
     mState = State::WAITING_COLLECTION;
 }
 
+void FriedChickenComponent::eaten() {
+    mState = State::EATEN;
+}
+
 int FriedChickenComponent::getNumSurface() const {
     return static_cast<int>(Surface::NUM_SURFACE);
 }
@@ -154,6 +158,10 @@ bool FriedChickenComponent::isFalling() const {
 
 bool FriedChickenComponent::isFinished() const {
     return mState == State::WAITING_COLLECTION;
+}
+
+bool FriedChickenComponent::isEaten() const {
+    return mState == State::EATEN;
 }
 
 void FriedChickenComponent::frying() {
