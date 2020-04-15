@@ -183,6 +183,7 @@
     <ClCompile Include="Math\Plane.cpp" />
     <ClCompile Include="Event\Subject.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
+    <ClCompile Include="Component\Oil.cpp" />
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="Math\Plane.h" />
     <ClInclude Include="Event\Subject.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
+    <ClInclude Include="Component\Oil.h" />
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Utility\Directory.h" />

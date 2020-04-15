@@ -11,6 +11,7 @@
 #include "../Component/HitPointComponent.h"
 #include "../Component/JumpTarget.h"
 #include "../Component/MeshComponent.h"
+#include "../Component/Oil.h"
 #include "../Component/PlayerChickenConnection.h"
 #include "../Component/PlayerMoveComponent.h"
 #include "../Component/PointLightComponent.h"
@@ -38,6 +39,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(HitPointComponent);
     ADD_COMPONENT(JumpTarget);
     ADD_COMPONENT(MeshComponent);
+    ADD_COMPONENT(Oil);
     ADD_COMPONENT(PlayerChickenConnection);
     ADD_COMPONENT(PlayerMoveComponent);
     ADD_COMPONENT(PointLightComponent);

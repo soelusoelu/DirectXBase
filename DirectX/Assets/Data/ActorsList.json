@@ -154,6 +154,17 @@
           }
         }
       ]
+    },
+    {
+      "type": "Oil",
+      "components": [
+        {
+          "type": "Oil",
+          "properties": {
+            "flowSpeed": 5.0
+          }
+        }
+      ]
     }
   ]
 }

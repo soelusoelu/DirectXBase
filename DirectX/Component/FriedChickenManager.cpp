@@ -52,11 +52,11 @@ void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target) {
-    return FindNearestChicken(target, nullptr);
+std::shared_ptr<GameObject> FriedChickenManager::findNearestChicken(const GameObjectPtr target) const {
+    return findNearestChicken(target, nullptr);
 }
 
-std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude) {
+std::shared_ptr<GameObject> FriedChickenManager::findNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude) const {
     float nearest = Math::infinity;
     GameObjectPtr chicken = nullptr;
     for (const auto& c : mChickens) {
@@ -73,6 +73,17 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
         }
     }
     return chicken;
+}
+
+std::list<std::shared_ptr<GameObject>> FriedChickenManager::getFriedChickens() const {
+    GameObjectPtrList list;
+    for (const auto& c : mChickens) {
+        if (!c->isFrying()) {
+            continue;
+        }
+        list.emplace_back(c->owner());
+    }
+    return list;
 }
 
 void FriedChickenManager::addScore() {
