@@ -161,7 +161,10 @@
         {
           "type": "Oil",
           "properties": {
-            "flowSpeed": 5.0
+            "flowSpeed": 3.0,
+            "flowRangeX": 4.0,
+            "flowRangeZFore": 3.0,
+            "flowRangeZBack": 5.0
           }
         }
       ]

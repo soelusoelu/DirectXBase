@@ -16,4 +16,7 @@ public:
 
 private:
     float mFlowSpeed;
+    float mFlowRangeX;
+    float mFlowRangeZFore;
+    float mFlowRangeZBack;
 };
