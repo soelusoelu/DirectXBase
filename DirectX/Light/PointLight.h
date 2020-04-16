@@ -3,9 +3,11 @@
 #include "../Math/Math.h"
 #include "../System/Game.h"
 #include <memory>
+#include <vector>
 
 class IMeshLoader;
 class Shader;
+struct Material;
 
 struct PointLightConstantBuffer {
     ALIGN16 Matrix4 wvp;
@@ -20,6 +22,7 @@ struct PointLightConstantBuffer {
 
 struct PointLight {
     std::shared_ptr<IMeshLoader> mesh;
+    std::vector<std::shared_ptr<Material>> materials;
     std::shared_ptr<Shader> shader;
     float radius;
 

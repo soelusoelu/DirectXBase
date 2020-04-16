@@ -73,7 +73,6 @@ void PointLightComponent::draw(const PointLight& pointLight) const {
     auto trans = Matrix4::createTranslation(owner()->transform()->getPosition());
     auto world = scale * trans;
 
-    auto mesh = pointLight.mesh;
     auto shader = pointLight.shader;
 
     //シェーダーのコンスタントバッファーに各種データを渡す
@@ -94,17 +93,19 @@ void PointLightComponent::draw(const PointLight& pointLight) const {
         shader->unmap();
     }
 
+    auto mesh = pointLight.mesh;
+    auto mats = pointLight.materials;
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < mesh->getNumMaterial(); i++) {
+    for (size_t i = 0; i < mats.size(); i++) {
         //使用されていないマテリアル対策
-        if (mesh->getMaterial(i)->numFace == 0) {
+        if (mats[i]->numFace == 0) {
             continue;
         }
         //インデックスバッファーをセット
         mesh->getVertexArray()->setIndexBuffer(i);
 
         //プリミティブをレンダリング
-        Singleton<DirectX>::instance().drawIndexed(mesh->getMaterial(i)->numFace * 3);
+        Singleton<DirectX>::instance().drawIndexed(mats[i]->numFace * 3);
     }
 }
 

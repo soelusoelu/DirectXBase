@@ -1,4 +1,4 @@
-#include "MeshComponent.h"
+ï»¿#include "MeshComponent.h"
 #include "Camera.h"
 #include "ComponentManager.h"
 #include "../DebugLayer/Inspector.h"
@@ -32,7 +32,7 @@ void MeshComponent::start() {
     auto camera = owner()->getGameObjectManager()->find("Camera");
     mCamera = camera->componentManager()->getComponent<Camera>();
 
-    //”¼Œa‚Æ’†SÀ•W‚Ìæ“¾
+    //åŠå¾„ã¨ä¸­å¿ƒåº§æ¨™ã®å–å¾—
     mCenter = mMesh->getCenter();
     mRadius = mMesh->getRadius();
 
@@ -61,15 +61,16 @@ void MeshComponent::drawDebugInfo(DebugInfoList* inspect) const {
 
 void MeshComponent::setMesh(const std::string& fileName) {
     mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
+    mMesh->setInitMaterials(&mMaterials);
     addToManager();
 }
 
 void MeshComponent::setShader() {
     mShader = Singleton<AssetsManager>::instance().createShader("GBuffer.hlsl");
-    //ƒƒbƒVƒ…—pƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@‚Ìì¬
+    //ãƒ¡ãƒƒã‚·ãƒ¥ç”¨ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ã®ä½œæˆ
     mShader->createConstantBuffer(sizeof(MeshConstantBuffer), 0);
     mShader->createConstantBuffer(sizeof(MaterialConstantBuffer), 1);
-    //ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚Ì¶¬
+    //ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã®ç”Ÿæˆ
     constexpr InputElementDesc layout[] = {
         { "POSITION", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, 0, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
         { "NORMAL", 0, VertexType::VERTEX_TYPE_FLOAT3, 0, sizeof(float) * 3, SlotClass::SLOT_CLASS_VERTEX_DATA, 0 },
@@ -80,24 +81,24 @@ void MeshComponent::setShader() {
 }
 
 void MeshComponent::draw() {
-    //g—p‚·‚éƒVƒF[ƒ_[‚Ì“o˜^
+    //ä½¿ç”¨ã™ã‚‹ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setVSShader();
     mShader->setPSShader();
-    //‚±‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ğg‚¤ƒVƒF[ƒ_[‚Ì“o˜^
+    //ã“ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½¿ã†ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setVSConstantBuffers(0);
     mShader->setPSConstantBuffers(0);
-    //’¸“_ƒCƒ“ƒvƒbƒgƒŒƒCƒAƒEƒg‚ğƒZƒbƒg
+    //é ‚ç‚¹ã‚¤ãƒ³ãƒ—ãƒƒãƒˆãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆã‚’ã‚»ãƒƒãƒˆ
     mShader->setInputLayout();
 
-    //ƒVƒF[ƒ_[‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ÉŠeíƒf[ƒ^‚ğ“n‚·
+    //ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã«å„ç¨®ãƒ‡ãƒ¼ã‚¿ã‚’æ¸¡ã™
     MappedSubResourceDesc msrd;
     if (mShader->map(&msrd, 0)) {
         MeshConstantBuffer cb;
-        //ƒ[ƒ‹ƒhs—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—ã‚’æ¸¡ã™
         auto trans = owner()->transform();
         cb.world = trans->getWorldTransform();
         cb.world.transpose();
-        //ƒ[ƒ‹ƒhAƒJƒƒ‰AË‰es—ñ‚ğ“n‚·
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰ã€ã‚«ãƒ¡ãƒ©ã€å°„å½±è¡Œåˆ—ã‚’æ¸¡ã™
         cb.WVP = trans->getWorldTransform() * mCamera->getViewProjection();
         cb.WVP.transpose();
 
@@ -105,20 +106,20 @@ void MeshComponent::draw() {
         mShader->unmap(0);
     }
 
-    //ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+    //ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
     mMesh->getVertexArray()->setVertexBuffer();
 
-    //‚±‚ÌƒRƒ“ƒXƒ^ƒ“ƒgƒoƒbƒtƒ@[‚ğg‚¤ƒVƒF[ƒ_[‚Ì“o˜^
+    //ã“ã®ã‚³ãƒ³ã‚¹ã‚¿ãƒ³ãƒˆãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ä½¿ã†ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼ã®ç™»éŒ²
     mShader->setPSConstantBuffers(1);
 
-    //ƒ}ƒeƒŠƒAƒ‹‚Ì”‚¾‚¯A‚»‚ê‚¼‚ê‚Ìƒ}ƒeƒŠƒAƒ‹‚ÌƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@|‚ğ•`‰æ
-    for (size_t i = 0; i < mMesh->getNumMaterial(); i++) {
-        //g—p‚³‚ê‚Ä‚¢‚È‚¢ƒ}ƒeƒŠƒAƒ‹‘Îô
-        auto mat = mMesh->getMaterial(i);
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ã®æ•°ã ã‘ã€ãã‚Œãã‚Œã®ãƒãƒ†ãƒªã‚¢ãƒ«ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ï¼ã‚’æç”»
+    for (size_t i = 0; i < getNumMaterial(); i++) {
+        //ä½¿ç”¨ã•ã‚Œã¦ã„ãªã„ãƒãƒ†ãƒªã‚¢ãƒ«å¯¾ç­–
+        auto mat = getMaterial(i);
         if (mat->numFace == 0) {
             continue;
         }
-        //ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@[‚ğƒZƒbƒg
+        //ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ¼ã‚’ã‚»ãƒƒãƒˆ
         mMesh->getVertexArray()->setIndexBuffer(i);
 
         if (mShader->map(&msrd, 1)) {
@@ -138,17 +139,17 @@ void MeshComponent::draw() {
             mShader->unmap(1);
         }
 
-        //ƒvƒŠƒ~ƒeƒBƒu‚ğƒŒƒ“ƒ_ƒŠƒ“ƒO
+        //ãƒ—ãƒªãƒŸãƒ†ã‚£ãƒ–ã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°
         Singleton<DirectX>::instance().drawIndexed(mat->numFace * 3);
     }
 }
 
 size_t MeshComponent::getNumMaterial() const {
-    return mMesh->getNumMaterial();
+    return mMaterials.size();
 }
 
 std::shared_ptr<Material> MeshComponent::getMaterial(unsigned index) const {
-    return mMesh->getMaterial(index);
+    return mMaterials[index];
 }
 
 const Vector3& MeshComponent::getCenter() const {

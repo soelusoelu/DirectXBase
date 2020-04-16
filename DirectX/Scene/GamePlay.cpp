@@ -46,7 +46,7 @@ void GamePlay::start() {
     auto tl = GameObjectCreater::createUI("TimeLimit");
     mTimeLimitTimer = tl->componentManager()->getComponent<Timer>();
     auto jt = GameObjectCreater::createUI("JumpTarget");
-    //auto f = GameObjectCreater::create("Field");
+    auto f = GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
 

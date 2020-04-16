@@ -18,6 +18,7 @@ ChickenMeshComponent::~ChickenMeshComponent() = default;
 
 void ChickenMeshComponent::setMesh(const std::string & fileName) {
     mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
+    mMesh->setInitMaterials(&mMaterials);
     addToManager(true);
 }
 
@@ -72,9 +73,9 @@ void ChickenMeshComponent::draw() {
     mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < mMesh->getNumMaterial(); i++) {
+    for (size_t i = 0; i < getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        auto mat = mMesh->getMaterial(i);
+        auto mat = getMaterial(i);
         if (mat->numFace == 0) {
             continue;
         }
