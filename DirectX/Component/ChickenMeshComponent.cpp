@@ -83,8 +83,8 @@ void ChickenMeshComponent::draw() {
 
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
-            cb.diffuse = mat->diffuse;
-            cb.specular = mat->specular;
+            cb.diffuse = Vector4(mat->diffuse, 1.f);
+            cb.specular = Vector4(mat->specular, 1.f);
 
             if (auto t = mat->texture) {
                 t->setPSTextures();

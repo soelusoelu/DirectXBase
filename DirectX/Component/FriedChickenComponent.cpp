@@ -20,14 +20,8 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero),
     mBurntColor(Vector3::zero),
-    mUpColor(nullptr),
-    mBottomColor(nullptr),
-    mLeftColor(nullptr),
-    mRightColor(nullptr),
-    mForeColor(nullptr),
-    mBackColor(nullptr),
     mGood(0.f),
-    mFallSpeed(60.f) {
+    mFallSpeed(1.f) {
     for (size_t i = 0; i < getNumSurface(); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(10.f));
     }
@@ -39,12 +33,9 @@ void FriedChickenComponent::start() {
     auto mesh = owner()->componentManager()->getComponent<ChickenMeshComponent>();
     if (mesh) {
         Debug::log(StringUtil::intToString(mesh->getNumMaterial()));
-        mRightColor = mesh->getMaterial(1); //右
-        mForeColor = mesh->getMaterial(2); //手前
-        mLeftColor = mesh->getMaterial(3); //左
-        mUpColor = mesh->getMaterial(4); //上
-        mBottomColor = mesh->getMaterial(5); //下
-        mBackColor = mesh->getMaterial(6); //奥
+        for (size_t i = 0; i < getNumSurface(); i++) {
+            mMaterials.emplace_back(mesh->getMaterial(i + 1));
+        }
     }
 
     initialize();
@@ -115,12 +106,9 @@ void FriedChickenComponent::initialize() {
     for (size_t i = 0; i < getNumSurface(); i++) {
         mFryTimer[i]->reset();
     }
-    mUpColor->diffuse = Vector4(mInitColor, 1.f);
-    mBottomColor->diffuse = Vector4(mInitColor, 1.f);
-    mLeftColor->diffuse = Vector4(mInitColor, 1.f);
-    mRightColor->diffuse = Vector4(mInitColor, 1.f);
-    mForeColor->diffuse = Vector4(mInitColor, 1.f);
-    mBackColor->diffuse = Vector4(mInitColor, 1.f);
+    for (auto&& mat : mMaterials) {
+        mat->diffuse = mInitColor;
+    }
 
     //空中からの落下状態に設定
     mState = State::FALL;
@@ -167,10 +155,11 @@ void FriedChickenComponent::frying() {
 
 void FriedChickenComponent::changeFryedColor() {
     auto color = getChangeColor(Surface::BOTTOM);
-    mForeColor->diffuse = Vector4(color, 1.f);
+    auto mat = getMaterial(Surface::UP);
+    mat->diffuse = color;
 }
 
-Vector3 FriedChickenComponent::getChangeColor(Surface surface) {
+Vector3 FriedChickenComponent::getChangeColor(Surface surface) const {
     if (surface == Surface::NUM_SURFACE) {
         return Vector3::zero;
     }
@@ -214,4 +203,9 @@ void FriedChickenComponent::soakedInOil() {
         t->setPosition(pos);
         mState = State::FRY;
     }
+}
+
+std::shared_ptr<Material> FriedChickenComponent::getMaterial(Surface surface) const {
+    int index = static_cast<int>(surface);
+    return mMaterials[index];
 }

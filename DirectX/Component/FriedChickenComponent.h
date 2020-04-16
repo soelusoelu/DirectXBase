@@ -65,13 +65,15 @@ private:
     void frying();
     //揚げ具合によって色を変える
     void changeFryedColor();
-    Vector3 getChangeColor(Surface surface);
+    Vector3 getChangeColor(Surface surface) const;
     //両面揚げれたか
     void successFrying();
     //空中から落下させる
     void fall();
     //油に浸かったら揚げ始める
     void soakedInOil();
+    //指定した面の取得
+    std::shared_ptr<Material> getMaterial(Surface surface) const;
 
 private:
     State mState;
@@ -83,12 +85,7 @@ private:
     Vector3 mFryedColor;
     Vector3 mBurntColor;
 
-    std::shared_ptr<Material> mUpColor;
-    std::shared_ptr<Material> mBottomColor;
-    std::shared_ptr<Material> mLeftColor;
-    std::shared_ptr<Material> mRightColor;
-    std::shared_ptr<Material> mForeColor;
-    std::shared_ptr<Material> mBackColor;
+    std::vector<std::shared_ptr<Material>> mMaterials;
 
     float mGood;
     float mFallSpeed;

@@ -9,16 +9,16 @@ cbuffer global_0 : register(b0)
 
 cbuffer global_1 : register(b1)
 {
-    float4 g_Diffuse : packoffset(c0) = float4(1, 0, 0, 0); //拡散反射(色）
-    float4 g_Specular : packoffset(c1) = float4(1, 1, 1, 1); //使わないけど
-    float g_Texture : packoffset(c2) = 0; //テクスチャーが貼られているメッシュかどうかのフラグ
+    float4 mDiffuse : packoffset(c0) = float4(1, 0, 0, 0); //拡散反射(色）
+    float4 mSpecular : packoffset(c1) = float4(1, 1, 1, 1); //使わないけど
+    float mTexture : packoffset(c2) = 0; //テクスチャーが貼られているメッシュかどうかのフラグ
 };
 
 //バーテックスバッファー出力構造体
 struct VS_OUTPUT
 {
     float4 Pos : SV_POSITION;
-    float3 Normal : TEXCOORD1;
+    float3 Normal : TEXCOORD0;
 };
 
 VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL)
@@ -35,8 +35,5 @@ VS_OUTPUT VS(float4 Pos : POSITION, float4 Norm : NORMAL)
 
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-    float4 color = g_Diffuse;
-    color.a = g_Diffuse.a;
-
-    return color;
+    return mDiffuse;
 }

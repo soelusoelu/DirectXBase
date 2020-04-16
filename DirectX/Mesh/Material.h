@@ -7,11 +7,11 @@
 class Texture;
 
 struct Material {
-    Vector4 ambient; //アンビエント
-    Vector4 diffuse; //ディフューズ
-    Vector4 specular; //スペキュラー
-    Vector4 emissive;
-    Vector4 bump;
+    Vector3 ambient; //アンビエント
+    Vector3 diffuse; //ディフューズ
+    Vector3 specular; //スペキュラー
+    Vector3 emissive;
+    Vector3 bump;
     float transparency;
     float shininess;
     std::string matName; //newmtl
@@ -20,11 +20,11 @@ struct Material {
     unsigned numFace; //そのマテリアルであるポリゴン数
 
     Material() :
-        ambient(Vector3::zero, 1.f),
-        diffuse(Vector3::zero, 1.f),
-        specular(Vector3::zero, 1.f),
-        emissive(Vector3::zero, 1.f),
-        bump(Vector3::zero, 1.f),
+        ambient(Vector3::zero),
+        diffuse(Vector3::zero),
+        specular(Vector3::zero),
+        emissive(Vector3::zero),
+        bump(Vector3::zero),
         transparency(1.f),
         shininess(1.f),
         matName(""),

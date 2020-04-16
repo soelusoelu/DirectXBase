@@ -303,7 +303,7 @@ bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath)
 
     std::string line;
     char s[256]; //ダミー
-    Vector4 v(0.f, 0.f, 0.f, 1.f);
+    Vector3 v;
     int matCount = -1;
 
     //本読み込み
