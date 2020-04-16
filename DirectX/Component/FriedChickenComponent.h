@@ -40,8 +40,6 @@ public:
     void firstSet(float good);
     //揚げ直す前の状態に戻す
     void initialize();
-    //揚げる面を変更
-    void changeSurface();
     //強制的に揚げ終わる
     void finishFryed();
     //食われる
@@ -61,11 +59,12 @@ public:
     bool isEaten() const;
 
 private:
+    //下の面を決定する
+    void bottomSurface();
     //下の面を揚げる
     void frying();
     //揚げ具合によって色を変える
     void changeFryedColor();
-    Vector3 getChangeColor(Surface surface) const;
     //両面揚げれたか
     void successFrying();
     //空中から落下させる
@@ -86,6 +85,7 @@ private:
     Vector3 mBurntColor;
 
     std::vector<std::shared_ptr<Material>> mMaterials;
+    Surface mCurrentBottomSurface;
 
     float mGood;
     float mFallSpeed;

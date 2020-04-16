@@ -20,6 +20,7 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero),
     mBurntColor(Vector3::zero),
+    mCurrentBottomSurface(Surface::BOTTOM),
     mGood(0.f),
     mFallSpeed(1.f) {
     for (size_t i = 0; i < getNumSurface(); i++) {
@@ -32,8 +33,9 @@ FriedChickenComponent::~FriedChickenComponent() = default;
 void FriedChickenComponent::start() {
     auto mesh = owner()->componentManager()->getComponent<ChickenMeshComponent>();
     if (mesh) {
-        Debug::log(StringUtil::intToString(mesh->getNumMaterial()));
         for (size_t i = 0; i < getNumSurface(); i++) {
+            //Surfaceと合わせてある
+            //最初のマテリアルは使われてないからプラス1
             mMaterials.emplace_back(mesh->getMaterial(i + 1));
         }
     }
@@ -49,6 +51,7 @@ void FriedChickenComponent::start() {
 
 void FriedChickenComponent::update() {
     if (mState == State::FRY) {
+        bottomSurface();
         frying();
         changeFryedColor();
         successFrying();
@@ -103,8 +106,8 @@ void FriedChickenComponent::initialize() {
     t->setScale(scale);
 
     //揚げる面の初期化
-    for (size_t i = 0; i < getNumSurface(); i++) {
-        mFryTimer[i]->reset();
+    for (auto&& timer : mFryTimer) {
+        timer->reset();
     }
     for (auto&& mat : mMaterials) {
         mat->diffuse = mInitColor;
@@ -112,9 +115,6 @@ void FriedChickenComponent::initialize() {
 
     //空中からの落下状態に設定
     mState = State::FALL;
-}
-
-void FriedChickenComponent::changeSurface() {
 }
 
 void FriedChickenComponent::finishFryed() {
@@ -149,23 +149,34 @@ bool FriedChickenComponent::isEaten() const {
     return mState == State::EATEN;
 }
 
+void FriedChickenComponent::bottomSurface() {
+    auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
+    auto x = Math::cos(dir.x);
+    auto y = Math::sin(dir.y);
+    static const float SIN_COS_45 = Math::sin(45.f);
+    if (dir.y <= -SIN_COS_45) {
+        mCurrentBottomSurface = Surface::BOTTOM;
+    } else if (dir.y > SIN_COS_45) {
+        mCurrentBottomSurface = Surface::UP;
+    } else if (dir.x <= -SIN_COS_45) {
+        mCurrentBottomSurface = Surface::LEFT;
+    } else if (dir.x > SIN_COS_45) {
+        mCurrentBottomSurface = Surface::RIGHT;
+    } else if (dir.z <= SIN_COS_45) {
+        mCurrentBottomSurface = Surface::FORE;
+    } else if (dir.z > SIN_COS_45) {
+        mCurrentBottomSurface = Surface::BACK;
+    } else {
+        Debug::logError("No bottom Surface!");
+    }
+}
+
 void FriedChickenComponent::frying() {
-    mFryTimer[static_cast<int>(Surface::BOTTOM)]->update();
+    mFryTimer[static_cast<int>(mCurrentBottomSurface)]->update();
 }
 
 void FriedChickenComponent::changeFryedColor() {
-    auto color = getChangeColor(Surface::BOTTOM);
-    auto mat = getMaterial(Surface::UP);
-    mat->diffuse = color;
-}
-
-Vector3 FriedChickenComponent::getChangeColor(Surface surface) const {
-    if (surface == Surface::NUM_SURFACE) {
-        return Vector3::zero;
-    }
-
-    //色の変更
-    auto rate = mFryTimer[static_cast<int>(surface)]->rate();
+    auto rate = mFryTimer[static_cast<int>(mCurrentBottomSurface)]->rate();
     auto a = mInitColor;
     auto b = mFryedColor;
     if (rate > 1.f) {
@@ -176,7 +187,9 @@ Vector3 FriedChickenComponent::getChangeColor(Surface surface) const {
     if (rate > 1.f) {
         rate = 1.f;
     }
-    return Vector3::lerp(a, b, rate);
+    auto color = Vector3::lerp(a, b, rate);
+    auto mat = getMaterial(mCurrentBottomSurface);
+    mat->diffuse = color;
 }
 
 void FriedChickenComponent::successFrying() {

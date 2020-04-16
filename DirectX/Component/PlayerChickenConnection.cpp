@@ -33,8 +33,6 @@ void PlayerChickenConnection::start() {
 
 void PlayerChickenConnection::update() {
     if (mPlayer->isJumpStart()) {
-        auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
-        chickenComp->changeSurface();
         mChicken->transform()->rotate(Vector3::right * 180.f);
     }
     if (mPlayer->isJumpEnd()) {
