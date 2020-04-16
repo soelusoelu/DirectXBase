@@ -8,15 +8,15 @@
 #include <vector>
 
 class GameObject;
-class ChickenMeshComponent;
+struct Material;
 
 class FriedChickenComponent : public Component {
     enum class Surface {
-        BOTTOM,
-        UP,
-        LEFT,
         RIGHT,
         FORE,
+        LEFT,
+        UP,
+        BOTTOM,
         BACK,
 
         NUM_SURFACE
@@ -74,8 +74,6 @@ private:
     void soakedInOil();
 
 private:
-    std::shared_ptr<ChickenMeshComponent> mMeshComp;
-    Surface mSurface;
     State mState;
     std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
@@ -85,12 +83,12 @@ private:
     Vector3 mFryedColor;
     Vector3 mBurntColor;
 
-    Vector3 mUpColor;
-    Vector3 mBottomColor;
-    Vector3 mLeftColor;
-    Vector3 mRightColor;
-    Vector3 mForeColor;
-    Vector3 mBackColor;
+    std::shared_ptr<Material> mUpColor;
+    std::shared_ptr<Material> mBottomColor;
+    std::shared_ptr<Material> mLeftColor;
+    std::shared_ptr<Material> mRightColor;
+    std::shared_ptr<Material> mForeColor;
+    std::shared_ptr<Material> mBackColor;
 
     float mGood;
     float mFallSpeed;

@@ -23,6 +23,7 @@ class GameObject;
 class IMeshLoader;
 class MeshManager;
 class Shader;
+struct Material;
 
 class MeshComponent : public Component, public std::enable_shared_from_this<MeshComponent> {
     enum class State {
@@ -41,6 +42,10 @@ public:
     virtual void setMesh(const std::string& fileName);
     virtual void setShader();
     virtual void draw();
+    //マテリアル数の取得
+    size_t getNumMaterial() const;
+    //マテリアルの取得
+    std::shared_ptr<Material> getMaterial(unsigned index) const;
     //中心座標の取得
     const Vector3& getCenter() const;
     //半径の取得

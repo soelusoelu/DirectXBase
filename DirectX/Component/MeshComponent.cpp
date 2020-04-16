@@ -143,12 +143,20 @@ void MeshComponent::draw() {
     }
 }
 
+size_t MeshComponent::getNumMaterial() const {
+    return mMesh->getNumMaterial();
+}
+
+std::shared_ptr<Material> MeshComponent::getMaterial(unsigned index) const {
+    return mMesh->getMaterial(index);
+}
+
 const Vector3& MeshComponent::getCenter() const {
-    return mMesh->getCenter();
+    return mCenter;
 }
 
 float MeshComponent::getRadius() const {
-    return mMesh->getRadius();
+    return mRadius;
 }
 
 void MeshComponent::destroy() {

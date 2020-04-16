@@ -7,13 +7,12 @@
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
+#include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
-    mMeshComp(nullptr),
-    mSurface(Surface::BOTTOM),
     mState(State::FRY),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
@@ -21,12 +20,12 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mInitColor(Vector3::zero),
     mFryedColor(Vector3::zero),
     mBurntColor(Vector3::zero),
-    mUpColor(ColorPalette::white),
-    mBottomColor(ColorPalette::white),
-    mLeftColor(ColorPalette::white),
-    mRightColor(ColorPalette::white),
-    mForeColor(ColorPalette::white),
-    mBackColor(ColorPalette::white),
+    mUpColor(nullptr),
+    mBottomColor(nullptr),
+    mLeftColor(nullptr),
+    mRightColor(nullptr),
+    mForeColor(nullptr),
+    mBackColor(nullptr),
     mGood(0.f),
     mFallSpeed(60.f) {
     for (size_t i = 0; i < getNumSurface(); i++) {
@@ -37,9 +36,15 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
 FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
-    mMeshComp = owner()->componentManager()->getComponent<ChickenMeshComponent>();
-    if (mMeshComp) {
-        mMeshComp->setColor(mInitColor);
+    auto mesh = owner()->componentManager()->getComponent<ChickenMeshComponent>();
+    if (mesh) {
+        Debug::log(StringUtil::intToString(mesh->getNumMaterial()));
+        mRightColor = mesh->getMaterial(1); //右
+        mForeColor = mesh->getMaterial(2); //手前
+        mLeftColor = mesh->getMaterial(3); //左
+        mUpColor = mesh->getMaterial(4); //上
+        mBottomColor = mesh->getMaterial(5); //下
+        mBackColor = mesh->getMaterial(6); //奥
     }
 
     initialize();
@@ -110,26 +115,18 @@ void FriedChickenComponent::initialize() {
     for (size_t i = 0; i < getNumSurface(); i++) {
         mFryTimer[i]->reset();
     }
-    if (mMeshComp) {
-        mMeshComp->setUpColor(mInitColor);
-        mMeshComp->setBottomColor(mInitColor);
-        mMeshComp->setLeftColor(mInitColor);
-        mMeshComp->setRightColor(mInitColor);
-        mMeshComp->setForeColor(mInitColor);
-        mMeshComp->setBackColor(mInitColor);
-    }
+    mUpColor->diffuse = Vector4(mInitColor, 1.f);
+    mBottomColor->diffuse = Vector4(mInitColor, 1.f);
+    mLeftColor->diffuse = Vector4(mInitColor, 1.f);
+    mRightColor->diffuse = Vector4(mInitColor, 1.f);
+    mForeColor->diffuse = Vector4(mInitColor, 1.f);
+    mBackColor->diffuse = Vector4(mInitColor, 1.f);
 
     //空中からの落下状態に設定
     mState = State::FALL;
 }
 
 void FriedChickenComponent::changeSurface() {
-    auto color = mUpColor;
-    mUpColor = mBottomColor;
-    mBottomColor = color;
-    color = mForeColor;
-    mForeColor = mBackColor;
-    mBackColor = color;
 }
 
 void FriedChickenComponent::finishFryed() {
@@ -169,13 +166,8 @@ void FriedChickenComponent::frying() {
 }
 
 void FriedChickenComponent::changeFryedColor() {
-    //auto upColor = getChangeColor(upSurface);
-    auto bottomColor = getChangeColor(mSurface);
-
-    if (mMeshComp) {
-        //mMeshComp->setUpColor(upColor);
-        mMeshComp->setBottomColor(bottomColor);
-    }
+    auto color = getChangeColor(Surface::BOTTOM);
+    mForeColor->diffuse = Vector4(color, 1.f);
 }
 
 Vector3 FriedChickenComponent::getChangeColor(Surface surface) {
