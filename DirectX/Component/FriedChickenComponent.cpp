@@ -7,6 +7,9 @@
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
+#include "../Input/Input.h"
+#include "../Input/JoyPad.h"
+#include "../Input/Keyboard.h"
 #include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
@@ -22,6 +25,7 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mBurntColor(Vector3::zero),
     mCurrentBottomSurface(Surface::BOTTOM),
     mGood(0.f),
+    mRollSpeed(60.f),
     mFallSpeed(1.f) {
     for (size_t i = 0; i < getNumSurface(); i++) {
         mFryTimer.emplace_back(std::make_unique<Time>(10.f));
@@ -70,6 +74,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector3(inObj, "initColor", &mInitColor);
     JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
     JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
+    JsonHelper::getFloat(inObj, "rollSpeed", &mRollSpeed);
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
@@ -83,6 +88,28 @@ void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
     info.first = "RandomRangeScale";
     info.second = InspectHelper::vector2ToString(mRandomRangeScale);
+    inspect->emplace_back(info);
+    info.first = "RollSpeed";
+    info.second = StringUtil::floatToString(mRollSpeed);
+    inspect->emplace_back(info);
+    info.first = "FallSpeed";
+    info.second = StringUtil::floatToString(mFallSpeed);
+    inspect->emplace_back(info);
+
+    info.first = "Surface";
+    if (mCurrentBottomSurface == Surface::UP) {
+        info.second = "UP";
+    } else if (mCurrentBottomSurface == Surface::BOTTOM) {
+        info.second = "BOTTOM";
+    } else if (mCurrentBottomSurface == Surface::LEFT) {
+        info.second = "LEFT";
+    } else if (mCurrentBottomSurface == Surface::RIGHT) {
+        info.second = "RIGHT";
+    } else if (mCurrentBottomSurface == Surface::FORE) {
+        info.second = "FORE";
+    } else if (mCurrentBottomSurface == Surface::BACK) {
+        info.second = "BACK";
+    }
     inspect->emplace_back(info);
 }
 
@@ -133,6 +160,17 @@ float FriedChickenComponent::getFryRate(int surfaceIndex) const {
     return mFryTimer[surfaceIndex]->rate();
 }
 
+void FriedChickenComponent::roll() {
+    if (!Input::keyboard()->getKey(KeyCode::LeftShift)) {
+        return;
+    }
+    auto h = Input::keyboard()->horizontal();
+    auto v = Input::keyboard()->vertical();
+    if (!Math::nearZero(h) || !Math::nearZero(v)) {
+        owner()->transform()->rotate(Vector3(v, 0.f, -h) * Time::deltaTime * mRollSpeed);
+    }
+}
+
 bool FriedChickenComponent::isFrying() const {
     return mState == State::FRY;
 }
@@ -159,9 +197,9 @@ void FriedChickenComponent::bottomSurface() {
     } else if (dir.y > SIN_COS_45) {
         mCurrentBottomSurface = Surface::UP;
     } else if (dir.x <= -SIN_COS_45) {
-        mCurrentBottomSurface = Surface::LEFT;
-    } else if (dir.x > SIN_COS_45) {
         mCurrentBottomSurface = Surface::RIGHT;
+    } else if (dir.x > SIN_COS_45) {
+        mCurrentBottomSurface = Surface::LEFT;
     } else if (dir.z <= SIN_COS_45) {
         mCurrentBottomSurface = Surface::FORE;
     } else if (dir.z > SIN_COS_45) {

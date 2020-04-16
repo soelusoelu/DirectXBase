@@ -23,9 +23,9 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     //ターゲットから一番近い唐揚げを検索
-    GameObjectPtr findNearestChicken(const GameObjectPtr target) const;
+    ChickenPtr findNearestChicken(const GameObjectPtr& target) const;
     //excludeを除くターゲットから一番近い唐揚げを検索
-    GameObjectPtr findNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude) const;
+    ChickenPtr findNearestChicken(const GameObjectPtr& target, const ChickenPtr& exclude) const;
     //揚げてる最中の唐揚げをすべて取得
     GameObjectPtrList getFriedChickens() const;
 

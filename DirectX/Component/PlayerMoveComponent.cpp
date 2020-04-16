@@ -103,6 +103,10 @@ void PlayerMoveComponent::jump() {
 }
 
 void PlayerMoveComponent::walk() {
+    if (Input::keyboard()->getKey(KeyCode::LeftShift)) {
+        return;
+    }
+
     auto left = Input::joyPad()->leftStick();
     if (!Math::nearZero(left.x) || !Math::nearZero(left.y)) {
         owner()->transform()->translate(Vector3(left.x, 0.f, left.y) * Time::deltaTime * mMoveSpeed);

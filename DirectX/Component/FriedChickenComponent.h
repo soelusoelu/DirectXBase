@@ -48,6 +48,8 @@ public:
     int getNumSurface() const;
     //揚げ終わるまでの時間比率の取得
     float getFryRate(int surfaceIndex) const;
+    //その場で唐揚げを回転させる
+    void roll();
 
     //揚げている途中か
     bool isFrying() const;
@@ -88,5 +90,6 @@ private:
     Surface mCurrentBottomSurface;
 
     float mGood;
+    float mRollSpeed;
     float mFallSpeed;
 };
