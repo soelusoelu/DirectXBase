@@ -26,6 +26,7 @@ public:
 private:
     void setPlayerPosOnTheChicken(const FriedChickenComponent& chicken);
     void setChickenPosUnderThePlayer();
+    void rollChicken();
     void collection();
 
 private:

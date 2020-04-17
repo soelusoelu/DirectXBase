@@ -7,9 +7,6 @@
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Input/Input.h"
-#include "../Input/JoyPad.h"
-#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
@@ -116,15 +113,11 @@ void FriedChickenComponent::eaten() {
     mState = State::EATEN;
 }
 
-void FriedChickenComponent::roll() {
-    if (!Input::keyboard()->getKey(KeyCode::LeftShift)) {
-        return;
-    }
-    auto h = Input::keyboard()->horizontal();
-    auto v = Input::keyboard()->vertical();
-    if (!Math::nearZero(h) || !Math::nearZero(v)) {
-        owner()->transform()->rotate(Vector3(v, 0.f, -h) * Time::deltaTime * mRollSpeed);
-    }
+void FriedChickenComponent::roll(const Vector3& direction) {
+    auto dir = direction;
+    dir.x = direction.z;
+    dir.z = -direction.x;
+    owner()->transform()->rotate(dir * Time::deltaTime * mRollSpeed);
 }
 
 bool FriedChickenComponent::isFrying() const {

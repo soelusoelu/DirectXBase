@@ -15,6 +15,7 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     mState(State::WALK),
     mJumpStartPosition(Vector3::zero),
     mJumpTargetPosition(Vector3::zero),
+    mMoveDir(Vector3::zero),
     mMoveSpeed(1.f),
     mJumpMoveRate(0.f),
     mJumpStart(false),
@@ -95,6 +96,10 @@ void PlayerMoveComponent::setTargetPosition(const Vector3 & pos) {
     mJumpTargetPosition = pos;
 }
 
+const Vector3& PlayerMoveComponent::getMoveDirection() const {
+    return mMoveDir;
+}
+
 void PlayerMoveComponent::jump() {
     if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::joyPad()->getJoyDown(JoyCode::A)) {
         jumpStartInitialize();
@@ -103,21 +108,32 @@ void PlayerMoveComponent::jump() {
 }
 
 void PlayerMoveComponent::walk() {
+    mMoveDir = Vector3::zero;
+
+    auto left = Input::joyPad()->leftStick();
+    if (!Math::nearZero(left.x)) {
+        mMoveDir.x = left.x;
+    }
+    if (!Math::nearZero(left.y)) {
+        mMoveDir.z = left.y;
+    }
+
+#ifdef _DEBUG
+    auto h = Input::keyboard()->horizontal();
+    auto v = Input::keyboard()->vertical();
+    if (!Math::nearZero(h)) {
+        mMoveDir.x = h;
+    }
+    if (!Math::nearZero(v)) {
+        mMoveDir.z = v;
+    }
+#endif // _DEBUG
+
     if (Input::keyboard()->getKey(KeyCode::LeftShift)) {
         return;
     }
 
-    auto left = Input::joyPad()->leftStick();
-    if (!Math::nearZero(left.x) || !Math::nearZero(left.y)) {
-        owner()->transform()->translate(Vector3(left.x, 0.f, left.y) * Time::deltaTime * mMoveSpeed);
-        return;
-    }
-
-    auto h = Input::keyboard()->horizontal();
-    auto v = Input::keyboard()->vertical();
-    if (!Math::nearZero(h) || !Math::nearZero(v)) {
-        owner()->transform()->translate(Vector3(h, 0.f, v) * Time::deltaTime * mMoveSpeed);
-    }
+    owner()->transform()->translate(mMoveDir * Time::deltaTime * mMoveSpeed);
 }
 
 void PlayerMoveComponent::jumpMove() {

@@ -29,6 +29,8 @@ public:
     bool isJumpEnd() const;
     //ターゲットの位置をセット
     void setTargetPosition(const Vector3& pos);
+    //移動する方向を取得
+    const Vector3& getMoveDirection() const;
 
 private:
     //ジャンプするか
@@ -46,6 +48,7 @@ private:
     State mState;
     Vector3 mJumpStartPosition;
     Vector3 mJumpTargetPosition;
+    Vector3 mMoveDir;
     float mMoveSpeed;
     float mJumpMoveRate;
     bool mJumpStart;

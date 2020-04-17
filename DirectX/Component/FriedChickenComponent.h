@@ -30,7 +30,7 @@ public:
     //食われる
     void eaten();
     //その場で唐揚げを回転させる
-    void roll();
+    void roll(const Vector3& direction);
 
     //揚げている途中か
     bool isFrying() const;

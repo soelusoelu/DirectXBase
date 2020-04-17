@@ -40,7 +40,7 @@ void PlayerChickenConnection::update() {
         setPlayerPosOnTheChicken(*mChicken);
         setChickenPosUnderThePlayer();
 
-        mChicken->roll();
+        rollChicken();
         collection();
     }
 }
@@ -81,6 +81,14 @@ void PlayerChickenConnection::setChickenPosUnderThePlayer() {
     auto pos = mPlayer->owner()->transform()->getPosition();
     pos.y = 0;
     mChicken->owner()->transform()->setPosition(pos);
+}
+
+void PlayerChickenConnection::rollChicken() {
+    const auto& dir = mPlayer->getMoveDirection();
+    if (Math::nearZero(dir.x) && Math::nearZero(dir.z)) {
+        return;
+    }
+    mChicken->roll(dir);
 }
 
 void PlayerChickenConnection::collection() {
