@@ -37,6 +37,10 @@ void ChickenFry::start() {
     initialize();
 }
 
+void ChickenFry::onUpdateWorldTransform() {
+    bottomSurface();
+}
+
 void ChickenFry::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 
@@ -87,7 +91,6 @@ void ChickenFry::initialize() {
 }
 
 void ChickenFry::update() {
-    bottomSurface();
     frying();
     changeFryedColor();
 }

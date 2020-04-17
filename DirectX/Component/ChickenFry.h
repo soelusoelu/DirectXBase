@@ -27,6 +27,7 @@ public:
     ChickenFry(std::shared_ptr<GameObject> owner);
     ~ChickenFry();
     virtual void start() override;
+    virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     //初期化
