@@ -6,6 +6,7 @@
 
 class FriedChickenComponent;
 class GameObject;
+class Score;
 class ScoreEvaluation;
 
 class FriedChickenManager : public Component {
@@ -38,6 +39,7 @@ private:
     void replenish();
 
 private:
+    std::shared_ptr<Score> mScore;
     std::shared_ptr<ScoreEvaluation> mScoreEvaluation;
     //揚げてる最中の唐揚げ
     ChickenPtrList mChickens;

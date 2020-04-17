@@ -1,16 +1,19 @@
 ﻿#include "FriedChickenManager.h"
+#include "ChickenFry.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
+#include "Score.h"
 #include "ScoreEvaluation.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
+#include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
-#include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
+    mScore(nullptr),
     mScoreEvaluation(nullptr),
     mMaxDrawNum(10) {
 }
@@ -26,6 +29,8 @@ void FriedChickenManager::awake() {
 }
 
 void FriedChickenManager::start() {
+    auto score = owner()->getGameObjectManager()->find("Score");
+    mScore = score->componentManager()->getComponent<Score>();
     mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
 
     for (auto&& chicken : mChickens) {
@@ -52,11 +57,11 @@ void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObjectPtr& target) const {
+std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObjectPtr & target) const {
     return findNearestChicken(target, nullptr);
 }
 
-std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObjectPtr& target, const ChickenPtr& exclude) const {
+std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObjectPtr & target, const ChickenPtr & exclude) const {
     float nearest = Math::infinity;
     ChickenPtr chicken = nullptr;
     for (const auto& c : mChickens) {
@@ -95,7 +100,15 @@ void FriedChickenManager::addScore() {
         if (!chicken->isFinished()) {
             continue;
         }
-        mScoreEvaluation->evaluateScore(*chicken);
+        auto fry = chicken->owner()->componentManager()->getComponent<ChickenFry>();
+        int score = 0;
+        if (!fry) {
+            return;
+        }
+        score = mScoreEvaluation->evaluateScore(*fry);
+        if (mScore) {
+            mScore->addScore(score);
+        }
     }
 }
 

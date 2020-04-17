@@ -1,7 +1,7 @@
 ﻿#include "FriedChickenComponent.h"
+#include "ChickenFry.h"
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
@@ -10,39 +10,25 @@
 #include "../Input/Input.h"
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
-#include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
+    mFry(nullptr),
     mState(State::FRY),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
-    mInitColor(Vector3::zero),
-    mFryedColor(Vector3::zero),
-    mBurntColor(Vector3::zero),
-    mCurrentBottomSurface(Surface::BOTTOM),
-    mGood(0.f),
+    mGoodLevel(0.f),
     mRollSpeed(60.f),
     mFallSpeed(1.f) {
-    for (size_t i = 0; i < getNumSurface(); i++) {
-        mFryTimer.emplace_back(std::make_unique<Time>(10.f));
-    }
 }
 
 FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
-    auto mesh = owner()->componentManager()->getComponent<ChickenMeshComponent>();
-    if (mesh) {
-        for (size_t i = 0; i < getNumSurface(); i++) {
-            //Surfaceと合わせてある
-            //最初のマテリアルは使われてないからプラス1
-            mMaterials.emplace_back(mesh->getMaterial(i + 1));
-        }
-    }
+    mFry = owner()->componentManager()->getComponent<ChickenFry>();
 
     initialize();
     //y軸を0にして最初から揚げ状態でスタート
@@ -55,10 +41,10 @@ void FriedChickenComponent::start() {
 
 void FriedChickenComponent::update() {
     if (mState == State::FRY) {
-        bottomSurface();
-        frying();
-        changeFryedColor();
-        successFrying();
+        if (mFry) {
+            mFry->update();
+            friedChangeState();
+        }
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
@@ -71,9 +57,6 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector2(inObj, "randomRangePositionX", &mRandomRangePositionX);
     JsonHelper::getVector2(inObj, "randomRangePositionZ", &mRandomRangePositionZ);
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
-    JsonHelper::getVector3(inObj, "initColor", &mInitColor);
-    JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
-    JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
     JsonHelper::getFloat(inObj, "rollSpeed", &mRollSpeed);
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
@@ -95,26 +78,10 @@ void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "FallSpeed";
     info.second = StringUtil::floatToString(mFallSpeed);
     inspect->emplace_back(info);
-
-    info.first = "Surface";
-    if (mCurrentBottomSurface == Surface::UP) {
-        info.second = "UP";
-    } else if (mCurrentBottomSurface == Surface::BOTTOM) {
-        info.second = "BOTTOM";
-    } else if (mCurrentBottomSurface == Surface::LEFT) {
-        info.second = "LEFT";
-    } else if (mCurrentBottomSurface == Surface::RIGHT) {
-        info.second = "RIGHT";
-    } else if (mCurrentBottomSurface == Surface::FORE) {
-        info.second = "FORE";
-    } else if (mCurrentBottomSurface == Surface::BACK) {
-        info.second = "BACK";
-    }
-    inspect->emplace_back(info);
 }
 
 void FriedChickenComponent::firstSet(float good) {
-    mGood = good;
+    mGoodLevel = good;
 }
 
 void FriedChickenComponent::initialize() {
@@ -133,11 +100,8 @@ void FriedChickenComponent::initialize() {
     t->setScale(scale);
 
     //揚げる面の初期化
-    for (auto&& timer : mFryTimer) {
-        timer->reset();
-    }
-    for (auto&& mat : mMaterials) {
-        mat->diffuse = mInitColor;
+    if (mFry) {
+        mFry->initialize();
     }
 
     //空中からの落下状態に設定
@@ -150,14 +114,6 @@ void FriedChickenComponent::finishFryed() {
 
 void FriedChickenComponent::eaten() {
     mState = State::EATEN;
-}
-
-int FriedChickenComponent::getNumSurface() const {
-    return static_cast<int>(Surface::NUM_SURFACE);
-}
-
-float FriedChickenComponent::getFryRate(int surfaceIndex) const {
-    return mFryTimer[surfaceIndex]->rate();
 }
 
 void FriedChickenComponent::roll() {
@@ -187,59 +143,10 @@ bool FriedChickenComponent::isEaten() const {
     return mState == State::EATEN;
 }
 
-void FriedChickenComponent::bottomSurface() {
-    auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
-    auto x = Math::cos(dir.x);
-    auto y = Math::sin(dir.y);
-    static const float SIN_COS_45 = Math::sin(45.f);
-    if (dir.y <= -SIN_COS_45) {
-        mCurrentBottomSurface = Surface::BOTTOM;
-    } else if (dir.y > SIN_COS_45) {
-        mCurrentBottomSurface = Surface::UP;
-    } else if (dir.x <= -SIN_COS_45) {
-        mCurrentBottomSurface = Surface::RIGHT;
-    } else if (dir.x > SIN_COS_45) {
-        mCurrentBottomSurface = Surface::LEFT;
-    } else if (dir.z <= SIN_COS_45) {
-        mCurrentBottomSurface = Surface::FORE;
-    } else if (dir.z > SIN_COS_45) {
-        mCurrentBottomSurface = Surface::BACK;
-    } else {
-        Debug::logError("No bottom Surface!");
+void FriedChickenComponent::friedChangeState() {
+    if (mFry->isFriedAllSurfaces(mGoodLevel)) {
+        mState = State::WAITING_COLLECTION;
     }
-}
-
-void FriedChickenComponent::frying() {
-    mFryTimer[static_cast<int>(mCurrentBottomSurface)]->update();
-}
-
-void FriedChickenComponent::changeFryedColor() {
-    auto rate = mFryTimer[static_cast<int>(mCurrentBottomSurface)]->rate();
-    auto a = mInitColor;
-    auto b = mFryedColor;
-    if (rate > 1.f) {
-        rate -= 1.f;
-        a = mFryedColor;
-        b = mBurntColor;
-    }
-    if (rate > 1.f) {
-        rate = 1.f;
-    }
-    auto color = Vector3::lerp(a, b, rate);
-    auto mat = getMaterial(mCurrentBottomSurface);
-    mat->diffuse = color;
-}
-
-void FriedChickenComponent::successFrying() {
-    bool result = true;
-    for (size_t i = 0; i < getNumSurface(); i++) {
-        if (mFryTimer[i]->rate() < mGood) {
-            result = false;
-            break;
-        }
-    }
-
-    mState = (result) ? State::WAITING_COLLECTION : State::FRY;
 }
 
 void FriedChickenComponent::fall() {
@@ -254,9 +161,4 @@ void FriedChickenComponent::soakedInOil() {
         t->setPosition(pos);
         mState = State::FRY;
     }
-}
-
-std::shared_ptr<Material> FriedChickenComponent::getMaterial(Surface surface) const {
-    int index = static_cast<int>(surface);
-    return mMaterials[index];
 }

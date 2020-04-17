@@ -109,6 +109,7 @@
     <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\Oil.cpp" />
+    <ClCompile Include="Component\ChickenFry.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -225,5 +226,6 @@
     <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\Oil.h" />
+    <ClInclude Include="Component\ChickenFry.h" />
   </ItemGroup>
 </Project>

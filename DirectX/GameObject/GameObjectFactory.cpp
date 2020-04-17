@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "../Component/Bird.h"
 #include "../Component/Camera.h"
+#include "../Component/ChickenFry.h"
 #include "../Component/ChickenMeshComponent.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
@@ -32,6 +33,7 @@ GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
     ADD_COMPONENT(Bird);
     ADD_COMPONENT(Camera);
+    ADD_COMPONENT(ChickenFry);
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(FriedChickenComponent);

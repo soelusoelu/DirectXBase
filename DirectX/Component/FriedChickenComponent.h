@@ -1,27 +1,12 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "../Device/Time.h"
 #include "../Math/Math.h"
-#include <rapidjson/document.h>
 #include <memory>
-#include <vector>
 
-class GameObject;
-struct Material;
+class ChickenFry;
 
 class FriedChickenComponent : public Component {
-    enum class Surface {
-        RIGHT,
-        FORE,
-        LEFT,
-        UP,
-        BOTTOM,
-        BACK,
-
-        NUM_SURFACE
-    };
-
     enum class State {
         FRY,
         FALL,
@@ -44,10 +29,6 @@ public:
     void finishFryed();
     //食われる
     void eaten();
-    //面の数の取得
-    int getNumSurface() const;
-    //揚げ終わるまでの時間比率の取得
-    float getFryRate(int surfaceIndex) const;
     //その場で唐揚げを回転させる
     void roll();
 
@@ -61,35 +42,20 @@ public:
     bool isEaten() const;
 
 private:
-    //下の面を決定する
-    void bottomSurface();
-    //下の面を揚げる
-    void frying();
-    //揚げ具合によって色を変える
-    void changeFryedColor();
-    //両面揚げれたか
-    void successFrying();
+    //揚げ終わったら状態遷移させる
+    void friedChangeState();
     //空中から落下させる
     void fall();
     //油に浸かったら揚げ始める
     void soakedInOil();
-    //指定した面の取得
-    std::shared_ptr<Material> getMaterial(Surface surface) const;
 
 private:
+    std::shared_ptr<ChickenFry> mFry;
     State mState;
-    std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
     Vector2 mRandomRangeScale;
-    Vector3 mInitColor;
-    Vector3 mFryedColor;
-    Vector3 mBurntColor;
-
-    std::vector<std::shared_ptr<Material>> mMaterials;
-    Surface mCurrentBottomSurface;
-
-    float mGood;
+    float mGoodLevel;
     float mRollSpeed;
     float mFallSpeed;
 };

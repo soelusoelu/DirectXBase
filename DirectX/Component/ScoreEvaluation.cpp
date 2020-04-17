@@ -1,16 +1,11 @@
 ﻿#include "ScoreEvaluation.h"
-#include "ComponentManager.h"
-#include "FriedChickenComponent.h"
-#include "Score.h"
+#include "ChickenFry.h"
 #include "../DebugLayer/Debug.h"
-#include "../GameObject/GameObject.h"
-#include "../GameObject/GameObjectManager.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 ScoreEvaluation::ScoreEvaluation(std::shared_ptr<GameObject> owner) :
     Component(owner, "ScoreEvaluation"),
-    mScore(nullptr),
     mLittleBad(0.f),
     mUsually(0.f),
     mGood(0.f),
@@ -21,11 +16,6 @@ ScoreEvaluation::ScoreEvaluation(std::shared_ptr<GameObject> owner) :
 }
 
 ScoreEvaluation::~ScoreEvaluation() = default;
-
-void ScoreEvaluation::start() {
-    auto score = owner()->getGameObjectManager()->find("Score");
-    mScore = score->componentManager()->getComponent<Score>();
-}
 
 void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
@@ -64,11 +54,7 @@ void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-void ScoreEvaluation::evaluateScore(const FriedChickenComponent& chicken) {
-    if (!mScore) {
-        return;
-    }
-
+int ScoreEvaluation::evaluateScore(const ChickenFry& chicken) const {
     int score = 0;
 
     for (size_t i = 0; i < chicken.getNumSurface(); i++) {
@@ -88,9 +74,8 @@ void ScoreEvaluation::evaluateScore(const FriedChickenComponent& chicken) {
         }
     }
 
-    if (score != 0) {
-        mScore->addScore(score);
-    }
+    Debug::log(StringUtil::intToString(score));
+    return score;
 }
 
 float ScoreEvaluation::getGood() const {
