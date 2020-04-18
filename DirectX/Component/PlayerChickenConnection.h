@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 class GameObject;
-class PlayerMoveComponent;
+class PlayerComponent;
 class FriedChickenComponent;
 enum class KeyCode;
 enum class JoyCode;
@@ -21,7 +21,7 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    void setPlayer(const GameObjectPtr& player);
+    void setPlayer(const GameObject& player);
     void setChicken(const ChickenPtr& chicken);
     ChickenPtr getChicken() const;
     void playerJumpTarget(const ChickenPtr& chicken);
@@ -29,11 +29,12 @@ public:
 private:
     void setPlayerPosOnTheChicken(const FriedChickenComponent& chicken);
     void setChickenPosUnderThePlayer();
+    void trackingJumpTarget();
     void rollChicken();
     void collection();
 
 private:
-    std::shared_ptr<PlayerMoveComponent> mPlayer;
+    std::shared_ptr<PlayerComponent> mPlayer;
     //プレイヤーの足元の唐揚げ
     ChickenPtr mChicken;
     //プレイヤーのジャンプターゲット

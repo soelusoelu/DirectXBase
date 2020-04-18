@@ -38,7 +38,7 @@ void GamePlay::start() {
     auto c = mFriedChickenManager->findNearestChicken(p);
     auto pcc = GameObjectCreater::create("PlayerChickenConnection");
     mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
-    mPCConnection->setPlayer(p);
+    mPCConnection->setPlayer(*p);
     mPCConnection->setChicken(c);
     auto bird = GameObjectCreater::create("Bird");
     auto score = GameObjectCreater::createUI("Score");

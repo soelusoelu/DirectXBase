@@ -14,7 +14,9 @@
 #include "../Component/MeshComponent.h"
 #include "../Component/Oil.h"
 #include "../Component/PlayerChickenConnection.h"
-#include "../Component/PlayerMoveComponent.h"
+#include "../Component/PlayerComponent.h"
+#include "../Component/PlayerJump.h"
+#include "../Component/PlayerWalk.h"
 #include "../Component/PointLightComponent.h"
 #include "../Component/Result.h"
 #include "../Component/Score.h"
@@ -43,7 +45,9 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(MeshComponent);
     ADD_COMPONENT(Oil);
     ADD_COMPONENT(PlayerChickenConnection);
-    ADD_COMPONENT(PlayerMoveComponent);
+    ADD_COMPONENT(PlayerComponent);
+    ADD_COMPONENT(PlayerJump);
+    ADD_COMPONENT(PlayerWalk);
     ADD_COMPONENT(PointLightComponent);
     ADD_COMPONENT(Result);
     ADD_COMPONENT(Score);

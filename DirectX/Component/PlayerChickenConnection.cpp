@@ -1,8 +1,10 @@
 ﻿#include "PlayerChickenConnection.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
+#include "IPlayerJump.h"
+#include "IPlayerWalk.h"
 #include "MeshComponent.h"
-#include "PlayerMoveComponent.h"
+#include "PlayerComponent.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
@@ -33,10 +35,14 @@ void PlayerChickenConnection::start() {
 }
 
 void PlayerChickenConnection::update() {
-    if (mPlayer->isJumpStart()) {
+    auto jump = mPlayer->getJumpState();
+    if (jump->isJumpStart()) {
         mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
     }
-    if (mPlayer->isJumpEnd()) {
+    if (jump->isJumping()) {
+        trackingJumpTarget();
+    }
+    if (jump->isJumpEnd()) {
         mChicken = mJumpTarget;
     }
     if (mPlayer->isWalking()) {
@@ -60,8 +66,8 @@ void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void PlayerChickenConnection::setPlayer(const GameObjectPtr & player) {
-    mPlayer = player->componentManager()->getComponent<PlayerMoveComponent>();
+void PlayerChickenConnection::setPlayer(const GameObject& player) {
+    mPlayer = player.componentManager()->getComponent<PlayerComponent>();
 }
 
 void PlayerChickenConnection::setChicken(const ChickenPtr & chicken) {
@@ -79,9 +85,6 @@ void PlayerChickenConnection::playerJumpTarget(const ChickenPtr & chicken) {
 
     if (mPlayer->isWalking()) {
         mJumpTarget = chicken;
-        auto pos = mJumpTarget->owner()->transform()->getPosition();
-        pos.y += mJumpTarget->owner()->transform()->getScale().y * mChickenRadius;
-        mPlayer->setTargetPosition(pos);
     }
 }
 
@@ -98,8 +101,17 @@ void PlayerChickenConnection::setChickenPosUnderThePlayer() {
     mChicken->owner()->transform()->setPosition(pos);
 }
 
+void PlayerChickenConnection::trackingJumpTarget() {
+    if (!mJumpTarget) {
+        return;
+    }
+    auto pos = mJumpTarget->owner()->transform()->getPosition();
+    pos.y += mJumpTarget->owner()->transform()->getScale().y * mChickenRadius;
+    mPlayer->getJumpState()->setTargetPosition(pos);
+}
+
 void PlayerChickenConnection::rollChicken() {
-    const auto& dir = mPlayer->getMoveDirection();
+    const auto& dir = mPlayer->getWalkState()->getMoveDirection();
     if (Math::nearZero(dir.x) && Math::nearZero(dir.z)) {
         return;
     }

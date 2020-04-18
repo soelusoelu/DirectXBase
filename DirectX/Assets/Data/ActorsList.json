@@ -51,13 +51,24 @@
           }
         },
         {
-          "type": "PlayerMoveComponent",
+          "type": "PlayerComponent",
+          "properties": {
+          }
+        },
+        {
+          "type": "PlayerWalk",
           "properties": {
             "moveSpeed": 5.0,
-            "jumpKey": "Space",
-            "jumpPad": "A",
             "rollKey": "LeftShift",
             "rollPad": "B"
+          }
+        },
+        {
+          "type": "PlayerJump",
+          "properties": {
+            "jumpKey": "Space",
+            "jumpPad": "A",
+            "speed": 1.0
           }
         }
       ]

@@ -155,6 +155,8 @@
     <ClCompile Include="Component\ChickenFry.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
+    <ClCompile Include="Component\PlayerComponent.cpp" />
+    <ClCompile Include="Component\PlayerJump.cpp" />
     <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\TimeLimit.cpp" />
@@ -185,6 +187,7 @@
     <ClCompile Include="Event\Subject.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
     <ClCompile Include="Component\Oil.cpp" />
+    <ClCompile Include="Component\PlayerWalk.cpp" />
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
@@ -211,7 +214,6 @@
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
     <ClCompile Include="GameObject\Transform2D.cpp" />
-    <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Component\PointLightComponent.cpp" />
     <ClCompile Include="Device\DrawString.cpp" />
     <ClCompile Include="System\Sampler.cpp" />
@@ -257,6 +259,10 @@
     <ClInclude Include="Component\ChickenFry.h" />
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\ChickenMeshComponent.h" />
+    <ClInclude Include="Component\IPlayerJump.h" />
+    <ClInclude Include="Component\IPlayerWalk.h" />
+    <ClInclude Include="Component\PlayerComponent.h" />
+    <ClInclude Include="Component\PlayerJump.h" />
     <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\TimeLimit.h" />
@@ -290,6 +296,7 @@
     <ClInclude Include="Event\Subject.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
     <ClInclude Include="Component\Oil.h" />
+    <ClInclude Include="Component\PlayerWalk.h" />
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Utility\Directory.h" />
@@ -317,7 +324,6 @@
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
     <ClInclude Include="GameObject\Transform2D.h" />
-    <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Component\PointLightComponent.h" />
     <ClInclude Include="Device\DrawString.h" />
     <ClInclude Include="System\RenderTargetViewDesc.h" />

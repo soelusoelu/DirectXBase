@@ -18,7 +18,6 @@
     <ClCompile Include="Device\Random.cpp" />
     <ClCompile Include="Device\Renderer.cpp" />
     <ClCompile Include="Device\Time.cpp" />
-    <ClCompile Include="Component\PlayerMoveComponent.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
@@ -110,6 +109,9 @@
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\Oil.cpp" />
     <ClCompile Include="Component\ChickenFry.cpp" />
+    <ClCompile Include="Component\PlayerJump.cpp" />
+    <ClCompile Include="Component\PlayerComponent.cpp" />
+    <ClCompile Include="Component\PlayerWalk.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -120,7 +122,6 @@
     <ClInclude Include="Device\Random.h" />
     <ClInclude Include="Device\Renderer.h" />
     <ClInclude Include="Device\Time.h" />
-    <ClInclude Include="Component\PlayerMoveComponent.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />
@@ -227,5 +228,10 @@
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\Oil.h" />
     <ClInclude Include="Component\ChickenFry.h" />
+    <ClInclude Include="Component\PlayerJump.h" />
+    <ClInclude Include="Component\PlayerComponent.h" />
+    <ClInclude Include="Component\PlayerWalk.h" />
+    <ClInclude Include="Component\IPlayerJump.h" />
+    <ClInclude Include="Component\IPlayerWalk.h" />
   </ItemGroup>
 </Project>
