@@ -105,4 +105,34 @@ Vector2 JoyPad::rightStick() const {
     return temp;
 }
 
+void JoyPad::stringToJoyCode(const std::string& src, JoyCode* dst) {
+    auto joy = JoyCode::None;
+
+    if (src == "A") {
+        joy = JoyCode::A;
+    } else if (src == "B") {
+        joy = JoyCode::B;
+    } else if (src == "X") {
+        joy = JoyCode::X;
+    } else if (src == "Y") {
+        joy = JoyCode::Y;
+    } else if (src == "LeftButton") {
+        joy = JoyCode::LeftButton;
+    } else if (src == "RightButton") {
+        joy = JoyCode::RightButton;
+    } else if (src == "Select") {
+        joy = JoyCode::Select;
+    } else if (src == "Start") {
+        joy = JoyCode::Start;
+    } else if (src == "LeftStickButton") {
+        joy = JoyCode::LeftStickButton;
+    } else if (src == "RightStickButton") {
+        joy = JoyCode::RightStickButton;
+    }
+
+    if (joy != JoyCode::None) {
+        *dst = joy;
+    }
+}
+
 LPDIRECTINPUTDEVICE8 JoyPad::mPadDevice = nullptr;

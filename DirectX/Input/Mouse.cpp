@@ -75,3 +75,25 @@ bool Mouse::getMouseUp(MouseCode button) {
 const Vector2& Mouse::getMousePosition() {
     return mMousePosition;
 }
+
+void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {
+    auto key = MouseCode::None;
+
+    if (src == "LeftButton") {
+        key = MouseCode::LeftButton;
+    } else if (src == "RightButton") {
+        key = MouseCode::RightButton;
+    } else if (src == "CenterButton") {
+        key = MouseCode::CenterButton;
+    } else if (src == "SideButton1") {
+        key = MouseCode::SideButton1;
+    } else if (src == "SideButton2") {
+        key = MouseCode::SideButton2;
+    } else if (src == "SideButton3") {
+        key = MouseCode::SideButton3;
+    }
+
+    if (key != MouseCode::None) {
+        *dst = key;
+    }
+}

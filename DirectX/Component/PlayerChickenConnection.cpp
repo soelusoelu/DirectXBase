@@ -8,13 +8,16 @@
 #include "../Input/Input.h"
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
+#include "../Utility/LevelLoader.h"
 
 PlayerChickenConnection::PlayerChickenConnection(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerChickenConnection", 150),
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
-    mChickenRadius(0.f) {
+    mChickenRadius(0.f),
+    mCollectionKey(KeyCode::None),
+    mCollectionPad(JoyCode::None) {
 }
 
 PlayerChickenConnection::~PlayerChickenConnection() = default;
@@ -45,11 +48,23 @@ void PlayerChickenConnection::update() {
     }
 }
 
-void PlayerChickenConnection::setPlayer(const GameObjectPtr& player) {
+void PlayerChickenConnection::loadProperties(const rapidjson::Value& inObj) {
+    Component::loadProperties(inObj);
+
+    std::string src;
+    if (JsonHelper::getString(inObj, "collectionKey", &src)) {
+        Keyboard::stringToKeyCode(src, &mCollectionKey);
+    }
+    if (JsonHelper::getString(inObj, "collectionPad", &src)) {
+        JoyPad::stringToJoyCode(src, &mCollectionPad);
+    }
+}
+
+void PlayerChickenConnection::setPlayer(const GameObjectPtr & player) {
     mPlayer = player->componentManager()->getComponent<PlayerMoveComponent>();
 }
 
-void PlayerChickenConnection::setChicken(const ChickenPtr& chicken) {
+void PlayerChickenConnection::setChicken(const ChickenPtr & chicken) {
     mChicken = chicken;
 }
 
@@ -57,7 +72,7 @@ std::shared_ptr<FriedChickenComponent> PlayerChickenConnection::getChicken() con
     return mChicken;
 }
 
-void PlayerChickenConnection::playerJumpTarget(const ChickenPtr& chicken) {
+void PlayerChickenConnection::playerJumpTarget(const ChickenPtr & chicken) {
     if (!chicken) {
         return;
     }
@@ -70,7 +85,7 @@ void PlayerChickenConnection::playerJumpTarget(const ChickenPtr& chicken) {
     }
 }
 
-void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenComponent& chicken) {
+void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenComponent & chicken) {
     auto pt = mPlayer->owner()->transform();
     auto pos = pt->getPosition();
     pos.y = chicken.owner()->transform()->getScale().y * mChickenRadius;
@@ -92,7 +107,7 @@ void PlayerChickenConnection::rollChicken() {
 }
 
 void PlayerChickenConnection::collection() {
-    if (Input::joyPad()->getJoyDown(JoyCode::X) || Input::keyboard()->getKeyDown(KeyCode::E)) {
+    if (Input::joyPad()->getJoyDown(mCollectionPad) || Input::keyboard()->getKeyDown(mCollectionKey)) {
         if (!mJumpTarget) {
             return;
         }

@@ -72,7 +72,7 @@ int Keyboard::vertical() {
 }
 
 void Keyboard::stringToKeyCode(const std::string& src, KeyCode* dst) {
-    KeyCode key = KeyCode::None;
+    auto key = KeyCode::None;
 
     if (src == "A") {
         key = KeyCode::A;
@@ -200,5 +200,7 @@ void Keyboard::stringToKeyCode(const std::string& src, KeyCode* dst) {
         key = KeyCode::F12;
     }
 
-    *dst = key;
+    if (key != KeyCode::None) {
+        *dst = key;
+    }
 }

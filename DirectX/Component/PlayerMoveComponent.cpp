@@ -18,6 +18,7 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     mJumpTargetPosition(Vector3::zero),
     mMoveDir(Vector3::zero),
     mJumpKey(KeyCode::None),
+    mJumpPad(JoyCode::None),
     mMoveSpeed(1.f),
     mJumpMoveRate(0.f),
     mJumpStart(false),
@@ -59,9 +60,12 @@ void PlayerMoveComponent::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
-    std::string key;
-    if (JsonHelper::getString(inObj, "jumpKey", &key)) {
-        Keyboard::stringToKeyCode(key, &mJumpKey);
+    std::string src;
+    if (JsonHelper::getString(inObj, "jumpKey", &src)) {
+        Keyboard::stringToKeyCode(src, &mJumpKey);
+    }
+    if (JsonHelper::getString(inObj, "jumpPad", &src)) {
+        JoyPad::stringToJoyCode(src, &mJumpPad);
     }
 }
 
@@ -108,7 +112,7 @@ const Vector3& PlayerMoveComponent::getMoveDirection() const {
 }
 
 void PlayerMoveComponent::jump() {
-    if (Input::keyboard()->getKeyDown(mJumpKey) || Input::joyPad()->getJoyDown(JoyCode::A)) {
+    if (Input::keyboard()->getKeyDown(mJumpKey) || Input::joyPad()->getJoyDown(mJumpPad)) {
         jumpStartInitialize();
         mState = State::JUMP;
     }

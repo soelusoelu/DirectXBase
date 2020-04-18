@@ -6,6 +6,7 @@
 
 class GameObject;
 enum class KeyCode;
+enum class JoyCode;
 
 class PlayerMoveComponent : public Component {
     enum class State {
@@ -51,6 +52,7 @@ private:
     Vector3 mJumpTargetPosition;
     Vector3 mMoveDir;
     KeyCode mJumpKey;
+    JoyCode mJumpPad;
     float mMoveSpeed;
     float mJumpMoveRate;
     bool mJumpStart;

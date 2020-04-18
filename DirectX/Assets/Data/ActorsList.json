@@ -54,7 +54,8 @@
           "type": "PlayerMoveComponent",
           "properties": {
             "moveSpeed": 5.0,
-            "jumpKey": "Space"
+            "jumpKey": "Space",
+            "jumpPad": "A"
           }
         }
       ]
@@ -135,6 +136,8 @@
         {
           "type": "PlayerChickenConnection",
           "properties": {
+            "collectionKey": "E",
+            "collectionPad": "X"
           }
         }
       ]

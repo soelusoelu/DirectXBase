@@ -3,6 +3,8 @@
 class GameObject;
 class PlayerMoveComponent;
 class FriedChickenComponent;
+enum class KeyCode;
+enum class JoyCode;
 
 #include "Component.h"
 #include "../Math/Math.h"
@@ -18,6 +20,7 @@ public:
     ~PlayerChickenConnection();
     virtual void start() override;
     virtual void update() override;
+    virtual void loadProperties(const rapidjson::Value& inObj) override;
     void setPlayer(const GameObjectPtr& player);
     void setChicken(const ChickenPtr& chicken);
     ChickenPtr getChicken() const;
@@ -38,4 +41,7 @@ private:
 
     //唐揚げのメッシュ半径
     float mChickenRadius;
+
+    KeyCode mCollectionKey;
+    JoyCode mCollectionPad;
 };
