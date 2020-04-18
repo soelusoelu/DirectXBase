@@ -53,6 +53,8 @@ private:
     Vector3 mMoveDir;
     KeyCode mJumpKey;
     JoyCode mJumpPad;
+    KeyCode mRollKey;
+    JoyCode mRollPad;
     float mMoveSpeed;
     float mJumpMoveRate;
     bool mJumpStart;

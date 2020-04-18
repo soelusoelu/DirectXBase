@@ -55,7 +55,9 @@
           "properties": {
             "moveSpeed": 5.0,
             "jumpKey": "Space",
-            "jumpPad": "A"
+            "jumpPad": "A",
+            "rollKey": "LeftShift",
+            "rollPad": "B"
           }
         }
       ]

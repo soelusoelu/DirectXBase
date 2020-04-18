@@ -48,7 +48,7 @@ void PlayerChickenConnection::update() {
     }
 }
 
-void PlayerChickenConnection::loadProperties(const rapidjson::Value& inObj) {
+void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     std::string src;
@@ -107,16 +107,23 @@ void PlayerChickenConnection::rollChicken() {
 }
 
 void PlayerChickenConnection::collection() {
-    if (Input::joyPad()->getJoyDown(mCollectionPad) || Input::keyboard()->getKeyDown(mCollectionKey)) {
-        if (!mJumpTarget) {
-            return;
-        }
-
-        mChicken->finishFryed();
-
-        auto pos = mJumpTarget->owner()->transform()->getPosition();
-        mPlayer->owner()->transform()->setPosition(pos);
-        setPlayerPosOnTheChicken(*mJumpTarget);
-        mChicken = mJumpTarget;
+    bool isPressed = Input::joyPad()->getJoyDown(mCollectionPad);
+#ifdef _DEBUG
+    if (!isPressed) {
+        isPressed = Input::keyboard()->getKeyDown(mCollectionKey);
     }
+#endif // _DEBUG
+    if (!isPressed) {
+        return;
+    }
+    if (!mJumpTarget) {
+        return;
+    }
+
+    mChicken->finishFryed();
+
+    auto pos = mJumpTarget->owner()->transform()->getPosition();
+    mPlayer->owner()->transform()->setPosition(pos);
+    setPlayerPosOnTheChicken(*mJumpTarget);
+    mChicken = mJumpTarget;
 }

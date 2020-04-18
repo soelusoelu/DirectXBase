@@ -67,6 +67,12 @@ void PlayerMoveComponent::loadProperties(const rapidjson::Value & inObj) {
     if (JsonHelper::getString(inObj, "jumpPad", &src)) {
         JoyPad::stringToJoyCode(src, &mJumpPad);
     }
+    if (JsonHelper::getString(inObj, "rollKey", &src)) {
+        Keyboard::stringToKeyCode(src, &mRollKey);
+    }
+    if (JsonHelper::getString(inObj, "rollPad", &src)) {
+        JoyPad::stringToJoyCode(src, &mRollPad);
+    }
 }
 
 void PlayerMoveComponent::drawDebugInfo(DebugInfoList * inspect) const {
@@ -123,10 +129,14 @@ void PlayerMoveComponent::walk() {
 
     auto left = Input::joyPad()->leftStick();
     if (!Math::nearZero(left.x)) {
-        mMoveDir.x = left.x;
+        mMoveDir.x = (left.x > 0.f) ? 1.f : -1.f;
     }
     if (!Math::nearZero(left.y)) {
-        mMoveDir.z = left.y;
+        mMoveDir.z = (left.y > 0.f) ? 1.f : -1.f;
+    }
+
+    if (Input::joyPad()->getJoy(mRollPad)) {
+        return;
     }
 
 #ifdef _DEBUG
@@ -138,11 +148,11 @@ void PlayerMoveComponent::walk() {
     if (!Math::nearZero(v)) {
         mMoveDir.z = v;
     }
-#endif // _DEBUG
 
-    if (Input::keyboard()->getKey(KeyCode::LeftShift)) {
+    if (Input::keyboard()->getKey(mRollKey)) {
         return;
     }
+#endif // _DEBUG
 
     owner()->transform()->translate(mMoveDir * Time::deltaTime * mMoveSpeed);
 }
