@@ -118,10 +118,17 @@ const Vector3& PlayerMoveComponent::getMoveDirection() const {
 }
 
 void PlayerMoveComponent::jump() {
-    if (Input::keyboard()->getKeyDown(mJumpKey) || Input::joyPad()->getJoyDown(mJumpPad)) {
-        jumpStartInitialize();
-        mState = State::JUMP;
+    bool isPressed = Input::joyPad()->getJoyDown(mJumpPad);
+#ifdef _DEBUG
+    if (!isPressed) {
+        isPressed = Input::keyboard()->getKeyDown(mJumpKey);
     }
+#endif // _DEBUG
+    if (!isPressed) {
+        return;
+    }
+    jumpStartInitialize();
+    mState = State::JUMP;
 }
 
 void PlayerMoveComponent::walk() {
