@@ -57,6 +57,7 @@ void SceneManager::update() {
     mRenderer->getDrawString()->clear();
     DebugUtility::drawStringClear();
 
+    //全ゲームオブジェクトの更新
     mGameObjectManager->update();
     //現在のシーンを更新
     mCurrentScene->update();

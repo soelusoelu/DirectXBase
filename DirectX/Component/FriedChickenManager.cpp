@@ -2,7 +2,6 @@
 #include "ChickenFry.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
-#include "Score.h"
 #include "ScoreEvaluation.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -13,7 +12,6 @@
 
 FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
-    mScore(nullptr),
     mScoreEvaluation(nullptr),
     mMaxDrawNum(10) {
 }
@@ -29,8 +27,6 @@ void FriedChickenManager::awake() {
 }
 
 void FriedChickenManager::start() {
-    auto score = owner()->getGameObjectManager()->find("Score");
-    mScore = score->componentManager()->getComponent<Score>();
     mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
 
     for (auto&& chicken : mChickens) {
@@ -39,7 +35,6 @@ void FriedChickenManager::start() {
 }
 
 void FriedChickenManager::update() {
-    addScore();
     moveToWait();
     replenish();
 }
@@ -91,25 +86,24 @@ std::list<std::shared_ptr<GameObject>> FriedChickenManager::getFriedChickens() c
     return list;
 }
 
-void FriedChickenManager::addScore() {
+int FriedChickenManager::getEvaluatedScore() const {
     if (!mScoreEvaluation) {
-        return;
+        return 0;
     }
 
+    int score = 0;
     for (const auto& chicken : mChickens) {
         if (!chicken->isFinished()) {
             continue;
         }
         auto fry = chicken->owner()->componentManager()->getComponent<ChickenFry>();
-        int score = 0;
         if (!fry) {
-            return;
+            return 0;
         }
-        score = mScoreEvaluation->evaluateScore(*fry);
-        if (mScore) {
-            mScore->addScore(score);
-        }
+        score += mScoreEvaluation->evaluateScore(*fry);
     }
+
+    return score;
 }
 
 void FriedChickenManager::moveToWait() {

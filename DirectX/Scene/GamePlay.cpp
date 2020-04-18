@@ -65,6 +65,9 @@ void GamePlay::update() {
         for (auto&& c : list) {
             mOil->flow(c);
         }
+        //スコアを加算
+        auto score = mFriedChickenManager->getEvaluatedScore();
+        mScore->addScore(score);
 
         if (mTimeLimitTimer->isTime()) {
             nextScene(std::make_shared<ResultScene>(mScore->getScore()));
