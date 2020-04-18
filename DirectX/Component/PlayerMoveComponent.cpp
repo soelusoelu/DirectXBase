@@ -9,6 +9,7 @@
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
+#include <string>
 
 PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerMoveComponent", 10),
@@ -16,6 +17,7 @@ PlayerMoveComponent::PlayerMoveComponent(std::shared_ptr<GameObject> owner) :
     mJumpStartPosition(Vector3::zero),
     mJumpTargetPosition(Vector3::zero),
     mMoveDir(Vector3::zero),
+    mJumpKey(KeyCode::None),
     mMoveSpeed(1.f),
     mJumpMoveRate(0.f),
     mJumpStart(false),
@@ -57,19 +59,24 @@ void PlayerMoveComponent::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
+    std::string key;
+    if (JsonHelper::getString(inObj, "jumpKey", &key)) {
+        Keyboard::stringToKeyCode(key, &mJumpKey);
+    }
 }
 
 void PlayerMoveComponent::drawDebugInfo(DebugInfoList * inspect) const {
     DebugInfo info;
+    info.first = "MoveSpeed";
+    info.second = StringUtil::floatToString(mMoveSpeed);
+    inspect->emplace_back(info);
+
     info.first = "State";
     if (mState == State::WALK) {
         info.second = "WALK";
     } else if (mState == State::JUMP) {
         info.second = "JUMP";
     }
-    inspect->emplace_back(info);
-    info.first = "MoveSpeed";
-    info.second = StringUtil::floatToString(mMoveSpeed);
     inspect->emplace_back(info);
 }
 
@@ -101,7 +108,7 @@ const Vector3& PlayerMoveComponent::getMoveDirection() const {
 }
 
 void PlayerMoveComponent::jump() {
-    if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::joyPad()->getJoyDown(JoyCode::A)) {
+    if (Input::keyboard()->getKeyDown(mJumpKey) || Input::joyPad()->getJoyDown(JoyCode::A)) {
         jumpStartInitialize();
         mState = State::JUMP;
     }

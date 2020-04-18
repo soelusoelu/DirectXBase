@@ -53,7 +53,8 @@
         {
           "type": "PlayerMoveComponent",
           "properties": {
-            "moveSpeed": 5.0
+            "moveSpeed": 5.0,
+            "jumpKey": "Space"
           }
         }
       ]

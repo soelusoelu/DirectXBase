@@ -5,6 +5,7 @@
 #include <memory>
 
 class GameObject;
+enum class KeyCode;
 
 class PlayerMoveComponent : public Component {
     enum class State {
@@ -49,6 +50,7 @@ private:
     Vector3 mJumpStartPosition;
     Vector3 mJumpTargetPosition;
     Vector3 mMoveDir;
+    KeyCode mJumpKey;
     float mMoveSpeed;
     float mJumpMoveRate;
     bool mJumpStart;

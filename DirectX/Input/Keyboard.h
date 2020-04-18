@@ -2,6 +2,7 @@
 
 #include "../System/DirectXIncLib.h"
 #include <dinput.h>
+#include <string>
 
 enum class KeyCode {
     A = DIK_A,
@@ -85,6 +86,8 @@ public:
     //縦横
     int horizontal();
     int vertical();
+    //文字列をKeyCodeに変換
+    static void stringToKeyCode(const std::string& src, KeyCode* dst);
 
 private:
     LPDIRECTINPUTDEVICE8 mKeyDevice;
