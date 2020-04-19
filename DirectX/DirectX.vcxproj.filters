@@ -233,5 +233,6 @@
     <ClInclude Include="Component\PlayerWalk.h" />
     <ClInclude Include="Component\IPlayerJump.h" />
     <ClInclude Include="Component\IPlayerWalk.h" />
+    <ClInclude Include="Component\FryState.h" />
   </ItemGroup>
 </Project>

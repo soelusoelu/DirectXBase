@@ -28,10 +28,6 @@ void FriedChickenManager::awake() {
 
 void FriedChickenManager::start() {
     mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
-
-    for (auto&& chicken : mChickens) {
-        chicken->firstSet(mScoreEvaluation->getGood());
-    }
 }
 
 void FriedChickenManager::update() {

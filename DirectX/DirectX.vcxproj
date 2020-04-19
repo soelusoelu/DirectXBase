@@ -268,6 +268,7 @@
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="Event\IObserver.h" />
+    <ClInclude Include="Component\FryState.h" />
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\Camera.h" />
     <ClInclude Include="Component\HitPointComponent.h" />

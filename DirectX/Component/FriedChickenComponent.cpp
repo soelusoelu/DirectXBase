@@ -17,7 +17,6 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
-    mGoodLevel(0.f),
     mRollSpeed(60.f),
     mFallSpeed(1.f) {
 }
@@ -77,10 +76,6 @@ void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-void FriedChickenComponent::firstSet(float good) {
-    mGoodLevel = good;
-}
-
 void FriedChickenComponent::initialize() {
     //アクティブ化
     owner()->setActive(true);
@@ -137,7 +132,7 @@ bool FriedChickenComponent::isEaten() const {
 }
 
 void FriedChickenComponent::friedChangeState() {
-    if (mFry->isFriedAllSurfaces(mGoodLevel)) {
+    if (mFry->isFriedAllSurfaces()) {
         mState = State::WAITING_COLLECTION;
     }
 }

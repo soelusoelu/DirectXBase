@@ -103,9 +103,6 @@
             "randomRangePositionX": [ -5.0, 5.0 ],
             "randomRangePositionZ": [ -5.0, 5.0 ],
             "randomRangeScale": [ 1.0, 2.0 ],
-            "initColor": [ 1.0, 0.8, 0.8 ],
-            "fryedColor": [ 0.4, 0.2, 0.1 ],
-            "burntColor": [ 0.1, 0.1, 0.1 ],
             "rollSpeed": 180.0,
             "fallSpeed": 5.0
           }
@@ -115,7 +112,22 @@
           "properties": {
             "initColor": [ 1.0, 0.8, 0.8 ],
             "fryedColor": [ 0.4, 0.2, 0.1 ],
-            "burntColor": [ 0.1, 0.1, 0.1 ]
+            "burntColor": [ 0.1, 0.1, 0.1 ],
+
+            "notFriedToLittleBadTimer": 4.0,
+            "littleBadToUsuallyTimer": 4.0,
+            "usuallyToGoodTimer": 4.0,
+            "goodToBadTimer": 3.0,
+
+            "easyNotFriedToLittleBadTimer": 3.0,
+            "easyLittleBadToUsuallyTimer": 3.0,
+            "easyUsuallyToGoodTimer": 3.0,
+            "easyGoodToBadTimer": 2.0,
+
+            "hardNotFriedToLittleBadTimer": 6.0,
+            "hardLittleBadToUsuallyTimer": 6.0,
+            "hardUsuallyToGoodTimer": 6.0,
+            "hardGoodToBadTimer": 4.0
           }
         }
       ]
@@ -132,9 +144,6 @@
         {
           "type": "ScoreEvaluation",
           "properties": {
-            "littleBad": 0.2,
-            "usually": 0.5,
-            "good": 0.8,
             "littleBadScore": 2,
             "usuallyScore": 3,
             "goodScore": 5,

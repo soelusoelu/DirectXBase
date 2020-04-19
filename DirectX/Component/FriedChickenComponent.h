@@ -21,8 +21,6 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
-    //マネージャーから必要な値をもらう
-    void firstSet(float good);
     //揚げ直す前の状態に戻す
     void initialize();
     //強制的に揚げ終わる
@@ -55,7 +53,6 @@ private:
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
     Vector2 mRandomRangeScale;
-    float mGoodLevel;
     float mRollSpeed;
     float mFallSpeed;
 };
