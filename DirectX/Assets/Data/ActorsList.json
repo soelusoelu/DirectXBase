@@ -82,7 +82,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "BackGround/abura.fbx",
+            "fileName": "BackGround/abura2.fbx",
             "alpha": 0.3
           }
         }
@@ -94,7 +94,7 @@
         {
           "type": "ChickenMeshComponent",
           "properties": {
-            "fileName": "Chicken/karaage1.fbx"
+            "fileName": "Chicken/karaage3.fbx"
           }
         },
         {
@@ -114,19 +114,19 @@
             "fryedColor": [ 0.4, 0.2, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ],
 
-            "notFriedToLittleBadTimer": 4.0,
-            "littleBadToUsuallyTimer": 4.0,
-            "usuallyToGoodTimer": 4.0,
+            "notFriedToLittleBadTimer": 0.0,
+            "littleBadToUsuallyTimer": 3.0,
+            "usuallyToGoodTimer": 3.0,
             "goodToBadTimer": 3.0,
 
-            "easyNotFriedToLittleBadTimer": 3.0,
-            "easyLittleBadToUsuallyTimer": 3.0,
-            "easyUsuallyToGoodTimer": 3.0,
-            "easyGoodToBadTimer": 2.0,
+            "easyNotFriedToLittleBadTimer": 0.0,
+            "easyLittleBadToUsuallyTimer": 2.0,
+            "easyUsuallyToGoodTimer": 2.0,
+            "easyGoodToBadTimer": 3.0,
 
-            "hardNotFriedToLittleBadTimer": 6.0,
-            "hardLittleBadToUsuallyTimer": 6.0,
-            "hardUsuallyToGoodTimer": 6.0,
+            "hardNotFriedToLittleBadTimer": 0.0,
+            "hardLittleBadToUsuallyTimer": 4.0,
+            "hardUsuallyToGoodTimer": 4.0,
             "hardGoodToBadTimer": 4.0
           }
         }
@@ -144,10 +144,10 @@
         {
           "type": "ScoreEvaluation",
           "properties": {
-            "littleBadScore": 2,
+            "littleBadScore": 0,
             "usuallyScore": 3,
-            "goodScore": 5,
-            "badScore": -2
+            "goodScore": 10,
+            "badScore": -3
           }
         }
       ]
