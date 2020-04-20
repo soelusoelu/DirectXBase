@@ -94,7 +94,7 @@
         {
           "type": "ChickenMeshComponent",
           "properties": {
-            "fileName": "Chicken/karaage1.fbx"
+            "fileName": "Chicken/karaage3.fbx"
           }
         },
         {
@@ -159,7 +159,8 @@
           "type": "PlayerChickenConnection",
           "properties": {
             "collectionKey": "E",
-            "collectionPad": "X"
+            "collectionPad": "X",
+            "isJumpRoll" : false
           }
         }
       ]
