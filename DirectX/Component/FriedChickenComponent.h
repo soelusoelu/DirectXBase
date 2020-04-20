@@ -20,6 +20,7 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    std::shared_ptr<IChickenFry> getFry() const;
     //揚げ直す前の状態に戻す
     void initialize();
     //強制的に揚げ終わる

@@ -1,14 +1,14 @@
 ﻿#pragma once
 
+#include "Component.h"
+#include "../Math/Math.h"
+#include <memory>
+
 class GameObject;
 class PlayerComponent;
 class FriedChickenComponent;
 enum class KeyCode;
 enum class JoyCode;
-
-#include "Component.h"
-#include "../Math/Math.h"
-#include <memory>
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection : public Component {

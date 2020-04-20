@@ -27,6 +27,7 @@ public:
     virtual void update() override;
     virtual bool isBurntAllSurfaces() const override;
     virtual bool isTooBurnt() const override;
+    virtual bool isBurntHalfSurfaces() const override;
     virtual int getNumSurface() const override;
     virtual FryState getFryState(ChickenSurface surface) const override;
     virtual FryState getFryState(unsigned surfaceIndex) const override;

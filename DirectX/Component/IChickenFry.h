@@ -14,6 +14,8 @@ public:
     virtual bool isBurntAllSurfaces() const = 0;
     //焦げた面が一定秒数以上揚げられてるか
     virtual bool isTooBurnt() const = 0;
+    //半分以上の面が揚がってるか
+    virtual bool isBurntHalfSurfaces() const = 0;
     //面の数の取得
     virtual int getNumSurface() const = 0;
     //指定した面の揚げ状態の取得

@@ -136,6 +136,18 @@ bool ChickenFry::isTooBurnt() const {
     return mTooBurntTimer->isTime();
 }
 
+bool ChickenFry::isBurntHalfSurfaces() const {
+    int count = 0;
+    for (size_t i = 0; i < getNumSurface(); i++) {
+        auto state = getFryState(i);
+        if (state == FryState::GOOD || state == FryState::BAD) {
+            count++;
+        }
+    }
+
+    return (count >= getNumSurface() / 2);
+}
+
 int ChickenFry::getNumSurface() const {
     return static_cast<int>(ChickenSurface::NUM_SURFACE);
 }
