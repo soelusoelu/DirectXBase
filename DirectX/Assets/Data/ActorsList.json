@@ -123,7 +123,9 @@
             "hardNotFriedToLittleBadTimer": 0.0,
             "hardLittleBadToUsuallyTimer": 4.0,
             "hardUsuallyToGoodTimer": 4.0,
-            "hardGoodToBadTimer": 4.0
+            "hardGoodToBadTimer": 4.0,
+
+            "tooBurntTimer": 5.0
           }
         },
         {

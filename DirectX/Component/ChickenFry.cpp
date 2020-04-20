@@ -7,6 +7,7 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
+#include "../Utility/StringUtil.h"
 
 ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
     Component(owner, "ChickenFry"),
@@ -14,6 +15,7 @@ ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
     mCurrentBottomSurface(ChickenSurface::BOTTOM),
     mEasySurface(ChickenSurface::BOTTOM),
     mHardSurface(ChickenSurface::BOTTOM),
+    mTooBurntTimer(std::make_unique<Time>(0.f)),
     mUsually(getNumFryState() - 1),
     mEasy(getNumFryState() - 1),
     mHard(getNumFryState() - 1),
@@ -41,7 +43,11 @@ void ChickenFry::start() {
 }
 
 void ChickenFry::onUpdateWorldTransform() {
-    bottomSurface();
+    auto previous = mCurrentBottomSurface;
+    choiceBottomSurface();
+    if (previous != mCurrentBottomSurface) {
+        mTooBurntTimer->reset();
+    }
 }
 
 void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
@@ -61,6 +67,11 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "hardLittleBadToUsuallyTimer", &mHard[1]);
     JsonHelper::getFloat(inObj, "hardUsuallyToGoodTimer", &mHard[2]);
     JsonHelper::getFloat(inObj, "hardGoodToBadTimer", &mHard[3]);
+
+    float time;
+    if (JsonHelper::getFloat(inObj, "tooBurntTimer", &time)) {
+        mTooBurntTimer->setLimitTime(time);
+    }
 }
 
 void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
@@ -78,6 +89,10 @@ void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "HardSurface";
     info.second = surfaceToString(mHardSurface);
     inspect->emplace_back(info);
+
+    info.first = "TooBurntTiemr";
+    info.second = StringUtil::floatToString(mTooBurntTimer->currentTime());
+    inspect->emplace_back(info);
 }
 
 void ChickenFry::initialize() {
@@ -86,6 +101,8 @@ void ChickenFry::initialize() {
         timer->setLimitTime(mBurntTime);
         timer->reset();
     }
+    //焦げ時間の初期化
+    mTooBurntTimer->reset();
 
     choiceEasyAndHardSurface();
 
@@ -96,13 +113,14 @@ void ChickenFry::initialize() {
 
 void ChickenFry::update() {
     frying();
+    updateTimerIfBurntBottomSurface();
 
     if (mColorChanger) {
         mColorChanger->update(mCurrentBottomSurface, getFryState(mCurrentBottomSurface));
     }
 }
 
-bool ChickenFry::isFriedAllSurfaces() const {
+bool ChickenFry::isBurntAllSurfaces() const {
     bool result = true;
     for (size_t i = 0; i < getNumSurface(); i++) {
         if (getFryState(i) != FryState::BAD) {
@@ -112,6 +130,10 @@ bool ChickenFry::isFriedAllSurfaces() const {
     }
 
     return result;
+}
+
+bool ChickenFry::isTooBurnt() const {
+    return mTooBurntTimer->isTime();
 }
 
 int ChickenFry::getNumSurface() const {
@@ -162,7 +184,7 @@ void ChickenFry::choiceEasyAndHardSurface() {
     mFryTimer[static_cast<int>(mHardSurface)]->setLimitTime(mHardBurntTime);
 }
 
-void ChickenFry::bottomSurface() {
+void ChickenFry::choiceBottomSurface() {
     auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
     static const float SIN_COS_45 = Math::sin(45.f);
     if (dir.y <= -SIN_COS_45) {
@@ -184,6 +206,14 @@ void ChickenFry::bottomSurface() {
 
 void ChickenFry::frying() {
     mFryTimer[static_cast<int>(mCurrentBottomSurface)]->update();
+}
+
+void ChickenFry::updateTimerIfBurntBottomSurface() {
+    if (getFryState(mCurrentBottomSurface) != FryState::BAD) {
+        return;
+    }
+
+    mTooBurntTimer->update();
 }
 
 int ChickenFry::getNumFryState() const {

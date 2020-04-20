@@ -40,7 +40,7 @@ void GamePlay::start() {
     mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
     mPCConnection->setPlayer(*p);
     mPCConnection->setChicken(c);
-    //auto bird = GameObjectCreater::create("Bird");
+    auto bird = GameObjectCreater::create("Bird");
     auto score = GameObjectCreater::createUI("Score");
     mScore = score->componentManager()->getComponent<Score>();
     auto tl = GameObjectCreater::createUI("TimeLimit");

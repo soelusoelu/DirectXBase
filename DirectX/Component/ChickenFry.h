@@ -26,8 +26,10 @@ public:
     void initialize();
     //FriedChickenComponentにより毎フレーム更新
     void update();
-    //すべての面を揚げ終わったか
-    bool isFriedAllSurfaces() const;
+    //すべての面が焦げたか
+    bool isBurntAllSurfaces() const;
+    //焦げた面が一定秒数以上揚げられてるか
+    bool isTooBurnt() const;
     //面の数の取得
     int getNumSurface() const;
     //指定した面の揚げ状態の取得
@@ -38,9 +40,11 @@ private:
     //揚がりやすい・揚がりにくい面を決める
     void choiceEasyAndHardSurface();
     //下の面を決定する
-    void bottomSurface();
+    void choiceBottomSurface();
     //下の面を揚げる
     void frying();
+    //下の面が焦げてたらタイマーを進める
+    void updateTimerIfBurntBottomSurface();
     //揚げ状態の数の取得
     int getNumFryState() const;
     //Surfaceを文字列化
@@ -52,6 +56,7 @@ private:
     ChickenSurface mCurrentBottomSurface;
     ChickenSurface mEasySurface;
     ChickenSurface mHardSurface;
+    std::unique_ptr<Time> mTooBurntTimer;
 
     //普通の面
     std::vector<float> mUsually;

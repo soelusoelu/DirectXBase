@@ -41,7 +41,7 @@ public:
 
 private:
     //揚げ終わったら状態遷移させる
-    void friedChangeState();
+    void autoCollection();
     //空中から落下させる
     void fall();
     //油に浸かったら揚げ始める
