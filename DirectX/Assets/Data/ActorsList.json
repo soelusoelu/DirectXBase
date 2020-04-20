@@ -61,13 +61,13 @@
     {
       "type": "Field",
       "properties": {
-        "scale": [ 10.0, 1.0, 10.0 ]
+        "scale": [ 1.0, 10.0, 10.0 ]
       },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "BackGround/test.obj",
+            "fileName": "BackGround/abura.fbx",
             "alpha": 0.3
           }
         }
@@ -79,7 +79,7 @@
         {
           "type": "ChickenMeshComponent",
           "properties": {
-            "fileName": "Chicken/karaage3.fbx"
+            "fileName": "Chicken/karaage1.fbx"
           }
         },
         {
