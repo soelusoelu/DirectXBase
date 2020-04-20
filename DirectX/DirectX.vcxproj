@@ -156,6 +156,7 @@
     <ClCompile Include="Component\ChickenFry.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
+    <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerJump.cpp" />
     <ClCompile Include="Component\Result.cpp" />
@@ -262,6 +263,7 @@
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\ChickenMeshComponent.h" />
     <ClInclude Include="Component\ChickenSurface.h" />
+    <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IPlayerJump.h" />
     <ClInclude Include="Component\IPlayerWalk.h" />
     <ClInclude Include="Component\PlayerComponent.h" />

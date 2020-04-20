@@ -113,6 +113,7 @@
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerWalk.cpp" />
     <ClCompile Include="Component\ChickenColorChanger.cpp" />
+    <ClCompile Include="Component\Field.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -237,5 +238,6 @@
     <ClInclude Include="Component\FryState.h" />
     <ClInclude Include="Component\ChickenColorChanger.h" />
     <ClInclude Include="Component\ChickenSurface.h" />
+    <ClInclude Include="Component\Field.h" />
   </ItemGroup>
 </Project>
