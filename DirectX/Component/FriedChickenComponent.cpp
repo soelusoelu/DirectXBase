@@ -76,8 +76,8 @@ void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-std::shared_ptr<IChickenFry> FriedChickenComponent::getFry() const {
-    return mFry;
+const IChickenFry& FriedChickenComponent::getFry() const {
+    return *mFry;
 }
 
 void FriedChickenComponent::initialize() {

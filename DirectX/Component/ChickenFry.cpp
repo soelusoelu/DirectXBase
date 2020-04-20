@@ -148,10 +148,6 @@ bool ChickenFry::isBurntHalfSurfaces() const {
     return (count >= getNumSurface() / 2);
 }
 
-int ChickenFry::getNumSurface() const {
-    return static_cast<int>(ChickenSurface::NUM_SURFACE);
-}
-
 FryState ChickenFry::getFryState(ChickenSurface surface) const {
     return getFryState(static_cast<unsigned>(surface));
 }
@@ -226,6 +222,10 @@ void ChickenFry::updateTimerIfBurntBottomSurface() {
     }
 
     mTooBurntTimer->update();
+}
+
+int ChickenFry::getNumSurface() const {
+    return static_cast<int>(ChickenSurface::NUM_SURFACE);
 }
 
 int ChickenFry::getNumFryState() const {

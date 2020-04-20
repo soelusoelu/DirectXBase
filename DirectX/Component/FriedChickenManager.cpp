@@ -92,11 +92,8 @@ int FriedChickenManager::getEvaluatedScore() const {
         if (!chicken->isFinished()) {
             continue;
         }
-        auto fry = chicken->owner()->componentManager()->getComponent<ChickenFry>();
-        if (!fry) {
-            return 0;
-        }
-        score += mScoreEvaluation->evaluateScore(*fry);
+        const auto& fry = chicken->getFry();
+        score += mScoreEvaluation->evaluateScore(fry);
     }
 
     return score;
