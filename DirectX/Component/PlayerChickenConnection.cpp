@@ -19,7 +19,8 @@ PlayerChickenConnection::PlayerChickenConnection(std::shared_ptr<GameObject> own
     mJumpTarget(nullptr),
     mChickenRadius(0.f),
     mCollectionKey(KeyCode::None),
-    mCollectionPad(JoyCode::None) {
+    mCollectionPad(JoyCode::None),
+    mIsJumpRoll(true) {
 }
 
 PlayerChickenConnection::~PlayerChickenConnection() = default;
@@ -37,7 +38,9 @@ void PlayerChickenConnection::start() {
 void PlayerChickenConnection::update() {
     auto jump = mPlayer->getJumpState();
     if (jump->isJumpStart()) {
-        mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
+        if (mIsJumpRoll) {
+            mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
+        }
     }
     if (jump->isJumping()) {
         trackingJumpTarget();
@@ -64,9 +67,10 @@ void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
     if (JsonHelper::getString(inObj, "collectionPad", &src)) {
         JoyPad::stringToJoyCode(src, &mCollectionPad);
     }
+    JsonHelper::getBool(inObj, "isJumpRoll", &mIsJumpRoll);
 }
 
-void PlayerChickenConnection::setPlayer(const GameObject& player) {
+void PlayerChickenConnection::setPlayer(const GameObject & player) {
     mPlayer = player.componentManager()->getComponent<PlayerComponent>();
 }
 

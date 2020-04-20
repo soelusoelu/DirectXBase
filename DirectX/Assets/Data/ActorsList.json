@@ -76,13 +76,13 @@
     {
       "type": "Field",
       "properties": {
-        "scale": [ 10.0, 1.0, 10.0 ]
+        "scale": [ 1.0, 10.0, 10.0 ]
       },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "BackGround/test.obj",
+            "fileName": "BackGround/abura2.fbx",
             "alpha": 0.3
           }
         }
@@ -110,19 +110,19 @@
         {
           "type": "ChickenFry",
           "properties": {
-            "notFriedToLittleBadTimer": 4.0,
-            "littleBadToUsuallyTimer": 4.0,
-            "usuallyToGoodTimer": 4.0,
+            "notFriedToLittleBadTimer": 0.0,
+            "littleBadToUsuallyTimer": 3.0,
+            "usuallyToGoodTimer": 3.0,
             "goodToBadTimer": 3.0,
 
-            "easyNotFriedToLittleBadTimer": 3.0,
-            "easyLittleBadToUsuallyTimer": 3.0,
-            "easyUsuallyToGoodTimer": 3.0,
-            "easyGoodToBadTimer": 2.0,
+            "easyNotFriedToLittleBadTimer": 0.0,
+            "easyLittleBadToUsuallyTimer": 2.0,
+            "easyUsuallyToGoodTimer": 2.0,
+            "easyGoodToBadTimer": 3.0,
 
-            "hardNotFriedToLittleBadTimer": 6.0,
-            "hardLittleBadToUsuallyTimer": 6.0,
-            "hardUsuallyToGoodTimer": 6.0,
+            "hardNotFriedToLittleBadTimer": 0.0,
+            "hardLittleBadToUsuallyTimer": 4.0,
+            "hardUsuallyToGoodTimer": 4.0,
             "hardGoodToBadTimer": 4.0
           }
         },
@@ -130,7 +130,7 @@
           "type": "ChickenColorChanger",
           "properties": {
             "initColor": [ 1.0, 0.8, 0.8 ],
-            "littleFriedColor": [ 0.8, 0.6, 0.5 ],
+            "littleFriedColor": [ 1.0, 0.8, 0.8 ],
             "usuallyColor": [ 0.6, 0.4, 0.3 ],
             "friedColor": [ 0.4, 0.2, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ]
@@ -150,10 +150,10 @@
         {
           "type": "ScoreEvaluation",
           "properties": {
-            "littleBadScore": 2,
+            "littleBadScore": 0,
             "usuallyScore": 3,
-            "goodScore": 5,
-            "badScore": -2
+            "goodScore": 10,
+            "badScore": -3
           }
         }
       ]
@@ -165,7 +165,8 @@
           "type": "PlayerChickenConnection",
           "properties": {
             "collectionKey": "E",
-            "collectionPad": "X"
+            "collectionPad": "X",
+            "isJumpRoll" : false
           }
         }
       ]
