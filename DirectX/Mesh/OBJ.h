@@ -11,16 +11,12 @@ struct Material;
 class VertexArray;
 
 class OBJ : public IMeshLoader {
-    using MaterialPtr = std::shared_ptr<Material>;
-    using MaterialPtrArray = std::vector<MaterialPtr>;
-
 public:
     OBJ();
     ~OBJ();
     virtual void perse(const std::string& filePath) override;
-    virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
+    virtual void setInitMaterials(MaterialPtrArray* rhs) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
-    virtual size_t getNumMaterial() const override;
     virtual Vector3 getCenter() const override;
     virtual float getRadius() const override;
 
@@ -30,7 +26,7 @@ private:
     void materialPreload(std::ifstream& stream);
 
 private:
-    MaterialPtrArray mMaterials;
+    MaterialPtrArray mInitMaterials;
     std::shared_ptr<VertexArray> mVertexArray;
     MeshVertex* mVertices;
 };

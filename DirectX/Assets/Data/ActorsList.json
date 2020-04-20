@@ -51,9 +51,24 @@
           }
         },
         {
-          "type": "PlayerMoveComponent",
+          "type": "PlayerComponent",
           "properties": {
-            "moveSpeed": 5.0
+          }
+        },
+        {
+          "type": "PlayerWalk",
+          "properties": {
+            "moveSpeed": 5.0,
+            "rollKey": "LeftShift",
+            "rollPad": "B"
+          }
+        },
+        {
+          "type": "PlayerJump",
+          "properties": {
+            "jumpKey": "Space",
+            "jumpPad": "A",
+            "speed": 1.0
           }
         }
       ]
@@ -88,10 +103,31 @@
             "randomRangePositionX": [ -5.0, 5.0 ],
             "randomRangePositionZ": [ -5.0, 5.0 ],
             "randomRangeScale": [ 1.0, 2.0 ],
+            "rollSpeed": 180.0,
+            "fallSpeed": 5.0
+          }
+        },
+        {
+          "type": "ChickenFry",
+          "properties": {
             "initColor": [ 1.0, 0.8, 0.8 ],
             "fryedColor": [ 0.4, 0.2, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ],
-            "fallSpeed": 5.0
+
+            "notFriedToLittleBadTimer": 4.0,
+            "littleBadToUsuallyTimer": 4.0,
+            "usuallyToGoodTimer": 4.0,
+            "goodToBadTimer": 3.0,
+
+            "easyNotFriedToLittleBadTimer": 3.0,
+            "easyLittleBadToUsuallyTimer": 3.0,
+            "easyUsuallyToGoodTimer": 3.0,
+            "easyGoodToBadTimer": 2.0,
+
+            "hardNotFriedToLittleBadTimer": 6.0,
+            "hardLittleBadToUsuallyTimer": 6.0,
+            "hardUsuallyToGoodTimer": 6.0,
+            "hardGoodToBadTimer": 4.0
           }
         }
       ]
@@ -108,9 +144,6 @@
         {
           "type": "ScoreEvaluation",
           "properties": {
-            "littleBad": 0.2,
-            "usually": 0.5,
-            "good": 0.8,
             "littleBadScore": 2,
             "usuallyScore": 3,
             "goodScore": 5,
@@ -125,6 +158,8 @@
         {
           "type": "PlayerChickenConnection",
           "properties": {
+            "collectionKey": "E",
+            "collectionPad": "X"
           }
         }
       ]
@@ -151,6 +186,20 @@
           "type": "Timer",
           "properties": {
             "limit": 15.0
+          }
+        }
+      ]
+    },
+    {
+      "type": "Oil",
+      "components": [
+        {
+          "type": "Oil",
+          "properties": {
+            "flowSpeed": 3.0,
+            "flowRangeX": 4.0,
+            "flowRangeZFore": 3.0,
+            "flowRangeZBack": 5.0
           }
         }
       ]

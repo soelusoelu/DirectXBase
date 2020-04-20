@@ -2,6 +2,7 @@
 
 #include "../Math/Math.h"
 #include <dinput.h>
+#include <string>
 
 enum class MouseCode {
     LeftButton = 0,
@@ -9,7 +10,9 @@ enum class MouseCode {
     CenterButton = 2,
     SideButton1 = 3,
     SideButton2 = 4,
-    SideButton3 = 5
+    SideButton3 = 5,
+
+    None = 512
 };
 
 class Mouse {
@@ -26,6 +29,8 @@ public:
     bool getMouseUp(MouseCode button);
     //マウスのウィンドウ位置
     const Vector2& getMousePosition();
+    //文字列をMouseCodeに変換
+    static void stringToJoyCode(const std::string& src, MouseCode* dst);
 
 private:
     LPDIRECTINPUTDEVICE8 mMouseDevice;

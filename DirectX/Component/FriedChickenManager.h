@@ -12,6 +12,7 @@ class FriedChickenManager : public Component {
     using ChickenPtr = std::shared_ptr<FriedChickenComponent>;
     using ChickenPtrList = std::list<ChickenPtr>;
     using GameObjectPtr = std::shared_ptr<GameObject>;
+    using GameObjectPtrList = std::list<GameObjectPtr>;
 
 public:
     FriedChickenManager(std::shared_ptr<GameObject> owner);
@@ -22,13 +23,15 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     //ターゲットから一番近い唐揚げを検索
-    GameObjectPtr FindNearestChicken(const GameObjectPtr target);
+    ChickenPtr findNearestChicken(const GameObjectPtr& target) const;
     //excludeを除くターゲットから一番近い唐揚げを検索
-    GameObjectPtr FindNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude);
+    ChickenPtr findNearestChicken(const GameObjectPtr& target, const ChickenPtr& exclude) const;
+    //揚げてる最中の唐揚げをすべて取得
+    GameObjectPtrList getFriedChickens() const;
+    //揚げ終わった唐揚げの状態に応じてスコアを返す
+    int getEvaluatedScore() const;
 
 private:
-    //揚げ終わった唐揚げの状態に応じてスコアを加算
-    void addScore();
     //揚げ終わった唐揚げを回収する
     void moveToWait();
     //唐揚げを補充する

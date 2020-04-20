@@ -11,19 +11,14 @@
 #include "../System/Texture.h"
 
 ChickenMeshComponent::ChickenMeshComponent(std::shared_ptr<GameObject> owner) :
-    MeshComponent(owner, "ChickenMeshComponent"),
-    mUpColor(ColorPalette::white),
-    mBottomColor(ColorPalette::white),
-    mLeftColor(ColorPalette::white),
-    mRightColor(ColorPalette::white),
-    mForeColor(ColorPalette::white),
-    mBackColor(ColorPalette::white) {
+    MeshComponent(owner, "ChickenMeshComponent") {
 }
 
 ChickenMeshComponent::~ChickenMeshComponent() = default;
 
 void ChickenMeshComponent::setMesh(const std::string & fileName) {
     mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
+    mMesh->setInitMaterials(&mMaterials);
     addToManager(true);
 }
 
@@ -60,17 +55,9 @@ void ChickenMeshComponent::draw() {
         auto trans = owner()->transform();
         cb.world = trans->getWorldTransform();
         cb.world.transpose();
-        cb.pos = trans->getPosition();
         //ワールド、カメラ、射影行列を渡す
         cb.wvp = trans->getWorldTransform() * mCamera->getViewProjection();
         cb.wvp.transpose();
-        //色
-        cb.upColor = mUpColor;
-        cb.bottomColor = mBottomColor;
-        cb.leftColor = mLeftColor;
-        cb.rightColor = mRightColor;
-        cb.foreColor = mForeColor;
-        cb.backColor = mBackColor;
 
         memcpy_s(msrd.data, msrd.rowPitch, (void*)&cb, sizeof(cb));
         mShader->unmap(0);
@@ -86,9 +73,9 @@ void ChickenMeshComponent::draw() {
     mShader->setPSConstantBuffers(1);
 
     //マテリアルの数だけ、それぞれのマテリアルのインデックスバッファ－を描画
-    for (size_t i = 0; i < mMesh->getNumMaterial(); i++) {
+    for (size_t i = 0; i < getNumMaterial(); i++) {
         //使用されていないマテリアル対策
-        auto mat = mMesh->getMaterial(i);
+        auto mat = getMaterial(i);
         if (mat->numFace == 0) {
             continue;
         }
@@ -97,8 +84,8 @@ void ChickenMeshComponent::draw() {
 
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
-            cb.diffuse = Vector4(mColor, 1.f);
-            cb.specular = mat->specular;
+            cb.diffuse = Vector4(mat->diffuse, 1.f);
+            cb.specular = Vector4(mat->specular, 1.f);
 
             if (auto t = mat->texture) {
                 t->setPSTextures();
@@ -115,28 +102,4 @@ void ChickenMeshComponent::draw() {
         //プリミティブをレンダリング
         Singleton<DirectX>::instance().drawIndexed(mat->numFace * 3);
     }
-}
-
-void ChickenMeshComponent::setUpColor(const Vector3 & color) {
-    mUpColor = color;
-}
-
-void ChickenMeshComponent::setBottomColor(const Vector3 & color) {
-    mBottomColor = color;
-}
-
-void ChickenMeshComponent::setLeftColor(const Vector3 & color) {
-    mLeftColor = color;
-}
-
-void ChickenMeshComponent::setRightColor(const Vector3 & color) {
-    mRightColor = color;
-}
-
-void ChickenMeshComponent::setForeColor(const Vector3 & color) {
-    mForeColor = color;
-}
-
-void ChickenMeshComponent::setBackColor(const Vector3 & color) {
-    mBackColor = color;
 }

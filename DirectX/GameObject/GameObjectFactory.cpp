@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "../Component/Bird.h"
 #include "../Component/Camera.h"
+#include "../Component/ChickenFry.h"
 #include "../Component/ChickenMeshComponent.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
@@ -11,8 +12,11 @@
 #include "../Component/HitPointComponent.h"
 #include "../Component/JumpTarget.h"
 #include "../Component/MeshComponent.h"
+#include "../Component/Oil.h"
 #include "../Component/PlayerChickenConnection.h"
-#include "../Component/PlayerMoveComponent.h"
+#include "../Component/PlayerComponent.h"
+#include "../Component/PlayerJump.h"
+#include "../Component/PlayerWalk.h"
 #include "../Component/PointLightComponent.h"
 #include "../Component/Result.h"
 #include "../Component/Score.h"
@@ -31,6 +35,7 @@ GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
     ADD_COMPONENT(Bird);
     ADD_COMPONENT(Camera);
+    ADD_COMPONENT(ChickenFry);
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(FriedChickenComponent);
@@ -38,8 +43,11 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(HitPointComponent);
     ADD_COMPONENT(JumpTarget);
     ADD_COMPONENT(MeshComponent);
+    ADD_COMPONENT(Oil);
     ADD_COMPONENT(PlayerChickenConnection);
-    ADD_COMPONENT(PlayerMoveComponent);
+    ADD_COMPONENT(PlayerComponent);
+    ADD_COMPONENT(PlayerJump);
+    ADD_COMPONENT(PlayerWalk);
     ADD_COMPONENT(PointLightComponent);
     ADD_COMPONENT(Result);
     ADD_COMPONENT(Score);

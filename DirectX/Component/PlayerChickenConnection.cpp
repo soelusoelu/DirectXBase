@@ -1,21 +1,25 @@
 ﻿#include "PlayerChickenConnection.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
+#include "IPlayerJump.h"
+#include "IPlayerWalk.h"
 #include "MeshComponent.h"
-#include "PlayerMoveComponent.h"
+#include "PlayerComponent.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
+#include "../Utility/LevelLoader.h"
 
 PlayerChickenConnection::PlayerChickenConnection(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerChickenConnection", 150),
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
-    mPlayerPreviousPos(Vector3::zero),
-    mChickenRadius(0.f) {
+    mChickenRadius(0.f),
+    mCollectionKey(KeyCode::None),
+    mCollectionPad(JoyCode::None) {
 }
 
 PlayerChickenConnection::~PlayerChickenConnection() = default;
@@ -23,83 +27,115 @@ PlayerChickenConnection::~PlayerChickenConnection() = default;
 void PlayerChickenConnection::start() {
     //メッシュ形状が変わらない・統一前提で
     if (mChicken) {
-        auto mesh = mChicken->componentManager()->getComponent<MeshComponent>();
+        auto mesh = mChicken->owner()->componentManager()->getComponent<MeshComponent>();
         if (mesh) {
             mChickenRadius = mesh->getRadius();
         }
     }
-    mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 
 void PlayerChickenConnection::update() {
-    if (mPlayer->isJumpStart()) {
-        auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
-        chickenComp->changeSurface();
-        mChicken->transform()->rotate(Vector3::right * 180.f);
+    auto jump = mPlayer->getJumpState();
+    if (jump->isJumpStart()) {
+        mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
     }
-    if (mPlayer->isJumpEnd()) {
+    if (jump->isJumping()) {
+        trackingJumpTarget();
+    }
+    if (jump->isJumpEnd()) {
         mChicken = mJumpTarget;
     }
     if (mPlayer->isWalking()) {
         setPlayerPosOnTheChicken(*mChicken);
         setChickenPosUnderThePlayer();
 
+        rollChicken();
         collection();
     }
-
-    mPlayerPreviousPos = mPlayer->owner()->transform()->getPosition();
 }
 
-void PlayerChickenConnection::setPlayer(const GameObjectPtr& player) {
-    mPlayer = player->componentManager()->getComponent<PlayerMoveComponent>();
+void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
+    Component::loadProperties(inObj);
+
+    std::string src;
+    if (JsonHelper::getString(inObj, "collectionKey", &src)) {
+        Keyboard::stringToKeyCode(src, &mCollectionKey);
+    }
+    if (JsonHelper::getString(inObj, "collectionPad", &src)) {
+        JoyPad::stringToJoyCode(src, &mCollectionPad);
+    }
 }
 
-void PlayerChickenConnection::setChicken(const GameObjectPtr& chicken) {
+void PlayerChickenConnection::setPlayer(const GameObject& player) {
+    mPlayer = player.componentManager()->getComponent<PlayerComponent>();
+}
+
+void PlayerChickenConnection::setChicken(const ChickenPtr & chicken) {
     mChicken = chicken;
 }
 
-std::shared_ptr<GameObject> PlayerChickenConnection::getChicken() const {
+std::shared_ptr<FriedChickenComponent> PlayerChickenConnection::getChicken() const {
     return mChicken;
 }
 
-void PlayerChickenConnection::playerJumpTarget(const GameObjectPtr& chicken) {
+void PlayerChickenConnection::playerJumpTarget(const ChickenPtr & chicken) {
     if (!chicken) {
         return;
     }
 
     if (mPlayer->isWalking()) {
         mJumpTarget = chicken;
-        auto pos = mJumpTarget->transform()->getPosition();
-        pos.y += mJumpTarget->transform()->getScale().y * mChickenRadius;
-        mPlayer->setTargetPosition(pos);
     }
 }
 
-void PlayerChickenConnection::setPlayerPosOnTheChicken(const GameObject& chicken) {
+void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenComponent & chicken) {
     auto pt = mPlayer->owner()->transform();
     auto pos = pt->getPosition();
-    pos.y = chicken.transform()->getScale().y * mChickenRadius;
+    pos.y = chicken.owner()->transform()->getScale().y * mChickenRadius;
     mPlayer->owner()->transform()->setPosition(pos);
 }
 
 void PlayerChickenConnection::setChickenPosUnderThePlayer() {
     auto pos = mPlayer->owner()->transform()->getPosition();
     pos.y = 0;
-    mChicken->transform()->setPosition(pos);
+    mChicken->owner()->transform()->setPosition(pos);
+}
+
+void PlayerChickenConnection::trackingJumpTarget() {
+    if (!mJumpTarget) {
+        return;
+    }
+    auto pos = mJumpTarget->owner()->transform()->getPosition();
+    pos.y += mJumpTarget->owner()->transform()->getScale().y * mChickenRadius;
+    mPlayer->getJumpState()->setTargetPosition(pos);
+}
+
+void PlayerChickenConnection::rollChicken() {
+    const auto& dir = mPlayer->getWalkState()->getMoveDirection();
+    if (Math::nearZero(dir.x) && Math::nearZero(dir.z)) {
+        return;
+    }
+    mChicken->roll(dir);
 }
 
 void PlayerChickenConnection::collection() {
-    if (Input::joyPad()->getJoyDown(JoyCode::X) || Input::keyboard()->getKeyDown(KeyCode::E)) {
-        if (!mJumpTarget) {
-            return;
-        }
-
-        auto chickenComp = mChicken->componentManager()->getComponent<FriedChickenComponent>();
-        chickenComp->finishFryed();
-
-        auto pos = mJumpTarget->transform()->getPosition();
-        mPlayer->owner()->transform()->setPosition(pos);
-        setPlayerPosOnTheChicken(*mJumpTarget);
-        mChicken = mJumpTarget;
+    bool isPressed = Input::joyPad()->getJoyDown(mCollectionPad);
+#ifdef _DEBUG
+    if (!isPressed) {
+        isPressed = Input::keyboard()->getKeyDown(mCollectionKey);
     }
+#endif // _DEBUG
+    if (!isPressed) {
+        return;
+    }
+    if (!mJumpTarget) {
+        return;
+    }
+
+    mChicken->finishFryed();
+
+    auto pos = mJumpTarget->owner()->transform()->getPosition();
+    mPlayer->owner()->transform()->setPosition(pos);
+    setPlayerPosOnTheChicken(*mJumpTarget);
+    mChicken = mJumpTarget;
 }

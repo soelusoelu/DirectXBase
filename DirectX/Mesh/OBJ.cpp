@@ -96,7 +96,7 @@ void OBJ::perse(const std::string& filePath) {
     int vt1 = 0, vt2 = 0, vt3 = 0;
     int fCount = 0;
 
-    for (unsigned i = 0; i < getNumMaterial(); i++) {
+    for (unsigned i = 0; i < mInitMaterials.size(); i++) {
         ifs.clear();
         ifs.seekg(0, std::ios_base::beg);
         fCount = 0;
@@ -115,11 +115,11 @@ void OBJ::perse(const std::string& filePath) {
             //フェイス 読み込み→頂点インデックスに
             if (strcmp(s, "usemtl") == 0) {
                 auto mat = line.substr(7); //「usemtl 」の文字数分
-                matFlag = (mMaterials[i]->matName == mat);
+                matFlag = (mInitMaterials[i]->matName == mat);
             }
 
             if (strcmp(s, "f") == 0 && matFlag) {
-                if (mMaterials[i]->texture) { //テクスチャーありサーフェイス
+                if (mInitMaterials[i]->texture) { //テクスチャーありサーフェイス
                     sscanf_s(line.c_str(), "%s %d/%d/%d %d/%d/%d %d/%d/%d", s, sizeof(s), &v1, &vt1, &vn1, &v2, &vt2, &vn2, &v3, &vt3, &vn3);
                 } else { //テクスチャー無しサーフェイス
                     sscanf_s(line.c_str(), "%s %d//%d %d//%d %d//%d", s, sizeof(s), &v1, &vn1, &v2, &vn2, &v3, &vn3);
@@ -154,7 +154,7 @@ void OBJ::perse(const std::string& filePath) {
         //インデックスバッファーを作成
         mVertexArray->createIndexBuffer(i, fCount * 3, faceBuffer);
 
-        mMaterials[i]->numFace = fCount;
+        mInitMaterials[i]->numFace = fCount;
     }
 
     delete[] vertices;
@@ -166,16 +166,31 @@ void OBJ::perse(const std::string& filePath) {
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
 }
 
-std::shared_ptr<Material> OBJ::getMaterial(unsigned index) const {
-    return mMaterials[index];
+void OBJ::setInitMaterials(MaterialPtrArray* rhs) const {
+    if (!rhs->empty()) {
+        rhs->clear();
+    }
+
+    auto mat = std::make_shared<Material>();
+    for (const auto& lhs : mInitMaterials) {
+        mat->ambient = lhs->ambient;
+        mat->diffuse = lhs->diffuse;
+        mat->specular = lhs->specular;
+        mat->emissive = lhs->emissive;
+        mat->bump = lhs->bump;
+        mat->transparency = lhs->transparency;
+        mat->shininess = lhs->shininess;
+        mat->matName = lhs->matName;
+        mat->textureName = lhs->textureName;
+        mat->texture = lhs->texture;
+        mat->numFace = lhs->numFace;
+
+        rhs->emplace_back(mat);
+    }
 }
 
 std::shared_ptr<VertexArray> OBJ::getVertexArray() const {
     return mVertexArray;
-}
-
-size_t OBJ::getNumMaterial() const {
-    return mMaterials.size();
 }
 
 Vector3 OBJ::getCenter() const {
@@ -303,7 +318,7 @@ bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath)
 
     std::string line;
     char s[256]; //ダミー
-    Vector4 v(0.f, 0.f, 0.f, 1.f);
+    Vector3 v;
     int matCount = -1;
 
     //本読み込み
@@ -320,32 +335,32 @@ bool OBJ::materialLoad(const std::string& fileName, const std::string& filePath)
         //マテリアル名
         if (strcmp(s, "newmtl") == 0) {
             matCount++;
-            mMaterials[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
+            mInitMaterials[matCount]->matName = line.substr(7); //「newmtl 」の文字数分
         }
         //アンビエント
         if (strcmp(s, "Ka") == 0) {
             sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
-            mMaterials[matCount]->ambient = v;
+            mInitMaterials[matCount]->ambient = v;
         }
         //ディフューズ
         if (strcmp(s, "Kd") == 0) {
             sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
-            mMaterials[matCount]->diffuse = v;
+            mInitMaterials[matCount]->diffuse = v;
         }
         //スペキュラー
         if (strcmp(s, "Ks") == 0) {
             sscanf_s(line.c_str(), "%s %f %f %f", s, sizeof(s), &v.x, &v.y, &v.z);
-            mMaterials[matCount]->specular = v;
+            mInitMaterials[matCount]->specular = v;
         }
         //テクスチャー
         if (strcmp(s, "map_Kd") == 0) {
-            mMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
+            mInitMaterials[matCount]->textureName = line.substr(7); //「map_Kd 」の文字数分
 
             auto dir = FileUtil::getDirectryFromFilePath(filePath);
-            dir += "/" + mMaterials[matCount]->textureName;
+            dir += "/" + mInitMaterials[matCount]->textureName;
 
             //テクスチャーを作成
-            mMaterials[matCount]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
+            mInitMaterials[matCount]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
         }
     }
 
@@ -368,7 +383,7 @@ void OBJ::materialPreload(std::ifstream& stream) {
 
         //マテリアル名
         if (strcmp(s, "newmtl") == 0) {
-            mMaterials.emplace_back(std::make_shared<Material>());
+            mInitMaterials.emplace_back(std::make_shared<Material>());
         }
     }
 

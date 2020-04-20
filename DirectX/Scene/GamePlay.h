@@ -7,6 +7,7 @@ class FriedChickenManager;
 class PlayerChickenConnection;
 class Score;
 class Timer;
+class Oil;
 
 class GamePlay : public SceneBase {
     enum class State {
@@ -25,5 +26,6 @@ private:
     std::shared_ptr<PlayerChickenConnection> mPCConnection;
     std::shared_ptr<Score> mScore;
     std::shared_ptr<Timer> mTimeLimitTimer;
+    std::shared_ptr<Oil> mOil;
     State mState;
 };

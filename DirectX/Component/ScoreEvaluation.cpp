@@ -1,19 +1,12 @@
 ﻿#include "ScoreEvaluation.h"
-#include "ComponentManager.h"
-#include "FriedChickenComponent.h"
-#include "Score.h"
+#include "ChickenFry.h"
+#include "FryState.h"
 #include "../DebugLayer/Debug.h"
-#include "../GameObject/GameObject.h"
-#include "../GameObject/GameObjectManager.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 ScoreEvaluation::ScoreEvaluation(std::shared_ptr<GameObject> owner) :
     Component(owner, "ScoreEvaluation"),
-    mScore(nullptr),
-    mLittleBad(0.f),
-    mUsually(0.f),
-    mGood(0.f),
     mLittleBadScore(0),
     mUsuallyScore(0),
     mGoodScore(0),
@@ -22,17 +15,9 @@ ScoreEvaluation::ScoreEvaluation(std::shared_ptr<GameObject> owner) :
 
 ScoreEvaluation::~ScoreEvaluation() = default;
 
-void ScoreEvaluation::start() {
-    auto score = owner()->getGameObjectManager()->find("Score");
-    mScore = score->componentManager()->getComponent<Score>();
-}
-
 void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 
-    JsonHelper::getFloat(inObj, "littleBad", &mLittleBad);
-    JsonHelper::getFloat(inObj, "usually", &mUsually);
-    JsonHelper::getFloat(inObj, "good", &mGood);
     JsonHelper::getInt(inObj, "littleBadScore", &mLittleBadScore);
     JsonHelper::getInt(inObj, "usuallyScore", &mUsuallyScore);
     JsonHelper::getInt(inObj, "goodScore", &mGoodScore);
@@ -41,15 +26,6 @@ void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
 
 void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
-    info.first = "LittleBad";
-    info.second = StringUtil::floatToString(mLittleBad);
-    inspect->emplace_back(info);
-    info.first = "Usually";
-    info.second = StringUtil::floatToString(mUsually);
-    inspect->emplace_back(info);
-    info.first = "Good";
-    info.second = StringUtil::floatToString(mGood);
-    inspect->emplace_back(info);
     info.first = "LittleBadScore";
     info.second = StringUtil::floatToString(mLittleBadScore);
     inspect->emplace_back(info);
@@ -64,35 +40,26 @@ void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-void ScoreEvaluation::evaluateScore(const FriedChickenComponent& chicken) {
-    if (!mScore) {
-        return;
-    }
-
+int ScoreEvaluation::evaluateScore(const ChickenFry& chicken) const {
     int score = 0;
 
     for (size_t i = 0; i < chicken.getNumSurface(); i++) {
-        auto rate = chicken.getFryRate(i);
-        if (0.f <= rate && rate < mLittleBad) {
+        auto state = chicken.getFryState(i);
+        if (state == FryState::NOT_FRIED) {
             continue;
-        } else if (mLittleBad <= rate && rate < mUsually) {
+        } else if (state == FryState::LITTLE_BAD) {
             score += mLittleBadScore;
-        } else if (mUsually <= rate && rate < mGood) {
+        } else if (state == FryState::USUALLY) {
             score += mUsuallyScore;
-        } else if (mGood <= rate && rate < 1.f) {
+        } else if (state == FryState::GOOD) {
             score += mGoodScore;
-        } else if (1.f <= rate) {
+        } else if (state == FryState::BAD) {
             score += mBadScore;
         } else {
             Debug::logWarning(getTypeName() + ": Invalid type.");
         }
     }
 
-    if (score != 0) {
-        mScore->addScore(score);
-    }
-}
-
-float ScoreEvaluation::getGood() const {
-    return mGood;
+    Debug::log(StringUtil::intToString(score));
+    return score;
 }

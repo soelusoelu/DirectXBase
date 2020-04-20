@@ -11,16 +11,12 @@ struct Material;
 class VertexArray;
 
 class FBX : public IMeshLoader {
-    using MaterialPtr = std::shared_ptr<Material>;
-    using MaterialPtrArray = std::vector<MaterialPtr>;
-
 public:
     FBX();
     ~FBX();
     virtual void perse(const std::string& filePath) override;
-    virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
+    virtual void setInitMaterials(MaterialPtrArray* rhs) const override;
     virtual std::shared_ptr<VertexArray> getVertexArray() const override;
-    virtual size_t getNumMaterial() const override;
     virtual Vector3 getCenter() const override;
     virtual float getRadius() const override;
 
@@ -36,6 +32,6 @@ private:
     FbxManager* mManager;
     std::vector<int> mIndexArray;
     MeshVertex* mVertices;
-    MaterialPtrArray mMaterials;
+    MaterialPtrArray mInitMaterials;
     std::shared_ptr<VertexArray> mVertexArray;
 };

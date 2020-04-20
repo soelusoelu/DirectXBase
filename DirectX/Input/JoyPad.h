@@ -2,6 +2,7 @@
 
 #include "../Math/Math.h"
 #include <dinput.h>
+#include <string>
 
 enum class JoyCode {
     A = 0,
@@ -10,10 +11,12 @@ enum class JoyCode {
     Y = 3,
     LeftButton = 4,
     RightButton = 5,
-    SelectButton = 6,
-    StartButton = 7,
+    Select = 6,
+    Start = 7,
     LeftStickButton = 8,
     RightStickButton = 9,
+
+    None = 512
 };
 
 class JoyPad {
@@ -31,6 +34,8 @@ public:
     //ジョイスティック対応
     Vector2 leftStick() const;
     Vector2 rightStick() const;
+    //文字列をJoyCodeに変換
+    static void stringToJoyCode(const std::string& src, JoyCode* dst);
 
 public:
     static LPDIRECTINPUTDEVICE8 mPadDevice;

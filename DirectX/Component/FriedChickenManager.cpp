@@ -1,11 +1,12 @@
 ﻿#include "FriedChickenManager.h"
+#include "ChickenFry.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "ScoreEvaluation.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
+#include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
-#include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
@@ -27,14 +28,9 @@ void FriedChickenManager::awake() {
 
 void FriedChickenManager::start() {
     mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
-
-    for (auto&& chicken : mChickens) {
-        chicken->firstSet(mScoreEvaluation->getGood());
-    }
 }
 
 void FriedChickenManager::update() {
-    addScore();
     moveToWait();
     replenish();
 }
@@ -52,15 +48,15 @@ void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target) {
-    return FindNearestChicken(target, nullptr);
+std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObjectPtr & target) const {
+    return findNearestChicken(target, nullptr);
 }
 
-std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameObjectPtr target, const GameObjectPtr exclude) {
+std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObjectPtr & target, const ChickenPtr & exclude) const {
     float nearest = Math::infinity;
-    GameObjectPtr chicken = nullptr;
+    ChickenPtr chicken = nullptr;
     for (const auto& c : mChickens) {
-        if (c->owner() == exclude) {
+        if (c == exclude) {
             continue;
         }
         if (!c->isFrying()) {
@@ -69,23 +65,41 @@ std::shared_ptr<GameObject> FriedChickenManager::FindNearestChicken(const GameOb
         auto l = (c->owner()->transform()->getPosition() - target->transform()->getPosition()).lengthSq();
         if (l < nearest) {
             nearest = l;
-            chicken = c->owner();
+            chicken = c;
         }
     }
     return chicken;
 }
 
-void FriedChickenManager::addScore() {
+std::list<std::shared_ptr<GameObject>> FriedChickenManager::getFriedChickens() const {
+    GameObjectPtrList list;
+    for (const auto& c : mChickens) {
+        if (!c->isFrying()) {
+            continue;
+        }
+        list.emplace_back(c->owner());
+    }
+    return list;
+}
+
+int FriedChickenManager::getEvaluatedScore() const {
     if (!mScoreEvaluation) {
-        return;
+        return 0;
     }
 
+    int score = 0;
     for (const auto& chicken : mChickens) {
         if (!chicken->isFinished()) {
             continue;
         }
-        mScoreEvaluation->evaluateScore(*chicken);
+        auto fry = chicken->owner()->componentManager()->getComponent<ChickenFry>();
+        if (!fry) {
+            return 0;
+        }
+        score += mScoreEvaluation->evaluateScore(*fry);
     }
+
+    return score;
 }
 
 void FriedChickenManager::moveToWait() {

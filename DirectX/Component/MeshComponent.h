@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "Component.h"
 #include "../Math/Math.h"
@@ -6,10 +6,11 @@
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 struct MeshConstantBuffer {
-    ALIGN16 Matrix4 world; //ƒ[ƒ‹ƒhs—ñ
-    ALIGN16 Matrix4 WVP; //ƒ[ƒ‹ƒh‚©‚çË‰e‚Ü‚Å‚Ì•ÏŠ·s—ñ
+    ALIGN16 Matrix4 world; //ãƒ¯ãƒ¼ãƒ«ãƒ‰è¡Œåˆ—
+    ALIGN16 Matrix4 WVP; //ãƒ¯ãƒ¼ãƒ«ãƒ‰ã‹ã‚‰å°„å½±ã¾ã§ã®å¤‰æ›è¡Œåˆ—
 };
 
 struct MaterialConstantBuffer {
@@ -23,8 +24,12 @@ class GameObject;
 class IMeshLoader;
 class MeshManager;
 class Shader;
+struct Material;
 
 class MeshComponent : public Component, public std::enable_shared_from_this<MeshComponent> {
+    using MaterialPtr = std::shared_ptr<Material>;
+    using MaterialPtrArray = std::vector<MaterialPtr>;
+
     enum class State {
         ACTIVE,
         NON_ACTIVE,
@@ -41,14 +46,18 @@ public:
     virtual void setMesh(const std::string& fileName);
     virtual void setShader();
     virtual void draw();
-    //’†SÀ•W‚Ìæ“¾
+    //ãƒãƒ†ãƒªã‚¢ãƒ«æ•°ã®å–å¾—
+    size_t getNumMaterial() const;
+    //ãƒãƒ†ãƒªã‚¢ãƒ«ã®å–å¾—
+    std::shared_ptr<Material> getMaterial(unsigned index) const;
+    //ä¸­å¿ƒåº§æ¨™ã®å–å¾—
     const Vector3& getCenter() const;
-    //”¼Œa‚Ìæ“¾
+    //åŠå¾„ã®å–å¾—
     float getRadius() const;
-    //‘S‘Ì‚ÌF‡‚¢(ƒVƒF[ƒ_[‘¤‚Åg—p‚µ‚Ä‚¢‚é•K—v‚ ‚è)
+    //å…¨ä½“ã®è‰²åˆã„(ã‚·ã‚§ãƒ¼ãƒ€ãƒ¼å´ã§ä½¿ç”¨ã—ã¦ã„ã‚‹å¿…è¦ã‚ã‚Š)
     void setColor(const Vector3& color);
     const Vector3& getColor() const;
-    //ó‘Ô
+    //çŠ¶æ…‹
     void destroy();
     void setActive(bool value);
     bool getActive() const;
@@ -63,6 +72,7 @@ protected:
     std::shared_ptr<IMeshLoader> mMesh;
     std::shared_ptr<Shader> mShader;
     std::shared_ptr<Camera> mCamera;
+    MaterialPtrArray mMaterials;
     State mState;
     Vector3 mCenter;
     float mRadius;

@@ -1,7 +1,7 @@
 ﻿#include "FriedChickenComponent.h"
+#include "ChickenFry.h"
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Debug.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
@@ -12,35 +12,19 @@
 
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
-    mMeshComp(nullptr),
-    mSurface(Surface::BOTTOM),
+    mFry(nullptr),
     mState(State::FRY),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
-    mInitColor(Vector3::zero),
-    mFryedColor(Vector3::zero),
-    mBurntColor(Vector3::zero),
-    mUpColor(ColorPalette::white),
-    mBottomColor(ColorPalette::white),
-    mLeftColor(ColorPalette::white),
-    mRightColor(ColorPalette::white),
-    mForeColor(ColorPalette::white),
-    mBackColor(ColorPalette::white),
-    mGood(0.f),
-    mFallSpeed(60.f) {
-    for (size_t i = 0; i < getNumSurface(); i++) {
-        mFryTimer.emplace_back(std::make_unique<Time>(10.f));
-    }
+    mRollSpeed(60.f),
+    mFallSpeed(1.f) {
 }
 
 FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
-    mMeshComp = owner()->componentManager()->getComponent<ChickenMeshComponent>();
-    if (mMeshComp) {
-        mMeshComp->setColor(mInitColor);
-    }
+    mFry = owner()->componentManager()->getComponent<ChickenFry>();
 
     initialize();
     //y軸を0にして最初から揚げ状態でスタート
@@ -53,9 +37,10 @@ void FriedChickenComponent::start() {
 
 void FriedChickenComponent::update() {
     if (mState == State::FRY) {
-        frying();
-        changeFryedColor();
-        successFrying();
+        if (mFry) {
+            mFry->update();
+            friedChangeState();
+        }
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
@@ -68,9 +53,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector2(inObj, "randomRangePositionX", &mRandomRangePositionX);
     JsonHelper::getVector2(inObj, "randomRangePositionZ", &mRandomRangePositionZ);
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
-    JsonHelper::getVector3(inObj, "initColor", &mInitColor);
-    JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
-    JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
+    JsonHelper::getFloat(inObj, "rollSpeed", &mRollSpeed);
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
@@ -85,10 +68,12 @@ void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "RandomRangeScale";
     info.second = InspectHelper::vector2ToString(mRandomRangeScale);
     inspect->emplace_back(info);
-}
-
-void FriedChickenComponent::firstSet(float good) {
-    mGood = good;
+    info.first = "RollSpeed";
+    info.second = StringUtil::floatToString(mRollSpeed);
+    inspect->emplace_back(info);
+    info.first = "FallSpeed";
+    info.second = StringUtil::floatToString(mFallSpeed);
+    inspect->emplace_back(info);
 }
 
 void FriedChickenComponent::initialize() {
@@ -107,29 +92,12 @@ void FriedChickenComponent::initialize() {
     t->setScale(scale);
 
     //揚げる面の初期化
-    for (size_t i = 0; i < getNumSurface(); i++) {
-        mFryTimer[i]->reset();
-    }
-    if (mMeshComp) {
-        mMeshComp->setUpColor(mInitColor);
-        mMeshComp->setBottomColor(mInitColor);
-        mMeshComp->setLeftColor(mInitColor);
-        mMeshComp->setRightColor(mInitColor);
-        mMeshComp->setForeColor(mInitColor);
-        mMeshComp->setBackColor(mInitColor);
+    if (mFry) {
+        mFry->initialize();
     }
 
     //空中からの落下状態に設定
     mState = State::FALL;
-}
-
-void FriedChickenComponent::changeSurface() {
-    auto color = mUpColor;
-    mUpColor = mBottomColor;
-    mBottomColor = color;
-    color = mForeColor;
-    mForeColor = mBackColor;
-    mBackColor = color;
 }
 
 void FriedChickenComponent::finishFryed() {
@@ -140,12 +108,11 @@ void FriedChickenComponent::eaten() {
     mState = State::EATEN;
 }
 
-int FriedChickenComponent::getNumSurface() const {
-    return static_cast<int>(Surface::NUM_SURFACE);
-}
-
-float FriedChickenComponent::getFryRate(int surfaceIndex) const {
-    return mFryTimer[surfaceIndex]->rate();
+void FriedChickenComponent::roll(const Vector3& direction) {
+    auto dir = direction;
+    dir.x = direction.z;
+    dir.z = -direction.x;
+    owner()->transform()->rotate(dir * Time::deltaTime * mRollSpeed);
 }
 
 bool FriedChickenComponent::isFrying() const {
@@ -164,50 +131,10 @@ bool FriedChickenComponent::isEaten() const {
     return mState == State::EATEN;
 }
 
-void FriedChickenComponent::frying() {
-    mFryTimer[static_cast<int>(Surface::BOTTOM)]->update();
-}
-
-void FriedChickenComponent::changeFryedColor() {
-    //auto upColor = getChangeColor(upSurface);
-    auto bottomColor = getChangeColor(mSurface);
-
-    if (mMeshComp) {
-        //mMeshComp->setUpColor(upColor);
-        mMeshComp->setBottomColor(bottomColor);
+void FriedChickenComponent::friedChangeState() {
+    if (mFry->isFriedAllSurfaces()) {
+        mState = State::WAITING_COLLECTION;
     }
-}
-
-Vector3 FriedChickenComponent::getChangeColor(Surface surface) {
-    if (surface == Surface::NUM_SURFACE) {
-        return Vector3::zero;
-    }
-
-    //色の変更
-    auto rate = mFryTimer[static_cast<int>(surface)]->rate();
-    auto a = mInitColor;
-    auto b = mFryedColor;
-    if (rate > 1.f) {
-        rate -= 1.f;
-        a = mFryedColor;
-        b = mBurntColor;
-    }
-    if (rate > 1.f) {
-        rate = 1.f;
-    }
-    return Vector3::lerp(a, b, rate);
-}
-
-void FriedChickenComponent::successFrying() {
-    bool result = true;
-    for (size_t i = 0; i < getNumSurface(); i++) {
-        if (mFryTimer[i]->rate() < mGood) {
-            result = false;
-            break;
-        }
-    }
-
-    mState = (result) ? State::WAITING_COLLECTION : State::FRY;
 }
 
 void FriedChickenComponent::fall() {

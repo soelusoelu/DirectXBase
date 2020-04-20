@@ -57,16 +57,32 @@ void FBX::perse(const std::string& filePath) {
     mVertexArray->createVertexBuffer(sizeof(MeshVertex), mVertices);
 }
 
-std::shared_ptr<Material> FBX::getMaterial(unsigned index) const {
-    return mMaterials[index];
+void FBX::setInitMaterials(MaterialPtrArray* rhs) const {
+    if (!rhs->empty()) {
+        rhs->clear();
+    }
+
+    for (const auto& lhs : mInitMaterials) {
+        auto mat = std::make_shared<Material>();
+
+        mat->ambient = lhs->ambient;
+        mat->diffuse = lhs->diffuse;
+        mat->specular = lhs->specular;
+        mat->emissive = lhs->emissive;
+        mat->bump = lhs->bump;
+        mat->transparency = lhs->transparency;
+        mat->shininess = lhs->shininess;
+        mat->matName = lhs->matName;
+        mat->textureName = lhs->textureName;
+        mat->texture = lhs->texture;
+        mat->numFace = lhs->numFace;
+
+        rhs->emplace_back(mat);
+    }
 }
 
 std::shared_ptr<VertexArray> FBX::getVertexArray() const {
     return mVertexArray;
-}
-
-size_t FBX::getNumMaterial() const {
-    return mMaterials.size();
 }
 
 Vector3 FBX::getCenter() const {
@@ -429,7 +445,7 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
 
     //マテリアル情報を取得
     for (size_t i = 0; i < materialNum; i++) {
-        mMaterials.emplace_back(std::make_shared<Material>());
+        mInitMaterials.emplace_back(std::make_shared<Material>());
 
         FbxSurfaceMaterial* material = node->GetMaterial(i);
         if (!material) {
@@ -441,70 +457,62 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
         if (material->GetClassId().Is(FbxSurfaceLambert::ClassId)) {
             FbxSurfaceLambert* lambert = static_cast<FbxSurfaceLambert*>(material);
 
-            auto mat = mMaterials[i];
+            auto mat = mInitMaterials[i];
 
             //アンビエント
             auto ambient = lambert->Ambient.Get();
             mat->ambient.x = static_cast<float>(ambient[0]);
             mat->ambient.y = static_cast<float>(ambient[1]);
             mat->ambient.z = static_cast<float>(ambient[2]);
-            mat->ambient.w = 1.f;
 
             //ディヒューズ
             auto diffuse = lambert->Diffuse.Get();
             mat->diffuse.x = static_cast<float>(diffuse[0]);
             mat->diffuse.y = static_cast<float>(diffuse[1]);
             mat->diffuse.z = static_cast<float>(diffuse[2]);
-            mat->diffuse.w = 1.f;
 
             //エミッシブ
             auto emissive = lambert->Emissive.Get();
             mat->emissive.x = static_cast<float>(emissive[0]);
             mat->emissive.y = static_cast<float>(emissive[1]);
             mat->emissive.z = static_cast<float>(emissive[2]);
-            mat->emissive.w = 1.f;
 
             //バンプ
             auto bump = lambert->Bump.Get();
             mat->bump.x = static_cast<float>(bump[0]);
             mat->bump.y = static_cast<float>(bump[1]);
             mat->bump.z = static_cast<float>(bump[2]);
-            mat->bump.w = 1.f;
 
             //透過度
             mat->transparency = static_cast<float>(lambert->TransparencyFactor.Get());
         } else if (material->GetClassId().Is(FbxSurfacePhong::ClassId)) {
             FbxSurfacePhong* phong = static_cast<FbxSurfacePhong*>(material);
 
-            auto mat = mMaterials[i];
+            auto mat = mInitMaterials[i];
 
             //アンビエント
             auto ambient = phong->Ambient.Get();
             mat->ambient.x = static_cast<float>(ambient[0]);
             mat->ambient.y = static_cast<float>(ambient[1]);
             mat->ambient.z = static_cast<float>(ambient[2]);
-            mat->ambient.w = 1.f;
 
             //ディヒューズ
             auto diffuse = phong->Diffuse.Get();
             mat->diffuse.x = static_cast<float>(diffuse[0]);
             mat->diffuse.y = static_cast<float>(diffuse[1]);
             mat->diffuse.z = static_cast<float>(diffuse[2]);
-            mat->diffuse.w = 1.f;
 
             //エミッシブ
             auto emissive = phong->Emissive.Get();
             mat->emissive.x = static_cast<float>(emissive[0]);
             mat->emissive.y = static_cast<float>(emissive[1]);
             mat->emissive.z = static_cast<float>(emissive[2]);
-            mat->emissive.w = 1.f;
 
             //バンプ
             auto bump = phong->Bump.Get();
             mat->bump.x = static_cast<float>(bump[0]);
             mat->bump.y = static_cast<float>(bump[1]);
             mat->bump.z = static_cast<float>(bump[2]);
-            mat->bump.w = 1.f;
 
             //透過度
             mat->transparency = static_cast<float>(phong->TransparencyFactor.Get());
@@ -514,7 +522,6 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
             mat->specular.x = static_cast<float>(specular[0]);
             mat->specular.y = static_cast<float>(specular[1]);
             mat->specular.z = static_cast<float>(specular[2]);
-            mat->specular.w = 1.f;
 
             //光沢
             mat->shininess = static_cast<float>(phong->Shininess.Get());
@@ -537,13 +544,13 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
                 FbxTexture* texture = FbxCast<FbxTexture>(property.GetSrcObject<FbxTexture>(j));
 
                 //テクスチャ名
-                mMaterials[i]->textureName = texture->GetName();
+                mInitMaterials[i]->textureName = texture->GetName();
 
                 auto dir = FileUtil::getDirectryFromFilePath(filePath);
-                dir += "/" + mMaterials[i]->textureName;
+                dir += "/" + mInitMaterials[i]->textureName;
 
                 //テクスチャーを作成
-                mMaterials[i]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
+                mInitMaterials[i]->texture = Singleton<AssetsManager>::instance().createTexture(dir, false);
 
                 break; //とりあえず今は1枚だけサポート
             }
@@ -566,7 +573,7 @@ void FBX::getMaterial(const std::string& filePath, FbxMesh* mesh) {
             }
         }
         mVertexArray->createIndexBuffer(i, count, indices);
-        mMaterials[i]->numFace = count / 3; //そのマテリアル内のポリゴン数
+        mInitMaterials[i]->numFace = count / 3; //そのマテリアル内のポリゴン数
 
         delete[] indices;
     }

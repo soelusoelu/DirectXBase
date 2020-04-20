@@ -1,27 +1,12 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "../Device/Time.h"
 #include "../Math/Math.h"
-#include <rapidjson/document.h>
 #include <memory>
-#include <vector>
 
-class GameObject;
-class ChickenMeshComponent;
+class ChickenFry;
 
 class FriedChickenComponent : public Component {
-    enum class Surface {
-        BOTTOM,
-        UP,
-        LEFT,
-        RIGHT,
-        FORE,
-        BACK,
-
-        NUM_SURFACE
-    };
-
     enum class State {
         FRY,
         FALL,
@@ -36,20 +21,14 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
-    //マネージャーから必要な値をもらう
-    void firstSet(float good);
     //揚げ直す前の状態に戻す
     void initialize();
-    //揚げる面を変更
-    void changeSurface();
     //強制的に揚げ終わる
     void finishFryed();
     //食われる
     void eaten();
-    //面の数の取得
-    int getNumSurface() const;
-    //揚げ終わるまでの時間比率の取得
-    float getFryRate(int surfaceIndex) const;
+    //その場で唐揚げを回転させる
+    void roll(const Vector3& direction);
 
     //揚げている途中か
     bool isFrying() const;
@@ -61,37 +40,19 @@ public:
     bool isEaten() const;
 
 private:
-    //下の面を揚げる
-    void frying();
-    //揚げ具合によって色を変える
-    void changeFryedColor();
-    Vector3 getChangeColor(Surface surface);
-    //両面揚げれたか
-    void successFrying();
+    //揚げ終わったら状態遷移させる
+    void friedChangeState();
     //空中から落下させる
     void fall();
     //油に浸かったら揚げ始める
     void soakedInOil();
 
 private:
-    std::shared_ptr<ChickenMeshComponent> mMeshComp;
-    Surface mSurface;
+    std::shared_ptr<ChickenFry> mFry;
     State mState;
-    std::vector<std::unique_ptr<Time>> mFryTimer;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
     Vector2 mRandomRangeScale;
-    Vector3 mInitColor;
-    Vector3 mFryedColor;
-    Vector3 mBurntColor;
-
-    Vector3 mUpColor;
-    Vector3 mBottomColor;
-    Vector3 mLeftColor;
-    Vector3 mRightColor;
-    Vector3 mForeColor;
-    Vector3 mBackColor;
-
-    float mGood;
+    float mRollSpeed;
     float mFallSpeed;
 };
