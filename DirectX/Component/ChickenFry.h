@@ -2,7 +2,7 @@
 
 #include "Component.h"
 #include "ChickenSurface.h"
-#include "FryState.h"
+#include "IChickenFry.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -10,7 +10,7 @@
 class ChickenColorChanger;
 class Time;
 
-class ChickenFry : public Component {
+class ChickenFry : public Component, public IChickenFry {
     using TimerPtr = std::shared_ptr<Time>;
     using TimerPtrArray = std::vector<TimerPtr>;
 
@@ -22,19 +22,14 @@ public:
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
-    //初期化
-    void initialize();
-    //FriedChickenComponentにより毎フレーム更新
-    void update();
-    //すべての面が焦げたか
-    bool isBurntAllSurfaces() const;
-    //焦げた面が一定秒数以上揚げられてるか
-    bool isTooBurnt() const;
-    //面の数の取得
-    int getNumSurface() const;
-    //指定した面の揚げ状態の取得
-    FryState getFryState(ChickenSurface surface) const;
-    FryState getFryState(unsigned surfaceIndex) const;
+
+    virtual void initialize() override;
+    virtual void update() override;
+    virtual bool isBurntAllSurfaces() const override;
+    virtual bool isTooBurnt() const override;
+    virtual int getNumSurface() const override;
+    virtual FryState getFryState(ChickenSurface surface) const override;
+    virtual FryState getFryState(unsigned surfaceIndex) const override;
 
 private:
     //揚がりやすい・揚がりにくい面を決める

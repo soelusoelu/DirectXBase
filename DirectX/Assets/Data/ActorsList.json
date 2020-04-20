@@ -76,7 +76,7 @@
     {
       "type": "Field",
       "properties": {
-        "scale": [ 0.5, 0.5, 0.1]
+        "scale": [ 0.5, 0.5, 1.0 ]
       },
       "components": [
         {
@@ -173,7 +173,7 @@
           "properties": {
             "collectionKey": "E",
             "collectionPad": "X",
-            "isJumpRoll" : false
+            "isJumpRoll": false
           }
         }
       ]

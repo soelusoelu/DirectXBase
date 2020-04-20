@@ -239,5 +239,6 @@
     <ClInclude Include="Component\ChickenColorChanger.h" />
     <ClInclude Include="Component\ChickenSurface.h" />
     <ClInclude Include="Component\Field.h" />
+    <ClInclude Include="Component\IChickenFry.h" />
   </ItemGroup>
 </Project>

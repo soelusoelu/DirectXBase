@@ -1,10 +1,9 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "IChickenFry.h"
 #include "../Math/Math.h"
 #include <memory>
-
-class ChickenFry;
 
 class FriedChickenComponent : public Component {
     enum class State {
@@ -48,7 +47,7 @@ private:
     void soakedInOil();
 
 private:
-    std::shared_ptr<ChickenFry> mFry;
+    std::shared_ptr<IChickenFry> mFry;
     State mState;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
