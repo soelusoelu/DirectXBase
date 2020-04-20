@@ -159,7 +159,8 @@
           "type": "PlayerChickenConnection",
           "properties": {
             "collectionKey": "E",
-            "collectionPad": "X"
+            "collectionPad": "X",
+            "isJumpRoll" : false
           }
         }
       ]

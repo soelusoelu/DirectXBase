@@ -45,4 +45,5 @@ private:
 
     KeyCode mCollectionKey;
     JoyCode mCollectionPad;
+    bool mIsJumpRoll;
 };
