@@ -116,8 +116,8 @@ void TransparentMeshComponent::draw() {
 
         if (mShader->map(&msrd, 1)) {
             MaterialConstantBuffer cb;
-            //cb.diffuse = mat->diffuse;
-            cb.diffuse = Vector4(mColor, mAlpha);
+            cb.diffuse = Vector4(mat->diffuse, mAlpha);
+            //cb.diffuse = Vector4(mColor, mAlpha);
             cb.specular = Vector4(mat->specular, 1.f);
 
             if (auto t = mat->texture) {
