@@ -7,6 +7,7 @@
 class FriedChickenComponent;
 class GameObject;
 class ScoreEvaluation;
+class Time;
 
 class FriedChickenManager : public Component {
     using ChickenPtr = std::shared_ptr<FriedChickenComponent>;
@@ -32,6 +33,10 @@ public:
     int getEvaluatedScore() const;
 
 private:
+    //アクティブになってる待ち唐揚げを非アクティブにする
+    void deactivateWaitingChickens();
+    //一定時間ごとに唐揚げの最大数を増やす
+    void increaseTheMaximumNumber();
     //揚げ終わった唐揚げを回収する
     void moveToWait();
     //唐揚げを補充する
@@ -43,6 +48,12 @@ private:
     ChickenPtrList mChickens;
     //待機中の唐揚げ
     ChickenPtrList mWaitingChickens;
+    //最初の唐揚げの数
+    int mStartNum;
     //一度に画面内に表示する最大数
-    int mMaxDrawNum;
+    int mMaxNum;
+    //現在の表示できる最大数
+    int mCurrentMaxNum;
+    //補充する時間間隔
+    std::unique_ptr<Time> mReplenishTimer;
 };

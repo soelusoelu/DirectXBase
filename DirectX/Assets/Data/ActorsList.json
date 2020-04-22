@@ -154,7 +154,9 @@
         {
           "type": "FriedChickenManager",
           "properties": {
-            "maxDrawNum": 5
+            "startNum": 2,
+            "maxNum": 5,
+            "replenishTimer": 20.0
           }
         },
         {

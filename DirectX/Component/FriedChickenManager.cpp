@@ -3,6 +3,7 @@
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "ScoreEvaluation.h"
+#include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
@@ -13,17 +14,28 @@
 FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
     mScoreEvaluation(nullptr),
-    mMaxDrawNum(10) {
+    mStartNum(0),
+    mMaxNum(0),
+    mCurrentMaxNum(0),
+    mReplenishTimer(std::make_unique<Time>(0.f)) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
 
 void FriedChickenManager::awake() {
-    for (size_t i = 0; i < mMaxDrawNum; i++) {
+    for (size_t i = 0; i < mStartNum; i++) {
         auto f = GameObjectCreater::create("FriedChicken");
         auto c = f->componentManager()->getComponent<FriedChickenComponent>();
         mChickens.emplace_back(c);
     }
+    int waitNum = mMaxNum - mStartNum;
+    for (size_t i = 0; i < waitNum; i++) {
+        auto f = GameObjectCreater::create("FriedChicken");
+        auto c = f->componentManager()->getComponent<FriedChickenComponent>();
+        mWaitingChickens.emplace_back(c);
+    }
+
+    mCurrentMaxNum = mStartNum;
 }
 
 void FriedChickenManager::start() {
@@ -31,6 +43,8 @@ void FriedChickenManager::start() {
 }
 
 void FriedChickenManager::update() {
+    deactivateWaitingChickens();
+    increaseTheMaximumNumber();
     moveToWait();
     replenish();
 }
@@ -38,13 +52,24 @@ void FriedChickenManager::update() {
 void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
-    JsonHelper::getInt(inObj, "maxDrawNum", &mMaxDrawNum);
+    JsonHelper::getInt(inObj, "startNum", &mStartNum);
+    JsonHelper::getInt(inObj, "maxNum", &mMaxNum);
+    float time;
+    if (JsonHelper::getFloat(inObj, "replenishTimer", &time)) {
+        mReplenishTimer->setLimitTime(time);
+    }
 }
 
 void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
     DebugInfo info;
-    info.first = "MaxDrawNum";
-    info.second = StringUtil::intToString(mMaxDrawNum);
+    info.first = "StartNum";
+    info.second = StringUtil::intToString(mStartNum);
+    inspect->emplace_back(info);
+    info.first = "MaxNum";
+    info.second = StringUtil::intToString(mMaxNum);
+    inspect->emplace_back(info);
+    info.first = "CurrentMaxNum";
+    info.second = StringUtil::intToString(mCurrentMaxNum);
     inspect->emplace_back(info);
 }
 
@@ -99,6 +124,22 @@ int FriedChickenManager::getEvaluatedScore() const {
     return score;
 }
 
+void FriedChickenManager::deactivateWaitingChickens() {
+    for (auto&& c : mWaitingChickens) {
+        if (c->owner()->getActive()) {
+            c->owner()->setActive(false);
+        }
+    }
+}
+
+void FriedChickenManager::increaseTheMaximumNumber() {
+    mReplenishTimer->update();
+    if (mReplenishTimer->isTime()) {
+        mReplenishTimer->reset();
+        mCurrentMaxNum++;
+    }
+}
+
 void FriedChickenManager::moveToWait() {
     auto itr = mChickens.begin();
     while (itr != mChickens.end()) {
@@ -113,15 +154,19 @@ void FriedChickenManager::moveToWait() {
 }
 
 void FriedChickenManager::replenish() {
-    if (mChickens.size() < mMaxDrawNum) {
-        if (mWaitingChickens.size() == 0) {
-            return;
-        }
-
-        auto itr = mWaitingChickens.begin();
-        auto chicken = (*itr);
-        mWaitingChickens.erase(itr);
-        chicken->initialize();
-        mChickens.emplace_back(chicken);
+    if (mCurrentMaxNum >= mMaxNum) {
+        return;
     }
+    if (mChickens.size() >= mCurrentMaxNum) {
+        return;
+    }
+    if (mWaitingChickens.empty()) {
+        return;
+    }
+
+    auto itr = mWaitingChickens.begin();
+    auto chicken = (*itr);
+    mWaitingChickens.erase(itr);
+    chicken->initialize();
+    mChickens.emplace_back(chicken);
 }
