@@ -15,14 +15,16 @@ public:
     MeshManager();
     ~MeshManager();
     void update();
-    void draw() const;
-    void drawTransparent() const;
+    void draw(const Camera& camera) const;
+    void drawTransparent(const Camera& camera) const;
     void add(const MeshPtr& mesh);
     void addTransparent(const MeshPtr& mesh);
     void clear();
 
 private:
     void remove();
+    //描画するか
+    bool isDraw(const MeshComponent& mesh, const Camera& camera) const;
 
     MeshManager(const MeshManager&) = delete;
     MeshManager& operator=(const MeshManager&) = delete;

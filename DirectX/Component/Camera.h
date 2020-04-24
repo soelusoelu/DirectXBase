@@ -20,6 +20,10 @@ public:
     void lookAt(const Vector3& position);
     //スクリーン座標をワールド座標に変換
     Vector3 screenToWorldPoint(const Vector2& position, float z);
+    //視錐台カリング
+    //true: 視錐台の内側
+    //false : 視錐台の外側
+    bool viewFrustumCulling(const Vector3& pos, float radius) const;
 
 private:
     void calcLookAt();

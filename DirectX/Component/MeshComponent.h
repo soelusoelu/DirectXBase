@@ -61,7 +61,7 @@ public:
     void destroy();
     void setActive(bool value);
     bool getActive() const;
-    bool isDead();
+    bool isDead() const;
 
     static void setMeshManager(MeshManager* manager);
 

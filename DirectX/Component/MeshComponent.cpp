@@ -172,7 +172,7 @@ bool MeshComponent::getActive() const {
     return mState == State::ACTIVE;
 }
 
-bool MeshComponent::isDead() {
+bool MeshComponent::isDead() const {
     return mState == State::DEAD;
 }
 
