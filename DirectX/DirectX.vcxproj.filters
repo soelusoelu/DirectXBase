@@ -240,5 +240,6 @@
     <ClInclude Include="Component\ChickenSurface.h" />
     <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IChickenFry.h" />
+    <ClInclude Include="Component\IMesh.h" />
   </ItemGroup>
 </Project>

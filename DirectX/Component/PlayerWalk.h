@@ -5,6 +5,7 @@
 #include "../Math/Math.h"
 #include <memory>
 
+class Camera;
 enum class KeyCode;
 enum class JoyCode;
 
@@ -12,6 +13,7 @@ class PlayerWalk : public Component, public IPlayerWalk {
 public:
     PlayerWalk(std::shared_ptr<GameObject> owner);
     ~PlayerWalk();
+    virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
 
@@ -20,8 +22,10 @@ public:
     void walkUpdate();
 
 private:
+    std::shared_ptr<Camera> mCamera;
     Vector3 mMoveDir;
     KeyCode mRollKey;
     JoyCode mRollPad;
     float mMoveSpeed;
+    float mMeshRadius;
 };
