@@ -118,10 +118,6 @@
         {
           "type": "ChickenFry",
           "properties": {
-            "initColor": [ 0.8, 0.6, 0.5 ],
-            "fryedColor": [ 0.8, 0.4, 0.1 ],
-            "burntColor": [ 0.1, 0.1, 0.1 ],
-
             "notFriedToLittleBadTimer": 0.0,
             "littleBadToUsuallyTimer": 5.0,
             "usuallyToGoodTimer": 5.0,

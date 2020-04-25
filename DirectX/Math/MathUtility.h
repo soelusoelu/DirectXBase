@@ -10,6 +10,7 @@ namespace Math {
     constexpr float infinity = std::numeric_limits<float>::infinity();
     constexpr float negInfinity = -std::numeric_limits<float>::infinity();
     constexpr float deg2Rad = PI / 180.f;
+    constexpr float rad2Deg = 180.f / PI;
 
     inline float toRadians(float degrees) {
         return degrees * PI / 180.0f;
