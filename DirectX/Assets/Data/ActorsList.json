@@ -118,13 +118,10 @@
         {
           "type": "ChickenFry",
           "properties": {
-<<<<<<< HEAD
             "initColor": [ 0.8, 0.6, 0.5 ],
             "fryedColor": [ 0.8, 0.4, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ],
 
-=======
->>>>>>> origin/master
             "notFriedToLittleBadTimer": 0.0,
             "littleBadToUsuallyTimer": 5.0,
             "usuallyToGoodTimer": 5.0,
@@ -136,13 +133,8 @@
             "easyGoodToBadTimer": 4.0,
 
             "hardNotFriedToLittleBadTimer": 0.0,
-<<<<<<< HEAD
             "hardLittleBadToUsuallyTimer": 7.0,
             "hardUsuallyToGoodTimer": 5.0,
-            "hardGoodToBadTimer": 4.0
-=======
-            "hardLittleBadToUsuallyTimer": 4.0,
-            "hardUsuallyToGoodTimer": 4.0,
             "hardGoodToBadTimer": 4.0,
 
             "tooBurntTimer": 5.0
@@ -156,7 +148,6 @@
             "usuallyColor": [ 0.6, 0.4, 0.3 ],
             "friedColor": [ 0.4, 0.2, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ]
->>>>>>> origin/master
           }
         }
       ]
