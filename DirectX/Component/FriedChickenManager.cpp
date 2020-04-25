@@ -138,6 +138,10 @@ void FriedChickenManager::increaseTheMaximumNumber() {
         mReplenishTimer->reset();
         mCurrentMaxNum++;
     }
+
+    if (mCurrentMaxNum > mMaxNum) {
+        mCurrentMaxNum = mMaxNum;
+    }
 }
 
 void FriedChickenManager::moveToWait() {
@@ -154,9 +158,6 @@ void FriedChickenManager::moveToWait() {
 }
 
 void FriedChickenManager::replenish() {
-    if (mCurrentMaxNum >= mMaxNum) {
-        return;
-    }
     if (mChickens.size() >= mCurrentMaxNum) {
         return;
     }
