@@ -69,7 +69,7 @@
         {
           "type": "Timer",
           "properties": {
-            "limit": 60.0
+            "limit": 90.0
           }
         }
       ]

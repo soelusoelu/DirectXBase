@@ -104,29 +104,29 @@
             "randomRangePositionZ": [ -5.0, 5.0 ],
             "randomRangeScale": [ 1.0, 2.0 ],
             "rollSpeed": 180.0,
-            "fallSpeed": 5.0
+            "fallSpeed": 3.0
           }
         },
         {
           "type": "ChickenFry",
           "properties": {
-            "initColor": [ 1.0, 0.8, 0.8 ],
-            "fryedColor": [ 0.4, 0.2, 0.1 ],
+            "initColor": [ 0.8, 0.6, 0.5 ],
+            "fryedColor": [ 0.8, 0.4, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ],
 
             "notFriedToLittleBadTimer": 0.0,
-            "littleBadToUsuallyTimer": 3.0,
-            "usuallyToGoodTimer": 3.0,
-            "goodToBadTimer": 3.0,
+            "littleBadToUsuallyTimer": 5.0,
+            "usuallyToGoodTimer": 5.0,
+            "goodToBadTimer": 4.0,
 
             "easyNotFriedToLittleBadTimer": 0.0,
-            "easyLittleBadToUsuallyTimer": 2.0,
-            "easyUsuallyToGoodTimer": 2.0,
-            "easyGoodToBadTimer": 3.0,
+            "easyLittleBadToUsuallyTimer": 4.0,
+            "easyUsuallyToGoodTimer": 4.0,
+            "easyGoodToBadTimer": 4.0,
 
             "hardNotFriedToLittleBadTimer": 0.0,
-            "hardLittleBadToUsuallyTimer": 4.0,
-            "hardUsuallyToGoodTimer": 4.0,
+            "hardLittleBadToUsuallyTimer": 7.0,
+            "hardUsuallyToGoodTimer": 5.0,
             "hardGoodToBadTimer": 4.0
           }
         }
@@ -186,7 +186,7 @@
         {
           "type": "Timer",
           "properties": {
-            "limit": 15.0
+            "limit": 20.0
           }
         }
       ]
@@ -197,7 +197,7 @@
         {
           "type": "Oil",
           "properties": {
-            "flowSpeed": 3.0,
+            "flowSpeed": 2.0,
             "flowRangeX": 4.0,
             "flowRangeZFore": 3.0,
             "flowRangeZBack": 5.0
