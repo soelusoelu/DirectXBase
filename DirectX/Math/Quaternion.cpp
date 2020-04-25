@@ -53,6 +53,25 @@ void Quaternion::normalize() {
     w /= len;
 }
 
+Vector3 Quaternion::euler() const {
+    Vector3 euler = Vector3::zero;
+    auto q = *this;
+    float sp = -2.f * (q.y * q.z - q.w * q.x);
+    //ジンバルロックチェック
+    if (Math::abs(sp) > 0.9999f) {
+        //真上か真下を向いている
+        euler.y = Math::PiOver2 * sp;
+        euler.x = Math::atan2(-q.x * q.z + q.w * q.y, 0.5f - q.y * q.y - q.z * q.z);
+        euler.z = 0.f;
+    } else {
+        euler.y = Math::asin(sp);
+        euler.x = Math::atan2(q.x * q.z + q.w * q.y, 0.5f - q.x * q.x - q.y * q.y);
+        euler.z = Math::atan2(q.x * q.y + q.w * q.z, 0.5f - q.x * q.x - q.z * q.z);
+    }
+
+    return euler;
+}
+
 Quaternion Quaternion::normalize(const Quaternion& q) {
     Quaternion retVal = q;
     retVal.normalize();

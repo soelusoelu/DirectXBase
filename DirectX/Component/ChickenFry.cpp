@@ -93,6 +93,11 @@ void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "TooBurntTiemr";
     info.second = StringUtil::floatToString(mTooBurntTimer->currentTime());
     inspect->emplace_back(info);
+
+    info.first = "Euler";
+    auto euler = owner()->transform()->getRotation().euler();
+    info.second = StringUtil::vector3ToString(euler);
+    inspect->emplace_back(info);
 }
 
 void ChickenFry::initialize() {
