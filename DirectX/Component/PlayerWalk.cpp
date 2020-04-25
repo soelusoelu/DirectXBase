@@ -1,6 +1,10 @@
 ﻿#include "PlayerWalk.h"
+#include "Camera.h"
+#include "ComponentManager.h"
+#include "MeshComponent.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
 #include "../Input/JoyPad.h"
@@ -11,15 +15,26 @@
 
 PlayerWalk::PlayerWalk(std::shared_ptr<GameObject> owner) :
     Component(owner, "PlayerWalk"),
+    mCamera(nullptr),
     mMoveDir(Vector3::zero),
     mRollKey(KeyCode::None),
     mRollPad(JoyCode::None),
-    mMoveSpeed(1.f) {
+    mMoveSpeed(1.f),
+    mMeshRadius(0.f) {
 }
 
 PlayerWalk::~PlayerWalk() = default;
 
-void PlayerWalk::loadProperties(const rapidjson::Value& inObj) {
+void PlayerWalk::start() {
+    auto camera = owner()->getGameObjectManager()->find("Camera");
+    mCamera = camera->componentManager()->getComponent<Camera>();
+    auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
+    if (mesh) {
+        mMeshRadius = mesh->getRadius() * owner()->transform()->getScale().x;
+    }
+}
+
+void PlayerWalk::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
@@ -32,7 +47,7 @@ void PlayerWalk::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
-void PlayerWalk::drawDebugInfo(DebugInfoList* inspect) const {
+void PlayerWalk::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
     DebugInfo info;
@@ -75,5 +90,15 @@ void PlayerWalk::walkUpdate() {
     }
 #endif // _DEBUG
 
-    owner()->transform()->translate(mMoveDir * Time::deltaTime * mMoveSpeed);
+    if (!mCamera) {
+        return;
+    }
+
+    auto amount = mMoveDir * Time::deltaTime * mMoveSpeed;
+    auto pos = owner()->transform()->getPosition();
+    if (!mCamera->viewFrustumCulling(pos + amount, mMeshRadius)) {
+        return;
+    }
+
+    owner()->transform()->translate(amount);
 }

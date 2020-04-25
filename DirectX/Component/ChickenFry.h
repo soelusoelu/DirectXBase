@@ -1,31 +1,18 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "FryState.h"
-#include "../Math/Math.h"
+#include "ChickenSurface.h"
+#include "IChickenFry.h"
 #include <memory>
 #include <string>
 #include <vector>
 
+class ChickenColorChanger;
 class Time;
-struct Material;
 
-class ChickenFry : public Component {
+class ChickenFry : public Component, public IChickenFry {
     using TimerPtr = std::shared_ptr<Time>;
     using TimerPtrArray = std::vector<TimerPtr>;
-    using MaterialPtr = std::shared_ptr<Material>;
-    using MaterialPtrArray = std::vector<MaterialPtr>;
-
-    enum class Surface {
-        RIGHT,
-        FORE,
-        LEFT,
-        UP,
-        BOTTOM,
-        BACK,
-
-        NUM_SURFACE
-    };
 
 public:
     ChickenFry(std::shared_ptr<GameObject> owner);
@@ -35,42 +22,38 @@ public:
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
-    //初期化
-    void initialize();
-    //FriedChickenComponentにより毎フレーム更新
-    void update();
-    //すべての面を揚げ終わったか
-    bool isFriedAllSurfaces() const;
-    //面の数の取得
-    int getNumSurface() const;
-    //指定した面の揚げ状態の取得
-    FryState getFryState(unsigned surfaceIndex) const;
+
+    virtual void initialize() override;
+    virtual void update() override;
+    virtual bool isBurntAllSurfaces() const override;
+    virtual bool isTooBurnt() const override;
+    virtual bool isBurntHalfSurfaces() const override;
+    virtual FryState getFryState(ChickenSurface surface) const override;
+    virtual FryState getFryState(unsigned surfaceIndex) const override;
 
 private:
     //揚がりやすい・揚がりにくい面を決める
     void choiceEasyAndHardSurface();
     //下の面を決定する
-    void bottomSurface();
+    void choiceBottomSurface();
     //下の面を揚げる
     void frying();
-    //揚げ具合によって色を変える
-    void changeFryedColor();
-    //指定した面のマテリアルの取得
-    MaterialPtr getMaterial(Surface surface) const;
+    //下の面が焦げてたらタイマーを進める
+    void updateTimerIfBurntBottomSurface();
+    //面の数の取得
+    int getNumSurface() const;
     //揚げ状態の数の取得
     int getNumFryState() const;
     //Surfaceを文字列化
-    std::string surfaceToString(Surface surface) const;
+    std::string surfaceToString(ChickenSurface surface) const;
 
 private:
+    std::shared_ptr<ChickenColorChanger> mColorChanger;
     TimerPtrArray mFryTimer;
-    MaterialPtrArray mMaterials;
-    Surface mCurrentBottomSurface;
-    Surface mEasySurface;
-    Surface mHardSurface;
-    Vector3 mInitColor;
-    Vector3 mFryedColor;
-    Vector3 mBurntColor;
+    ChickenSurface mCurrentBottomSurface;
+    ChickenSurface mEasySurface;
+    ChickenSurface mHardSurface;
+    std::unique_ptr<Time> mTooBurntTimer;
 
     //普通の面
     std::vector<float> mUsually;

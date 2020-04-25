@@ -1,24 +1,21 @@
 ﻿#include "ChickenFry.h"
-#include "ChickenMeshComponent.h"
+#include "ChickenColorChanger.h"
 #include "ComponentManager.h"
 #include "../DebugLayer/Debug.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
-#include <cassert>
+#include "../Utility/StringUtil.h"
 
 ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
     Component(owner, "ChickenFry"),
-    mCurrentBottomSurface(Surface::BOTTOM),
-    mEasySurface(Surface::BOTTOM),
-    mHardSurface(Surface::BOTTOM),
-    mInitColor(Vector3::zero),
-    mFryedColor(Vector3::zero),
-    mBurntColor(Vector3::zero),
+    mColorChanger(nullptr),
+    mCurrentBottomSurface(ChickenSurface::BOTTOM),
+    mEasySurface(ChickenSurface::BOTTOM),
+    mHardSurface(ChickenSurface::BOTTOM),
+    mTooBurntTimer(std::make_unique<Time>(0.f)),
     mUsually(getNumFryState() - 1),
     mEasy(getNumFryState() - 1),
     mHard(getNumFryState() - 1),
@@ -42,28 +39,19 @@ void ChickenFry::awake() {
 }
 
 void ChickenFry::start() {
-    auto mesh = owner()->componentManager()->getComponent<ChickenMeshComponent>();
-    if (mesh) {
-        for (size_t i = 0; i < getNumSurface(); i++) {
-            //Surfaceと合わせてある
-            //最初のマテリアルは使われてないからプラス1
-            mMaterials.emplace_back(mesh->getMaterial(i + 1));
-        }
-    }
-
-    initialize();
+    mColorChanger = owner()->componentManager()->getComponent<ChickenColorChanger>();
 }
 
 void ChickenFry::onUpdateWorldTransform() {
-    bottomSurface();
+    auto previous = mCurrentBottomSurface;
+    choiceBottomSurface();
+    if (previous != mCurrentBottomSurface) {
+        mTooBurntTimer->reset();
+    }
 }
 
 void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
-
-    JsonHelper::getVector3(inObj, "initColor", &mInitColor);
-    JsonHelper::getVector3(inObj, "fryedColor", &mFryedColor);
-    JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
 
     JsonHelper::getFloat(inObj, "notFriedToLittleBadTimer", &mUsually[0]);
     JsonHelper::getFloat(inObj, "littleBadToUsuallyTimer", &mUsually[1]);
@@ -79,22 +67,17 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "hardLittleBadToUsuallyTimer", &mHard[1]);
     JsonHelper::getFloat(inObj, "hardUsuallyToGoodTimer", &mHard[2]);
     JsonHelper::getFloat(inObj, "hardGoodToBadTimer", &mHard[3]);
+
+    float time;
+    if (JsonHelper::getFloat(inObj, "tooBurntTimer", &time)) {
+        mTooBurntTimer->setLimitTime(time);
+    }
 }
 
 void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
     DebugInfo info;
-    info.first = "InitColor";
-    info.second = InspectHelper::vector3ToString(mInitColor);
-    inspect->emplace_back(info);
-    info.first = "FryedColor";
-    info.second = InspectHelper::vector3ToString(mFryedColor);
-    inspect->emplace_back(info);
-    info.first = "BurntColor";
-    info.second = InspectHelper::vector3ToString(mBurntColor);
-    inspect->emplace_back(info);
-
     info.first = "CurrentBottomSurface";
     info.second = surfaceToString(mCurrentBottomSurface);
     inspect->emplace_back(info);
@@ -106,6 +89,15 @@ void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "HardSurface";
     info.second = surfaceToString(mHardSurface);
     inspect->emplace_back(info);
+
+    info.first = "TooBurntTiemr";
+    info.second = StringUtil::floatToString(mTooBurntTimer->currentTime());
+    inspect->emplace_back(info);
+
+    info.first = "Euler";
+    auto euler = owner()->transform()->getRotation().euler();
+    info.second = StringUtil::vector3ToString(euler);
+    inspect->emplace_back(info);
 }
 
 void ChickenFry::initialize() {
@@ -114,19 +106,26 @@ void ChickenFry::initialize() {
         timer->setLimitTime(mBurntTime);
         timer->reset();
     }
-    for (auto&& mat : mMaterials) {
-        mat->diffuse = mInitColor;
-    }
+    //焦げ時間の初期化
+    mTooBurntTimer->reset();
 
     choiceEasyAndHardSurface();
+
+    if (mColorChanger) {
+        mColorChanger->initialize();
+    }
 }
 
 void ChickenFry::update() {
     frying();
-    changeFryedColor();
+    updateTimerIfBurntBottomSurface();
+
+    if (mColorChanger) {
+        mColorChanger->update(mCurrentBottomSurface, getFryState(mCurrentBottomSurface));
+    }
 }
 
-bool ChickenFry::isFriedAllSurfaces() const {
+bool ChickenFry::isBurntAllSurfaces() const {
     bool result = true;
     for (size_t i = 0; i < getNumSurface(); i++) {
         if (getFryState(i) != FryState::BAD) {
@@ -138,8 +137,24 @@ bool ChickenFry::isFriedAllSurfaces() const {
     return result;
 }
 
-int ChickenFry::getNumSurface() const {
-    return static_cast<int>(Surface::NUM_SURFACE);
+bool ChickenFry::isTooBurnt() const {
+    return mTooBurntTimer->isTime();
+}
+
+bool ChickenFry::isBurntHalfSurfaces() const {
+    int count = 0;
+    for (size_t i = 0; i < getNumSurface(); i++) {
+        auto state = getFryState(i);
+        if (state == FryState::GOOD || state == FryState::BAD) {
+            count++;
+        }
+    }
+
+    return (count >= getNumSurface() / 2);
+}
+
+FryState ChickenFry::getFryState(ChickenSurface surface) const {
+    return getFryState(static_cast<unsigned>(surface));
 }
 
 FryState ChickenFry::getFryState(unsigned surfaceIndex) const {
@@ -176,27 +191,27 @@ void ChickenFry::choiceEasyAndHardSurface() {
         hardSurface = Random::randomRange(0, getNumSurface() - 1);
     } while (hardSurface == easySurface);
 
-    mEasySurface = static_cast<Surface>(easySurface);
-    mHardSurface = static_cast<Surface>(hardSurface);
+    mEasySurface = static_cast<ChickenSurface>(easySurface);
+    mHardSurface = static_cast<ChickenSurface>(hardSurface);
     mFryTimer[static_cast<int>(mEasySurface)]->setLimitTime(mEasyBurntTime);
     mFryTimer[static_cast<int>(mHardSurface)]->setLimitTime(mHardBurntTime);
 }
 
-void ChickenFry::bottomSurface() {
+void ChickenFry::choiceBottomSurface() {
     auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
     static const float SIN_COS_45 = Math::sin(45.f);
     if (dir.y <= -SIN_COS_45) {
-        mCurrentBottomSurface = Surface::BOTTOM;
-    } else if (dir.y > SIN_COS_45) {
-        mCurrentBottomSurface = Surface::UP;
+        mCurrentBottomSurface = ChickenSurface::BOTTOM;
+    } else if (dir.y >= SIN_COS_45) {
+        mCurrentBottomSurface = ChickenSurface::UP;
     } else if (dir.x <= -SIN_COS_45) {
-        mCurrentBottomSurface = Surface::RIGHT;
-    } else if (dir.x > SIN_COS_45) {
-        mCurrentBottomSurface = Surface::LEFT;
-    } else if (dir.z <= SIN_COS_45) {
-        mCurrentBottomSurface = Surface::FORE;
-    } else if (dir.z > SIN_COS_45) {
-        mCurrentBottomSurface = Surface::BACK;
+        mCurrentBottomSurface = ChickenSurface::RIGHT;
+    } else if (dir.x >= SIN_COS_45) {
+        mCurrentBottomSurface = ChickenSurface::LEFT;
+    } else if (dir.z <= -SIN_COS_45) {
+        mCurrentBottomSurface = ChickenSurface::BACK;
+    } else if (dir.z >= SIN_COS_45) {
+        mCurrentBottomSurface = ChickenSurface::FORE;
     } else {
         Debug::logError("No bottom Surface!");
     }
@@ -206,46 +221,36 @@ void ChickenFry::frying() {
     mFryTimer[static_cast<int>(mCurrentBottomSurface)]->update();
 }
 
-void ChickenFry::changeFryedColor() {
-    auto rate = mFryTimer[static_cast<int>(mCurrentBottomSurface)]->rate();
-    auto a = mInitColor;
-    auto b = mFryedColor;
-    if (rate > 1.f) {
-        rate -= 1.f;
-        a = mFryedColor;
-        b = mBurntColor;
+void ChickenFry::updateTimerIfBurntBottomSurface() {
+    if (getFryState(mCurrentBottomSurface) != FryState::BAD) {
+        return;
     }
-    if (rate > 1.f) {
-        rate = 1.f;
-    }
-    auto color = Vector3::lerp(a, b, rate);
-    getMaterial(mCurrentBottomSurface)->diffuse = color;
+
+    mTooBurntTimer->update();
 }
 
-std::shared_ptr<Material> ChickenFry::getMaterial(Surface surface) const {
-    int index = static_cast<int>(surface);
-    assert(0 <= index && index < getNumSurface());
-    return mMaterials[index];
+int ChickenFry::getNumSurface() const {
+    return static_cast<int>(ChickenSurface::NUM_SURFACE);
 }
 
 int ChickenFry::getNumFryState() const {
     return static_cast<int>(FryState::NUM_STATE);
 }
 
-std::string ChickenFry::surfaceToString(Surface surface) const {
+std::string ChickenFry::surfaceToString(ChickenSurface surface) const {
     std::string str;
 
-    if (surface == Surface::UP) {
+    if (surface == ChickenSurface::UP) {
         str = "UP";
-    } else if (surface == Surface::BOTTOM) {
+    } else if (surface == ChickenSurface::BOTTOM) {
         str = "BOTTOM";
-    } else if (surface == Surface::LEFT) {
+    } else if (surface == ChickenSurface::LEFT) {
         str = "LEFT";
-    } else if (surface == Surface::RIGHT) {
+    } else if (surface == ChickenSurface::RIGHT) {
         str = "RIGHT";
-    } else if (surface == Surface::FORE) {
+    } else if (surface == ChickenSurface::FORE) {
         str = "FORE";
-    } else if (surface == Surface::BACK) {
+    } else if (surface == ChickenSurface::BACK) {
         str = "BACK";
     }
 

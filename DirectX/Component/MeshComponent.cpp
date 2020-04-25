@@ -59,6 +59,54 @@ void MeshComponent::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
+bool MeshComponent::isVisible() const {
+    if (!mCamera) {
+        return false;
+    }
+
+    return mCamera->viewFrustumCulling(owner()->transform()->getPosition(), mRadius);
+}
+
+size_t MeshComponent::getNumMaterial() const {
+    return mMaterials.size();
+}
+
+std::shared_ptr<Material> MeshComponent::getMaterial(unsigned index) const {
+    return mMaterials[index];
+}
+
+const Vector3& MeshComponent::getCenter() const {
+    return mCenter;
+}
+
+float MeshComponent::getRadius() const {
+    return mRadius;
+}
+
+void MeshComponent::setColor(const Vector3& color) {
+    mColor = color;
+}
+
+const Vector3& MeshComponent::getColor() const {
+    return mColor;
+}
+
+void MeshComponent::destroy() {
+    mState = State::DEAD;
+}
+
+void MeshComponent::setActive(bool value) {
+    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+}
+
+bool MeshComponent::getActive() const {
+    return mState == State::ACTIVE;
+}
+
+bool MeshComponent::isDead() const {
+    return mState == State::DEAD;
+}
+
 void MeshComponent::setMesh(const std::string& fileName) {
     mMesh = Singleton<AssetsManager>::instance().createMesh(fileName);
     mMesh->setInitMaterials(&mMaterials);
@@ -142,46 +190,6 @@ void MeshComponent::draw() {
         //プリミティブをレンダリング
         Singleton<DirectX>::instance().drawIndexed(mat->numFace * 3);
     }
-}
-
-size_t MeshComponent::getNumMaterial() const {
-    return mMaterials.size();
-}
-
-std::shared_ptr<Material> MeshComponent::getMaterial(unsigned index) const {
-    return mMaterials[index];
-}
-
-const Vector3& MeshComponent::getCenter() const {
-    return mCenter;
-}
-
-float MeshComponent::getRadius() const {
-    return mRadius;
-}
-
-void MeshComponent::destroy() {
-    mState = State::DEAD;
-}
-
-void MeshComponent::setActive(bool value) {
-    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
-}
-
-bool MeshComponent::getActive() const {
-    return mState == State::ACTIVE;
-}
-
-bool MeshComponent::isDead() {
-    return mState == State::DEAD;
-}
-
-void MeshComponent::setColor(const Vector3& color) {
-    mColor = color;
-}
-
-const Vector3& MeshComponent::getColor() const {
-    return mColor;
 }
 
 void MeshComponent::setMeshManager(MeshManager* manager) {

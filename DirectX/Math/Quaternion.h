@@ -32,6 +32,8 @@ public:
 
     void normalize();
 
+    Vector3 euler() const;
+
     // Normalize the provided quaternion
     static Quaternion normalize(const Quaternion& q);
 

@@ -1,8 +1,7 @@
 ﻿#pragma once
 
 #include "Component.h"
-
-class ChickenFry;
+#include "IChickenFry.h"
 
 //唐揚げの揚げ具合からスコアを評価するクラス
 class ScoreEvaluation : public Component {
@@ -12,7 +11,7 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     //揚げ状態によってスコアを評価
-    int evaluateScore(const ChickenFry& chicken) const;
+    int evaluateScore(const IChickenFry& chicken) const;
 
 private:
     int mLittleBadScore;

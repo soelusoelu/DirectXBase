@@ -1,6 +1,7 @@
 ﻿#include "PlayerChickenConnection.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
+#include "IChickenFry.h"
 #include "IPlayerJump.h"
 #include "IPlayerWalk.h"
 #include "MeshComponent.h"
@@ -133,6 +134,9 @@ void PlayerChickenConnection::collection() {
         return;
     }
     if (!mJumpTarget) {
+        return;
+    }
+    if (!mChicken->getFry().isBurntHalfSurfaces()) {
         return;
     }
 

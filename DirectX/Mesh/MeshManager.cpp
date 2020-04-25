@@ -1,6 +1,9 @@
 ﻿#include "MeshManager.h"
+#include "../Component/Camera.h"
 #include "../Component/MeshComponent.h"
 #include "../Device/Renderer.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 #include "../System/BlendDesc.h"
 #include "../System/BlendState.h"
 #include "../System/DepthStencilState.h"
@@ -16,7 +19,7 @@ void MeshManager::update() {
     remove();
 }
 
-void MeshManager::draw() const {
+void MeshManager::draw(const Camera& camera) const {
     if (mMeshes.empty()) {
         return;
     }
@@ -25,7 +28,7 @@ void MeshManager::draw() const {
     Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
 
     for (const auto& mesh : mMeshes) {
-        if (!mesh->getActive() || mesh->isDead()) {
+        if (!isDraw(*mesh, camera)) {
             continue;
         }
 
@@ -41,7 +44,7 @@ void MeshManager::draw() const {
     }
 }
 
-void MeshManager::drawTransparent() const {
+void MeshManager::drawTransparent(const Camera& camera) const {
     if (mTransparentMeshes.empty()) {
         return;
     }
@@ -59,7 +62,7 @@ void MeshManager::drawTransparent() const {
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 
     for (const auto& mesh : mTransparentMeshes) {
-        if (!mesh->getActive() || mesh->isDead()) {
+        if (!isDraw(*mesh, camera)) {
             continue;
         }
 
@@ -105,4 +108,19 @@ void MeshManager::remove() {
             ++itr;
         }
     }
+}
+
+bool MeshManager::isDraw(const MeshComponent& mesh, const Camera& camera) const {
+    if (!mesh.getActive()) {
+        return false;
+    }
+    if (mesh.isDead()) {
+        return false;
+    }
+    auto pos = mesh.owner()->transform()->getPosition();
+    if (!camera.viewFrustumCulling(pos, mesh.getRadius())) {
+        return false;
+    }
+
+    return true;
 }

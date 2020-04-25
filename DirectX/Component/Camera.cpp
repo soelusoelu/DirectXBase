@@ -1,6 +1,7 @@
 ﻿#include "Camera.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
+#include "../Math/Plane.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
@@ -83,6 +84,81 @@ Vector3 Camera::screenToWorldPoint(const Vector2 & position, float z) {
     //out = Vector3(position, z) * temp;
 
     return out;
+}
+
+bool Camera::viewFrustumCulling(const Vector3& pos, float radius) const {
+    //ワールド空間からビュー空間に変換
+    auto viewPos = Vector3::transform(pos, mView);
+    //事前計算
+    auto aspect = static_cast<float>(Window::width()) / static_cast<float>(Window::height());
+    auto calcX = mFarClip * Math::tan(mFOV / 2.f) * aspect;
+    auto calcY = mFarClip * Math::tan(mFOV / 2.f);
+
+    Vector3 p1, p2, p3;
+    //左
+    p1 = Vector3::zero;
+    p2.x = -calcX;
+    p2.y = -calcY;
+    p2.z = mFarClip;
+    p3 = p2;
+    p3.y = -p2.y;
+    auto left = Plane(p1, p2, p3);
+    //右
+    p1 = Vector3::zero;
+    p2.x = calcX;
+    p2.y = calcY;
+    p2.z = mFarClip;
+    p3 = p2;
+    p3.y = -p2.y;
+    auto right = Plane(p1, p2, p3);
+    //上
+    p1 = Vector3::zero;
+    p2.x = -calcX;
+    p2.y = calcY;
+    p2.z = mFarClip;
+    p3 = p2;
+    p3.x = -p2.x;
+    auto top = Plane(p1, p2, p3);
+    //下
+    p1 = Vector3::zero;
+    p2.x = calcX;
+    p2.y = -calcY;
+    p2.z = mFarClip;
+    p3 = p2;
+    p3.x = -p2.x;
+    auto bottom = Plane(p1, p2, p3);
+
+    //6面と境界球判定
+    //手前
+    if (viewPos.z + radius < mNearClip) {
+        return false;
+    }
+    //奥
+    if (viewPos.z - radius > mFarClip) {
+        return false;
+    }
+    //左
+    auto dis = (viewPos.x * left.a) + (viewPos.z * left.c);
+    if (dis > radius) {
+        return false;
+    }
+    //右
+    dis = (viewPos.x * right.a) + (viewPos.z * right.c);
+    if (dis > radius) {
+        return false;
+    }
+    //上
+    dis = (viewPos.y * top.b) + (viewPos.z * top.c);
+    if (dis > radius) {
+        return false;
+    }
+    //下
+    dis = (viewPos.y * bottom.b) + (viewPos.z * bottom.c);
+    if (dis > radius) {
+        return false;
+    }
+
+    return true;
 }
 
 void Camera::calcLookAt() {

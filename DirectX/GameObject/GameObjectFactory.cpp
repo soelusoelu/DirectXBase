@@ -2,11 +2,13 @@
 #include "GameObject.h"
 #include "../Component/Bird.h"
 #include "../Component/Camera.h"
+#include "../Component/ChickenColorChanger.h"
 #include "../Component/ChickenFry.h"
 #include "../Component/ChickenMeshComponent.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
+#include "../Component/Field.h"
 #include "../Component/FriedChickenComponent.h"
 #include "../Component/FriedChickenManager.h"
 #include "../Component/HitPointComponent.h"
@@ -35,9 +37,11 @@ GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
     ADD_COMPONENT(Bird);
     ADD_COMPONENT(Camera);
+    ADD_COMPONENT(ChickenColorChanger);
     ADD_COMPONENT(ChickenFry);
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(DirectionalLight);
+    ADD_COMPONENT(Field);
     ADD_COMPONENT(FriedChickenComponent);
     ADD_COMPONENT(FriedChickenManager);
     ADD_COMPONENT(HitPointComponent);

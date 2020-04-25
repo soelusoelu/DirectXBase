@@ -76,7 +76,8 @@
     {
       "type": "Field",
       "properties": {
-        "scale": [ 1.0, 10.0, 10.0 ]
+        "position": [ 5.0, 0.0, 5.0 ],
+        "scale": [ 0.5, 0.5, 0.5 ]
       },
       "components": [
         {
@@ -84,6 +85,13 @@
           "properties": {
             "fileName": "BackGround/abura2.fbx",
             "alpha": 0.3
+          }
+        },
+        {
+          "type": "Field",
+          "properties": {
+            "isRoll": true,
+            "rollSpeed": 0.5
           }
         }
       ]
@@ -110,10 +118,13 @@
         {
           "type": "ChickenFry",
           "properties": {
+<<<<<<< HEAD
             "initColor": [ 0.8, 0.6, 0.5 ],
             "fryedColor": [ 0.8, 0.4, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ],
 
+=======
+>>>>>>> origin/master
             "notFriedToLittleBadTimer": 0.0,
             "littleBadToUsuallyTimer": 5.0,
             "usuallyToGoodTimer": 5.0,
@@ -125,9 +136,27 @@
             "easyGoodToBadTimer": 4.0,
 
             "hardNotFriedToLittleBadTimer": 0.0,
+<<<<<<< HEAD
             "hardLittleBadToUsuallyTimer": 7.0,
             "hardUsuallyToGoodTimer": 5.0,
             "hardGoodToBadTimer": 4.0
+=======
+            "hardLittleBadToUsuallyTimer": 4.0,
+            "hardUsuallyToGoodTimer": 4.0,
+            "hardGoodToBadTimer": 4.0,
+
+            "tooBurntTimer": 5.0
+          }
+        },
+        {
+          "type": "ChickenColorChanger",
+          "properties": {
+            "initColor": [ 1.0, 0.8, 0.8 ],
+            "littleFriedColor": [ 1.0, 0.8, 0.8 ],
+            "usuallyColor": [ 0.6, 0.4, 0.3 ],
+            "friedColor": [ 0.4, 0.2, 0.1 ],
+            "burntColor": [ 0.1, 0.1, 0.1 ]
+>>>>>>> origin/master
           }
         }
       ]
@@ -138,7 +167,9 @@
         {
           "type": "FriedChickenManager",
           "properties": {
-            "maxDrawNum": 5
+            "startNum": 2,
+            "maxNum": 5,
+            "replenishTimer": 20.0
           }
         },
         {
@@ -160,7 +191,7 @@
           "properties": {
             "collectionKey": "E",
             "collectionPad": "X",
-            "isJumpRoll" : false
+            "isJumpRoll": false
           }
         }
       ]

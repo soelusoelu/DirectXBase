@@ -84,13 +84,13 @@ void SceneManager::draw() const {
     //各テクスチャ上にレンダリング
     mRenderer->renderToTexture();
     //メッシュの一括描画
-    mMeshManager->draw();
+    mMeshManager->draw(*mCamera);
     //各テクスチャを参照してレンダリング
     mRenderer->renderFromTexture(*mCamera, *mDirectionalLight);
     //ポイントライトの一括描画
     mRenderer->drawPointLights();
     //透明メッシュの描画
-    mMeshManager->drawTransparent();
+    mMeshManager->drawTransparent(*mCamera);
 
     //スプライト描画準備
     Matrix4 proj = Matrix4::identity;

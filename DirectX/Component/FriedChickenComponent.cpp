@@ -39,7 +39,7 @@ void FriedChickenComponent::update() {
     if (mState == State::FRY) {
         if (mFry) {
             mFry->update();
-            friedChangeState();
+            autoCollection();
         }
     } else if (mState == State::FALL) {
         fall();
@@ -76,6 +76,10 @@ void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
+const IChickenFry& FriedChickenComponent::getFry() const {
+    return *mFry;
+}
+
 void FriedChickenComponent::initialize() {
     //アクティブ化
     owner()->setActive(true);
@@ -108,7 +112,7 @@ void FriedChickenComponent::eaten() {
     mState = State::EATEN;
 }
 
-void FriedChickenComponent::roll(const Vector3& direction) {
+void FriedChickenComponent::roll(const Vector3 & direction) {
     auto dir = direction;
     dir.x = direction.z;
     dir.z = -direction.x;
@@ -131,8 +135,13 @@ bool FriedChickenComponent::isEaten() const {
     return mState == State::EATEN;
 }
 
-void FriedChickenComponent::friedChangeState() {
-    if (mFry->isFriedAllSurfaces()) {
+void FriedChickenComponent::autoCollection() {
+    bool isFinish = mFry->isBurntAllSurfaces();
+    if (!isFinish) {
+        isFinish = mFry->isTooBurnt();
+    }
+
+    if (isFinish) {
         mState = State::WAITING_COLLECTION;
     }
 }

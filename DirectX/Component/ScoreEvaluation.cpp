@@ -1,5 +1,5 @@
 ﻿#include "ScoreEvaluation.h"
-#include "ChickenFry.h"
+#include "ChickenSurface.h"
 #include "FryState.h"
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
@@ -40,10 +40,11 @@ void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-int ScoreEvaluation::evaluateScore(const ChickenFry& chicken) const {
+int ScoreEvaluation::evaluateScore(const IChickenFry& chicken) const {
     int score = 0;
 
-    for (size_t i = 0; i < chicken.getNumSurface(); i++) {
+    auto num = static_cast<int>(ChickenSurface::NUM_SURFACE);
+    for (size_t i = 0; i < num; i++) {
         auto state = chicken.getFryState(i);
         if (state == FryState::NOT_FRIED) {
             continue;

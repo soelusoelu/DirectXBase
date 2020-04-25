@@ -1,10 +1,9 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "IChickenFry.h"
 #include "../Math/Math.h"
 #include <memory>
-
-class ChickenFry;
 
 class FriedChickenComponent : public Component {
     enum class State {
@@ -21,6 +20,7 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    const IChickenFry& getFry() const;
     //揚げ直す前の状態に戻す
     void initialize();
     //強制的に揚げ終わる
@@ -41,14 +41,14 @@ public:
 
 private:
     //揚げ終わったら状態遷移させる
-    void friedChangeState();
+    void autoCollection();
     //空中から落下させる
     void fall();
     //油に浸かったら揚げ始める
     void soakedInOil();
 
 private:
-    std::shared_ptr<ChickenFry> mFry;
+    std::shared_ptr<IChickenFry> mFry;
     State mState;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;

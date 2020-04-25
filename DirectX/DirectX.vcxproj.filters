@@ -112,6 +112,8 @@
     <ClCompile Include="Component\PlayerJump.cpp" />
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerWalk.cpp" />
+    <ClCompile Include="Component\ChickenColorChanger.cpp" />
+    <ClCompile Include="Component\Field.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -234,5 +236,10 @@
     <ClInclude Include="Component\IPlayerJump.h" />
     <ClInclude Include="Component\IPlayerWalk.h" />
     <ClInclude Include="Component\FryState.h" />
+    <ClInclude Include="Component\ChickenColorChanger.h" />
+    <ClInclude Include="Component\ChickenSurface.h" />
+    <ClInclude Include="Component\Field.h" />
+    <ClInclude Include="Component\IChickenFry.h" />
+    <ClInclude Include="Component\IMesh.h" />
   </ItemGroup>
 </Project>

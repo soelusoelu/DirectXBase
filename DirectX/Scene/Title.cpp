@@ -2,6 +2,7 @@
 #include "GamePlay.h"
 #include "../Sprite/Sprite.h"
 #include "../Input/Input.h"
+#include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 
 Title::Title() :
@@ -16,7 +17,7 @@ void Title::start() {
 }
 
 void Title::update() {
-    if (Input::keyboard()->getKeyDown(KeyCode::Space)) {
+    if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::joyPad()->getJoyDown(JoyCode::A)) {
         nextScene(std::make_shared<GamePlay>());
     }
 }

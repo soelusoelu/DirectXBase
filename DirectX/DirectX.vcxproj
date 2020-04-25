@@ -104,6 +104,12 @@
       </AdditionalLibraryDirectories>
       <AdditionalDependencies>libfbxsdk-md.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <FxCompile>
+      <ShaderType>Effect</ShaderType>
+    </FxCompile>
+    <FxCompile>
+      <ShaderModel>5.0</ShaderModel>
+    </FxCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -152,9 +158,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\ChickenColorChanger.cpp" />
     <ClCompile Include="Component\ChickenFry.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
+    <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerJump.cpp" />
     <ClCompile Include="Component\Result.cpp" />
@@ -256,9 +264,14 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\ChickenColorChanger.h" />
     <ClInclude Include="Component\ChickenFry.h" />
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\ChickenMeshComponent.h" />
+    <ClInclude Include="Component\ChickenSurface.h" />
+    <ClInclude Include="Component\Field.h" />
+    <ClInclude Include="Component\IChickenFry.h" />
+    <ClInclude Include="Component\IMesh.h" />
     <ClInclude Include="Component\IPlayerJump.h" />
     <ClInclude Include="Component\IPlayerWalk.h" />
     <ClInclude Include="Component\PlayerComponent.h" />
