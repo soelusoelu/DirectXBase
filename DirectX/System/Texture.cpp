@@ -42,19 +42,19 @@ const TextureDesc& Texture::desc() const {
     return mDesc;
 }
 
-void Texture::setVSTextures(unsigned start, unsigned numTextures) {
+void Texture::setVSTextures(unsigned start, unsigned numTextures) const {
     mShaderResourceView->setVSShaderResources(start, numTextures);
 }
 
-void Texture::setPSTextures(unsigned start, unsigned numTextures) {
+void Texture::setPSTextures(unsigned start, unsigned numTextures) const {
     mShaderResourceView->setPSShaderResources(start, numTextures);
 }
 
-void Texture::setVSSamplers(unsigned start, unsigned numSamplers) {
+void Texture::setVSSamplers(unsigned start, unsigned numSamplers) const {
     mSampler->setVSSamplers(start, numSamplers);
 }
 
-void Texture::setPSSamplers(unsigned start, unsigned numSamplers) {
+void Texture::setPSSamplers(unsigned start, unsigned numSamplers) const {
     mSampler->setPSSamplers(start, numSamplers);
 }
 

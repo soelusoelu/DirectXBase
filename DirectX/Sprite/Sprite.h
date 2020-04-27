@@ -44,9 +44,9 @@ public:
     bool getActive() const;
     bool isDead() const;
     //テクスチャの取得
-    std::shared_ptr<Texture> texture() const;
+    const Texture& texture() const;
     //シェーダーの取得
-    std::shared_ptr<Shader> shader() const;
+    const Shader& shader() const;
     //ファイル名の取得
     const std::string& fileName() const;
 

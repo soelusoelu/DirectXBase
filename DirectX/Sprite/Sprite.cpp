@@ -152,12 +152,12 @@ bool Sprite::isDead() const {
     return mState == State::DEAD;
 }
 
-std::shared_ptr<Texture> Sprite::texture() const {
-    return mTexture;
+const Texture& Sprite::texture() const {
+    return *mTexture;
 }
 
-std::shared_ptr<Shader> Sprite::shader() const {
-    return mShader;
+const Shader& Sprite::shader() const {
+    return *mShader;
 }
 
 const std::string& Sprite::fileName() const {

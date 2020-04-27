@@ -76,10 +76,10 @@ bool SpriteComponent::getActive() const {
     return mSprite->getActive();
 }
 
-std::shared_ptr<Texture> SpriteComponent::texture() const {
+const Texture& SpriteComponent::texture() const {
     return mSprite->texture();
 }
 
-std::shared_ptr<Shader> SpriteComponent::shader() const {
+const Shader& SpriteComponent::shader() const {
     return mSprite->shader();
 }

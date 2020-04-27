@@ -34,9 +34,9 @@ public:
     void setActive(bool value);
     bool getActive() const;
     //テクスチャ
-    std::shared_ptr<Texture> texture() const;
+    const Texture& texture() const;
     //シェーダーの取得
-    std::shared_ptr<Shader> shader() const;
+    const Shader& shader() const;
 
 private:
     std::shared_ptr<Sprite> mSprite;

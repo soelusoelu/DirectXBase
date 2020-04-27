@@ -118,7 +118,8 @@ bool MeshManager::isDraw(const MeshComponent& mesh, const Camera& camera) const 
         return false;
     }
     auto pos = mesh.owner()->transform()->getPosition();
-    if (!camera.viewFrustumCulling(pos, mesh.getRadius())) {
+    auto radius = mesh.getRadius() * mesh.owner()->transform()->getScale().x;
+    if (!camera.viewFrustumCulling(pos, radius)) {
         return false;
     }
 
