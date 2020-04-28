@@ -97,14 +97,13 @@ void SceneManager::draw() const {
     mMeshManager->drawTransparent(*mCamera);
 
     //スプライト描画準備
-    auto proj = mCamera->getProjection();
+    mRenderer->renderSprite();
     //3Dスプライト
-    mRenderer->renderSprite3D(&proj);
-    auto viewProj = mCamera->getView() * proj;
-    mSpriteManager->draw3Ds(viewProj);
+    mRenderer->renderSprite3D();
+    mSpriteManager->draw3Ds(mCamera->getViewProjection());
     //2Dスプライト
-    proj = Matrix4::identity;
-    mRenderer->renderSprite(&proj);
+    auto proj = Matrix4::identity;
+    mRenderer->renderSprite2D(&proj);
     mSpriteManager->drawComponents();
     mSpriteManager->draw(proj);
     //テキスト一括描画

@@ -38,7 +38,8 @@
         {
           "type": "Sprite3D",
           "properties": {
-            "fileName": "ArrowDown2.png"
+            "fileName": "ArrowDown2.png",
+            "scale": [ 1.0, 1.0 ]
           }
         },
         {

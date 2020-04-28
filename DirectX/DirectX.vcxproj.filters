@@ -116,6 +116,7 @@
     <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\Billboard.cpp" />
     <ClCompile Include="Component\Sprite3D.cpp" />
+    <ClCompile Include="Component\BirdOrbit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -246,5 +247,6 @@
     <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Billboard.h" />
     <ClInclude Include="Component\Sprite3D.h" />
+    <ClInclude Include="Component\BirdOrbit.h" />
   </ItemGroup>
 </Project>

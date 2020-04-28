@@ -13,9 +13,10 @@
 
 Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type) :
     Component(owenr, type),
+    mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
-    mTextureSize(Vector2::zero),
+    mTextureAspect(Vector2::zero),
     mColor(Vector4(1.f, 1.f, 1.f, 1.f)),
     mUV(Vector4(0.f, 0.f, 1.f, 1.f)),
     mFileName("") {
@@ -32,9 +33,11 @@ void Sprite3D::start() {
     mTexture = Singleton<AssetsManager>::instance().createTexture(mFileName);
     mShader = Singleton<AssetsManager>::instance().createShader("Texture.hlsl");
 
-    //デスクをもとにサイズ取得
+    //デスクをもとにテクスチャのアスペクト比を取得
     auto desc = mTexture->desc();
-    mTextureSize.set(desc.width, desc.height);
+    auto v = static_cast<float>(desc.height) / static_cast<float>(desc.width);
+    mTextureAspect.set(1.f, v);
+    mTransform->setScale(mTransform->getScale() * Vector3(mTextureAspect, 1.f));
 
     mShader->createConstantBuffer(sizeof(TextureConstantBuffer));
 
@@ -49,10 +52,18 @@ void Sprite3D::start() {
     addToManager();
 }
 
+void Sprite3D::update() {
+    mTransform->computeWorldTransform();
+}
+
 void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getString(inObj, "fileName", &mFileName);
+    Vector2 scale;
+    if (JsonHelper::getVector2(inObj, "scale", &scale)) {
+        mTransform->setScale(Vector3(scale, 1.f));
+    }
     Vector3 color;
     if (JsonHelper::getVector3(inObj, "color", &color)) {
         setColor(color);
@@ -87,7 +98,7 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
     if (mShader->map(&msrd)) {
         TextureConstantBuffer cb;
         //ワールド、射影行列を渡す
-        cb.wp = owner()->transform()->getWorldTransform() * viewProj;
+        cb.wp = mTransform->getWorldTransform() * viewProj;
         cb.wp.transpose();
         cb.color = mColor;
         cb.uv = mUV;
@@ -101,6 +112,10 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
     mTexture->setPSSamplers();
     //プリミティブをレンダリング
     Singleton<DirectX>::instance().drawIndexed(6);
+}
+
+const std::shared_ptr<Transform3D>& Sprite3D::transform() const {
+    return mTransform;
 }
 
 void Sprite3D::setColor(const Vector3& color) {
@@ -137,10 +152,6 @@ void Sprite3D::setUV(float l, float t, float r, float b) {
 
 const Vector4& Sprite3D::getUV() const {
     return mUV;
-}
-
-const Vector2& Sprite3D::getTextureSize() const {
-    return mTextureSize;
 }
 
 const Texture& Sprite3D::texture() const {

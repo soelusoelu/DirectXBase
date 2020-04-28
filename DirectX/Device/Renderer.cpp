@@ -112,8 +112,19 @@ void Renderer::renderFromTexture(const Camera& camera, const DirectionalLight& d
     mGBuffer->renderFromTexture(camera, dirLight, mAmbientLight);
 }
 
-void Renderer::renderSprite(Matrix4* proj) {
-    //プロジェクション
+void Renderer::renderSprite() const {
+    //プリミティブ・トポロジーをセット
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //インデックスバッファーをセット
+    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    //通常合成
+    BlendDesc bd;
+    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
+    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
+    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+}
+
+void Renderer::renderSprite2D(Matrix4* proj) const {
     //原点をスクリーン左上にするために平行移動
     proj->m[3][0] = -1.f;
     proj->m[3][1] = 1.f;
@@ -121,39 +132,21 @@ void Renderer::renderSprite(Matrix4* proj) {
     proj->m[0][0] = 2.f / Window::width();
     proj->m[1][1] = -2.f / Window::height();
 
-    //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
     //バーテックスバッファーをセット
     Texture::vertexBuffer->setVertexBuffer();
-    //インデックスバッファーをセット
-    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //デプステスト無効化
     Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 }
 
-void Renderer::renderSprite3D(Matrix4* proj) {
-    //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+void Renderer::renderSprite3D() const {
     //バーテックスバッファーをセット
     Texture::vertexBuffer3D->setVertexBuffer();
-    //インデックスバッファーをセット
-    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //デプステスト有効化
     Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
     Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 }
 
-void Renderer::renderToDebug(Matrix4* proj) {
+void Renderer::renderToDebug(Matrix4* proj) const {
     Singleton<DirectX>::instance().setDebugRenderTarget();
     Singleton<DirectX>::instance().setViewport(Window::debugWidth(), Window::debugHeight());
 
