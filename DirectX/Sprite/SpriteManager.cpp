@@ -60,6 +60,9 @@ void SpriteManager::draw3Ds(const Matrix4& viewProj) const {
     }
 
     for (const auto& sprite : mSprite3Ds) {
+        if (!sprite->getActive() || sprite->isDead()) {
+            return;
+        }
         sprite->draw(viewProj);
     }
 }
@@ -98,6 +101,15 @@ void SpriteManager::remove() {
             itr2 = mSpriteComponents.erase(itr2);
         } else {
             ++itr2;
+        }
+    }
+
+    auto itr3 = mSprite3Ds.begin();
+    while (itr3 != mSprite3Ds.end()) {
+        if ((*itr3)->isDead()) {
+            itr3 = mSprite3Ds.erase(itr3);
+        } else {
+            ++itr3;
         }
     }
 }

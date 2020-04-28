@@ -16,13 +16,16 @@ Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type) :
     mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
+    mState(State::ACTIVE),
     mTextureAspect(Vector2::zero),
     mColor(Vector4(1.f, 1.f, 1.f, 1.f)),
     mUV(Vector4(0.f, 0.f, 1.f, 1.f)),
     mFileName("") {
 }
 
-Sprite3D::~Sprite3D() = default;
+Sprite3D::~Sprite3D() {
+    mState = State::DEAD;
+}
 
 void Sprite3D::start() {
     if (mFileName.empty()) {
@@ -54,6 +57,10 @@ void Sprite3D::start() {
 
 void Sprite3D::update() {
     mTransform->computeWorldTransform();
+}
+
+void Sprite3D::onSetActive(bool value) {
+    setActive(value);
 }
 
 void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
@@ -152,6 +159,18 @@ void Sprite3D::setUV(float l, float t, float r, float b) {
 
 const Vector4& Sprite3D::getUV() const {
     return mUV;
+}
+
+void Sprite3D::setActive(bool value) {
+    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+}
+
+bool Sprite3D::getActive() const {
+    return mState == State::ACTIVE;
+}
+
+bool Sprite3D::isDead() const {
+    return mState == State::DEAD;
 }
 
 const Texture& Sprite3D::texture() const {

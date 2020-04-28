@@ -10,11 +10,18 @@ class Texture;
 class Transform3D;
 
 class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D> {
+    enum class State {
+        ACTIVE,
+        NON_ACTIVE,
+        DEAD
+    };
+
 public:
     Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type = "Sprite3D");
     virtual ~Sprite3D();
     virtual void start() override;
     virtual void update() override;
+    virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
 
@@ -33,10 +40,9 @@ public:
     void setUV(float l, float t, float r, float b);
     const Vector4& getUV() const;
     //状態管理
-    //void destroy();
-    //void setActive(bool value);
-    //bool getActive() const;
-    //bool isDead() const;
+    void setActive(bool value);
+    bool getActive() const;
+    bool isDead() const;
     //テクスチャの取得
     const Texture& texture() const;
     //シェーダーの取得
@@ -55,6 +61,7 @@ protected:
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
+    State mState;
     Vector2 mTextureAspect;
     Vector4 mColor;
     Vector4 mUV;

@@ -1,4 +1,5 @@
 ﻿#include "Bird.h"
+#include "BirdOrbit.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "MeshComponent.h"
@@ -12,6 +13,7 @@
 
 Bird::Bird(std::shared_ptr<GameObject> owner) :
     Component(owner, "Bird"),
+    mOrbit(nullptr),
     mTimer(nullptr),
     mMesh(nullptr),
     mTarget(nullptr),
@@ -22,8 +24,10 @@ Bird::Bird(std::shared_ptr<GameObject> owner) :
 Bird::~Bird() = default;
 
 void Bird::start() {
-    mTimer = owner()->componentManager()->getComponent<Timer>();
-    mMesh = owner()->componentManager()->getComponent<MeshComponent>();
+    auto compMana = owner()->componentManager();
+    mOrbit = compMana->getComponent<BirdOrbit>();
+    mTimer = compMana->getComponent<Timer>();
+    mMesh = compMana->getComponent<MeshComponent>();
     auto t = owner()->transform();
     t->rotate(Vector3::up, 90.f);
     t->rotate(Vector3::forward, 90.f);
@@ -35,14 +39,9 @@ void Bird::start() {
 
 void Bird::update() {
     if (mState == State::WAIT) {
-        if (!mTimer) {
-            return;
-        }
-        if (mTimer->isTime()) {
-            mState = State::MOVE;
-            initialize();
-            mTimer->reset();
-        }
+        waiting();
+    } else if (mState == State::PREDICT_LINE) {
+        predictLine();
     } else if (mState == State::MOVE) {
         move();
         takeChicken();
@@ -61,6 +60,8 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "State";
     if (mState == State::WAIT) {
         info.second = "WAIT";
+    } else if (mState == State::PREDICT_LINE) {
+        info.second = "PREDICT_LINE";
     } else if (mState == State::MOVE) {
         info.second = "MOVE";
     }
@@ -70,9 +71,26 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
+void Bird::waiting() {
+    if (!mTimer) {
+        return;
+    }
+    if (mTimer->rate() > 0.8f) {
+        mState = State::PREDICT_LINE;
+        initialize();
+    }
+}
+
+void Bird::predictLine() {
+    if (mTimer->isTime()) {
+        mState = State::MOVE;
+    }
+}
+
 void Bird::move() {
     if (!mTarget) {
         mState = State::WAIT;
+        finalize();
         return;
     }
     auto t = owner()->transform();
@@ -108,6 +126,7 @@ void Bird::isEndMoving() {
     auto posX = owner()->transform()->getPosition().x;
     if (posX < -15.f) {
         mState = State::WAIT;
+        finalize();
     }
 }
 
@@ -115,4 +134,11 @@ void Bird::initialize() {
     mTarget = owner()->getGameObjectManager()->randomFind("FriedChicken");
     auto posZ = mTarget->transform()->getPosition().z;
     owner()->transform()->setPosition(Vector3(10.f, 0.f, posZ));
+    mOrbit->setActive(true);
+    mOrbit->setPositionZ(posZ);
+}
+
+void Bird::finalize() {
+    mTimer->reset();
+    mOrbit->setActive(false);
 }
