@@ -4,7 +4,6 @@
 #include "../Math/Math.h"
 #include <memory>
 
-class Camera;
 class Shader;
 class SpriteManager;
 class Texture;
@@ -19,7 +18,7 @@ public:
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
 
     //描画
-    virtual void draw() const;
+    virtual void draw(const Matrix4& viewProj) const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
@@ -54,7 +53,6 @@ protected:
 protected:
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
-    std::shared_ptr<Camera> mCamera;
     Vector2 mTextureSize;
     Vector4 mColor;
     Vector4 mUV;

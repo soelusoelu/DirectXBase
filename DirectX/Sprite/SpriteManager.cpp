@@ -54,13 +54,13 @@ void SpriteManager::drawComponents() const {
     }
 }
 
-void SpriteManager::draw3Ds() const {
+void SpriteManager::draw3Ds(const Matrix4& viewProj) const {
     if (mSprite3Ds.empty()) {
         return;
     }
 
     for (const auto& sprite : mSprite3Ds) {
-        sprite->draw();
+        sprite->draw(viewProj);
     }
 }
 

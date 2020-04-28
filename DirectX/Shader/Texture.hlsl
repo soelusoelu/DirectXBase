@@ -5,8 +5,8 @@ SamplerState g_samLinear : register(s0);
 cbuffer global
 {
     matrix mWorldProj;
-    float4 gColor;
-    float4 gUV;
+    float4 mColor;
+    float4 mUV;
 };
 
 //ç\ë¢ëÃ
@@ -20,7 +20,7 @@ VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
 {
     VS_OUTPUT output = (VS_OUTPUT) 0;
     output.Pos = mul(Pos, mWorldProj);
-    output.Tex = Tex * float2(gUV.z - gUV.x, gUV.w - gUV.y) + float2(gUV.x, gUV.y);
+    output.Tex = Tex * float2(mUV.z - mUV.x, mUV.w - mUV.y) + float2(mUV.x, mUV.y);
 
     return output;
 }
@@ -28,6 +28,6 @@ VS_OUTPUT VS(float4 Pos : POSITION, float2 Tex : TEXCOORD)
 float4 PS(VS_OUTPUT input) : SV_Target
 {
     float4 color = g_texDecal.Sample(g_samLinear, input.Tex);
-    color *= gColor;
+    color *= mColor;
     return color;
 }

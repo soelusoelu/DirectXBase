@@ -1,11 +1,8 @@
 ﻿#include "Sprite3D.h"
-#include "Camera.h"
-#include "ComponentManager.h"
 #include "../Sprite/SpriteManager.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
 #include "../GameObject/GameObject.h"
-#include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../Shader/Shader.h"
 #include "../System/DirectX.h"
@@ -13,20 +10,11 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 #include <cassert>
-#include "../System/BlendDesc.h"
-#include "../System/BlendState.h"
-#include "../System/DepthStencilState.h"
-#include "../System/DirectX.h"
-#include "../System/Format.h"
-#include "../System/IndexBuffer.h"
-#include "../System/Texture.h"
-#include "../System/VertexBuffer.h"
 
 Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type) :
     Component(owenr, type),
     mTexture(nullptr),
     mShader(nullptr),
-    mCamera(nullptr),
     mTextureSize(Vector2::zero),
     mColor(Vector4(1.f, 1.f, 1.f, 1.f)),
     mUV(Vector4(0.f, 0.f, 1.f, 1.f)),
@@ -59,9 +47,6 @@ void Sprite3D::start() {
     mShader->createInputLayout(layout, numElements);
 
     addToManager();
-
-    auto camera = owner()->getGameObjectManager()->find("Camera");
-    mCamera = camera->componentManager()->getComponent<Camera>();
 }
 
 void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
@@ -87,22 +72,7 @@ void Sprite3D::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-void Sprite3D::draw() const {
-    //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
-    //バーテックスバッファーをセット
-    Texture::vertexBuffer->setVertexBuffer();
-    //インデックスバッファーをセット
-    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
-    //デプステスト無効化
-    //Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
-    //Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
-
+void Sprite3D::draw(const Matrix4& viewProj) const {
     //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -117,7 +87,7 @@ void Sprite3D::draw() const {
     if (mShader->map(&msrd)) {
         TextureConstantBuffer cb;
         //ワールド、射影行列を渡す
-        cb.wp = owner()->transform()->getWorldTransform() * mCamera->getViewProjection();
+        cb.wp = owner()->transform()->getWorldTransform() * viewProj;
         cb.wp.transpose();
         cb.color = mColor;
         cb.uv = mUV;

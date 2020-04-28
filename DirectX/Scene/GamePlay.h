@@ -7,6 +7,7 @@ class FriedChickenManager;
 class PlayerChickenConnection;
 class Score;
 class Timer;
+class JumpTarget;
 class Oil;
 
 class GamePlay : public SceneBase {
@@ -26,6 +27,7 @@ private:
     std::shared_ptr<PlayerChickenConnection> mPCConnection;
     std::shared_ptr<Score> mScore;
     std::shared_ptr<Timer> mTimeLimitTimer;
+    std::shared_ptr<JumpTarget> mJumpTarget;
     std::shared_ptr<Oil> mOil;
     State mState;
 };

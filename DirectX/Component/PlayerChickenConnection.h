@@ -23,7 +23,8 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     void setPlayer(const GameObject& player);
     void setChicken(const ChickenPtr& chicken);
-    ChickenPtr getChicken() const;
+    const ChickenPtr& getChicken() const;
+    const FriedChickenComponent& getJumpTarget() const;
     void playerJumpTarget(const ChickenPtr& chicken);
 
 private:

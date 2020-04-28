@@ -79,8 +79,12 @@ void PlayerChickenConnection::setChicken(const ChickenPtr & chicken) {
     mChicken = chicken;
 }
 
-std::shared_ptr<FriedChickenComponent> PlayerChickenConnection::getChicken() const {
+const std::shared_ptr<FriedChickenComponent>& PlayerChickenConnection::getChicken() const {
     return mChicken;
+}
+
+const FriedChickenComponent& PlayerChickenConnection::getJumpTarget() const {
+    return *mJumpTarget;
 }
 
 void PlayerChickenConnection::playerJumpTarget(const ChickenPtr & chicken) {

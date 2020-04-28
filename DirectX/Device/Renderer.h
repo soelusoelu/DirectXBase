@@ -31,6 +31,7 @@ public:
     void renderToTexture();
     void renderFromTexture(const Camera& camera, const DirectionalLight& dirLight);
     void renderSprite(Matrix4* proj);
+    void renderSprite3D(Matrix4* proj);
     void renderToDebug(Matrix4* proj);
 
 private:

@@ -134,7 +134,6 @@ const Vector2& Transform2D::getSize() const {
     return mSize;
 }
 
-
 void Transform2D::shouldRecomputeTransform() {
     mIsRecomputeTransform = true;
 }

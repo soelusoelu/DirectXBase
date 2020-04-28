@@ -136,6 +136,23 @@ void Renderer::renderSprite(Matrix4* proj) {
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
 }
 
+void Renderer::renderSprite3D(Matrix4* proj) {
+    //プリミティブ・トポロジーをセット
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    //バーテックスバッファーをセット
+    Texture::vertexBuffer3D->setVertexBuffer();
+    //インデックスバッファーをセット
+    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
+    //デプステスト有効化
+    Singleton<DirectX>::instance().depthStencilState()->depthTest(true);
+    Singleton<DirectX>::instance().depthStencilState()->depthMask(true);
+    //通常合成
+    BlendDesc bd;
+    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
+    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
+    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+}
+
 void Renderer::renderToDebug(Matrix4* proj) {
     Singleton<DirectX>::instance().setDebugRenderTarget();
     Singleton<DirectX>::instance().setViewport(Window::debugWidth(), Window::debugHeight());

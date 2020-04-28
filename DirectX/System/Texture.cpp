@@ -35,6 +35,7 @@ Texture::~Texture() = default;
 
 void Texture::end() {
     SAFE_DELETE(vertexBuffer);
+    SAFE_DELETE(vertexBuffer3D);
     SAFE_DELETE(indexBuffer);
 }
 
@@ -76,6 +77,17 @@ void Texture::createVertexBuffer() {
     sub.data = vertices;
 
     vertexBuffer = new VertexBuffer(bd, &sub);
+
+    static const TextureVertex vertices3D[] = {
+        Vector3(-0.5f, 0.5f, 0.f), Vector2(0.f, 0.f), //左上
+        Vector3(0.5f, 0.5f, 0.f), Vector2(1.f, 0.f), //右上
+        Vector3(-0.5f, -0.5f, 0.f), Vector2(0.f, 1.f), //左下
+        Vector3(0.5f, -0.5f, 0.f), Vector2(1.f, 1.f), //右下
+    };
+
+    sub.data = vertices3D;
+
+    vertexBuffer3D = new VertexBuffer(bd, &sub);
 }
 
 void Texture::createIndexBuffer() {
@@ -150,4 +162,5 @@ unsigned Texture::toFilter(TextureFilter filter) const {
 }
 
 VertexBuffer* Texture::vertexBuffer = nullptr;
+VertexBuffer* Texture::vertexBuffer3D = nullptr;
 IndexBuffer* Texture::indexBuffer = nullptr;

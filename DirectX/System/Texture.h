@@ -47,6 +47,7 @@ private:
 
 public:
     static VertexBuffer* vertexBuffer;
+    static VertexBuffer* vertexBuffer3D;
     static IndexBuffer* indexBuffer;
 
 private:
