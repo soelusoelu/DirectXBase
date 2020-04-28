@@ -36,9 +36,9 @@
       "type": "JumpTarget",
       "components": [
         {
-          "type": "SpriteComponent",
+          "type": "Sprite3D",
           "properties": {
-            "fileName": "circleP.png"
+            "fileName": "ArrowDown2.png"
           }
         },
         {

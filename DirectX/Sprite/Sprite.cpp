@@ -53,7 +53,7 @@ void Sprite::update() {
     }
 }
 
-void Sprite::draw(const Matrix4& proj) {
+void Sprite::draw(const Matrix4& proj) const {
     //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -84,7 +84,7 @@ void Sprite::draw(const Matrix4& proj) {
     Singleton<DirectX>::instance().drawIndexed(6);
 }
 
-std::shared_ptr<Transform2D> Sprite::transform() const {
+const std::shared_ptr<Transform2D>& Sprite::transform() const {
     return mTransform;
 }
 

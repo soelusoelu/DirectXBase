@@ -6,6 +6,8 @@
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
 #include "../Component/MeshComponent.h"
+#include "../Component/Sprite3D.h"
+#include "../Component/SpriteComponent.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
@@ -42,6 +44,8 @@ void SceneManager::initialize() {
     GameObject::setGameObjectManager(mGameObjectManager);
     MeshComponent::setMeshManager(mMeshManager);
     Sprite::setSpriteManager(mSpriteManager);
+    SpriteComponent::setSpriteManager(mSpriteManager);
+    Sprite3D::setSpriteManager(mSpriteManager);
     Collider::setPhysics(mPhysics);
 
     auto cam = GameObjectCreater::create("Camera");
@@ -93,9 +97,11 @@ void SceneManager::draw() const {
     mMeshManager->drawTransparent(*mCamera);
 
     //スプライト描画準備
-    Matrix4 proj = Matrix4::identity;
+    auto proj = Matrix4::identity;
     mRenderer->renderSprite(&proj);
     //スプライトの一括描画
+    mSpriteManager->draw3Ds();
+    mSpriteManager->drawComponents();
     mSpriteManager->draw(proj);
     //テキスト一括描画
     mRenderer->getDrawString()->drawAll(proj);
