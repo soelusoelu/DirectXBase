@@ -180,10 +180,10 @@ FryState ChickenFry::getFryState(unsigned surfaceIndex) const {
 }
 
 void ChickenFry::choiceEasyAndHardSurface() {
-    auto easySurface = Random::randomRange(0, getNumSurface() - 1);
+    auto easySurface = Random::randomRange(0, getNumSurface());
     int hardSurface;
     do {
-        hardSurface = Random::randomRange(0, getNumSurface() - 1);
+        hardSurface = Random::randomRange(0, getNumSurface());
     } while (hardSurface == easySurface);
 
     mEasySurface = static_cast<ChickenSurface>(easySurface);

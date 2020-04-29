@@ -18,7 +18,7 @@ class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D>
 
 public:
     Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type = "Sprite3D");
-    virtual ~Sprite3D();
+    ~Sprite3D();
     virtual void start() override;
     virtual void update() override;
     virtual void onSetActive(bool value) override;
@@ -26,7 +26,7 @@ public:
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
 
     //描画
-    virtual void draw(const Matrix4& viewProj) const;
+    void draw(const Matrix4& viewProj) const;
     //トランスフォーム
     const std::shared_ptr<Transform3D>& transform() const;
     //色味、たぶん0～1

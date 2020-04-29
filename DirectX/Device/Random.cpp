@@ -15,7 +15,7 @@ int Random::randomRange(int min, int max) {
 }
 
 float Random::randomRange(float min, float max) {
-    std::uniform_real_distribution<float> dist(min, max);
+    std::uniform_real_distribution<float> dist(min, max - 1);
     return dist(mt);
 }
 

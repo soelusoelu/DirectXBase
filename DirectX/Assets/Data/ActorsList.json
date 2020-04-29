@@ -192,7 +192,8 @@
         {
           "type": "Bird",
           "properties": {
-            "moveSpeed": 20.0
+            "moveSpeed": 20.0,
+            "restartTimer": 20.0
           }
         },
         {
@@ -202,21 +203,16 @@
           }
         },
         {
-          "type": "Timer",
-          "properties": {
-            "limit": 20.0
-          }
-        },
-        {
           "type": "BirdOrbit",
           "properties": {
+            "secondsAgo": 3.0
           }
         },
         {
           "type": "Sprite3D",
           "properties": {
             "fileName": "block.png",
-            "scale": [ 20.0, 1.0 ]
+            "scale": [ 30.0, 1.0 ]
           }
         }
       ]

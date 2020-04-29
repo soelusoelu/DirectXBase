@@ -1,6 +1,5 @@
 ﻿#include "GameObjectFactory.h"
 #include "GameObject.h"
-#include "../Component/Billboard.h"
 #include "../Component/Bird.h"
 #include "../Component/BirdOrbit.h"
 #include "../Component/Camera.h"
@@ -38,7 +37,6 @@
 
 GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
-    ADD_COMPONENT(Billboard);
     ADD_COMPONENT(Bird);
     ADD_COMPONENT(BirdOrbit);
     ADD_COMPONENT(Camera);

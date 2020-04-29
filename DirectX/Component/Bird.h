@@ -4,7 +4,7 @@
 #include <memory>
 
 class BirdOrbit;
-class Timer;
+class Time;
 class MeshComponent;
 class GameObject;
 
@@ -34,8 +34,8 @@ private:
 
 private:
     std::shared_ptr<BirdOrbit> mOrbit;
-    std::shared_ptr<Timer> mTimer;
     std::shared_ptr<MeshComponent> mMesh;
+    std::unique_ptr<Time> mRestartTimer;
     std::shared_ptr<GameObject> mTarget;
     State mState;
     float mMoveSpeed;
