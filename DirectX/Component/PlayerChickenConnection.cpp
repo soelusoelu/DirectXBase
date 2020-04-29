@@ -37,7 +37,7 @@ void PlayerChickenConnection::start() {
 }
 
 void PlayerChickenConnection::update() {
-    auto jump = mPlayer->getJumpState();
+    const auto& jump = mPlayer->getJumpState();
     if (jump->isJumpStart()) {
         if (mIsJumpRoll) {
             mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
@@ -50,6 +50,8 @@ void PlayerChickenConnection::update() {
         mChicken = mJumpTarget;
     }
     if (mPlayer->isWalking()) {
+        bool res = (mJumpTarget) ? true : false;
+        jump->canJump(res);
         setPlayerPosOnTheChicken(*mChicken);
         setChickenPosUnderThePlayer();
 
@@ -83,6 +85,10 @@ const std::shared_ptr<FriedChickenComponent>& PlayerChickenConnection::getChicke
     return mChicken;
 }
 
+bool PlayerChickenConnection::isJumpTarget() const {
+    return (mJumpTarget) ? true : false;
+}
+
 Vector3 PlayerChickenConnection::getJumpTargetTopPos() const {
     if (!mJumpTarget) {
         return Vector3::zero;
@@ -95,10 +101,6 @@ Vector3 PlayerChickenConnection::getJumpTargetTopPos() const {
 }
 
 void PlayerChickenConnection::setPlayerJumpTarget(const ChickenPtr & chicken) {
-    if (!chicken) {
-        return;
-    }
-
     if (mPlayer->isWalking()) {
         mJumpTarget = chicken;
     }
@@ -121,6 +123,7 @@ void PlayerChickenConnection::trackingJumpTarget() {
     if (!mJumpTarget) {
         return;
     }
+
     auto pos = mJumpTarget->owner()->transform()->getPosition();
     pos.y += mJumpTarget->owner()->transform()->getScale().y * mChickenRadius;
     mPlayer->getJumpState()->setTargetPosition(pos);

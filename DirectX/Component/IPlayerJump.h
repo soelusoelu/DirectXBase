@@ -13,4 +13,6 @@ public:
     virtual bool isJumpEnd() const = 0;
     //ターゲットの位置をセット
     virtual void setTargetPosition(const Vector3& pos) = 0;
+    //ジャンプできるか
+    virtual void canJump(bool value) = 0;
 };

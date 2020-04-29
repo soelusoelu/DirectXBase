@@ -24,6 +24,7 @@ public:
     virtual bool isJumping() const override;
     virtual bool isJumpEnd() const override;
     virtual void setTargetPosition(const Vector3& pos) override;
+    virtual void canJump(bool value) override;
 
     //ジャンプ実行
     void jump();
@@ -47,4 +48,5 @@ private:
     JoyCode mJumpPad;
     float mSpeed;
     float mMoveRate;
+    bool mCanJump;
 };

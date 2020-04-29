@@ -12,12 +12,13 @@
 #include "../System/Format.h"
 #include "../System/GBuffer.h"
 #include "../System/IndexBuffer.h"
+#include "../System/RasterizerDesc.h"
+#include "../System/RasterizerState.h"
 #include "../System/RenderTargetView.h"
 #include "../System/RenderTargetViewDesc.h"
 #include "../System/Sampler.h"
 #include "../System/ShaderResourceView.h"
 #include "../System/SubResourceDesc.h"
-#include "../System/RasterizerState.h"
 #include "../System/Texture.h"
 #include "../System/Texture2D.h"
 #include "../System/VertexBuffer.h"
@@ -122,6 +123,10 @@ void Renderer::renderSprite() const {
     bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
     bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
     Singleton<DirectX>::instance().blendState()->setBlendState(bd);
+    //カリングオフ
+    RasterizerDesc rd;
+    rd.cullMode = CullMode::NONE;
+    Singleton<DirectX>::instance().rasterizerState()->setRasterizerState(rd);
 }
 
 void Renderer::renderSprite2D(Matrix4* proj) const {

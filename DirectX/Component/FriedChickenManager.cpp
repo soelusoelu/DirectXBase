@@ -87,6 +87,9 @@ std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(c
         if (!c->isFrying()) {
             continue;
         }
+        if (!c->owner()->getActive()) {
+            continue;
+        }
         auto l = (c->owner()->transform()->getPosition() - target.transform()->getPosition()).lengthSq();
         if (l < nearest) {
             nearest = l;

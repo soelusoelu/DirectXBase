@@ -24,6 +24,9 @@ public:
     void setPlayer(const GameObject& player);
     void setChicken(const ChickenPtr& chicken);
     const ChickenPtr& getChicken() const;
+    //ジャンプターゲットが有効か
+    bool isJumpTarget() const;
+    //ジャンプターゲットのトップポジション
     Vector3 getJumpTargetTopPos() const;
     void setPlayerJumpTarget(const ChickenPtr& chicken);
 

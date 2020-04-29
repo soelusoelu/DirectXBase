@@ -63,7 +63,12 @@ void GamePlay::update() {
         auto c = mFriedChickenManager->findNearestChicken(*p, mPCConnection->getChicken());
         mPCConnection->setPlayerJumpTarget(c);
         //ジャンプ地点を更新する
-        mJumpTarget->setTargetPosition(mPCConnection->getJumpTargetTopPos());
+        if (mPCConnection->isJumpTarget()) {
+            mJumpTarget->setActive(true);
+            mJumpTarget->setTargetPosition(mPCConnection->getJumpTargetTopPos());
+        } else {
+            mJumpTarget->setActive(false);
+        }
         //油の流れに沿って移動させる
         mOil->flow(p);
         auto list = mFriedChickenManager->getFriedChickens();
