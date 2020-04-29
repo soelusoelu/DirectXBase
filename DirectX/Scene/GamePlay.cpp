@@ -61,9 +61,9 @@ void GamePlay::update() {
         auto p = mGameObjectManager->getPlayer();
         //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
         auto c = mFriedChickenManager->findNearestChicken(*p, mPCConnection->getChicken());
-        mPCConnection->playerJumpTarget(c);
+        mPCConnection->setPlayerJumpTarget(c);
         //ジャンプ地点を更新する
-        mJumpTarget->setTargetPosition(mPCConnection->getJumpTarget().owner()->transform()->getPosition());
+        mJumpTarget->setTargetPosition(mPCConnection->getJumpTargetTopPos());
         //油の流れに沿って移動させる
         mOil->flow(p);
         auto list = mFriedChickenManager->getFriedChickens();

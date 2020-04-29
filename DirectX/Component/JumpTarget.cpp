@@ -30,8 +30,5 @@ void JumpTarget::saveProperties(rapidjson::Document::AllocatorType & alloc, rapi
 }
 
 void JumpTarget::setTargetPosition(const Vector3 & pos) {
-    if (!mSprite) {
-        return;
-    }
     mSprite->transform()->setPosition(pos + Vector3::up * mOffsetPosY);
 }

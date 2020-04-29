@@ -45,7 +45,7 @@
         {
           "type": "JumpTarget",
           "properties": {
-            "offsetPosY": 3.0
+            "offsetPosY": 0.5
           }
         }
       ]

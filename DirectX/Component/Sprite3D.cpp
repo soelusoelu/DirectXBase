@@ -11,8 +11,8 @@
 #include "../Utility/LevelLoader.h"
 #include <cassert>
 
-Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type) :
-    Component(owenr, type),
+Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr) :
+    Component(owenr, "Sprite3D", 500),
     mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),

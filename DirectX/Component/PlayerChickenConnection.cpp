@@ -83,11 +83,18 @@ const std::shared_ptr<FriedChickenComponent>& PlayerChickenConnection::getChicke
     return mChicken;
 }
 
-const FriedChickenComponent& PlayerChickenConnection::getJumpTarget() const {
-    return *mJumpTarget;
+Vector3 PlayerChickenConnection::getJumpTargetTopPos() const {
+    if (!mJumpTarget) {
+        return Vector3::zero;
+    }
+    auto trans = mJumpTarget->owner()->transform();
+    auto pos = trans->getPosition();
+    auto offsetY = mChickenRadius * trans->getScale().y;
+    pos.y += offsetY;
+    return pos;
 }
 
-void PlayerChickenConnection::playerJumpTarget(const ChickenPtr & chicken) {
+void PlayerChickenConnection::setPlayerJumpTarget(const ChickenPtr & chicken) {
     if (!chicken) {
         return;
     }

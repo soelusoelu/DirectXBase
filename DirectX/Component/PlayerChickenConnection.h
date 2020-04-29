@@ -24,8 +24,8 @@ public:
     void setPlayer(const GameObject& player);
     void setChicken(const ChickenPtr& chicken);
     const ChickenPtr& getChicken() const;
-    const FriedChickenComponent& getJumpTarget() const;
-    void playerJumpTarget(const ChickenPtr& chicken);
+    Vector3 getJumpTargetTopPos() const;
+    void setPlayerJumpTarget(const ChickenPtr& chicken);
 
 private:
     void setPlayerPosOnTheChicken(const FriedChickenComponent& chicken);

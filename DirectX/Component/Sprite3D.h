@@ -17,7 +17,7 @@ class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D>
     };
 
 public:
-    Sprite3D(std::shared_ptr<GameObject> owenr, const std::string& type = "Sprite3D");
+    Sprite3D(std::shared_ptr<GameObject> owenr);
     ~Sprite3D();
     virtual void start() override;
     virtual void update() override;

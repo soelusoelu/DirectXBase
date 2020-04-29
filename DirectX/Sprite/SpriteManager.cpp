@@ -35,7 +35,7 @@ void SpriteManager::draw(const Matrix4& proj) const {
 
     for (const auto& sprite : mSprites) {
         if (!sprite->getActive() || sprite->isDead()) {
-            return;
+            continue;
         }
         sprite->draw(proj);
     }
@@ -48,7 +48,7 @@ void SpriteManager::drawComponents() const {
 
     for (const auto& sprite : mSpriteComponents) {
         if (!sprite->getActive() || sprite->isDead()) {
-            return;
+            continue;
         }
         sprite->draw();
     }
@@ -61,7 +61,7 @@ void SpriteManager::draw3Ds(const Matrix4& viewProj) const {
 
     for (const auto& sprite : mSprite3Ds) {
         if (!sprite->getActive() || sprite->isDead()) {
-            return;
+            continue;
         }
         sprite->draw(viewProj);
     }

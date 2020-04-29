@@ -10,12 +10,12 @@ float Random::randomNormal() {
 }
 
 int Random::randomRange(int min, int max) {
-    std::uniform_int_distribution<int> dist(min, max);
+    std::uniform_int_distribution<int> dist(min, max - 1);
     return dist(mt);
 }
 
 float Random::randomRange(float min, float max) {
-    std::uniform_real_distribution<float> dist(min, max - 1);
+    std::uniform_real_distribution<float> dist(min, max);
     return dist(mt);
 }
 
