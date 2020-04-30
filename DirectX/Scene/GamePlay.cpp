@@ -88,7 +88,9 @@ void GamePlay::update() {
     } else if (mState == State::PAUSE) {
     }
     //リセット
+#ifdef _DEBUG
     if (Input::keyboard()->getKeyDown(KeyCode::R)) {
         nextScene(std::make_shared<GamePlay>());
     }
+#endif // _DEBUG
 }

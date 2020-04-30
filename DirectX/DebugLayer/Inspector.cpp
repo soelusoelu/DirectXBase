@@ -112,8 +112,8 @@ void Inspector::drawRotation(const TransformPtr& target, const Vector2 & positio
     auto pos = position;
     mDrawString->drawString("Rotation", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto rot = target->getRotation();
-    mDrawString->drawString(InspectHelper::quaternionToString(rot), pos, mElementScale);
+    auto rot = target->getRotation().euler();
+    mDrawString->drawString(InspectHelper::vector3ToString(rot), pos, mElementScale);
 }
 
 void Inspector::drawScale(const TransformPtr& target, const Vector2 & position) const {
