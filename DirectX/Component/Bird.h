@@ -3,13 +3,15 @@
 #include "Component.h"
 #include <memory>
 
-class Timer;
+class BirdOrbit;
+class Time;
 class MeshComponent;
 class GameObject;
 
 class Bird : public Component {
     enum class State {
         WAIT,
+        PREDICT_LINE,
         MOVE
     };
 
@@ -22,14 +24,18 @@ public:
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
 
 private:
+    void waiting();
+    void predictLine();
     void move();
     void takeChicken();
     void isEndMoving();
     void initialize();
+    void finalize();
 
 private:
-    std::shared_ptr<Timer> mTimer;
+    std::shared_ptr<BirdOrbit> mOrbit;
     std::shared_ptr<MeshComponent> mMesh;
+    std::unique_ptr<Time> mRestartTimer;
     std::shared_ptr<GameObject> mTarget;
     State mState;
     float mMoveSpeed;

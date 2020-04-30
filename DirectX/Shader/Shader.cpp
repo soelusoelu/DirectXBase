@@ -24,7 +24,7 @@ Shader::~Shader() {
     SAFE_RELEASE(mPixelShader);
 }
 
-bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) {
+bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {
     auto msr = toMappedSubResource(data);
     auto res = Singleton<DirectX>::instance().deviceContext()->Map(mConstantBuffers[index]->buffer(), sub, type, flag, &msr);
 
@@ -35,15 +35,15 @@ bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D1
     return (SUCCEEDED(res));
 }
 
-void Shader::unmap(unsigned index, unsigned sub) {
+void Shader::unmap(unsigned index, unsigned sub) const {
     Singleton<DirectX>::instance().deviceContext()->Unmap(mConstantBuffers[index]->buffer(), sub);
 }
 
-void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
+void Shader::setVSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
     Singleton<DirectX>::instance().deviceContext()->VSSetShader(mVertexShader, &classInstances, numClassInstances);
 }
 
-void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) {
+void Shader::setPSShader(ID3D11ClassInstance* classInstances, unsigned numClassInstances) const {
     Singleton<DirectX>::instance().deviceContext()->PSSetShader(mPixelShader, &classInstances, numClassInstances);
 }
 
@@ -62,12 +62,12 @@ void Shader::createConstantBuffer(unsigned bufferSize, unsigned index) {
     mConstantBuffers[index] = std::make_unique<Buffer>(cb);
 }
 
-void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) {
+void Shader::setVSConstantBuffers(unsigned index, unsigned numBuffers) const {
     auto buf = mConstantBuffers[index]->buffer();
     Singleton<DirectX>::instance().deviceContext()->VSSetConstantBuffers(index, numBuffers, &buf);
 }
 
-void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) {
+void Shader::setPSConstantBuffers(unsigned index, unsigned numBuffers) const {
     auto buf = mConstantBuffers[index]->buffer();
     Singleton<DirectX>::instance().deviceContext()->PSSetConstantBuffers(index, numBuffers, &buf);
 }
@@ -76,7 +76,7 @@ void Shader::createInputLayout(const InputElementDesc layout[], unsigned numElem
     mVertexLayout = std::make_unique<InputElement>(layout, numElements, mCompileShader);
 }
 
-void Shader::setInputLayout() {
+void Shader::setInputLayout() const {
     Singleton<DirectX>::instance().deviceContext()->IASetInputLayout(mVertexLayout->layout());
 }
 

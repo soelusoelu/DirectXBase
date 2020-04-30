@@ -53,7 +53,7 @@ void Sprite::update() {
     }
 }
 
-void Sprite::draw(const Matrix4& proj) {
+void Sprite::draw(const Matrix4& proj) const {
     //シェーダーを登録
     mShader->setVSShader();
     mShader->setPSShader();
@@ -84,7 +84,7 @@ void Sprite::draw(const Matrix4& proj) {
     Singleton<DirectX>::instance().drawIndexed(6);
 }
 
-std::shared_ptr<Transform2D> Sprite::transform() const {
+const std::shared_ptr<Transform2D>& Sprite::transform() const {
     return mTransform;
 }
 
@@ -152,12 +152,12 @@ bool Sprite::isDead() const {
     return mState == State::DEAD;
 }
 
-std::shared_ptr<Texture> Sprite::texture() const {
-    return mTexture;
+const Texture& Sprite::texture() const {
+    return *mTexture;
 }
 
-std::shared_ptr<Shader> Sprite::shader() const {
-    return mShader;
+const Shader& Sprite::shader() const {
+    return *mShader;
 }
 
 const std::string& Sprite::fileName() const {

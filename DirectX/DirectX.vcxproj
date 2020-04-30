@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\BirdOrbit.cpp" />
     <ClCompile Include="Component\ChickenColorChanger.cpp" />
     <ClCompile Include="Component\ChickenFry.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Component\PlayerWalk.cpp" />
     <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
+    <ClCompile Include="Component\Sprite3D.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -264,6 +266,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\BirdOrbit.h" />
     <ClInclude Include="Component\ChickenColorChanger.h" />
     <ClInclude Include="Component\ChickenFry.h" />
     <ClInclude Include="Component\Bird.h" />
@@ -297,6 +300,7 @@
     <ClInclude Include="GameObject\GameObjectFactory.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Vector2.h" />
@@ -313,6 +317,7 @@
     <ClInclude Include="Component\PlayerWalk.h" />
     <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Component\Timer.h" />
+    <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />

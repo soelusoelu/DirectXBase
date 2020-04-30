@@ -30,11 +30,11 @@ public:
     static void end();
     const TextureDesc& desc() const;
     //テクスチャの登録
-    void setVSTextures(unsigned start = 0, unsigned numTextures = 1);
-    void setPSTextures(unsigned start = 0, unsigned numTextures = 1);
+    void setVSTextures(unsigned start = 0, unsigned numTextures = 1) const;
+    void setPSTextures(unsigned start = 0, unsigned numTextures = 1) const;
     //サンプラーの登録
-    void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1);
-    void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1);
+    void setVSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
+    void setPSSamplers(unsigned start = 0, unsigned numSamplers = 1) const;
 
 private:
     void createVertexBuffer();
@@ -47,6 +47,7 @@ private:
 
 public:
     static VertexBuffer* vertexBuffer;
+    static VertexBuffer* vertexBuffer3D;
     static IndexBuffer* indexBuffer;
 
 private:

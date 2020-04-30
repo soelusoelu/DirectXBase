@@ -1,6 +1,7 @@
 ﻿#include "GamePlay.h"
 #include "ResultScene.h"
 #include "../Component/ComponentManager.h"
+#include "../Component/FriedChickenComponent.h"
 #include "../Component/FriedChickenManager.h"
 #include "../Component/JumpTarget.h"
 #include "../Component/Oil.h"
@@ -24,6 +25,7 @@ GamePlay::GamePlay() :
     mPCConnection(nullptr),
     mScore(nullptr),
     mTimeLimitTimer(nullptr),
+    mJumpTarget(nullptr),
     mOil(nullptr),
     mState(State::PLAY) {
 }
@@ -35,7 +37,7 @@ void GamePlay::start() {
     auto p = GameObjectCreater::create("Player");
     auto fcm = GameObjectCreater::create("FriedChickenManager");
     mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
-    auto c = mFriedChickenManager->findNearestChicken(p);
+    auto c = mFriedChickenManager->findNearestChicken(*p);
     auto pcc = GameObjectCreater::create("PlayerChickenConnection");
     mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
     mPCConnection->setPlayer(*p);
@@ -46,6 +48,7 @@ void GamePlay::start() {
     auto tl = GameObjectCreater::createUI("TimeLimit");
     mTimeLimitTimer = tl->componentManager()->getComponent<Timer>();
     auto jt = GameObjectCreater::createUI("JumpTarget");
+    mJumpTarget = jt->componentManager()->getComponent<JumpTarget>();
     auto f = GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
@@ -57,8 +60,15 @@ void GamePlay::update() {
     if (mState == State::PLAY) {
         auto p = mGameObjectManager->getPlayer();
         //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
-        auto c = mFriedChickenManager->findNearestChicken(p, mPCConnection->getChicken());
-        mPCConnection->playerJumpTarget(c);
+        auto c = mFriedChickenManager->findNearestChicken(*p, mPCConnection->getChicken());
+        mPCConnection->setPlayerJumpTarget(c);
+        //ジャンプ地点を更新する
+        if (mPCConnection->isJumpTarget()) {
+            mJumpTarget->setActive(true);
+            mJumpTarget->setTargetPosition(mPCConnection->getJumpTargetTopPos());
+        } else {
+            mJumpTarget->setActive(false);
+        }
         //油の流れに沿って移動させる
         mOil->flow(p);
         auto list = mFriedChickenManager->getFriedChickens();
@@ -78,7 +88,9 @@ void GamePlay::update() {
     } else if (mState == State::PAUSE) {
     }
     //リセット
+#ifdef _DEBUG
     if (Input::keyboard()->getKeyDown(KeyCode::R)) {
         nextScene(std::make_shared<GamePlay>());
     }
+#endif // _DEBUG
 }

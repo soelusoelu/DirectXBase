@@ -2,7 +2,7 @@
 
 class Time {
 public:
-    Time(float sec);
+    Time(float sec = 0.f);
     ~Time();
     void update();
     //設定を最初の状態に戻す

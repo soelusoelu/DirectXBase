@@ -1,15 +1,15 @@
 ﻿#pragma once
 
+#include "Component.h"
 #include "../Math/Math.h"
 #include <memory>
-#include <string>
 
 class Shader;
 class SpriteManager;
 class Texture;
-class Transform2D;
+class Transform3D;
 
-class Sprite : public std::enable_shared_from_this<Sprite> {
+class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D> {
     enum class State {
         ACTIVE,
         NON_ACTIVE,
@@ -17,29 +17,29 @@ class Sprite : public std::enable_shared_from_this<Sprite> {
     };
 
 public:
-    Sprite(const std::string& fileName);
-    ~Sprite();
-    //マネージャークラスへの登録
-    void addToManager();
-    //SpriteManagerにて毎フレーム実行
-    void update();
+    Sprite3D(std::shared_ptr<GameObject> owenr);
+    ~Sprite3D();
+    virtual void start() override;
+    virtual void update() override;
+    virtual void onSetActive(bool value) override;
+    virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+
     //描画
-    void draw(const Matrix4& proj) const;
-    //Transform
-    const std::shared_ptr<Transform2D>& transform() const;
+    void draw(const Matrix4& viewProj) const;
+    //トランスフォーム
+    const std::shared_ptr<Transform3D>& transform() const;
     //色味、たぶん0～1
     void setColor(const Vector3& color);
     void setColor(float r, float g, float b);
     //不透明度(0～1、1が不透明, 0が透明)
     void setAlpha(float alpha);
+    //色味の取得
     const Vector4& getColor() const;
     //切り取り範囲(left, top, right, bottom, 0～1)
     void setUV(float l, float t, float r, float b);
     const Vector4& getUV() const;
-    //テクスチャサイズの取得
-    const Vector2& getTextureSize() const;
     //状態管理
-    void destroy();
     void setActive(bool value);
     bool getActive() const;
     bool isDead() const;
@@ -53,16 +53,19 @@ public:
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);
 
-private:
-    std::shared_ptr<Transform2D> mTransform;
+protected:
+    //マネージャークラスへの登録
+    void addToManager();
+
+protected:
+    std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
-    Vector2 mTextureSize;
+    State mState;
+    Vector2 mTextureAspect;
     Vector4 mColor;
     Vector4 mUV;
-    State mState;
     std::string mFileName;
 
     static SpriteManager* mSpriteManager;
 };
-

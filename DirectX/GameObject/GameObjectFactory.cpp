@@ -1,6 +1,7 @@
 ﻿#include "GameObjectFactory.h"
 #include "GameObject.h"
 #include "../Component/Bird.h"
+#include "../Component/BirdOrbit.h"
 #include "../Component/Camera.h"
 #include "../Component/ChickenColorChanger.h"
 #include "../Component/ChickenFry.h"
@@ -25,6 +26,7 @@
 #include "../Component/ScoreEvaluation.h"
 #include "../Component/SoundComponent.h"
 #include "../Component/SphereCollisionComponent.h"
+#include "../Component/Sprite3D.h"
 #include "../Component/SpriteComponent.h"
 #include "../Component/Text.h"
 #include "../Component/TimeLimit.h"
@@ -36,6 +38,7 @@
 GameObjectFactory::GameObjectFactory() :
     mRenderer(nullptr) {
     ADD_COMPONENT(Bird);
+    ADD_COMPONENT(BirdOrbit);
     ADD_COMPONENT(Camera);
     ADD_COMPONENT(ChickenColorChanger);
     ADD_COMPONENT(ChickenFry);
@@ -58,6 +61,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(ScoreEvaluation);
     ADD_COMPONENT(SoundComponent);
     ADD_COMPONENT(SphereCollisionComponent);
+    ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteComponent);
     ADD_COMPONENT(Text);
     ADD_COMPONENT(TimeLimit);

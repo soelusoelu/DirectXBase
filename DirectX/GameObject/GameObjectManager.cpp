@@ -83,7 +83,7 @@ std::shared_ptr<GameObject> GameObjectManager::randomFind(const std::string& tag
         }
     }
 
-    auto randomIndex = Random::randomRange(0, gameObjectArray.size() - 1);
+    auto randomIndex = Random::randomRange(0, gameObjectArray.size());
     return gameObjectArray[randomIndex];
 }
 

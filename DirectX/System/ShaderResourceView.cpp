@@ -21,11 +21,11 @@ ShaderResourceView::~ShaderResourceView() {
     SAFE_RELEASE(mShaderResourceView);
 }
 
-void ShaderResourceView::setVSShaderResources(unsigned start, unsigned numViews) {
+void ShaderResourceView::setVSShaderResources(unsigned start, unsigned numViews) const {
     Singleton<DirectX>::instance().deviceContext()->VSSetShaderResources(start, numViews, &mShaderResourceView);
 }
 
-void ShaderResourceView::setPSShaderResources(unsigned start, unsigned numViews) {
+void ShaderResourceView::setPSShaderResources(unsigned start, unsigned numViews) const {
     Singleton<DirectX>::instance().deviceContext()->PSSetShaderResources(start, numViews, &mShaderResourceView);
 }
 

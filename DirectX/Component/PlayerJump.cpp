@@ -18,7 +18,8 @@ PlayerJump::PlayerJump(std::shared_ptr<GameObject> owner) :
     mJumpKey(KeyCode::None),
     mJumpPad(JoyCode::None),
     mSpeed(0.f),
-    mMoveRate(0.f) {
+    mMoveRate(0.f),
+    mCanJump(false) {
 }
 
 PlayerJump::~PlayerJump() = default;
@@ -51,6 +52,9 @@ void PlayerJump::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "MoveRate";
     info.second = StringUtil::floatToString(mMoveRate);
     inspect->emplace_back(info);
+    info.first = "CanJump";
+    info.second = StringUtil::boolToString(mCanJump);
+    inspect->emplace_back(info);
 
     info.first = "State";
     if (mCurrentState == State::JUMPING) {
@@ -62,6 +66,10 @@ void PlayerJump::drawDebugInfo(DebugInfoList * inspect) const {
 }
 
 void PlayerJump::jump() {
+    if (!mCanJump) {
+        return;
+    }
+
     bool isPressed = Input::joyPad()->getJoyDown(mJumpPad);
 #ifdef _DEBUG
     if (!isPressed) {
@@ -94,6 +102,10 @@ bool PlayerJump::isJumpEnd() const {
 
 void PlayerJump::setTargetPosition(const Vector3 & pos) {
     mJumpTargetPosition = pos;
+}
+
+void PlayerJump::canJump(bool value) {
+    mCanJump = value;
 }
 
 void PlayerJump::move() {

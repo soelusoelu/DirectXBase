@@ -1,7 +1,6 @@
 ﻿#include "ChickenFry.h"
 #include "ChickenColorChanger.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Debug.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
@@ -93,11 +92,6 @@ void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "TooBurntTiemr";
     info.second = StringUtil::floatToString(mTooBurntTimer->currentTime());
     inspect->emplace_back(info);
-
-    info.first = "Euler";
-    auto euler = owner()->transform()->getRotation().euler();
-    info.second = StringUtil::vector3ToString(euler);
-    inspect->emplace_back(info);
 }
 
 void ChickenFry::initialize() {
@@ -185,10 +179,10 @@ FryState ChickenFry::getFryState(unsigned surfaceIndex) const {
 }
 
 void ChickenFry::choiceEasyAndHardSurface() {
-    auto easySurface = Random::randomRange(0, getNumSurface() - 1);
+    auto easySurface = Random::randomRange(0, getNumSurface());
     int hardSurface;
     do {
-        hardSurface = Random::randomRange(0, getNumSurface() - 1);
+        hardSurface = Random::randomRange(0, getNumSurface());
     } while (hardSurface == easySurface);
 
     mEasySurface = static_cast<ChickenSurface>(easySurface);
@@ -198,23 +192,36 @@ void ChickenFry::choiceEasyAndHardSurface() {
 }
 
 void ChickenFry::choiceBottomSurface() {
-    auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
-    static const float SIN_COS_45 = Math::sin(45.f);
-    if (dir.y <= -SIN_COS_45) {
-        mCurrentBottomSurface = ChickenSurface::BOTTOM;
-    } else if (dir.y >= SIN_COS_45) {
-        mCurrentBottomSurface = ChickenSurface::UP;
-    } else if (dir.x <= -SIN_COS_45) {
-        mCurrentBottomSurface = ChickenSurface::RIGHT;
-    } else if (dir.x >= SIN_COS_45) {
-        mCurrentBottomSurface = ChickenSurface::LEFT;
-    } else if (dir.z <= -SIN_COS_45) {
-        mCurrentBottomSurface = ChickenSurface::BACK;
-    } else if (dir.z >= SIN_COS_45) {
-        mCurrentBottomSurface = ChickenSurface::FORE;
-    } else {
-        Debug::logError("No bottom Surface!");
+    auto dir = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
+
+    static const Vector3 dirs[] = {
+        Vector3::up,
+        Vector3::down,
+        Vector3::left,
+        Vector3::right,
+        Vector3::forward,
+        Vector3::back,
+    };
+    static const ChickenSurface dirSurfaces[] = {
+        ChickenSurface::BOTTOM,
+        ChickenSurface::UP,
+        ChickenSurface::RIGHT,
+        ChickenSurface::LEFT,
+        ChickenSurface::BACK,
+        ChickenSurface::FORE,
+    };
+
+    float min = Math::infinity;
+    auto sur = ChickenSurface::UP;
+    float dist = 0.f;
+    for (size_t i = 0; i < 6; i++) {
+        dist = (dirs[i] - dir).lengthSq();
+        if (dist < min) {
+            min = dist;
+            sur = dirSurfaces[i];
+        }
     }
+    mCurrentBottomSurface = sur;
 }
 
 void ChickenFry::frying() {

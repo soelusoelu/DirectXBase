@@ -1,8 +1,9 @@
 ﻿#include "Bird.h"
+#include "BirdOrbit.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "MeshComponent.h"
-#include "Timer.h"
+#include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
@@ -12,7 +13,8 @@
 
 Bird::Bird(std::shared_ptr<GameObject> owner) :
     Component(owner, "Bird"),
-    mTimer(nullptr),
+    mOrbit(nullptr),
+    mRestartTimer(std::make_unique<Time>()),
     mMesh(nullptr),
     mTarget(nullptr),
     mState(State::WAIT),
@@ -22,27 +24,21 @@ Bird::Bird(std::shared_ptr<GameObject> owner) :
 Bird::~Bird() = default;
 
 void Bird::start() {
-    mTimer = owner()->componentManager()->getComponent<Timer>();
-    mMesh = owner()->componentManager()->getComponent<MeshComponent>();
+    auto compMana = owner()->componentManager();
+    mOrbit = compMana->getComponent<BirdOrbit>();
+    mMesh = compMana->getComponent<MeshComponent>();
+    mMesh->setActive(false);
     auto t = owner()->transform();
     t->rotate(Vector3::up, 90.f);
     t->rotate(Vector3::forward, 90.f);
-    t->setPosition(Vector3::right * 30.f);
-    if (mMesh) {
-        t->setPivot(Vector3::up * mMesh->getRadius());
-    }
+    t->setPivot(Vector3::up * mMesh->getRadius());
 }
 
 void Bird::update() {
     if (mState == State::WAIT) {
-        if (!mTimer) {
-            return;
-        }
-        if (mTimer->isTime()) {
-            mState = State::MOVE;
-            initialize();
-            mTimer->reset();
-        }
+        waiting();
+    } else if (mState == State::PREDICT_LINE) {
+        predictLine();
     } else if (mState == State::MOVE) {
         move();
         takeChicken();
@@ -54,6 +50,10 @@ void Bird::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
+    float time;
+    if (JsonHelper::getFloat(inObj, "restartTimer", &time)) {
+        mRestartTimer->setLimitTime(time);
+    }
 }
 
 void Bird::drawDebugInfo(DebugInfoList * inspect) const {
@@ -61,6 +61,8 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "State";
     if (mState == State::WAIT) {
         info.second = "WAIT";
+    } else if (mState == State::PREDICT_LINE) {
+        info.second = "PREDICT_LINE";
     } else if (mState == State::MOVE) {
         info.second = "MOVE";
     }
@@ -68,15 +70,34 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
     info.first = "MoveSpeed";
     info.second = StringUtil::floatToString(mMoveSpeed);
     inspect->emplace_back(info);
+    info.first = "RestartTimer";
+    info.second = StringUtil::floatToString(mRestartTimer->limitTime());
+    inspect->emplace_back(info);
+}
+
+void Bird::waiting() {
+    mRestartTimer->update();
+    auto temp = mRestartTimer->limitTime() - mRestartTimer->currentTime();
+    if (temp <= mOrbit->getTime()) {
+        mState = State::PREDICT_LINE;
+        initialize();
+    }
+}
+
+void Bird::predictLine() {
+    mRestartTimer->update();
+    if (mRestartTimer->isTime()) {
+        mRestartTimer->reset();
+        mState = State::MOVE;
+    }
 }
 
 void Bird::move() {
     if (!mTarget) {
         mState = State::WAIT;
+        finalize();
         return;
     }
-    auto t = owner()->transform();
-    auto posX = t->getPosition().x;
     owner()->transform()->translate(Vector3::left * Time::deltaTime * mMoveSpeed);
 }
 
@@ -106,13 +127,22 @@ void Bird::takeChicken() {
 
 void Bird::isEndMoving() {
     auto posX = owner()->transform()->getPosition().x;
-    if (posX < -15.f) {
+    if (posX < 0.f && !mMesh->isVisible()) {
         mState = State::WAIT;
+        finalize();
     }
 }
 
 void Bird::initialize() {
     mTarget = owner()->getGameObjectManager()->randomFind("FriedChicken");
     auto posZ = mTarget->transform()->getPosition().z;
-    owner()->transform()->setPosition(Vector3(10.f, 0.f, posZ));
+    owner()->transform()->setPosition(Vector3(15.f, 0.f, posZ));
+    mMesh->setActive(true);
+    mOrbit->setActive(true);
+    mOrbit->setPositionZ(posZ);
+}
+
+void Bird::finalize() {
+    mMesh->setActive(false);
+    mOrbit->setActive(false);
 }

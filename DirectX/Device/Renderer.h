@@ -30,8 +30,14 @@ public:
 
     void renderToTexture();
     void renderFromTexture(const Camera& camera, const DirectionalLight& dirLight);
-    void renderSprite(Matrix4* proj);
-    void renderToDebug(Matrix4* proj);
+    //スプライト描画共通処理
+    void renderSprite() const;
+    //2Dスプライト処理
+    void renderSprite2D(Matrix4* proj) const;
+    //3Dスプライト処理
+    void renderSprite3D() const;
+    //デバッグ画面処理
+    void renderToDebug(Matrix4* proj) const;
 
 private:
     void removePointLight();

@@ -1,5 +1,7 @@
 ﻿#include "SpriteManager.h"
 #include "Sprite.h"
+#include "../Component/Sprite3D.h"
+#include "../Component/SpriteComponent.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/Transform2D.h"
 #include "../System/BlendDesc.h"
@@ -20,19 +22,48 @@ void SpriteManager::update() {
     for (auto&& sprite : mSprites) {
         sprite->update();
     }
+    for (auto&& sprite : mSpriteComponents) {
+        sprite->update();
+    }
     remove();
 }
 
-void SpriteManager::draw(const Matrix4& proj) {
+void SpriteManager::draw(const Matrix4& proj) const {
     if (mSprites.empty()) {
         return;
     }
 
-    for (auto&& sprite : mSprites) {
+    for (const auto& sprite : mSprites) {
         if (!sprite->getActive() || sprite->isDead()) {
-            return;
+            continue;
         }
         sprite->draw(proj);
+    }
+}
+
+void SpriteManager::drawComponents() const {
+    if (mSpriteComponents.empty()) {
+        return;
+    }
+
+    for (const auto& sprite : mSpriteComponents) {
+        if (!sprite->getActive() || sprite->isDead()) {
+            continue;
+        }
+        sprite->draw();
+    }
+}
+
+void SpriteManager::draw3Ds(const Matrix4& viewProj) const {
+    if (mSprite3Ds.empty()) {
+        return;
+    }
+
+    for (const auto& sprite : mSprite3Ds) {
+        if (!sprite->getActive() || sprite->isDead()) {
+            continue;
+        }
+        sprite->draw(viewProj);
     }
 }
 
@@ -40,8 +71,18 @@ void SpriteManager::add(const SpritePtr& add) {
     mSprites.emplace_back(add);
 }
 
+void SpriteManager::addComponent(const SpriteComponentPtr& add) {
+    mSpriteComponents.emplace_back(add);
+}
+
+void SpriteManager::add3D(const Sprite3DPtr& add) {
+    mSprite3Ds.emplace_back(add);
+}
+
 void SpriteManager::clear() {
     mSprites.clear();
+    mSpriteComponents.clear();
+    mSprite3Ds.clear();
 }
 
 void SpriteManager::remove() {
@@ -51,6 +92,24 @@ void SpriteManager::remove() {
             itr = mSprites.erase(itr);
         } else {
             ++itr;
+        }
+    }
+
+    auto itr2 = mSpriteComponents.begin();
+    while (itr2 != mSpriteComponents.end()) {
+        if ((*itr2)->isDead()) {
+            itr2 = mSpriteComponents.erase(itr2);
+        } else {
+            ++itr2;
+        }
+    }
+
+    auto itr3 = mSprite3Ds.begin();
+    while (itr3 != mSprite3Ds.end()) {
+        if ((*itr3)->isDead()) {
+            itr3 = mSprite3Ds.erase(itr3);
+        } else {
+            ++itr3;
         }
     }
 }
