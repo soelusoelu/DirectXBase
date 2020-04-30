@@ -23,8 +23,7 @@ void ChickenColorChanger::start() {
     if (mesh) {
         for (size_t i = 0; i < static_cast<int>(ChickenSurface::NUM_SURFACE); i++) {
             //Surfaceと合わせてある
-            //最初のマテリアルは使われてないからプラス1
-            mMaterials.emplace_back(mesh->getMaterial(i + 1));
+            mMaterials.emplace_back(mesh->getMaterial(i));
         }
     }
 
