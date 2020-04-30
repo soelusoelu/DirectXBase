@@ -47,7 +47,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Chips/Chips.fbx"
+            "fileName": "Player/Chips.fbx"
           }
         },
         {
@@ -186,7 +186,7 @@
     {
       "type": "Bird",
       "properties": {
-        "scale": [ 5.0, 5.0, 5.0 ]
+        "scale": [ 10.0, 10.0, 10.0 ]
       },
       "components": [
         {
@@ -199,7 +199,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Bird/Chips.fbx"
+            "fileName": "Bird/tonbi4.fbx"
           }
         },
         {
