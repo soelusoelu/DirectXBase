@@ -47,7 +47,11 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
+<<<<<<< HEAD
             "fileName": "Chips/testPlayer.fbx"
+=======
+            "fileName": "Player/Chips.fbx"
+>>>>>>> c8e620e2af10a885a1a0ab1be7409e45602284a7
           }
         },
         {
@@ -186,7 +190,7 @@
     {
       "type": "Bird",
       "properties": {
-        "scale": [ 5.0, 5.0, 5.0 ]
+        "scale": [ 10.0, 10.0, 10.0 ]
       },
       "components": [
         {
