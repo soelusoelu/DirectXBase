@@ -41,13 +41,13 @@
     {
       "type": "Player",
       "properties": {
-        "scale": [ 5.0, 5.0, 5.0 ]
+        "scale": [ 1.0, 1.0, 1.0 ]
       },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Player/Chips.fbx"
+            "fileName": "Player/testPlayer.fbx"
           }
         },
         {
