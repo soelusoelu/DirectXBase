@@ -41,7 +41,7 @@
     {
       "type": "Player",
       "properties": {
-        "scale": [ 1.0, 1.0, 1.0 ]
+        "scale": [ 0.5, 0.5, 0.5 ]
       },
       "components": [
         {
@@ -76,8 +76,8 @@
     {
       "type": "Field",
       "properties": {
-        "position": [ 5.0, 0.0, 5.0 ],
-        "scale": [ 0.5, 0.5, 0.5 ]
+        "position": [ 0.0, 0.0, 0.0 ],
+        "scale": [ 0.6, 0.6, 0.6 ]
       },
       "components": [
         {
@@ -119,19 +119,19 @@
           "type": "ChickenFry",
           "properties": {
             "notFriedToLittleBadTimer": 0.0,
-            "littleBadToUsuallyTimer": 5.0,
-            "usuallyToGoodTimer": 5.0,
-            "goodToBadTimer": 4.0,
+            "littleBadToUsuallyTimer": 7.0,
+            "usuallyToGoodTimer": 6.0,
+            "goodToBadTimer": 6.0,
 
             "easyNotFriedToLittleBadTimer": 0.0,
-            "easyLittleBadToUsuallyTimer": 4.0,
-            "easyUsuallyToGoodTimer": 4.0,
-            "easyGoodToBadTimer": 4.0,
+            "easyLittleBadToUsuallyTimer": 5.0,
+            "easyUsuallyToGoodTimer": 5.0,
+            "easyGoodToBadTimer": 5.0,
 
             "hardNotFriedToLittleBadTimer": 0.0,
-            "hardLittleBadToUsuallyTimer": 7.0,
-            "hardUsuallyToGoodTimer": 5.0,
-            "hardGoodToBadTimer": 4.0,
+            "hardLittleBadToUsuallyTimer": 10.0,
+            "hardUsuallyToGoodTimer": 7.0,
+            "hardGoodToBadTimer": 7.0,
 
             "tooBurntTimer": 5.0
           }
@@ -142,7 +142,7 @@
             "initColor": [ 0.8, 0.6, 0.5 ],
             "littleFriedColor": [ 0.8, 0.5, 0.4 ],
             "usuallyColor": [ 0.8, 0.5, 0.3 ],
-            "friedColor": [ 0.8, 0.4, 0.1 ],
+            "friedColor": [ 0.8, 0.3, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ]
           }
         }
@@ -154,9 +154,9 @@
         {
           "type": "FriedChickenManager",
           "properties": {
-            "startNum": 2,
+            "startNum": 1,
             "maxNum": 5,
-            "replenishTimer": 20.0
+            "replenishTimer": 30.0
           }
         },
         {
