@@ -21,8 +21,7 @@ private:
 public:
     std::shared_ptr<Shader> createShader(const std::string& fileName);
     std::shared_ptr<Texture> createTexture(const std::string& fileName, bool isSprite = true);
-    std::shared_ptr<Sound> createBGM(const std::string& fileName);
-    std::shared_ptr<Sound> createSE(const std::string& fileName);
+    std::shared_ptr<Sound> createSound(const std::string& fileName);
     std::shared_ptr<IMeshLoader> createMesh(const std::string& fileName);
 
 private:

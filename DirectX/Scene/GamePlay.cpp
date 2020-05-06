@@ -7,11 +7,11 @@
 #include "../Component/Oil.h"
 #include "../Component/PlayerChickenConnection.h"
 #include "../Component/Score.h"
+#include "../Component/SoundComponent.h"
 #include "../Component/Timer.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/AssetsManager.h"
-#include "../Device/Sound.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
@@ -33,9 +33,7 @@ GamePlay::GamePlay() :
     mState(State::PLAY) {
 }
 
-GamePlay::~GamePlay() {
-    mBGM->stop();
-}
+GamePlay::~GamePlay() = default;
 
 void GamePlay::start() {
     //ファイルからアクターを読み込む
@@ -58,9 +56,9 @@ void GamePlay::start() {
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
 
-    mBGM = Singleton<AssetsManager>::instance().createBGM("gameplay.wav");
-    mBGM->setVolume(0.1f);
-    mBGM->play(true);
+    auto bgm = GameObjectCreater::create("GamePlayBGM");
+    mBGM = bgm->componentManager()->getComponent<SoundComponent>();
+    mBGM->playBGM();
 
     DebugUtility::inspector()->setTarget(p);
 }

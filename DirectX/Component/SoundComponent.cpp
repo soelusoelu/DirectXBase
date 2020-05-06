@@ -6,11 +6,16 @@
 
 SoundComponent::SoundComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "SoundComponent"),
+    mSound(nullptr),
     mFileName(""),
     mVolume(1.f) {
 }
 
-SoundComponent::~SoundComponent() = default;
+SoundComponent::~SoundComponent() {
+    if (mSound) {
+        mSound->stop();
+    }
+}
 
 void SoundComponent::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
@@ -31,12 +36,23 @@ void SoundComponent::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-void SoundComponent::play() {
-    playOneShot(mFileName, mVolume);
+void SoundComponent::playBGM() {
+    playBGM(mFileName, mVolume);
 }
 
-void SoundComponent::playOneShot(const std::string & fileName, float volumeScale) {
-    auto sound = Singleton<AssetsManager>::instance().createSE(fileName);
+void SoundComponent::playBGM(const std::string& fileName, float volumeScale) {
+    mSound = Singleton<AssetsManager>::instance().createSound(fileName);
+
+    mSound->setVolume(volumeScale);
+    mSound->play(true);
+}
+
+void SoundComponent::playSE() {
+    playSE(mFileName, mVolume);
+}
+
+void SoundComponent::playSE(const std::string & fileName, float volumeScale) {
+    auto sound = Singleton<AssetsManager>::instance().createSound(fileName);
 
     sound->setVolume(volumeScale);
     sound->play();

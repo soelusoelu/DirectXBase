@@ -36,7 +36,7 @@ std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & fileNa
     return texture;
 }
 
-std::shared_ptr<Sound> AssetsManager::createBGM(const std::string & fileName) {
+std::shared_ptr<Sound> AssetsManager::createSound(const std::string& fileName) {
     std::shared_ptr<Sound> sound = nullptr;
     auto itr = mSounds.find(fileName);
     if (itr != mSounds.end()) { //既に読み込まれている
@@ -46,12 +46,9 @@ std::shared_ptr<Sound> AssetsManager::createBGM(const std::string & fileName) {
         mSoundBase->load(fileName, &sound);
         mSounds.emplace(fileName, sound);
     }
-    return sound;
-}
 
-std::shared_ptr<Sound> AssetsManager::createSE(const std::string & fileName) {
-    auto sound = createBGM(fileName);
     mSoundBase->createSourceVoice(&sound);
+
     return sound;
 }
 

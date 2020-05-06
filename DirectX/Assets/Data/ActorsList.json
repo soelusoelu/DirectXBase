@@ -237,6 +237,18 @@
           }
         }
       ]
+    },
+    {
+      "type": "GamePlayBGM",
+      "components": [
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "gameplay.wav",
+            "volume": 0.1
+          }
+        }
+      ]
     }
   ]
 }

@@ -143,7 +143,7 @@ void Bird::initialize() {
     mMesh->setActive(true);
     mOrbit->setActive(true);
     mOrbit->setPositionZ(posZ);
-    mSound->play();
+    mSound->playSE();
 }
 
 void Bird::finalize() {
