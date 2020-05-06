@@ -3,6 +3,7 @@
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "MeshComponent.h"
+#include "SoundComponent.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
@@ -16,6 +17,7 @@ Bird::Bird(std::shared_ptr<GameObject> owner) :
     mOrbit(nullptr),
     mRestartTimer(std::make_unique<Time>()),
     mMesh(nullptr),
+    mSound(nullptr),
     mTarget(nullptr),
     mState(State::WAIT),
     mMoveSpeed(0.f) {
@@ -28,6 +30,7 @@ void Bird::start() {
     mOrbit = compMana->getComponent<BirdOrbit>();
     mMesh = compMana->getComponent<MeshComponent>();
     mMesh->setActive(false);
+    mSound = compMana->getComponent<SoundComponent>();
     auto t = owner()->transform();
     t->rotate(Vector3::up, 90.f);
     t->rotate(Vector3::forward, 90.f);
@@ -140,6 +143,7 @@ void Bird::initialize() {
     mMesh->setActive(true);
     mOrbit->setActive(true);
     mOrbit->setPositionZ(posZ);
+    mSound->play();
 }
 
 void Bird::finalize() {

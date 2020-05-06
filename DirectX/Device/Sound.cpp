@@ -3,7 +3,9 @@
 #include "../System/Game.h"
 #include "../Utility/Directory.h"
 
-SoundBase::SoundBase() {
+SoundBase::SoundBase() :
+    mXAudio2(nullptr),
+    mMasteringVoice(nullptr) {
     if (FAILED(CoInitializeEx(NULL, COINIT_MULTITHREADED))) {
         return;
     }

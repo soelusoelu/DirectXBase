@@ -49,7 +49,7 @@ void Renderer::update() {
     removePointLight();
 }
 
-std::shared_ptr<DrawString> Renderer::getDrawString() const {
+const std::shared_ptr<DrawString>& Renderer::getDrawString() const {
     return mDrawString;
 }
 

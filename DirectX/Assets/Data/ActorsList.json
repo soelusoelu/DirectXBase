@@ -214,6 +214,13 @@
             "fileName": "block.png",
             "scale": [ 30.0, 1.0 ]
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "hawk1.wav",
+            "volume": 0.1
+          }
         }
       ]
     },

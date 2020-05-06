@@ -9,6 +9,7 @@ class Score;
 class Timer;
 class JumpTarget;
 class Oil;
+class Sound;
 
 class GamePlay : public SceneBase {
     enum class State {
@@ -29,5 +30,6 @@ private:
     std::shared_ptr<Timer> mTimeLimitTimer;
     std::shared_ptr<JumpTarget> mJumpTarget;
     std::shared_ptr<Oil> mOil;
+    std::shared_ptr<Sound> mBGM;
     State mState;
 };

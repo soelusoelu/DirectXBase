@@ -7,6 +7,7 @@ class BirdOrbit;
 class Time;
 class MeshComponent;
 class GameObject;
+class SoundComponent;
 
 class Bird : public Component {
     enum class State {
@@ -35,6 +36,7 @@ private:
 private:
     std::shared_ptr<BirdOrbit> mOrbit;
     std::shared_ptr<MeshComponent> mMesh;
+    std::shared_ptr<SoundComponent> mSound;
     std::unique_ptr<Time> mRestartTimer;
     std::shared_ptr<GameObject> mTarget;
     State mState;

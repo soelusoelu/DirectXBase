@@ -21,7 +21,7 @@ public:
     void initialize();
     void update();
 
-    std::shared_ptr<DrawString> getDrawString() const;
+    const std::shared_ptr<DrawString>& getDrawString() const;
 
     const Vector3& getAmbientLight() const;
     void setAmbientLight(const Vector3& ambient);

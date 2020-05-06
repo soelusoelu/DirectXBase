@@ -13,7 +13,7 @@ AssetsManager::AssetsManager() :
 AssetsManager::~AssetsManager() = default;
 
 std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName) {
-    std::shared_ptr<Shader> shader;
+    std::shared_ptr<Shader> shader = nullptr;
     auto itr = mShaders.find(fileName);
     if (itr != mShaders.end()) { //既に読み込まれている
         shader = itr->second;
@@ -25,7 +25,7 @@ std::shared_ptr<Shader> AssetsManager::createShader(const std::string & fileName
 }
 
 std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & fileName, bool isSprite) {
-    std::shared_ptr<Texture> texture;
+    std::shared_ptr<Texture> texture = nullptr;
     auto itr = mTextures.find(fileName);
     if (itr != mTextures.end()) { //既に読み込まれている
         texture = itr->second;
@@ -37,7 +37,7 @@ std::shared_ptr<Texture> AssetsManager::createTexture(const std::string & fileNa
 }
 
 std::shared_ptr<Sound> AssetsManager::createBGM(const std::string & fileName) {
-    std::shared_ptr<Sound> sound;
+    std::shared_ptr<Sound> sound = nullptr;
     auto itr = mSounds.find(fileName);
     if (itr != mSounds.end()) { //既に読み込まれている
         sound = itr->second;
@@ -56,7 +56,7 @@ std::shared_ptr<Sound> AssetsManager::createSE(const std::string & fileName) {
 }
 
 std::shared_ptr<IMeshLoader> AssetsManager::createMesh(const std::string & fileName) {
-    std::shared_ptr<IMeshLoader> mesh;
+    std::shared_ptr<IMeshLoader> mesh = nullptr;
     auto itr = mMeshLoaders.find(fileName);
     if (itr != mMeshLoaders.end()) { //既に読み込まれている
         mesh = itr->second;
