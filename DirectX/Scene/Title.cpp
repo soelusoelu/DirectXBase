@@ -1,23 +1,24 @@
 ﻿#include "Title.h"
 #include "GamePlay.h"
-#include "../Sprite/Sprite.h"
-#include "../Input/Input.h"
-#include "../Input/JoyPad.h"
-#include "../Input/Keyboard.h"
+#include "../Component/ComponentManager.h"
+#include "../Component/Scene/TitleComponent.h"
+#include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectFactory.h"
 
 Title::Title() :
-    SceneBase() {
+    SceneBase(),
+    mTitle(nullptr) {
 }
 
 Title::~Title() = default;
 
 void Title::start() {
-    auto title = std::make_shared<Sprite>("12Title.png");
-    title->addToManager();
+    auto title = GameObjectCreater::create("Title");
+    mTitle = title->componentManager()->getComponent<TitleComponent>();
 }
 
 void Title::update() {
-    if (Input::keyboard()->getKeyDown(KeyCode::Space) || Input::joyPad()->getJoyDown(JoyCode::A)) {
+    if (mTitle->isEnd()) {
         nextScene(std::make_shared<GamePlay>());
     }
 }

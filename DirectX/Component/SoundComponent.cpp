@@ -8,7 +8,8 @@ SoundComponent::SoundComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "SoundComponent"),
     mSound(nullptr),
     mFileName(""),
-    mVolume(1.f) {
+    mVolume(1.f),
+    mIsFirstPlay(false) {
 }
 
 SoundComponent::~SoundComponent() {
@@ -17,11 +18,18 @@ SoundComponent::~SoundComponent() {
     }
 }
 
-void SoundComponent::loadProperties(const rapidjson::Value & inObj) {
+void SoundComponent::start() {
+    if (mIsFirstPlay) {
+        playBGM();
+    }
+}
+
+void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getString(inObj, "fileName", &mFileName);
     JsonHelper::getFloat(inObj, "volume", &mVolume);
+    JsonHelper::getBool(inObj, "isFirstPlay", &mIsFirstPlay);
 }
 
 void SoundComponent::drawDebugInfo(DebugInfoList* inspect) const {
@@ -33,6 +41,9 @@ void SoundComponent::drawDebugInfo(DebugInfoList* inspect) const {
     inspect->emplace_back(info);
     info.first = "Volume";
     info.second = StringUtil::floatToString(mVolume);
+    inspect->emplace_back(info);
+    info.first = "IsFirstPlay";
+    info.second = StringUtil::boolToString(mIsFirstPlay);
     inspect->emplace_back(info);
 }
 
@@ -51,7 +62,7 @@ void SoundComponent::playSE() {
     playSE(mFileName, mVolume);
 }
 
-void SoundComponent::playSE(const std::string & fileName, float volumeScale) {
+void SoundComponent::playSE(const std::string& fileName, float volumeScale) {
     auto sound = Singleton<AssetsManager>::instance().createSound(fileName);
 
     sound->setVolume(volumeScale);

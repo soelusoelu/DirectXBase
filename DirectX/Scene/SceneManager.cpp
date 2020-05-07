@@ -22,12 +22,13 @@
 
 SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
-    mCurrentScene(std::make_shared<GamePlay>()),
+    mCurrentScene(std::make_shared<Title>()),
     mCamera(nullptr),
     mGameObjectManager(new GameObjectManager()),
     mMeshManager(new MeshManager()),
     mSpriteManager(new SpriteManager()),
-    mPhysics(new Physics()) {
+    mPhysics(new Physics()),
+    mShouldDraw(true) {
 }
 
 SceneManager::~SceneManager() {
@@ -60,6 +61,7 @@ void SceneManager::update() {
     //アップデートの最初で文字列削除
     mRenderer->getDrawString()->clear();
     DebugUtility::drawStringClear();
+    mShouldDraw = true;
 
     //全ゲームオブジェクトの更新
     mGameObjectManager->update();
@@ -80,11 +82,14 @@ void SceneManager::update() {
     if (next) {
         mCurrentScene = next;
         change();
-        mGameObjectManager->update();
+        mShouldDraw = false;
     }
 }
 
 void SceneManager::draw() const {
+    if (!mShouldDraw) {
+        return;
+    }
     //各テクスチャ上にレンダリング
     mRenderer->renderToTexture();
     //メッシュの一括描画

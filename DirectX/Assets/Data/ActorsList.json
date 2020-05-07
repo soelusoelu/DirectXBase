@@ -239,13 +239,45 @@
       ]
     },
     {
-      "type": "GamePlayBGM",
+      "type": "Title",
       "components": [
+        {
+          "type": "TitleComponent",
+          "properties": {
+            "enterKey": "Space",
+            "enterPad": "A"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "12Title.png"
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "title.wav",
+            "volume": 0.1,
+            "isFirstPlay": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "GamePlay",
+      "components": [
+        {
+          "type": "GamePlayComponent",
+          "properties": {
+          }
+        },
         {
           "type": "SoundComponent",
           "properties": {
             "fileName": "gameplay.wav",
-            "volume": 0.1
+            "volume": 0.1,
+            "isFirstPlay": true
           }
         }
       ]

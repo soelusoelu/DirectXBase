@@ -33,4 +33,5 @@ private:
     MeshManager* mMeshManager;
     SpriteManager* mSpriteManager;
     Physics* mPhysics;
+    bool mShouldDraw;
 };

@@ -167,6 +167,7 @@
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerJump.cpp" />
     <ClCompile Include="Component\Result.cpp" />
+    <ClCompile Include="Component\Scene\TitleComponent.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="GameObject\GameObjectFactory.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
+    <ClCompile Include="Component\Scene\GamePlayComponent.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Matrix3.cpp" />
     <ClCompile Include="Math\Matrix4.cpp" />
@@ -280,6 +282,7 @@
     <ClInclude Include="Component\PlayerComponent.h" />
     <ClInclude Include="Component\PlayerJump.h" />
     <ClInclude Include="Component\Result.h" />
+    <ClInclude Include="Component\Scene\TitleComponent.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
@@ -301,6 +304,7 @@
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Component\ISprite.h" />
+    <ClInclude Include="Component\Scene\GamePlayComponent.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Vector2.h" />

@@ -116,6 +116,8 @@
     <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\Sprite3D.cpp" />
     <ClCompile Include="Component\BirdOrbit.cpp" />
+    <ClCompile Include="Component\Scene\TitleComponent.cpp" />
+    <ClCompile Include="Component\Scene\GamePlayComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -246,5 +248,7 @@
     <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
+    <ClInclude Include="Component\Scene\TitleComponent.h" />
+    <ClInclude Include="Component\Scene\GamePlayComponent.h" />
   </ItemGroup>
 </Project>
