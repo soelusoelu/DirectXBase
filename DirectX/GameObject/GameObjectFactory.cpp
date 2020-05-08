@@ -32,8 +32,10 @@
 #include "../Component/TimeLimit.h"
 #include "../Component/Timer.h"
 #include "../Component/TransparentMeshComponent.h"
-#include "../Component/Scene/GamePlayComponent.h"
-#include "../Component/Scene/TitleComponent.h"
+#include "../Component/Scene/GamePlay.h"
+#include "../Component/Scene/ResultScene.h"
+#include "../Component/Scene/Scene.h"
+#include "../Component/Scene/Title.h"
 #include "../DebugLayer/Debug.h"
 #include "../Utility/LevelLoader.h"
 
@@ -69,8 +71,10 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(TimeLimit);
     ADD_COMPONENT(Timer);
     ADD_COMPONENT(TransparentMeshComponent);
-    ADD_COMPONENT(GamePlayComponent);
-    ADD_COMPONENT(TitleComponent);
+    ADD_COMPONENT(GamePlay);
+    ADD_COMPONENT(ResultScene);
+    ADD_COMPONENT(Scene);
+    ADD_COMPONENT(Title);
 }
 
 GameObjectFactory::~GameObjectFactory() = default;

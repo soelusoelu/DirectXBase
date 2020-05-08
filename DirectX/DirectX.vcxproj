@@ -167,7 +167,6 @@
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerJump.cpp" />
     <ClCompile Include="Component\Result.cpp" />
-    <ClCompile Include="Component\Scene\TitleComponent.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
@@ -186,7 +185,7 @@
     <ClCompile Include="GameObject\GameObjectFactory.cpp" />
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
-    <ClCompile Include="Component\Scene\GamePlayComponent.cpp" />
+    <ClCompile Include="Component\Scene\GamePlay.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Matrix3.cpp" />
     <ClCompile Include="Math\Matrix4.cpp" />
@@ -199,9 +198,11 @@
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
     <ClCompile Include="Component\Oil.cpp" />
     <ClCompile Include="Component\PlayerWalk.cpp" />
-    <ClCompile Include="Scene\ResultScene.cpp" />
+    <ClCompile Include="Component\Scene\ResultScene.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Component\Sprite3D.cpp" />
+    <ClCompile Include="Component\Scene\Scene.cpp" />
+    <ClCompile Include="Component\Scene\Title.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -248,10 +249,7 @@
     <ClCompile Include="System\GBuffer.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
-    <ClCompile Include="Scene\GamePlay.cpp" />
-    <ClCompile Include="Scene\SceneBase.cpp" />
     <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Sprite\Sprite.cpp" />
     <ClCompile Include="Sprite\SpriteManager.cpp" />
@@ -282,7 +280,6 @@
     <ClInclude Include="Component\PlayerComponent.h" />
     <ClInclude Include="Component\PlayerJump.h" />
     <ClInclude Include="Component\Result.h" />
-    <ClInclude Include="Component\Scene\TitleComponent.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
@@ -304,7 +301,7 @@
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Component\ISprite.h" />
-    <ClInclude Include="Component\Scene\GamePlayComponent.h" />
+    <ClInclude Include="Component\Scene\GamePlay.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Vector2.h" />
@@ -319,9 +316,11 @@
     <ClInclude Include="Component\ScoreEvaluation.h" />
     <ClInclude Include="Component\Oil.h" />
     <ClInclude Include="Component\PlayerWalk.h" />
-    <ClInclude Include="Scene\ResultScene.h" />
+    <ClInclude Include="Component\Scene\ResultScene.h" />
     <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Component\Sprite3D.h" />
+    <ClInclude Include="Component\Scene\Scene.h" />
+    <ClInclude Include="Component\Scene\Title.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />
@@ -376,10 +375,7 @@
     <ClInclude Include="System\GBuffer.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
     <ClInclude Include="Component\MeshComponent.h" />
-    <ClInclude Include="Scene\GamePlay.h" />
-    <ClInclude Include="Scene\SceneBase.h" />
     <ClInclude Include="Scene\SceneManager.h" />
-    <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Sprite\Sprite.h" />
     <ClInclude Include="Sprite\SpriteManager.h" />

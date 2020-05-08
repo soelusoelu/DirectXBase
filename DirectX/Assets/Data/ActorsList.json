@@ -242,7 +242,12 @@
       "type": "Title",
       "components": [
         {
-          "type": "TitleComponent",
+          "type": "Scene",
+          "properties": {
+          }
+        },
+        {
+          "type": "Title",
           "properties": {
             "enterKey": "Space",
             "enterPad": "A"
@@ -268,7 +273,12 @@
       "type": "GamePlay",
       "components": [
         {
-          "type": "GamePlayComponent",
+          "type": "Scene",
+          "properties": {
+          }
+        },
+        {
+          "type": "GamePlay",
           "properties": {
           }
         },
@@ -276,6 +286,31 @@
           "type": "SoundComponent",
           "properties": {
             "fileName": "gameplay.wav",
+            "volume": 0.1,
+            "isFirstPlay": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "Result",
+      "components": [
+        {
+          "type": "Scene",
+          "properties": {
+          }
+        },
+        {
+          "type": "ResultScene",
+          "properties": {
+            "enterKey": "Space",
+            "enterPad": "A"
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "result.wav",
             "volume": 0.1,
             "isFirstPlay": true
           }

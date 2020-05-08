@@ -1,6 +1,4 @@
 ﻿#include "SceneManager.h"
-#include "GamePlay.h"
-#include "Title.h"
 #include "../Component/Camera.h"
 #include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
@@ -8,6 +6,7 @@
 #include "../Component/MeshComponent.h"
 #include "../Component/Sprite3D.h"
 #include "../Component/SpriteComponent.h"
+#include "../Component/Scene/Scene.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
@@ -22,7 +21,7 @@
 
 SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
-    mCurrentScene(std::make_shared<Title>()),
+    mCurrentScene(nullptr),
     mCamera(nullptr),
     mGameObjectManager(new GameObjectManager()),
     mMeshManager(new MeshManager()),
@@ -55,6 +54,9 @@ void SceneManager::initialize() {
     mDirectionalLight = dirLight->componentManager()->getComponent<DirectionalLight>();
 
     change();
+
+    auto title = GameObjectCreater::create("Title");
+    mCurrentScene = title->componentManager()->getComponent<Scene>();
 }
 
 void SceneManager::update() {
@@ -65,8 +67,6 @@ void SceneManager::update() {
 
     //全ゲームオブジェクトの更新
     mGameObjectManager->update();
-    //現在のシーンを更新
-    mCurrentScene->update();
     //総当たり判定
     mPhysics->sweepAndPrune();
     //レンダラーの更新
@@ -78,10 +78,11 @@ void SceneManager::update() {
     DebugUtility::update();
 
     //nullptrじゃなければシーン移行
-    auto next = mCurrentScene->getNextScene();
-    if (next) {
-        mCurrentScene = next;
+    const auto& next = mCurrentScene->getNext();
+    if (!next.empty()) {
         change();
+        auto nextScene = GameObjectCreater::create(next);
+        mCurrentScene = nextScene->componentManager()->getComponent<Scene>();
         mShouldDraw = false;
     }
 }
@@ -126,6 +127,4 @@ void SceneManager::change() {
     mGameObjectManager->clear();
     mMeshManager->clear();
     mSpriteManager->clear();
-    mCurrentScene->set(mGameObjectManager);
-    mCurrentScene->start();
 }

@@ -1,4 +1,5 @@
-﻿#include "GamePlayComponent.h"
+﻿#include "GamePlay.h"
+#include "Scene.h"
 #include "../../Component/ComponentManager.h"
 #include "../../Component/FriedChickenComponent.h"
 #include "../../Component/FriedChickenManager.h"
@@ -15,23 +16,24 @@
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
+#include "../../System/Game.h"
 #include "../../Utility/LevelLoader.h"
 
-GamePlayComponent::GamePlayComponent(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "GamePlayComponent"),
+GamePlay::GamePlay(const std::shared_ptr<GameObject>& owner) :
+    Component(owner, "GamePlay"),
+    mScene(nullptr),
     mFriedChickenManager(nullptr),
     mPCConnection(nullptr),
     mScore(nullptr),
     mTimeLimitTimer(nullptr),
     mJumpTarget(nullptr),
     mOil(nullptr),
-    mIsEnd(false),
     mIsFirstSleep(false) {
 }
 
-GamePlayComponent::~GamePlayComponent() = default;
+GamePlay::~GamePlay() = default;
 
-void GamePlayComponent::awake() {
+void GamePlay::awake() {
     auto p = GameObjectCreater::create("Player");
     auto fcm = GameObjectCreater::create("FriedChickenManager");
     mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
@@ -47,14 +49,18 @@ void GamePlayComponent::awake() {
     mTimeLimitTimer = tl->componentManager()->getComponent<Timer>();
     auto jt = GameObjectCreater::createUI("JumpTarget");
     mJumpTarget = jt->componentManager()->getComponent<JumpTarget>();
-    //GameObjectCreater::create("Field");
+    GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
 
     DebugUtility::inspector()->setTarget(p);
 }
 
-void GamePlayComponent::update() {
+void GamePlay::start() {
+    mScene = owner()->componentManager()->getComponent<Scene>();
+}
+
+void GamePlay::update() {
     if (!mIsFirstSleep) {
         mIsFirstSleep = true;
         return;
@@ -80,9 +86,17 @@ void GamePlayComponent::update() {
     auto score = mFriedChickenManager->getEvaluatedScore();
     mScore->addScore(score);
 
-    mIsEnd = mTimeLimitTimer->isTime();
-}
+    if (mTimeLimitTimer->isTime()) {
+        mScene->next("Result");
+    }
 
-bool GamePlayComponent::isEnd() const {
-    return mIsEnd;
+    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
+        Game::quit();
+    }
+    //リセット
+#ifdef _DEBUG
+    if (Input::keyboard()->getKeyDown(KeyCode::R)) {
+        mScene->next("GamePlay");
+    }
+#endif // _DEBUG
 }

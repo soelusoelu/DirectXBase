@@ -3,13 +3,13 @@
 #include <rapidjson/document.h>
 #include <memory>
 
+class Scene;
 class Camera;
 class DirectionalLight;
 class GameObjectManager;
 class MeshManager;
 class Physics;
 class Renderer;
-class SceneBase;
 class SpriteManager;
 
 class SceneManager {
@@ -26,7 +26,7 @@ private:
 
 private:
     std::shared_ptr<Renderer> mRenderer;
-    std::shared_ptr<SceneBase> mCurrentScene;
+    std::shared_ptr<Scene> mCurrentScene;
     std::shared_ptr<Camera> mCamera;
     std::shared_ptr<DirectionalLight> mDirectionalLight;
     GameObjectManager* mGameObjectManager;

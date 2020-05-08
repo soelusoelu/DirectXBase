@@ -29,10 +29,6 @@
     <ClCompile Include="System\Window.cpp" />
     <ClCompile Include="Device\Sound.cpp" />
     <ClCompile Include="Component\SoundComponent.cpp" />
-    <ClCompile Include="Scene\GamePlay.cpp" />
-    <ClCompile Include="Scene\SceneBase.cpp" />
-    <ClCompile Include="Scene\SceneManager.cpp" />
-    <ClCompile Include="Scene\Title.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Component\SphereCollisionComponent.cpp" />
     <ClCompile Include="Mesh\MeshManager.cpp" />
@@ -102,7 +98,6 @@
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="Component\PlayerChickenConnection.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
-    <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
@@ -116,8 +111,11 @@
     <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\Sprite3D.cpp" />
     <ClCompile Include="Component\BirdOrbit.cpp" />
-    <ClCompile Include="Component\Scene\TitleComponent.cpp" />
-    <ClCompile Include="Component\Scene\GamePlayComponent.cpp" />
+    <ClCompile Include="Component\Scene\ResultScene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
+    <ClCompile Include="Component\Scene\Scene.cpp" />
+    <ClCompile Include="Component\Scene\GamePlay.cpp" />
+    <ClCompile Include="Component\Scene\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -143,10 +141,6 @@
     <ClInclude Include="System\Window.h" />
     <ClInclude Include="Device\Sound.h" />
     <ClInclude Include="Component\SoundComponent.h" />
-    <ClInclude Include="Scene\GamePlay.h" />
-    <ClInclude Include="Scene\SceneBase.h" />
-    <ClInclude Include="Scene\SceneManager.h" />
-    <ClInclude Include="Scene\Title.h" />
     <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Component\SphereCollisionComponent.h" />
     <ClInclude Include="Mesh\MeshManager.h" />
@@ -227,7 +221,6 @@
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="Component\PlayerChickenConnection.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
-    <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\Timer.h" />
@@ -248,7 +241,10 @@
     <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
-    <ClInclude Include="Component\Scene\TitleComponent.h" />
-    <ClInclude Include="Component\Scene\GamePlayComponent.h" />
+    <ClInclude Include="Component\Scene\ResultScene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
+    <ClInclude Include="Component\Scene\Scene.h" />
+    <ClInclude Include="Component\Scene\GamePlay.h" />
+    <ClInclude Include="Component\Scene\Title.h" />
   </ItemGroup>
 </Project>
