@@ -1,19 +1,12 @@
 ﻿#pragma once
 
 enum class ChickenSurface {
+    BOTTOM,
     RIGHT,
     FORE,
-    LEFT,
     UP,
-    BOTTOM,
     BACK,
-
-    //LEFT,
-    //FORE,
-    //RIGHT,
-    //UP,
-    //BOTTOM,
-    //BACK,
+    LEFT,
 
     NUM_SURFACE
 };
