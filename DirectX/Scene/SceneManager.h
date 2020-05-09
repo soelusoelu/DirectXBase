@@ -2,6 +2,8 @@
 
 #include <rapidjson/document.h>
 #include <memory>
+#include <string>
+#include <unordered_set>
 
 class Scene;
 class Camera;
@@ -13,16 +15,18 @@ class Renderer;
 class SpriteManager;
 
 class SceneManager {
+    using StringSet = std::unordered_set<std::string>;
+
 public:
     SceneManager(const std::shared_ptr<Renderer>& renderer);
     ~SceneManager();
-    void loadProperties(const rapidjson::Value& inObj);
     void initialize();
     void update();
     void draw() const;
 
 private:
-    void change();
+    void change(const StringSet& tags);
+    void createScene(const std::string& name);
 
 private:
     std::shared_ptr<Renderer> mRenderer;

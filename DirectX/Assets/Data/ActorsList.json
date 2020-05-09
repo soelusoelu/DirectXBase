@@ -293,7 +293,7 @@
       ]
     },
     {
-      "type": "Result",
+      "type": "ResultScene",
       "components": [
         {
           "type": "Scene",

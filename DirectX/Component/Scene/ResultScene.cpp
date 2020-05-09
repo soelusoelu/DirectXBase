@@ -1,9 +1,11 @@
 ﻿#include "ResultScene.h"
 #include "Scene.h"
-#include "../../Component/ComponentManager.h"
-#include "../../Component/Result.h"
+#include "../ComponentManager.h"
+#include "../Result.h"
+#include "../Score.h"
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectFactory.h"
+#include "../../GameObject/GameObjectManager.h"
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
@@ -22,10 +24,14 @@ ResultScene::~ResultScene() = default;
 
 void ResultScene::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
+    auto scoreObj = owner()->getGameObjectManager()->find("Score");
+    auto score = scoreObj->componentManager()->getComponent<Score>();
 
     auto resultObj = GameObjectCreater::createUI("Result");
     auto result = resultObj->componentManager()->getComponent<Result>();
-    result->setScore(mScore);
+    result->setScore(score->getScore());
+
+    scoreObj->destroy();
 }
 
 void ResultScene::update() {
@@ -51,8 +57,4 @@ void ResultScene::loadProperties(const rapidjson::Value& inObj) {
     if (JsonHelper::getString(inObj, "enterPad", &src)) {
         JoyPad::stringToJoyCode(src, &mEnterPad);
     }
-}
-
-void ResultScene::setScore(int score) {
-    mScore = score;
 }

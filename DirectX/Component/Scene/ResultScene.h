@@ -14,7 +14,6 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    void setScore(int score);
 
 private:
     std::shared_ptr<Scene> mScene;

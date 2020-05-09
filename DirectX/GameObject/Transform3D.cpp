@@ -13,9 +13,7 @@ Transform3D::Transform3D(std::shared_ptr<GameObject> owner) :
     mIsRecomputeTransform(true) {
 }
 
-Transform3D::~Transform3D() = default;
-
-void Transform3D::finalize() {
+Transform3D::~Transform3D() {
     if (mParent) {
         mParent.reset();
     }

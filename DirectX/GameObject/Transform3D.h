@@ -15,8 +15,6 @@ class Transform3D : public std::enable_shared_from_this<Transform3D> {
 public:
     Transform3D(std::shared_ptr<GameObject> owner = nullptr);
     ~Transform3D();
-    //終了処理
-    void finalize();
 
     //アタッチ元のアクターを返す
     std::shared_ptr<GameObject> owner() const;

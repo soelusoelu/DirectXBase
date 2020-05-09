@@ -37,9 +37,6 @@ SceneManager::~SceneManager() {
     SAFE_DELETE(mPhysics);
 }
 
-void SceneManager::loadProperties(const rapidjson::Value& inObj) {
-}
-
 void SceneManager::initialize() {
     GameObject::setGameObjectManager(mGameObjectManager);
     MeshComponent::setMeshManager(mMeshManager);
@@ -53,10 +50,8 @@ void SceneManager::initialize() {
     auto dirLight = GameObjectCreater::create("DirectionalLight");
     mDirectionalLight = dirLight->componentManager()->getComponent<DirectionalLight>();
 
-    change();
-
-    auto title = GameObjectCreater::create("Title");
-    mCurrentScene = title->componentManager()->getComponent<Scene>();
+    //初期シーンの設定
+    createScene("Title");
 }
 
 void SceneManager::update() {
@@ -77,12 +72,11 @@ void SceneManager::update() {
     //デバッグ
     DebugUtility::update();
 
-    //nullptrじゃなければシーン移行
+    //シーン移行
     const auto& next = mCurrentScene->getNext();
     if (!next.empty()) {
-        change();
-        auto nextScene = GameObjectCreater::create(next);
-        mCurrentScene = nextScene->componentManager()->getComponent<Scene>();
+        change(mCurrentScene->getObjectToNext());
+        createScene(next);
         mShouldDraw = false;
     }
 }
@@ -123,8 +117,13 @@ void SceneManager::draw() const {
 #endif // _DEBUG
 }
 
-void SceneManager::change() {
-    mGameObjectManager->clear();
+void SceneManager::change(const StringSet& tags) {
+    mGameObjectManager->clearExceptSpecified(tags);
     mMeshManager->clear();
     mSpriteManager->clear();
+}
+
+void SceneManager::createScene(const std::string& name) {
+    auto scene = GameObjectCreater::create(name);
+    mCurrentScene = scene->componentManager()->getComponent<Scene>();
 }

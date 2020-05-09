@@ -28,7 +28,7 @@ void GameObjectManager::update() {
     DebugUtility::hierarchy()->setGameObjectToButton(mGameObjects);
 }
 
-void GameObjectManager::add(const GameObjectPtr& add) {
+void GameObjectManager::add(const GameObjectPtr & add) {
     if (mUpdatingGameObjects) {
         mPendingGameObjects.emplace_back(add);
     } else {
@@ -37,16 +37,18 @@ void GameObjectManager::add(const GameObjectPtr& add) {
 }
 
 void GameObjectManager::clear() {
-    for (auto&& gameObject : mGameObjects) {
-        gameObject->finalize();
-    }
-    for (auto&& gameObject : mPendingGameObjects) {
-        gameObject->finalize();
-    }
+    StringSet set{};
+    clearExceptSpecified(set);
+}
+
+void GameObjectManager::clearExceptSpecified(const StringSet & tags) {
+    auto excepts = tags;
+    excepts.emplace("Camera");
+    excepts.emplace("DirectionalLight");
 
     auto itr = mGameObjects.begin();
     while (itr != mGameObjects.end()) {
-        if ((*itr)->tag() != "Camera" && (*itr)->tag() != "DirectionalLight") {
+        if (excepts.find((*itr)->tag()) == excepts.end()) {
             itr = mGameObjects.erase(itr);
         } else {
             ++itr;
@@ -55,7 +57,7 @@ void GameObjectManager::clear() {
     mPendingGameObjects.clear();
 }
 
-std::shared_ptr<GameObject> GameObjectManager::find(const std::string& tag) const {
+std::shared_ptr<GameObject> GameObjectManager::find(const std::string & tag) const {
     for (const auto& gameObject : mGameObjects) {
         if (gameObject->tag() == tag) {
             return gameObject;
@@ -70,7 +72,7 @@ std::shared_ptr<GameObject> GameObjectManager::find(const std::string& tag) cons
     return nullptr;
 }
 
-std::shared_ptr<GameObject> GameObjectManager::randomFind(const std::string& tag) const {
+std::shared_ptr<GameObject> GameObjectManager::randomFind(const std::string & tag) const {
     std::vector<GameObjectPtr> gameObjectArray;
     for (const auto& gameObject : mGameObjects) {
         if (gameObject->tag() == tag) {
@@ -95,7 +97,6 @@ void GameObjectManager::remove() {
     auto itr = mGameObjects.begin();
     while (itr != mGameObjects.end()) {
         if ((*itr)->isDead()) {
-            (*itr)->finalize();
             itr = mGameObjects.erase(itr);
         } else {
             ++itr;

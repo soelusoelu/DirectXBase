@@ -3,12 +3,14 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <unordered_set>
 
 class GameObject;
 
 class GameObjectManager {
     using GameObjectPtr = std::shared_ptr<GameObject>;
     using GameObjectPtrList = std::list<GameObjectPtr>;
+    using StringSet = std::unordered_set<std::string>;
 
 public:
     GameObjectManager();
@@ -19,6 +21,8 @@ public:
     void add(const GameObjectPtr& add);
     //登録済みの全ゲームオブジェクトの削除
     void clear();
+    //指定のタグを除く、登録済みの全ゲームオブジェクトの削除
+    void clearExceptSpecified(const StringSet& tags);
     //ゲームオブジェクトの検索
     GameObjectPtr find(const std::string& tag) const;
     //ゲームオブジェクトのランダム検索

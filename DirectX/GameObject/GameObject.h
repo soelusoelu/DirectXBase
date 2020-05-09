@@ -21,8 +21,6 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
 public:
     GameObject(std::shared_ptr<Renderer> renderer);
     virtual ~GameObject();
-    //終了処理
-    void finalize();
 
     //更新
     void update();

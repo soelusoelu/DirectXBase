@@ -58,6 +58,7 @@ void GamePlay::awake() {
 
 void GamePlay::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
+    mScene->addObjectToNext("Score");
 }
 
 void GamePlay::update() {
@@ -87,7 +88,7 @@ void GamePlay::update() {
     mScore->addScore(score);
 
     if (mTimeLimitTimer->isTime()) {
-        mScene->next("Result");
+        mScene->next("ResultScene");
     }
 
     if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
