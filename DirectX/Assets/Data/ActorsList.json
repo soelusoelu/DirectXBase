@@ -262,6 +262,12 @@
         {
           "type": "SpriteComponent",
           "properties": {
+            "fileName": "Sousa.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
             "fileName": "NowLoading.png"
           }
         },
@@ -300,7 +306,7 @@
           "type": "SoundComponent",
           "properties": {
             "fileName": "karaage.wav",
-            "volume": 0.5,
+            "volume": 0.3,
             "isFirstPlay": false
           }
         }

@@ -24,6 +24,9 @@ void Title::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
 
     auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
+    auto itr = sprites.begin();
+    ++itr;
+    (*itr)->setActive(false);
     sprites.back()->transform()->setPivot(Pivot::RIGHT_BOTTOM);
     sprites.back()->transform()->setPosition(Vector2(1920.f, 1080.f));
     sprites.back()->setActive(false);
@@ -42,6 +45,9 @@ void Title::update() {
     }
     if (isEnd) {
         auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
+        auto itr = sprites.begin();
+        ++itr;
+        (*itr)->setActive(true);
         sprites.back()->setActive(true);
 
         mEndFrame = true;
