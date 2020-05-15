@@ -256,7 +256,13 @@
         {
           "type": "SpriteComponent",
           "properties": {
-            "fileName": "12Title.png"
+            "fileName": "Title.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "NowLoading.png"
           }
         },
         {
@@ -286,8 +292,16 @@
           "type": "SoundComponent",
           "properties": {
             "fileName": "gameplay.wav",
-            "volume": 0.1,
-            "isFirstPlay": true
+            "volume": 0.01,
+            "isFirstPlay": false
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "karaage.wav",
+            "volume": 0.5,
+            "isFirstPlay": false
           }
         }
       ]

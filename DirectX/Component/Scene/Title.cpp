@@ -1,7 +1,9 @@
 #include "Title.h"
 #include "Scene.h"
 #include "../ComponentManager.h"
+#include "../SpriteComponent.h"
 #include "../../GameObject/GameObject.h"
+#include "../../GameObject/Transform2D.h"
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
@@ -12,13 +14,19 @@ Title::Title(const std::shared_ptr<GameObject>& owner) :
     Component(owner, "Title"),
     mScene(nullptr),
     mEnterKey(KeyCode::None),
-    mEnterPad(JoyCode::None) {
+    mEnterPad(JoyCode::None),
+    mEndFrame(false) {
 }
 
 Title::~Title() = default;
 
 void Title::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
+
+    auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
+    sprites.back()->transform()->setPivot(Pivot::RIGHT_BOTTOM);
+    sprites.back()->transform()->setPosition(Vector2(1920.f, 1080.f));
+    sprites.back()->setActive(false);
 }
 
 void Title::update() {
@@ -29,12 +37,18 @@ void Title::update() {
     }
 #endif // _DEBUG
 
-    if (isEnd) {
+    if (mEndFrame) {
         mScene->next("GamePlay");
+    }
+    if (isEnd) {
+        auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
+        sprites.back()->setActive(true);
+
+        mEndFrame = true;
     }
 }
 
-void Title::loadProperties(const rapidjson::Value& inObj) {
+void Title::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     std::string src;

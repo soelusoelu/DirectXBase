@@ -7,6 +7,7 @@
 #include "../../Component/Oil.h"
 #include "../../Component/PlayerChickenConnection.h"
 #include "../../Component/Score.h"
+#include "../../Component/SoundComponent.h"
 #include "../../Component/Timer.h"
 #include "../../DebugLayer/DebugUtility.h"
 #include "../../DebugLayer/Inspector.h"
@@ -59,6 +60,11 @@ void GamePlay::awake() {
 void GamePlay::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
     mScene->addObjectToNext("Score");
+
+    auto sounds = owner()->componentManager()->getComponents<SoundComponent>();
+    for (const auto sound : sounds) {
+        sound->playBGM();
+    }
 }
 
 void GamePlay::update() {

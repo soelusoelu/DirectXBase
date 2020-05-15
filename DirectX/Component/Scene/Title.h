@@ -19,4 +19,5 @@ private:
     std::shared_ptr<Scene> mScene;
     KeyCode mEnterKey;
     JoyCode mEnterPad;
+    bool mEndFrame;
 };
