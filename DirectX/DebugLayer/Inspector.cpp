@@ -7,6 +7,7 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
+#include <any>
 #include <list>
 #include <string>
 
@@ -129,7 +130,7 @@ void Inspector::drawComponent(const ComponentPtr& component, Vector2 * position)
     mDrawString->drawString(component->getTypeName(), pos, mElementScale);
 
     //コンポーネントのデバッグ情報を取得
-    std::list<std::pair<std::string, std::string>> debugInfo;
+    std::list<std::pair<std::string, std::any>> debugInfo;
     component->drawDebugInfo(&debugInfo);
 
     //すべてのデバッグ情報を描画
@@ -142,7 +143,7 @@ void Inspector::drawComponent(const ComponentPtr& component, Vector2 * position)
         pos.y += mCharHeight;
         mDrawString->drawString(ele, pos, mElementScale);
         pos.x = mValuePositionX;
-        mDrawString->drawString(info.second, pos, mElementScale);
+        mDrawString->drawString(StringUtil::anyToString(info.second), pos, mElementScale);
     }
 
     *position = pos;

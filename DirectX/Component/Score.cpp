@@ -23,7 +23,7 @@ void Score::update() {
         mHighScore = mScore;
     }
     if (mText) {
-        mText->setText(mScore);
+        mText->setText(StringUtil::intToString(mScore));
     }
 }
 
@@ -42,10 +42,10 @@ void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
 void Score::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "Score";
-    info.second = StringUtil::intToString(mScore);
+    info.second = mScore;
     inspect->emplace_back(info);
     info.first = "HighScore";
-    info.second = StringUtil::intToString(mHighScore);
+    info.second = mHighScore;
     inspect->emplace_back(info);
 }
 

@@ -10,7 +10,6 @@
 #include "../GameObject/Transform3D.h"
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Bird::Bird(std::shared_ptr<GameObject> owner) :
     Component(owner, "Bird"),
@@ -71,10 +70,10 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
     }
     inspect->emplace_back(info);
     info.first = "MoveSpeed";
-    info.second = StringUtil::floatToString(mMoveSpeed);
+    info.second = mMoveSpeed;
     inspect->emplace_back(info);
     info.first = "RestartTimer";
-    info.second = StringUtil::floatToString(mRestartTimer->limitTime());
+    info.second = mRestartTimer->limitTime();
     inspect->emplace_back(info);
 }
 

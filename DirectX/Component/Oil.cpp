@@ -3,7 +3,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Oil::Oil(std::shared_ptr<GameObject> owner) :
     Component(owner, "Oil", 130),
@@ -29,16 +28,16 @@ void Oil::drawDebugInfo(DebugInfoList * inspect) const {
 
     DebugInfo info;
     info.first = "FlowSpeed";
-    info.second = StringUtil::floatToString(mFlowSpeed);
+    info.second = mFlowSpeed;
     inspect->emplace_back(info);
     info.first = "flowRangeX";
-    info.second = StringUtil::floatToString(mFlowRangeX);
+    info.second = mFlowRangeX;
     inspect->emplace_back(info);
     info.first = "flowRangeZFore";
-    info.second = StringUtil::floatToString(mFlowRangeZFore);
+    info.second = mFlowRangeZFore;
     inspect->emplace_back(info);
     info.first = "flowRangeZBack";
-    info.second = StringUtil::floatToString(mFlowRangeZBack);
+    info.second = mFlowRangeZBack;
     inspect->emplace_back(info);
 }
 

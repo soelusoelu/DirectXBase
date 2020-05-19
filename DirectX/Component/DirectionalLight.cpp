@@ -4,7 +4,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 DirectionalLight::DirectionalLight(std::shared_ptr<GameObject> owner) :
     Component(owner, "DirectionalLight"),
@@ -30,7 +29,7 @@ void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
 void DirectionalLight::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "Color";
-    info.second = StringUtil::vector3ToString(mColor);
+    info.second = mColor;
     inspect->emplace_back(info);
 }
 

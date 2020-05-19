@@ -27,16 +27,16 @@ void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
 void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "LittleBadScore";
-    info.second = StringUtil::floatToString(mLittleBadScore);
+    info.second = mLittleBadScore;
     inspect->emplace_back(info);
     info.first = "UsuallyScore";
-    info.second = StringUtil::floatToString(mUsuallyScore);
+    info.second = mUsuallyScore;
     inspect->emplace_back(info);
     info.first = "GoodScore";
-    info.second = StringUtil::floatToString(mGoodScore);
+    info.second = mGoodScore;
     inspect->emplace_back(info);
     info.first = "BadScore";
-    info.second = StringUtil::floatToString(mBadScore);
+    info.second = mBadScore;
     inspect->emplace_back(info);
 }
 

@@ -4,7 +4,6 @@
 #include "../Math/Plane.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Camera::Camera(std::shared_ptr<GameObject> owner) :
     Component(owner, "Camera", 1000),
@@ -39,13 +38,13 @@ void Camera::loadProperties(const rapidjson::Value & inObj) {
 void Camera::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "FOV";
-    info.second = StringUtil::floatToString(mFOV);
+    info.second = mFOV;
     inspect->emplace_back(info);
     info.first = "NearClip";
-    info.second = StringUtil::floatToString(mNearClip);
+    info.second = mNearClip;
     inspect->emplace_back(info);
     info.first = "FarClip";
-    info.second = StringUtil::floatToString(mFarClip);
+    info.second = mFarClip;
     inspect->emplace_back(info);
 }
 

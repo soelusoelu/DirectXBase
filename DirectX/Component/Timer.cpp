@@ -1,7 +1,6 @@
 ﻿#include "Timer.h"
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Timer::Timer(std::shared_ptr<GameObject> owner) :
     Component(owner, "Timer", 50),
@@ -35,13 +34,13 @@ void Timer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
 void Timer::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "CurrentTime";
-    info.second = StringUtil::floatToString(mCurrentTime);
+    info.second = mCurrentTime;
     inspect->emplace_back(info);
     info.first = "LimitTime";
-    info.second = StringUtil::floatToString(mLimitTime);
+    info.second = mLimitTime;
     inspect->emplace_back(info);
     info.first = "IsOverLimit";
-    info.second = StringUtil::boolToString(mIsOverLimit);
+    info.second = mIsOverLimit;
     inspect->emplace_back(info);
 }
 

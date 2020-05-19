@@ -3,7 +3,6 @@
 #include "../GameObject/Transform3D.h"
 #include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Field::Field(std::shared_ptr<GameObject> owner) :
     Component(owner, "Field"),
@@ -36,9 +35,9 @@ void Field::drawDebugInfo(DebugInfoList * inspect) const {
 
     DebugInfo info;
     info.first = "IsRoll";
-    info.second = StringUtil::boolToString(mIsRoll);
+    info.second = mIsRoll;
     inspect->emplace_back(info);
     info.first = "RollSpeed";
-    info.second = StringUtil::floatToString(mRollSpeed);
+    info.second = mRollSpeed;
     inspect->emplace_back(info);
 }

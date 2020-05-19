@@ -2,13 +2,11 @@
 #include "ChickenFry.h"
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenComponent"),
@@ -60,19 +58,19 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
 void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
     DebugInfo info;
     info.first = "RandomRangePositionX";
-    info.second = InspectHelper::vector2ToString(mRandomRangePositionX);
+    info.second = mRandomRangePositionX;
     inspect->emplace_back(info);
     info.first = "RandomRangePositionZ";
-    info.second = InspectHelper::vector2ToString(mRandomRangePositionZ);
+    info.second = mRandomRangePositionZ;
     inspect->emplace_back(info);
     info.first = "RandomRangeScale";
-    info.second = InspectHelper::vector2ToString(mRandomRangeScale);
+    info.second = mRandomRangeScale;
     inspect->emplace_back(info);
     info.first = "RollSpeed";
-    info.second = StringUtil::floatToString(mRollSpeed);
+    info.second = mRollSpeed;
     inspect->emplace_back(info);
     info.first = "FallSpeed";
-    info.second = StringUtil::floatToString(mFallSpeed);
+    info.second = mFallSpeed;
     inspect->emplace_back(info);
 }
 

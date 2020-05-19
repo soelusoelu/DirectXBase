@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <rapidjson/document.h>
+#include <any>
 #include <list>
 #include <memory>
 #include <string>
@@ -11,7 +12,7 @@ class GameObject;
 class Component {
     using GameObjectPtr = std::shared_ptr<GameObject>;
 protected:
-    using DebugInfo = std::pair<std::string, std::string>;
+    using DebugInfo = std::pair<std::string, std::any>;
     using DebugInfoList = std::list<DebugInfo>;
 
 protected:

@@ -9,7 +9,6 @@
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     Component(owner, "FriedChickenManager", 200),
@@ -17,7 +16,7 @@ FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
     mStartNum(0),
     mMaxNum(0),
     mCurrentMaxNum(0),
-    mReplenishTimer(std::make_unique<Time>(0.f)) {
+    mReplenishTimer(std::make_unique<Time>()) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
@@ -63,13 +62,13 @@ void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
 void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
     DebugInfo info;
     info.first = "StartNum";
-    info.second = StringUtil::intToString(mStartNum);
+    info.second = mStartNum;
     inspect->emplace_back(info);
     info.first = "MaxNum";
-    info.second = StringUtil::intToString(mMaxNum);
+    info.second = mMaxNum;
     inspect->emplace_back(info);
     info.first = "CurrentMaxNum";
-    info.second = StringUtil::intToString(mCurrentMaxNum);
+    info.second = mCurrentMaxNum;
     inspect->emplace_back(info);
 }
 

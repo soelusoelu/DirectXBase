@@ -4,7 +4,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 BirdOrbit::BirdOrbit(std::shared_ptr<GameObject> owner) :
     Component(owner, "BirdOrbit"),
@@ -31,7 +30,7 @@ void BirdOrbit::drawDebugInfo(DebugInfoList * inspect) const {
 
     DebugInfo info;
     info.first = "SecondsAgo";
-    info.second = StringUtil::floatToString(mTimer);
+    info.second = mTimer;
     inspect->emplace_back(info);
 }
 

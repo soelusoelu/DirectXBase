@@ -6,7 +6,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
     Component(owner, "ChickenFry"),
@@ -90,7 +89,7 @@ void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 
     info.first = "TooBurntTiemr";
-    info.second = StringUtil::floatToString(mTooBurntTimer->currentTime());
+    info.second = mTooBurntTimer->currentTime();
     inspect->emplace_back(info);
 }
 

@@ -2,7 +2,6 @@
 #include "../Device/AssetsManager.h"
 #include "../Device/Sound.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 SoundComponent::SoundComponent(std::shared_ptr<GameObject> owner) :
     Component(owner, "SoundComponent"),
@@ -40,10 +39,10 @@ void SoundComponent::drawDebugInfo(DebugInfoList* inspect) const {
     info.second = mFileName;
     inspect->emplace_back(info);
     info.first = "Volume";
-    info.second = StringUtil::floatToString(mVolume);
+    info.second = mVolume;
     inspect->emplace_back(info);
     info.first = "IsFirstPlay";
-    info.second = StringUtil::boolToString(mIsFirstPlay);
+    info.second = mIsFirstPlay;
     inspect->emplace_back(info);
 }
 

@@ -2,8 +2,6 @@
 #include "../GameObject/GameObject.h"
 #include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
-#include <string>
 
 HitPointComponent::HitPointComponent(std::shared_ptr<GameObject> onwer) :
     Component(onwer, "HitPointComponent"),
@@ -23,10 +21,10 @@ void HitPointComponent::loadProperties(const rapidjson::Value & inObj) {
 void HitPointComponent::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "HP";
-    info.second = StringUtil::intToString(mHP);
+    info.second = mHP;
     inspect->emplace_back(info);
     info.first = "MaxHP";
-    info.second = StringUtil::intToString(mMaxHP);
+    info.second = mMaxHP;
     inspect->emplace_back(info);
 }
 

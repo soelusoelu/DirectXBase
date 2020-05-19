@@ -1,7 +1,6 @@
 ﻿#include "MeshComponent.h"
 #include "Camera.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/AssetsManager.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
@@ -55,7 +54,7 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
 void MeshComponent::drawDebugInfo(DebugInfoList* inspect) const {
     DebugInfo info;
     info.first = "Color";
-    info.second = InspectHelper::vector3ToString(mColor);
+    info.second = mColor;
     inspect->emplace_back(info);
 }
 

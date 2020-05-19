@@ -15,7 +15,6 @@ public:
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     void setText(const std::string& text);
-    void setText(int number);
     const std::string& text() const;
     void setPosition(const Vector2& pos);
     const Vector2& getPosition() const;

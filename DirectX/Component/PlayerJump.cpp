@@ -6,7 +6,6 @@
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 #include <string>
 
 PlayerJump::PlayerJump(std::shared_ptr<GameObject> owner) :
@@ -47,13 +46,13 @@ void PlayerJump::drawDebugInfo(DebugInfoList * inspect) const {
 
     DebugInfo info;
     info.first = "Speed";
-    info.second = StringUtil::floatToString(mSpeed);
+    info.second = mSpeed;
     inspect->emplace_back(info);
     info.first = "MoveRate";
-    info.second = StringUtil::floatToString(mMoveRate);
+    info.second = mMoveRate;
     inspect->emplace_back(info);
     info.first = "CanJump";
-    info.second = StringUtil::boolToString(mCanJump);
+    info.second = mCanJump;
     inspect->emplace_back(info);
 
     info.first = "State";

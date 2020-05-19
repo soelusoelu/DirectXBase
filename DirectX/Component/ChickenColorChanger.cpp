@@ -2,7 +2,6 @@
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
 #include "../DebugLayer/Debug.h"
-#include "../Debuglayer/Inspector.h"
 #include "../GameObject/GameObject.h"
 #include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
@@ -45,19 +44,19 @@ void ChickenColorChanger::drawDebugInfo(DebugInfoList* inspect) const {
 
     DebugInfo info;
     info.first = "InitColor";
-    info.second = InspectHelper::vector3ToString(mInitColor);
+    info.second = mInitColor;
     inspect->emplace_back(info);
     info.first = "LittleFriedColor";
-    info.second = InspectHelper::vector3ToString(mLittleFriedColor);
+    info.second = mLittleFriedColor;
     inspect->emplace_back(info);
     info.first = "UsuallyColor";
-    info.second = InspectHelper::vector3ToString(mUsuallyColor);
+    info.second = mUsuallyColor;
     inspect->emplace_back(info);
     info.first = "FriedColor";
-    info.second = InspectHelper::vector3ToString(mFriedColor);
+    info.second = mFriedColor;
     inspect->emplace_back(info);
     info.first = "BurntColor";
-    info.second = InspectHelper::vector3ToString(mBurntColor);
+    info.second = mBurntColor;
     inspect->emplace_back(info);
 }
 

@@ -4,11 +4,10 @@
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Utility/StringUtil.h"
 
 SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<GameObject> owner) :
     Collider(owner, "SphereCollisionComponent"),
-    mSphere(std::make_shared<Sphere>(Vector3::zero, 0.f)),
+    mSphere(std::make_shared<Sphere>()),
     mDefaultCenter(Vector3::zero),
     mDefaultRadius(0.f) {
 }

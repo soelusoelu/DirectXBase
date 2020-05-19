@@ -10,7 +10,6 @@
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 #include <string>
 
 PlayerWalk::PlayerWalk(std::shared_ptr<GameObject> owner) :
@@ -52,7 +51,7 @@ void PlayerWalk::drawDebugInfo(DebugInfoList * inspect) const {
 
     DebugInfo info;
     info.first = "MoveSpeed";
-    info.second = StringUtil::floatToString(mMoveSpeed);
+    info.second = mMoveSpeed;
     inspect->emplace_back(info);
 }
 

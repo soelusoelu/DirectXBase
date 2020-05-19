@@ -1,5 +1,4 @@
 ﻿#include "Text.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
@@ -65,28 +64,24 @@ void Text::drawDebugInfo(DebugInfoList* inspect) const {
     info.second = mText;
     inspect->emplace_back(info);
     info.first = "Position";
-    info.second = InspectHelper::vector2ToString(mPosition);
+    info.second = mPosition;
     inspect->emplace_back(info);
     info.first = "Scale";
-    info.second = InspectHelper::vector2ToString(mScale);
+    info.second = mScale;
     inspect->emplace_back(info);
     info.first = "Color";
-    info.second = InspectHelper::vector3ToString(mColor);
+    info.second = mColor;
     inspect->emplace_back(info);
     info.first = "Alpha";
-    info.second = StringUtil::floatToString(mAlpha);
+    info.second = mAlpha;
     inspect->emplace_back(info);
-    info.first = "RightJustified";
-    info.second = StringUtil::boolToString(mIsRightJustified);
+    info.first = "IsRightJustified";
+    info.second = mIsRightJustified;
     inspect->emplace_back(info);
 }
 
 void Text::setText(const std::string & text) {
     mText = text;
-}
-
-void Text::setText(int number) {
-    mText = StringUtil::intToString(number);
 }
 
 const std::string& Text::text() const {
