@@ -14,7 +14,8 @@ class Bird : public Component {
     enum class State {
         WAIT,
         PREDICT_LINE,
-        MOVE
+        MOVE,
+        HIT_MOVE
     };
 
 public:
@@ -29,6 +30,7 @@ private:
     void waiting();
     void predictLine();
     void move();
+    void hitMove();
     void takeChicken();
     void isEndMoving();
     void initialize();
@@ -43,4 +45,5 @@ private:
     std::shared_ptr<GameObject> mTarget;
     State mState;
     float mMoveSpeed;
+    float mClimbSpeed;
 };

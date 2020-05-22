@@ -205,6 +205,7 @@
           "type": "Bird",
           "properties": {
             "moveSpeed": 20.0,
+            "climbSpeed": 10.0,
             "restartTimer": 20.0
           }
         },

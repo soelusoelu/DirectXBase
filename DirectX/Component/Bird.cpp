@@ -21,7 +21,8 @@ Bird::Bird(std::shared_ptr<GameObject> owner) :
     mSound(nullptr),
     mTarget(nullptr),
     mState(State::WAIT),
-    mMoveSpeed(0.f) {
+    mMoveSpeed(0.f),
+    mClimbSpeed(0.f) {
 }
 
 Bird::~Bird() = default;
@@ -36,7 +37,6 @@ void Bird::start() {
     auto t = owner()->transform();
     t->rotate(Vector3::up, 90.f);
     t->rotate(Vector3::forward, 90.f);
-    t->setPivot(Vector3::up * mMesh->getRadius());
 }
 
 void Bird::update() {
@@ -48,6 +48,9 @@ void Bird::update() {
         move();
         takeChicken();
         isEndMoving();
+    } else if (mState == State::HIT_MOVE) {
+        hitMove();
+        isEndMoving();
     }
 }
 
@@ -55,6 +58,7 @@ void Bird::loadProperties(const rapidjson::Value & inObj) {
     Component::loadProperties(inObj);
 
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
+    JsonHelper::getFloat(inObj, "climbSpeed", &mClimbSpeed);
     float time;
     if (JsonHelper::getFloat(inObj, "restartTimer", &time)) {
         mRestartTimer->setLimitTime(time);
@@ -70,10 +74,15 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
         info.second = "PREDICT_LINE";
     } else if (mState == State::MOVE) {
         info.second = "MOVE";
+    } else if (mState == State::HIT_MOVE) {
+        info.second = "HIT_MOVE";
     }
     inspect->emplace_back(info);
     info.first = "MoveSpeed";
     info.second = mMoveSpeed;
+    inspect->emplace_back(info);
+    info.first = "ClimbSpeed";
+    info.second = mClimbSpeed;
     inspect->emplace_back(info);
     info.first = "RestartTimer";
     info.second = mRestartTimer->limitTime();
@@ -106,6 +115,13 @@ void Bird::move() {
     owner()->transform()->translate(Vector3::left * Time::deltaTime * mMoveSpeed);
 }
 
+void Bird::hitMove() {
+    auto amount = Vector3::zero;
+    amount.x = -mMoveSpeed * Time::deltaTime;
+    amount.y = mClimbSpeed * Time::deltaTime;;
+    owner()->transform()->translate(amount);
+}
+
 void Bird::takeChicken() {
     if (!mTarget) {
         return;
@@ -122,6 +138,7 @@ void Bird::takeChicken() {
 
     if (hit) {
         hit->componentManager()->getComponent<FriedChickenComponent>()->eaten();
+        mState = State::HIT_MOVE;
     }
 }
 
