@@ -1,9 +1,7 @@
 #include "Title.h"
 #include "Scene.h"
 #include "../ComponentManager.h"
-#include "../SpriteComponent.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Transform2D.h"
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
@@ -14,22 +12,13 @@ Title::Title(const std::shared_ptr<GameObject>& owner) :
     Component(owner, "Title"),
     mScene(nullptr),
     mEnterKey(KeyCode::None),
-    mEnterPad(JoyCode::None),
-    mEndFrame(false) {
+    mEnterPad(JoyCode::None) {
 }
 
 Title::~Title() = default;
 
 void Title::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
-
-    auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
-    auto itr = sprites.begin();
-    ++itr;
-    (*itr)->setActive(false);
-    sprites.back()->transform()->setPivot(Pivot::RIGHT_BOTTOM);
-    sprites.back()->transform()->setPosition(Vector2(1920.f, 1080.f));
-    sprites.back()->setActive(false);
 }
 
 void Title::update() {
@@ -40,17 +29,8 @@ void Title::update() {
     }
 #endif // _DEBUG
 
-    if (mEndFrame) {
-        mScene->next("GamePlay");
-    }
     if (isEnd) {
-        auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
-        auto itr = sprites.begin();
-        ++itr;
-        (*itr)->setActive(true);
-        sprites.back()->setActive(true);
-
-        mEndFrame = true;
+        mScene->next("OperationExplanation");
     }
 }
 

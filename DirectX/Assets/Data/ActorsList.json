@@ -260,6 +260,31 @@
           }
         },
         {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "title.wav",
+            "volume": 0.01,
+            "isFirstPlay": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "OperationExplanation",
+      "components": [
+        {
+          "type": "Scene",
+          "properties": {
+          }
+        },
+        {
+          "type": "OperationExplanation",
+          "properties": {
+            "enterKey": "Space",
+            "enterPad": "A"
+          }
+        },
+        {
           "type": "SpriteComponent",
           "properties": {
             "fileName": "Sousa.png"
@@ -268,14 +293,17 @@
         {
           "type": "SpriteComponent",
           "properties": {
-            "fileName": "NowLoading.png"
+            "fileName": "NowLoading.png",
+            "isActive": false,
+            "position": [ 1920.0, 1080.0 ],
+            "pivot": "RightBottom"
           }
         },
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "title.wav",
-            "volume": 0.1,
+            "fileName": "Shokunin.wav",
+            "volume": 0.01,
             "isFirstPlay": true
           }
         }
@@ -331,7 +359,7 @@
           "type": "SoundComponent",
           "properties": {
             "fileName": "result.wav",
-            "volume": 0.1,
+            "volume": 0.01,
             "isFirstPlay": true
           }
         }

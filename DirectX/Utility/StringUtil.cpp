@@ -55,6 +55,14 @@ std::string StringUtil::vector3ToString(const Vector3& vec, int decimalDigits) {
     return x + "  " + y + "  " + z;
 }
 
+std::string StringUtil::vector4ToString(const Vector4& vec, int decimalDigits) {
+    auto x = "X " + floatToString(vec.x, decimalDigits);
+    auto y = "Y " + floatToString(vec.y, decimalDigits);
+    auto z = "Z " + floatToString(vec.z, decimalDigits);
+    auto w = "W " + floatToString(vec.w, decimalDigits);
+    return x + "  " + y + "  " + z + "  " + w;
+}
+
 std::string StringUtil::quaternionToString(const Quaternion& quaternion, int decimalDigits) {
     auto x = "X " + floatToString(quaternion.x, decimalDigits);
     auto y = "Y " + floatToString(quaternion.y, decimalDigits);
@@ -89,6 +97,9 @@ std::string StringUtil::anyToString(const std::any& src) {
     } else if (type == typeid(Vector3)) {
         auto value = std::any_cast<Vector3>(src);
         str = vector3ToString(value);
+    } else if (type == typeid(Vector4)) {
+        auto value = std::any_cast<Vector4>(src);
+        str = vector4ToString(value);
     } else if (type == typeid(Quaternion)) {
         auto value = std::any_cast<Quaternion>(src);
         str = quaternionToString(value);

@@ -3,6 +3,7 @@
 #include "../Math/Math.h"
 #include <memory>
 #include <list>
+#include <string>
 
 enum class Pivot {
     LEFT_TOP,
@@ -13,7 +14,9 @@ enum class Pivot {
     CENTER_RIGHT,
     LEFT_BOTTOM,
     CETNER_BOTTOM,
-    RIGHT_BOTTOM
+    RIGHT_BOTTOM,
+
+    NONE
 };
 
 class Transform2D {
@@ -47,6 +50,9 @@ public:
     //ポリゴンサイズ
     void setSize(const Vector2& size);
     const Vector2& getSize() const;
+
+    //文字列をPivotに変換
+    static void stringToPivot(const std::string& src, Pivot* dst);
 
 private:
     void shouldRecomputeTransform();

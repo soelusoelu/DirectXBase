@@ -1,6 +1,7 @@
 #include "SpriteComponent.h"
 #include "ComponentManager.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/Transform2D.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../System/BlendDesc.h"
@@ -30,9 +31,29 @@ void SpriteComponent::onSetActive(bool value) {
 void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     Component::loadProperties(inObj);
 
-    std::string fileName;
-    if (JsonHelper::getString(inObj, "fileName", &fileName)) {
-        setSprite(fileName);
+    std::string str;
+    if (JsonHelper::getString(inObj, "fileName", &str)) {
+        setSprite(str);
+    }
+    bool isActive = true;
+    if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
+        setActive(isActive);
+    }
+    Vector2 vec2;
+    if (JsonHelper::getVector2(inObj, "position", &vec2)) {
+        transform()->setPosition(vec2);
+    }
+    if (JsonHelper::getVector2(inObj, "scale", &vec2)) {
+        transform()->setScale(vec2);
+    }
+    float rot;
+    if (JsonHelper::getFloat(inObj, "rotation", &rot)) {
+        transform()->setRotation(rot);
+    }
+    if (JsonHelper::getString(inObj, "pivot", &str)) {
+        Pivot pivot = Pivot::NONE;
+        Transform2D::stringToPivot(str, &pivot);
+        transform()->setPivot(pivot);
     }
 }
 
@@ -40,6 +61,33 @@ void SpriteComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, 
     Component::saveProperties(alloc, inObj);
 
     JsonHelper::setString(alloc, inObj, "fileName", fileName());
+}
+
+void SpriteComponent::drawDebugInfo(DebugInfoList* inspect) const {
+    Component::drawDebugInfo(inspect);
+
+    DebugInfo info;
+    info.first = "FileName";
+    info.second = fileName();
+    inspect->emplace_back(info);
+    info.first = "Position";
+    info.second = transform()->getPosition();
+    inspect->emplace_back(info);
+    info.first = "Rotation";
+    info.second = transform()->getRotation();
+    inspect->emplace_back(info);
+    info.first = "Scale";
+    info.second = transform()->getScale();
+    inspect->emplace_back(info);
+    info.first = "Color";
+    info.second = getColor();
+    inspect->emplace_back(info);
+    info.first = "UV";
+    info.second = getUV();
+    inspect->emplace_back(info);
+    info.first = "TextureSize";
+    info.second = getTextureSize();
+    inspect->emplace_back(info);
 }
 
 void SpriteComponent::update() {
