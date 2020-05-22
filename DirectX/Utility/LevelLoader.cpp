@@ -313,6 +313,30 @@ bool JsonHelper::getQuaternion(const rapidjson::Value & inObject, const char* in
     return true;
 }
 
+bool JsonHelper::getStringList(const rapidjson::Value& inObject, const char* inProperty, std::list<std::string>* out) {
+    auto itr = inObject.FindMember(inProperty);
+    if (itr == inObject.MemberEnd()) {
+        return false;
+    }
+
+    auto& property = itr->value;
+    if (!property.IsArray()) {
+        return false;
+    }
+
+    std::list<std::string> temp;
+    for (rapidjson::SizeType i = 0; i < property.Size(); i++) {
+        if (!property[i].IsString()) {
+            return false;
+        }
+        temp.emplace_back(property[i].GetString());
+    }
+
+    *out = temp;
+
+    return true;
+}
+
 void JsonHelper::setInt(rapidjson::Document::AllocatorType & alloc, rapidjson::Value * inObject, const char* name, int value) {
     rapidjson::Value v(value);
     inObject->AddMember(rapidjson::StringRef(name), v, alloc);

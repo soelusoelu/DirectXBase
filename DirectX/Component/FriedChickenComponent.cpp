@@ -2,6 +2,7 @@
 #include "ChickenFry.h"
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
+#include "SoundComponent.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
@@ -16,7 +17,8 @@ FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) 
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
     mRollSpeed(60.f),
-    mFallSpeed(1.f) {
+    mFallSpeed(1.f),
+    mIsWaitingColliction(false) {
 }
 
 FriedChickenComponent::~FriedChickenComponent() = default;
@@ -37,11 +39,14 @@ void FriedChickenComponent::update() {
     if (mState == State::FRY) {
         if (mFry) {
             mFry->update();
+            tooBurnt();
             autoCollection();
         }
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
+    } else if (mState == State::TOO_BURNT) {
+        tooBurntUpdate();
     }
 }
 
@@ -82,6 +87,8 @@ void FriedChickenComponent::initialize() {
     //アクティブ化
     owner()->setActive(true);
 
+    mIsWaitingColliction = false;
+
     //ランダムで位置を決める
     auto pos = Random::randomRange(
         Vector3(mRandomRangePositionX.x, 0.f, mRandomRangePositionZ.x),
@@ -103,7 +110,7 @@ void FriedChickenComponent::initialize() {
 }
 
 void FriedChickenComponent::finishFryed() {
-    mState = State::WAITING_COLLECTION;
+    mIsWaitingColliction = true;
 }
 
 void FriedChickenComponent::eaten() {
@@ -126,21 +133,38 @@ bool FriedChickenComponent::isFalling() const {
 }
 
 bool FriedChickenComponent::isFinished() const {
-    return mState == State::WAITING_COLLECTION;
+    return mIsWaitingColliction;
 }
 
 bool FriedChickenComponent::isEaten() const {
     return mState == State::EATEN;
 }
 
-void FriedChickenComponent::autoCollection() {
-    bool isFinish = mFry->isBurntAllSurfaces();
-    if (!isFinish) {
-        isFinish = mFry->isTooBurnt();
-    }
+bool FriedChickenComponent::isTooBurnt() const {
+    return mState == State::TOO_BURNT;
+}
 
-    if (isFinish) {
-        mState = State::WAITING_COLLECTION;
+void FriedChickenComponent::tooBurnt() {
+    if (mFry->isTooBurnt()) {
+        auto sound = owner()->componentManager()->getComponent<SoundComponent>();
+        sound->playSE();
+
+        mState = State::TOO_BURNT;
+    }
+}
+
+void FriedChickenComponent::tooBurntUpdate() {
+    auto trans = owner()->transform();
+    trans->translate(Vector3::down * Time::deltaTime);
+
+    if (trans->getPosition().y < -3.f) {
+        finishFryed();
+    }
+}
+
+void FriedChickenComponent::autoCollection() {
+    if (mFry->isBurntAllSurfaces()) {
+        finishFryed();
     }
 }
 

@@ -62,7 +62,7 @@ void GamePlay::start() {
     mScene->addObjectToNext("Score");
 
     auto sounds = owner()->componentManager()->getComponents<SoundComponent>();
-    for (const auto sound : sounds) {
+    for (const auto& sound : sounds) {
         sound->playBGM();
     }
 }

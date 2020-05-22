@@ -51,6 +51,7 @@ public:
     static bool getVector2(const rapidjson::Value& inObject, const char* inProperty, Vector2* out);
     static bool getVector3(const rapidjson::Value& inObject, const char* inProperty, Vector3* out);
     static bool getQuaternion(const rapidjson::Value& inObject, const char* inProperty, Quaternion* out);
+    static bool getStringList(const rapidjson::Value& inObject, const char* inProperty, std::list<std::string>* out);
 
     static void setInt(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, int value);
     static void setFloat(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObject, const char* name, float value);

@@ -114,6 +114,9 @@ void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenCompone
 }
 
 void PlayerChickenConnection::setChickenPosUnderThePlayer() {
+    if (mChicken->isTooBurnt()) {
+        return;
+    }
     auto pos = mPlayer->owner()->transform()->getPosition();
     pos.y = 0;
     mChicken->owner()->transform()->setPosition(pos);

@@ -145,6 +145,13 @@
             "friedColor": [ 0.8, 0.3, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ]
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "蒸発・蒸気・ジュー02_koge.wav",
+            "volume": 0.3
+          }
         }
       ]
     },
@@ -156,7 +163,7 @@
           "properties": {
             "startNum": 1,
             "maxNum": 5,
-            "replenishTimer": 30.0
+            "replenishTimer": 20.0
           }
         },
         {
@@ -358,7 +365,7 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "result.wav",
+            "fileName": "江戸のぶらり旅_result.wav",
             "volume": 0.01,
             "isFirstPlay": true
           }
