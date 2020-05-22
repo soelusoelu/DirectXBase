@@ -17,7 +17,6 @@
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
-#include "../../System/Game.h"
 #include "../../Utility/LevelLoader.h"
 
 GamePlay::GamePlay(const std::shared_ptr<GameObject>& owner) :
@@ -97,9 +96,6 @@ void GamePlay::update() {
         mScene->next("ResultScene");
     }
 
-    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
-        Game::quit();
-    }
     //リセット
 #ifdef _DEBUG
     if (Input::keyboard()->getKeyDown(KeyCode::R)) {
