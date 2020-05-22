@@ -1,4 +1,5 @@
 ﻿#include "Shader.h"
+#include "../DebugLayer/Debug.h"
 #include "../System/Buffer.h"
 #include "../System/BufferDesc.h"
 #include "../System/DirectX.h"
@@ -84,12 +85,12 @@ void Shader::createVertexShader(const std::string& fileName) {
     Singleton<Directory>::instance().setShaderDirectory();
     //ブロブからバーテックスシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, nullptr, &mCompileShader, nullptr, nullptr))) {
-        MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
+        Debug::windowMessage(fileName + ": hlsl読み込み失敗");
         return;
     }
     if (FAILED(Singleton<DirectX>::instance().device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
         SAFE_RELEASE(mCompileShader);
-        MessageBox(0, L"バーテックスシェーダー作成失敗", nullptr, MB_OK);
+        Debug::windowMessage(fileName + ": バーテックスシェーダー作成失敗");
         return;
     }
 }
@@ -99,12 +100,12 @@ void Shader::createPixelShader(const std::string& fileName) {
     Singleton<Directory>::instance().setShaderDirectory();
     //ブロブからピクセルシェーダー作成
     if (FAILED(D3DX11CompileFromFileA(fileName.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, nullptr, &compiledShader, nullptr, nullptr))) {
-        MessageBox(0, L"hlsl読み込み失敗", nullptr, MB_OK);
+        Debug::windowMessage(fileName + ": hlsl読み込み失敗");
         return;
     }
     if (FAILED(Singleton<DirectX>::instance().device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
         SAFE_RELEASE(compiledShader);
-        MessageBox(0, L"ピクセルシェーダー作成失敗", nullptr, MB_OK);
+        Debug::windowMessage(fileName + ": ピクセルシェーダー作成失敗");
         return;
     }
     SAFE_RELEASE(compiledShader);

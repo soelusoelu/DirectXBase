@@ -4,6 +4,7 @@
 #include "FriedChickenComponent.h"
 #include "MeshComponent.h"
 #include "SoundComponent.h"
+#include "SphereCollisionComponent.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
@@ -16,6 +17,7 @@ Bird::Bird(std::shared_ptr<GameObject> owner) :
     mOrbit(nullptr),
     mRestartTimer(std::make_unique<Time>()),
     mMesh(nullptr),
+    mCollider(nullptr),
     mSound(nullptr),
     mTarget(nullptr),
     mState(State::WAIT),
@@ -29,6 +31,7 @@ void Bird::start() {
     mOrbit = compMana->getComponent<BirdOrbit>();
     mMesh = compMana->getComponent<MeshComponent>();
     mMesh->setActive(false);
+    mCollider = compMana->getComponent<SphereCollisionComponent>();
     mSound = compMana->getComponent<SoundComponent>();
     auto t = owner()->transform();
     t->rotate(Vector3::up, 90.f);
@@ -107,23 +110,18 @@ void Bird::takeChicken() {
     if (!mTarget) {
         return;
     }
-    auto birdPos = owner()->transform()->getPosition();
-    auto targetPos = mTarget->transform()->getPosition();
-    //鳥が唐揚げの右側にいるときのみ
-    if (birdPos.x < targetPos.x) {
-        return;
-    }
-    //鳥と唐揚げの距離が近いときのみ
-    if (Math::abs(birdPos.x - targetPos.x) > 1.f) {
-        return;
-    }
-    if (Math::abs(birdPos.z - targetPos.z) > 1.f) {
-        return;
+
+    std::shared_ptr<GameObject> hit = nullptr;
+    for (const auto& col : mCollider->onCollisionEnter()) {
+        if (col->owner()->tag() != "FriedChicken") {
+            continue;
+        }
+        hit = col->owner();
+        break;
     }
 
-    auto fc = mTarget->componentManager()->getComponent<FriedChickenComponent>();
-    if (fc) {
-        fc->eaten();
+    if (hit) {
+        hit->componentManager()->getComponent<FriedChickenComponent>()->eaten();
     }
 }
 

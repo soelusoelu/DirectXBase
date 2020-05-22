@@ -147,6 +147,11 @@
           }
         },
         {
+          "type": "SphereCollisionComponent",
+          "properties": {
+          }
+        },
+        {
           "type": "SoundComponent",
           "properties": {
             "fileName": "蒸発・蒸気・ジュー02_koge.wav",
@@ -220,6 +225,11 @@
           "properties": {
             "fileName": "block.png",
             "scale": [ 30.0, 1.0 ]
+          }
+        },
+        {
+          "type": "SphereCollisionComponent",
+          "properties": {
           }
         },
         {
