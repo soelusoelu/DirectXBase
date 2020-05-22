@@ -119,6 +119,9 @@ int FriedChickenManager::getEvaluatedScore() const {
         if (!chicken->isFinished()) {
             continue;
         }
+        if (chicken->isTooBurnt()) {
+            continue;
+        }
         const auto& fry = chicken->getFry();
         score += mScoreEvaluation->evaluateScore(fry);
     }

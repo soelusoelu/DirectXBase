@@ -302,7 +302,7 @@
           "properties": {
             "fileName": "NowLoading.png",
             "isActive": false,
-            "position": [ 1920.0, 1080.0 ],
+            "position": [ 1920.0, 1130.0 ],
             "pivot": "RightBottom"
           }
         },
