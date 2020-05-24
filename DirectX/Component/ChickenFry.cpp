@@ -6,8 +6,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../DebugLayer/Debug.h"
-#include "../Utility/StringUtil.h"
 
 ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
     Component(owner, "ChickenFry"),
@@ -193,9 +191,6 @@ void ChickenFry::choiceEasyAndHardSurface() {
 }
 
 void ChickenFry::choiceBottomSurface() {
-    auto dir = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
-    //auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
-
     static const Vector3 dirs[] = {
         Vector3::up,
         Vector3::down,
@@ -205,29 +200,24 @@ void ChickenFry::choiceBottomSurface() {
         Vector3::back,
     };
     static const ChickenSurface dirSurfaces[] = {
-        ChickenSurface::BOTTOM,
         ChickenSurface::UP,
+        ChickenSurface::BOTTOM,
         ChickenSurface::RIGHT,
         ChickenSurface::LEFT,
-        ChickenSurface::BACK,
         ChickenSurface::FORE,
+        ChickenSurface::BACK,
     };
 
     float min = Math::infinity;
     auto sur = ChickenSurface::UP;
-    float dist = 0.f;
     for (size_t i = 0; i < 6; i++) {
-        dist = (dirs[i] - dir).lengthSq();
-        if (dist < min) {
-            min = dist;
+        auto dir = Vector3::transform(dirs[i], owner()->transform()->getRotation());
+        if (dir.y < min) {
+            min = dir.y;
             sur = dirSurfaces[i];
         }
     }
     mCurrentBottomSurface = sur;
-
-    //auto dot = Vector3::dot(Vector3::down, dir);
-    //auto cos = Math::acos(dot) * Math::rad2Deg;
-    //Debug::log(StringUtil::floatToString(dot, 5));
 }
 
 void ChickenFry::frying() {
