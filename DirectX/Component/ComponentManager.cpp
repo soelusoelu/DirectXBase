@@ -1,9 +1,7 @@
 ﻿#include "ComponentManager.h"
 #include "Component.h"
 
-ComponentManager::ComponentManager(const std::shared_ptr<GameObject>& owner) :
-    mOwner(owner) {
-}
+ComponentManager::ComponentManager() = default;
 
 ComponentManager::~ComponentManager() {
     mStartComponents.clear();

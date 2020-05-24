@@ -107,7 +107,7 @@ void GameObject::initialize() {
     }
 
     mTransform = std::make_shared<Transform3D>(shared_from_this());
-    mComponentManager = std::make_shared<ComponentManager>(shared_from_this());
+    mComponentManager = std::make_shared<ComponentManager>();
 }
 
 void GameObject::updateDestroyTimer() {
