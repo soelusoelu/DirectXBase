@@ -11,8 +11,8 @@
 #include "../Utility/LevelLoader.h"
 #include <cassert>
 
-Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr) :
-    Component(owenr, "Sprite3D", 500),
+Sprite3D::Sprite3D() :
+    Component(500),
     mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
@@ -29,7 +29,7 @@ Sprite3D::~Sprite3D() {
 
 void Sprite3D::start() {
     if (mFileName.empty()) {
-        Debug::logWarning(getTypeName() + ": No filename.");
+        Debug::logWarning(getComponentName() + ": No filename.");
         return;
     }
 

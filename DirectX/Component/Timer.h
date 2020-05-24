@@ -4,7 +4,7 @@
 
 class Timer : public Component {
 public:
-    Timer(std::shared_ptr<GameObject> owner);
+    Timer();
     ~Timer();
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

@@ -9,7 +9,7 @@ enum class JoyCode;
 
 class OperationExplanation : public Component {
 public:
-    OperationExplanation(const std::shared_ptr<GameObject>& owner);
+    OperationExplanation();
     ~OperationExplanation();
     virtual void start() override;
     virtual void update() override;

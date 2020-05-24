@@ -5,8 +5,8 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
-Camera::Camera(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Camera", 1000),
+Camera::Camera() :
+    Component(),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
     mFOV(45.f),

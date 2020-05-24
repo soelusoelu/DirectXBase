@@ -16,7 +16,7 @@ class FriedChickenManager : public Component {
     using GameObjectPtrList = std::list<GameObjectPtr>;
 
 public:
-    FriedChickenManager(std::shared_ptr<GameObject> owner);
+    FriedChickenManager();
     ~FriedChickenManager();
     virtual void awake() override;
     virtual void start() override;

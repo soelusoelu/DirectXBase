@@ -5,8 +5,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 
-SphereCollisionComponent::SphereCollisionComponent(std::shared_ptr<GameObject> owner) :
-    Collider(owner, "SphereCollisionComponent"),
+SphereCollisionComponent::SphereCollisionComponent() :
+    Collider(),
     mSphere(std::make_shared<Sphere>()),
     mDefaultCenter(Vector3::zero),
     mDefaultRadius(0.f) {
@@ -46,6 +46,6 @@ void SphereCollisionComponent::set(const Vector3 & center, float radius) {
     }
 }
 
-std::shared_ptr<Sphere> SphereCollisionComponent::getSphere() const {
-    return mSphere;
+const Sphere& SphereCollisionComponent::getSphere() const {
+    return *mSphere;
 }

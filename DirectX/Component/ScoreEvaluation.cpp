@@ -5,8 +5,8 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-ScoreEvaluation::ScoreEvaluation(std::shared_ptr<GameObject> owner) :
-    Component(owner, "ScoreEvaluation"),
+ScoreEvaluation::ScoreEvaluation() :
+    Component(),
     mLittleBadScore(0),
     mUsuallyScore(0),
     mGoodScore(0),
@@ -57,7 +57,7 @@ int ScoreEvaluation::evaluateScore(const IChickenFry& chicken) const {
         } else if (state == FryState::BAD) {
             score += mBadScore;
         } else {
-            Debug::logWarning(getTypeName() + ": Invalid type.");
+            Debug::logWarning(getComponentName() + ": Invalid type.");
         }
     }
 

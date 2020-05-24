@@ -8,7 +8,7 @@ class Timer;
 
 class TimeLimit : public Component {
 public:
-    TimeLimit(std::shared_ptr<GameObject> owner);
+    TimeLimit();
     ~TimeLimit();
     virtual void start() override;
     virtual void update() override;

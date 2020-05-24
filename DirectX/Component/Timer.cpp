@@ -2,8 +2,8 @@
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
 
-Timer::Timer(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Timer", 50),
+Timer::Timer() :
+    Component(50),
     mCurrentTime(0.f),
     mLimitTime(0.f),
     mIsOverLimit(false) {

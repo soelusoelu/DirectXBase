@@ -15,7 +15,7 @@ class PlayerComponent : public Component {
     };
 
 public:
-    PlayerComponent(std::shared_ptr<GameObject> owner);
+    PlayerComponent();
     ~PlayerComponent();
     virtual void start() override;
     virtual void update() override;

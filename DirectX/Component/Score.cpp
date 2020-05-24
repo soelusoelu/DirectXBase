@@ -5,8 +5,8 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-Score::Score(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Score"),
+Score::Score() :
+    Component(),
     mText(nullptr),
     mScore(0),
     mHighScore(0) {

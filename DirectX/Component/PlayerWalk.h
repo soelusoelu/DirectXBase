@@ -11,7 +11,7 @@ enum class JoyCode;
 
 class PlayerWalk : public Component, public IPlayerWalk {
 public:
-    PlayerWalk(std::shared_ptr<GameObject> owner);
+    PlayerWalk();
     ~PlayerWalk();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

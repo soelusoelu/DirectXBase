@@ -6,7 +6,7 @@
 //唐揚げの揚げ具合からスコアを評価するクラス
 class ScoreEvaluation : public Component {
 public:
-    ScoreEvaluation(std::shared_ptr<GameObject> owner);
+    ScoreEvaluation();
     ~ScoreEvaluation();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;

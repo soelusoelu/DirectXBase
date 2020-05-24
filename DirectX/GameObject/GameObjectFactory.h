@@ -17,7 +17,7 @@ class Renderer;
 class GameObjectFactory {
     friend class Singleton<GameObjectFactory>;
     using GameObjectPtr = std::shared_ptr<GameObject>;
-    using ComponentFunc = std::function<void(GameObjectPtr, const rapidjson::Value&)>;
+    using ComponentFunc = std::function<void(const GameObjectPtr&, const std::string&, const rapidjson::Value&)>;
 
 private:
     GameObjectFactory();

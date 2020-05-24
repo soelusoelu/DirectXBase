@@ -15,8 +15,8 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
-SpriteComponent::SpriteComponent(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type),
+SpriteComponent::SpriteComponent() :
+    Component(500),
     mSprite(nullptr) {
 }
 

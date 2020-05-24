@@ -15,8 +15,8 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
-PointLightComponent::PointLightComponent(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PointLightComponent"),
+PointLightComponent::PointLightComponent() :
+    Component(),
     mCamera(nullptr),
     mColor(ColorPalette::white),
     mInnerRadius(0.5f),

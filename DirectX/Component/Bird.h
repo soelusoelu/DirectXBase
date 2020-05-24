@@ -19,7 +19,7 @@ class Bird : public Component {
     };
 
 public:
-    Bird(std::shared_ptr<GameObject> owner);
+    Bird();
     ~Bird();
     virtual void start() override;
     virtual void update() override;

@@ -6,8 +6,8 @@
 #include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
 
-ChickenColorChanger::ChickenColorChanger(std::shared_ptr<GameObject> owner) :
-    Component(owner, "ChickenColorChanger"),
+ChickenColorChanger::ChickenColorChanger() :
+    Component(),
     mInitColor(Vector3::zero),
     mLittleFriedColor(Vector3::zero),
     mUsuallyColor(Vector3::zero),
@@ -84,7 +84,7 @@ void ChickenColorChanger::updateColor(ChickenSurface bottomSurface, FryState bot
     } else if (bottomState == FryState::BAD) {
         color = mBurntColor;
     } else {
-        Debug::logError(getTypeName() + ": Invalid state");
+        Debug::logError(getComponentName() + ": Invalid state");
     }
 
     getMaterial(bottomSurface)->diffuse = color;

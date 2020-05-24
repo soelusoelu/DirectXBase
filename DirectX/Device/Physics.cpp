@@ -33,7 +33,7 @@ void Physics::sweepAndPrune() {
     std::sort(mColliders.begin(), mColliders.end(), [](CollPtr a, CollPtr b) {
         auto circleA = std::dynamic_pointer_cast<SphereCollisionComponent>(a);
         auto circleB = std::dynamic_pointer_cast<SphereCollisionComponent>(b);
-        return circleA->getSphere()->center.x - circleA->getSphere()->radius < circleB->getSphere()->center.x - circleB->getSphere()->radius;
+        return circleA->getSphere().center.x - circleA->getSphere().radius < circleB->getSphere().center.x - circleB->getSphere().radius;
     });
 
     for (size_t i = 0; i < mColliders.size(); i++) {
@@ -41,20 +41,20 @@ void Physics::sweepAndPrune() {
         if (!a->getEnable()) {
             continue;
         }
-        auto as = a->getSphere();
+        const auto& as = a->getSphere();
         //mCircles[i]の中心+半径を取得
-        float max = as->center.x + as->radius;
+        float max = as.center.x + as.radius;
         for (size_t j = i + 1; j < mColliders.size(); j++) {
             auto b = std::dynamic_pointer_cast<SphereCollisionComponent>(mColliders[j]);
             if (!b->getEnable()) {
                 continue;
             }
-            auto bs = b->getSphere();
+            const auto& bs = b->getSphere();
             //もしmCircles[j]の中心-半径が、mCircles[i]の中心+半径を超えていたら、
             //mCircles[i]と交差する可能性があるボックスは存在しない
-            if (bs->center.x - bs->radius > max) {
+            if (bs.center.x - bs.radius > max) {
                 break;
-            } else if (intersect(*as, *bs)) {
+            } else if (intersect(as, bs)) {
                 a->addHitCollider(b);
                 b->addHitCollider(a);
             }

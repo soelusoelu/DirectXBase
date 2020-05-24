@@ -3,8 +3,8 @@
 #include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
 
-HitPointComponent::HitPointComponent(std::shared_ptr<GameObject> onwer) :
-    Component(onwer, "HitPointComponent"),
+HitPointComponent::HitPointComponent() :
+    Component(),
     mHP(0),
     mMaxHP(0) {
 }

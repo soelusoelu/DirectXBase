@@ -5,8 +5,8 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-Text::Text(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Text", 500),
+Text::Text() :
+    Component(500),
     mText(""),
     mPosition(Vector2::zero),
     mScale(Vector2::one),

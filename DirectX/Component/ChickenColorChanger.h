@@ -14,7 +14,7 @@ class ChickenColorChanger : public Component {
     using MaterialPtrArray = std::vector<MaterialPtr>;
 
 public:
-    ChickenColorChanger(std::shared_ptr<GameObject> owner);
+    ChickenColorChanger();
     ~ChickenColorChanger();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

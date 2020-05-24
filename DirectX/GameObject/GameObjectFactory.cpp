@@ -172,7 +172,7 @@ void GameObjectFactory::loadComponents(const GameObjectPtr& gameObject, const ra
             continue;
         }
         //新規コンポーネントを生成
-        itr->second(gameObject, compObj["properties"]);
+        itr->second(gameObject, type, compObj["properties"]);
     }
 }
 

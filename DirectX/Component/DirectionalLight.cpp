@@ -5,8 +5,8 @@
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-DirectionalLight::DirectionalLight(std::shared_ptr<GameObject> owner) :
-    Component(owner, "DirectionalLight"),
+DirectionalLight::DirectionalLight() :
+    Component(),
     mDirection(Vector3::zero),
     mColor(Vector3::one) {
 }

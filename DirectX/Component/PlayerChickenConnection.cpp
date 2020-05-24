@@ -13,8 +13,8 @@
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
-PlayerChickenConnection::PlayerChickenConnection(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerChickenConnection", 150),
+PlayerChickenConnection::PlayerChickenConnection() :
+    Component(150),
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),

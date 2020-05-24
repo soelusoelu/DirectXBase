@@ -5,8 +5,8 @@
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-BirdOrbit::BirdOrbit(std::shared_ptr<GameObject> owner) :
-    Component(owner, "BirdOrbit"),
+BirdOrbit::BirdOrbit() :
+    Component(),
     mTimer(0.f),
     mSprite(nullptr) {
 }

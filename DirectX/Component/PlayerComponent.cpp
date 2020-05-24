@@ -6,8 +6,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 
-PlayerComponent::PlayerComponent(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerComponent", 10),
+PlayerComponent::PlayerComponent() :
+    Component(10),
     mWalk(nullptr),
     mJump(nullptr),
     mState(State::WALK),

@@ -7,7 +7,7 @@ class GameObject;
 
 class Camera : public Component {
 public:
-    Camera(std::shared_ptr<GameObject> owner);
+    Camera();
     ~Camera();
     virtual void start() override;
     virtual void update() override;

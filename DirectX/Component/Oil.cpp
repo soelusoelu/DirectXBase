@@ -4,8 +4,8 @@
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-Oil::Oil(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Oil", 130),
+Oil::Oil() :
+    Component(130),
     mFlowSpeed(0.f),
     mFlowRangeX(0.f),
     mFlowRangeZFore(0.f),
@@ -41,8 +41,8 @@ void Oil::drawDebugInfo(DebugInfoList * inspect) const {
     inspect->emplace_back(info);
 }
 
-void Oil::flow(const GameObjectPtr & gameObject) {
-    auto t = gameObject->transform();
+void Oil::flow(const GameObjectPtr& gameObject) {
+    const auto& t = gameObject->transform();
     auto pos = t->getPosition();
     auto moveDir = Vector3::zero;
     if (pos.z < -mFlowRangeZFore) {

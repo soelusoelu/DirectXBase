@@ -42,11 +42,11 @@ public:
     const std::string& tag() const;
 
     //レンダラーの取得
-    std::shared_ptr<Renderer> renderer() const;
+    const std::shared_ptr<Renderer>& renderer() const;
     //トランスフォームの取得
-    std::shared_ptr<Transform3D> transform() const;
+    const std::shared_ptr<Transform3D>& transform() const;
     //コンポーネント管理者の取得
-    std::shared_ptr<ComponentManager> componentManager() const;
+    const std::shared_ptr<ComponentManager>& componentManager() const;
 
     //GameObjectManagerの登録
     static void setGameObjectManager(GameObjectManager* manager);

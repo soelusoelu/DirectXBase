@@ -10,8 +10,8 @@
 #include "../System/DirectX.h"
 #include "../System/Texture.h"
 
-ChickenMeshComponent::ChickenMeshComponent(std::shared_ptr<GameObject> owner) :
-    MeshComponent(owner, "ChickenMeshComponent") {
+ChickenMeshComponent::ChickenMeshComponent() :
+    MeshComponent() {
 }
 
 ChickenMeshComponent::~ChickenMeshComponent() = default;

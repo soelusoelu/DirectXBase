@@ -7,7 +7,7 @@ class Sprite3D;
 
 class BirdOrbit : public Component {
 public:
-    BirdOrbit(std::shared_ptr<GameObject> owner);
+    BirdOrbit();
     ~BirdOrbit();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

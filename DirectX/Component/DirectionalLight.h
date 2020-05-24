@@ -8,7 +8,7 @@ class GameObject;
 
 class DirectionalLight : public Component {
 public:
-    DirectionalLight(std::shared_ptr<GameObject> owner);
+    DirectionalLight();
     ~DirectionalLight();
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

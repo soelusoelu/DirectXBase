@@ -126,7 +126,7 @@ void Inspector::drawScale(const Transform3D& target, const Vector2 & position) c
 
 void Inspector::drawComponent(const Component& component, Vector2 * position) const {
     auto pos = *position;
-    mDrawString->drawString(component.getTypeName(), pos, mElementScale);
+    mDrawString->drawString(component.getComponentName(), pos, mElementScale);
 
     //コンポーネントのデバッグ情報を取得
     std::list<std::pair<std::string, std::any>> debugInfo;

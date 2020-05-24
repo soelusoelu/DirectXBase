@@ -10,15 +10,16 @@
 class GameObject;
 
 class Component {
+    friend class ComponentManager;
+
     using GameObjectPtr = std::shared_ptr<GameObject>;
 protected:
     using DebugInfo = std::pair<std::string, std::any>;
     using DebugInfoList = std::list<DebugInfo>;
 
 protected:
-    Component(const GameObjectPtr& owner, const std::string& type, int updateOrder = 100);
 public:
-    //TODO: publicからprotectedにする
+    Component(int updateOrder = 100);
     virtual ~Component();
     //getComponentはここでして
     virtual void start() {};
@@ -42,12 +43,14 @@ public:
 
     GameObjectPtr owner() const;
     int getUpdateOrder() const;
-    const std::string& getTypeName() const;
+    const std::string& getComponentName() const;
 
     //指定されたプロパティでコンポーネントを生成
     template <typename T>
-    static void create(GameObjectPtr gameObject, const rapidjson::Value& inObj) {
-        auto t = std::make_shared<T>(gameObject);
+    static void create(const GameObjectPtr& owner, const std::string& componentName, const rapidjson::Value& inObj) {
+        auto t = std::make_shared<T>();
+        t->mOwner = owner;
+        t->mType = componentName;
         t->owner()->componentManager()->addComponent(t);
         t->loadProperties(inObj);
         t->awake();

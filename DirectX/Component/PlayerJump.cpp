@@ -8,8 +8,8 @@
 #include "../Utility/LevelLoader.h"
 #include <string>
 
-PlayerJump::PlayerJump(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerJump", 5),
+PlayerJump::PlayerJump() :
+    Component(5),
     mCurrentState(State::NONE),
     mPreviousState(State::NONE),
     mJumpStartPosition(Vector3::zero),

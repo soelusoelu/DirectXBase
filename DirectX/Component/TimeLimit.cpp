@@ -7,8 +7,8 @@
 #include "../System/Window.h"
 #include "../Utility/StringUtil.h"
 
-TimeLimit::TimeLimit(std::shared_ptr<GameObject> owner) :
-    Component(owner, "TimeLimit"),
+TimeLimit::TimeLimit() :
+    Component(),
     mText(nullptr),
     mTimer(nullptr) {
 }

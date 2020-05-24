@@ -4,8 +4,8 @@
 #include "../Math/Math.h"
 #include "../Utility/LevelLoader.h"
 
-Field::Field(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Field"),
+Field::Field() :
+    Component(),
     mIsRoll(false),
     mRollSpeed(0.f) {
 }

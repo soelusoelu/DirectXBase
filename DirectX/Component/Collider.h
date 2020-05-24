@@ -13,7 +13,7 @@ class Collider : public Component, public std::enable_shared_from_this<Collider>
     using CollPtrList = std::list<CollPtr>;
 
 protected:
-    Collider(std::shared_ptr<GameObject> owner, const std::string& type);
+    Collider();
     virtual ~Collider();
 
 public:
@@ -30,7 +30,7 @@ public:
     //衝突判定の自動化
     void automation();
     //コライダーを追加
-    void addHitCollider(CollPtr hit);
+    void addHitCollider(const CollPtr& hit);
     CollPtrList onCollisionEnter();
     CollPtrList onCollisionStay();
     CollPtrList onCollisionExit();

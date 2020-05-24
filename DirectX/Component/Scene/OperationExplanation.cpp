@@ -10,8 +10,8 @@
 #include "../../Utility/LevelLoader.h"
 #include <string>
 
-OperationExplanation::OperationExplanation(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "OperationExplanation"),
+OperationExplanation::OperationExplanation() :
+    Component(),
     mScene(nullptr),
     mEnterKey(KeyCode::None),
     mEnterPad(JoyCode::None),

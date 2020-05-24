@@ -10,8 +10,8 @@
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
-    Component(owner, "FriedChickenManager", 200),
+FriedChickenManager::FriedChickenManager() :
+    Component(200),
     mScoreEvaluation(nullptr),
     mStartNum(0),
     mMaxNum(0),

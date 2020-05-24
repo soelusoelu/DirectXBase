@@ -14,8 +14,8 @@
 #include "../System/Texture.h"
 #include "../Utility/LevelLoader.h"
 
-MeshComponent::MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type),
+MeshComponent::MeshComponent() :
+    Component(),
     mMesh(nullptr),
     mShader(nullptr),
     mCamera(nullptr),

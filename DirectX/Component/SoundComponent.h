@@ -7,7 +7,7 @@ class Sound;
 
 class SoundComponent : public Component {
 public:
-    SoundComponent(std::shared_ptr<GameObject> owner);
+    SoundComponent();
     ~SoundComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

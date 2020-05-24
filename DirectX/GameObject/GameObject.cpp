@@ -69,15 +69,15 @@ const std::string& GameObject::tag() const {
     return mTag;
 }
 
-std::shared_ptr<Renderer> GameObject::renderer() const {
+const std::shared_ptr<Renderer>& GameObject::renderer() const {
     return mRenderer;
 }
 
-std::shared_ptr<Transform3D> GameObject::transform() const {
+const std::shared_ptr<Transform3D>& GameObject::transform() const {
     return mTransform;
 }
 
-std::shared_ptr<ComponentManager> GameObject::componentManager() const {
+const std::shared_ptr<ComponentManager>& GameObject::componentManager() const {
     return mComponentManager;
 }
 

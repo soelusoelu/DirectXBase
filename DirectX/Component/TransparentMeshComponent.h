@@ -15,7 +15,7 @@ class DirectionalLight;
 
 class TransparentMeshComponent : public MeshComponent {
 public:
-    TransparentMeshComponent(std::shared_ptr<GameObject> owner);
+    TransparentMeshComponent();
     ~TransparentMeshComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

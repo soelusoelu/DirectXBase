@@ -2,8 +2,8 @@
 #include "../Device/Physics.h"
 #include <algorithm>
 
-Collider::Collider(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type, 500),
+Collider::Collider() :
+    Component(500),
     mIsAutoUpdate(true),
     mEnable(false) {
 }
@@ -54,7 +54,7 @@ void Collider::automation() {
     }
 }
 
-void Collider::addHitCollider(CollPtr hit) {
+void Collider::addHitCollider(const CollPtr& hit) {
     mCurrentCollider.emplace_back(hit);
 }
 

@@ -8,7 +8,7 @@ class GameObject;
 
 class HitPointComponent : public Component {
 public:
-    HitPointComponent(std::shared_ptr<GameObject> onwer);
+    HitPointComponent();
     ~HitPointComponent();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;

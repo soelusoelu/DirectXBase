@@ -1,10 +1,9 @@
 ﻿#include "Component.h"
-#include "ComponentManager.h"
 
-Component::Component(const GameObjectPtr& owner, const std::string& type, int updateOrder) :
-    mOwner(owner),
+Component::Component(int updateOrder) :
+    mOwner(),
     mUpdateOrder(updateOrder),
-    mType(type) {
+    mType("") {
 }
 
 Component::~Component() = default;
@@ -17,6 +16,6 @@ int Component::getUpdateOrder() const {
     return mUpdateOrder;
 }
 
-const std::string& Component::getTypeName() const {
+const std::string& Component::getComponentName() const {
     return mType;
 }

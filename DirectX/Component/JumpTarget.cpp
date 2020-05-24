@@ -5,8 +5,8 @@
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-JumpTarget::JumpTarget(std::shared_ptr<GameObject> owner) :
-    Component(owner, "JumpTarget"),
+JumpTarget::JumpTarget() :
+    Component(),
     mSprite(nullptr),
     mOffsetPosY(0.f),
     mAmountRotation(0.f) {

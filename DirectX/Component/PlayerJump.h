@@ -14,7 +14,7 @@ class PlayerJump : public Component, public IPlayerJump {
     };
 
 public:
-    PlayerJump(std::shared_ptr<GameObject> owner);
+    PlayerJump();
     ~PlayerJump();
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

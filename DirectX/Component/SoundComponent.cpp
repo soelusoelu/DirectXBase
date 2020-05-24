@@ -3,8 +3,8 @@
 #include "../Device/Sound.h"
 #include "../Utility/LevelLoader.h"
 
-SoundComponent::SoundComponent(std::shared_ptr<GameObject> owner) :
-    Component(owner, "SoundComponent"),
+SoundComponent::SoundComponent() :
+    Component(),
     mSound(nullptr),
     mFileName(""),
     mVolume(1.f),

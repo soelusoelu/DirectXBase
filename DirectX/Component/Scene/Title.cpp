@@ -8,8 +8,8 @@
 #include "../../Utility/LevelLoader.h"
 #include <string>
 
-Title::Title(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "Title"),
+Title::Title() :
+    Component(),
     mScene(nullptr),
     mEnterKey(KeyCode::None),
     mEnterPad(JoyCode::None) {

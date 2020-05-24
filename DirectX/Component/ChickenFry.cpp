@@ -7,13 +7,13 @@
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 
-ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
-    Component(owner, "ChickenFry"),
+ChickenFry::ChickenFry() :
+    Component(),
     mColorChanger(nullptr),
     mCurrentBottomSurface(ChickenSurface::BOTTOM),
     mEasySurface(ChickenSurface::BOTTOM),
     mHardSurface(ChickenSurface::BOTTOM),
-    mTooBurntTimer(std::make_unique<Time>(0.f)),
+    mTooBurntTimer(std::make_unique<Time>()),
     mUsually(getNumFryState() - 1),
     mEasy(getNumFryState() - 1),
     mHard(getNumFryState() - 1),

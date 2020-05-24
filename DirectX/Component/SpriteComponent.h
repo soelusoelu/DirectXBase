@@ -12,7 +12,7 @@ class Transform2D;
 
 class SpriteComponent : public Component, public ISprite, public std::enable_shared_from_this<SpriteComponent> {
 public:
-    SpriteComponent(std::shared_ptr<GameObject> owner, const std::string& type = "SpriteComponent");
+    SpriteComponent();
     virtual ~SpriteComponent();
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

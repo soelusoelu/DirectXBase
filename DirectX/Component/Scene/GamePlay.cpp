@@ -19,8 +19,8 @@
 #include "../../Input/Keyboard.h"
 #include "../../Utility/LevelLoader.h"
 
-GamePlay::GamePlay(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "GamePlay"),
+GamePlay::GamePlay() :
+    Component(),
     mScene(nullptr),
     mFriedChickenManager(nullptr),
     mPCConnection(nullptr),

@@ -14,8 +14,8 @@
 #include "../System/Texture.h"
 #include "../Utility/LevelLoader.h"
 
-TransparentMeshComponent::TransparentMeshComponent(std::shared_ptr<GameObject> owner) :
-    MeshComponent(owner, "TransparentMeshComponent"),
+TransparentMeshComponent::TransparentMeshComponent() :
+    MeshComponent(),
     mDirLight(nullptr),
     mAlpha(1.f) {
 }

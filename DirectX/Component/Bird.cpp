@@ -12,8 +12,8 @@
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
 
-Bird::Bird(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Bird"),
+Bird::Bird() :
+    Component(),
     mOrbit(nullptr),
     mRestartTimer(std::make_unique<Time>()),
     mMesh(nullptr),

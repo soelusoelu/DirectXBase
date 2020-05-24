@@ -12,8 +12,8 @@
 #include "../Utility/LevelLoader.h"
 #include <string>
 
-PlayerWalk::PlayerWalk(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerWalk"),
+PlayerWalk::PlayerWalk() :
+    Component(),
     mCamera(nullptr),
     mMoveDir(Vector3::zero),
     mRollKey(KeyCode::None),

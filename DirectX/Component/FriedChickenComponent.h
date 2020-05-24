@@ -14,7 +14,7 @@ class FriedChickenComponent : public Component {
     };
 
 public:
-    FriedChickenComponent(std::shared_ptr<GameObject> owner);
+    FriedChickenComponent();
     ~FriedChickenComponent();
     virtual void start() override;
     virtual void update() override;
