@@ -26,6 +26,15 @@ void SphereCollisionComponent::start() {
     }
 }
 
+void SphereCollisionComponent::drawDebugInfo(DebugInfoList* inspect) const {
+    Component::drawDebugInfo(inspect);
+
+    inspect->emplace_back("Center", mSphere->center);
+    inspect->emplace_back("Radius", mSphere->radius);
+    inspect->emplace_back("DefaultCenter", mDefaultCenter);
+    inspect->emplace_back("DefaultRadius", mDefaultRadius);
+}
+
 void SphereCollisionComponent::onUpdateWorldTransform() {
     Collider::onUpdateWorldTransform();
 

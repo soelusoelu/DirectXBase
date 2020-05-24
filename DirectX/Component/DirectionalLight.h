@@ -6,10 +6,12 @@
 
 class GameObject;
 
+//要修正
 class DirectionalLight : public Component {
 public:
     DirectionalLight();
     ~DirectionalLight();
+    virtual void awake() override;
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(DebugInfoList* inspect) const override;

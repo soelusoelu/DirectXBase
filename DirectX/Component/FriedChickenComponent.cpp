@@ -61,22 +61,11 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
-    DebugInfo info;
-    info.first = "RandomRangePositionX";
-    info.second = mRandomRangePositionX;
-    inspect->emplace_back(info);
-    info.first = "RandomRangePositionZ";
-    info.second = mRandomRangePositionZ;
-    inspect->emplace_back(info);
-    info.first = "RandomRangeScale";
-    info.second = mRandomRangeScale;
-    inspect->emplace_back(info);
-    info.first = "RollSpeed";
-    info.second = mRollSpeed;
-    inspect->emplace_back(info);
-    info.first = "FallSpeed";
-    info.second = mFallSpeed;
-    inspect->emplace_back(info);
+    inspect->emplace_back("RandomRangePositionX", mRandomRangePositionX);
+    inspect->emplace_back("RandomRangePositionZ", mRandomRangePositionZ);
+    inspect->emplace_back("RandomRangeScale", mRandomRangeScale);
+    inspect->emplace_back("RollSpeed", mRollSpeed);
+    inspect->emplace_back("FallSpeed", mFallSpeed);
 }
 
 const IChickenFry& FriedChickenComponent::getFry() const {

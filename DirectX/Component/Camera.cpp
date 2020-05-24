@@ -36,16 +36,9 @@ void Camera::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void Camera::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "FOV";
-    info.second = mFOV;
-    inspect->emplace_back(info);
-    info.first = "NearClip";
-    info.second = mNearClip;
-    inspect->emplace_back(info);
-    info.first = "FarClip";
-    info.second = mFarClip;
-    inspect->emplace_back(info);
+    inspect->emplace_back("FOV", mFOV);
+    inspect->emplace_back("NearClip", mNearClip);
+    inspect->emplace_back("FarClip", mFarClip);
 }
 
 const Matrix4& Camera::getView() const {

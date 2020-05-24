@@ -32,16 +32,11 @@ void Timer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
 }
 
 void Timer::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "CurrentTime";
-    info.second = mCurrentTime;
-    inspect->emplace_back(info);
-    info.first = "LimitTime";
-    info.second = mLimitTime;
-    inspect->emplace_back(info);
-    info.first = "IsOverLimit";
-    info.second = mIsOverLimit;
-    inspect->emplace_back(info);
+    Component::drawDebugInfo(inspect);
+
+    inspect->emplace_back("CurrentTime", mCurrentTime);
+    inspect->emplace_back("LimitTime", mLimitTime);
+    inspect->emplace_back("IsOverLimit", mIsOverLimit);
 }
 
 void Timer::reset() {

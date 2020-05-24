@@ -21,6 +21,7 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     void setPlayer(const GameObject& player);
     void setChicken(const ChickenPtr& chicken);
     const ChickenPtr& getChicken() const;

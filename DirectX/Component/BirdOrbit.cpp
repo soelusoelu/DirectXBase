@@ -15,8 +15,6 @@ BirdOrbit::~BirdOrbit() = default;
 
 void BirdOrbit::start() {
     mSprite = owner()->componentManager()->getComponent<Sprite3D>();
-    mSprite->transform()->rotate(Vector3::right, 90.f);
-    mSprite->setActive(false);
 }
 
 void BirdOrbit::loadProperties(const rapidjson::Value & inObj) {
@@ -28,10 +26,7 @@ void BirdOrbit::loadProperties(const rapidjson::Value & inObj) {
 void BirdOrbit::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "SecondsAgo";
-    info.second = mTimer;
-    inspect->emplace_back(info);
+    inspect->emplace_back("SecondsAgo", mTimer);
 }
 
 void BirdOrbit::setActive(bool value) {

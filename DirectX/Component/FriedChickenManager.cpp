@@ -60,16 +60,9 @@ void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
-    DebugInfo info;
-    info.first = "StartNum";
-    info.second = mStartNum;
-    inspect->emplace_back(info);
-    info.first = "MaxNum";
-    info.second = mMaxNum;
-    inspect->emplace_back(info);
-    info.first = "CurrentMaxNum";
-    info.second = mCurrentMaxNum;
-    inspect->emplace_back(info);
+    inspect->emplace_back("StartNum", mStartNum);
+    inspect->emplace_back("MaxNum", mMaxNum);
+    inspect->emplace_back("CurrentMaxNum", mCurrentMaxNum);
 }
 
 std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject& target) const {

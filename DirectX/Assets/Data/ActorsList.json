@@ -225,6 +225,8 @@
           "type": "Sprite3D",
           "properties": {
             "fileName": "block.png",
+            "isActive": false,
+            "rotation": [ 90.0, 0.0, 0.0 ],
             "scale": [ 30.0, 1.0 ]
           }
         },

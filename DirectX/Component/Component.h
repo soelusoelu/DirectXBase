@@ -50,7 +50,7 @@ public:
     static void create(const GameObjectPtr& owner, const std::string& componentName, const rapidjson::Value& inObj) {
         auto t = std::make_shared<T>();
         t->mOwner = owner;
-        t->mType = componentName;
+        t->mComponentName = componentName;
         t->owner()->componentManager()->addComponent(t);
         t->loadProperties(inObj);
         t->awake();
@@ -59,5 +59,5 @@ public:
 private:
     std::weak_ptr<GameObject> mOwner;
     int mUpdateOrder;
-    std::string mType;
+    std::string mComponentName;
 };

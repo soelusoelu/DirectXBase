@@ -75,22 +75,10 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
 void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "CurrentBottomSurface";
-    info.second = surfaceToString(mCurrentBottomSurface);
-    inspect->emplace_back(info);
-
-    info.first = "EasySurface";
-    info.second = surfaceToString(mEasySurface);
-    inspect->emplace_back(info);
-
-    info.first = "HardSurface";
-    info.second = surfaceToString(mHardSurface);
-    inspect->emplace_back(info);
-
-    info.first = "TooBurntTiemr";
-    info.second = mTooBurntTimer->currentTime();
-    inspect->emplace_back(info);
+    inspect->emplace_back("CurrentBottomSurface", surfaceToString(mCurrentBottomSurface));
+    inspect->emplace_back("EasySurface", surfaceToString(mEasySurface));
+    inspect->emplace_back("HardSurface", surfaceToString(mHardSurface));
+    inspect->emplace_back("TooBurntTiemr", mTooBurntTimer->currentTime());
 }
 
 void ChickenFry::initialize() {

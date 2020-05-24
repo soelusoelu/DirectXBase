@@ -43,19 +43,10 @@ void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void PointLightComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Color";
-    info.second = mColor;
-    inspect->emplace_back(info);
-    info.first = "InnerRadius";
-    info.second = mInnerRadius;
-    inspect->emplace_back(info);
-    info.first = "OuterRadius";
-    info.second = mOuterRadius;
-    inspect->emplace_back(info);
-    info.first = "Intensity";
-    info.second = mIntensity;
-    inspect->emplace_back(info);
+    inspect->emplace_back("Color", mColor);
+    inspect->emplace_back("InnerRadius", mInnerRadius);
+    inspect->emplace_back("OuterRadius", mOuterRadius);
+    inspect->emplace_back("Intensity", mIntensity);
 }
 
 void PointLightComponent::draw(const PointLight& pointLight) const {

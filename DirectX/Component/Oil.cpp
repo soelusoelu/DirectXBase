@@ -26,19 +26,10 @@ void Oil::loadProperties(const rapidjson::Value & inObj) {
 void Oil::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "FlowSpeed";
-    info.second = mFlowSpeed;
-    inspect->emplace_back(info);
-    info.first = "flowRangeX";
-    info.second = mFlowRangeX;
-    inspect->emplace_back(info);
-    info.first = "flowRangeZFore";
-    info.second = mFlowRangeZFore;
-    inspect->emplace_back(info);
-    info.first = "flowRangeZBack";
-    info.second = mFlowRangeZBack;
-    inspect->emplace_back(info);
+    inspect->emplace_back("FlowSpeed", mFlowSpeed);
+    inspect->emplace_back("flowRangeX", mFlowRangeX);
+    inspect->emplace_back("flowRangeZFore", mFlowRangeZFore);
+    inspect->emplace_back("flowRangeZBack", mFlowRangeZBack);
 }
 
 void Oil::flow(const GameObjectPtr& gameObject) {

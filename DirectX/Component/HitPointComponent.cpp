@@ -19,13 +19,8 @@ void HitPointComponent::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void HitPointComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "HP";
-    info.second = mHP;
-    inspect->emplace_back(info);
-    info.first = "MaxHP";
-    info.second = mMaxHP;
-    inspect->emplace_back(info);
+    inspect->emplace_back("HP", mHP);
+    inspect->emplace_back("MaxHP", mMaxHP);
 }
 
 void HitPointComponent::takeDamage(int damage) {

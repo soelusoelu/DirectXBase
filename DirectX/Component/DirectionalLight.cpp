@@ -13,6 +13,10 @@ DirectionalLight::DirectionalLight() :
 
 DirectionalLight::~DirectionalLight() = default;
 
+void DirectionalLight::awake() {
+    owner()->transform()->rotate(mDirection);
+}
+
 void DirectionalLight::onUpdateWorldTransform() {
     mDirection = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
 }
@@ -23,14 +27,10 @@ void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
     //向きと色を設定
     JsonHelper::getVector3(inObj, "direction", &mDirection);
     JsonHelper::getVector3(inObj, "color", &mColor);
-    owner()->transform()->rotate(mDirection);
 }
 
 void DirectionalLight::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Color";
-    info.second = mColor;
-    inspect->emplace_back(info);
+    inspect->emplace_back("Color", mColor);
 }
 
 const Vector3& DirectionalLight::getDirection() const {

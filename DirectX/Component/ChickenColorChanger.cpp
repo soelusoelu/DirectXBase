@@ -42,22 +42,11 @@ void ChickenColorChanger::loadProperties(const rapidjson::Value& inObj) {
 void ChickenColorChanger::drawDebugInfo(DebugInfoList* inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "InitColor";
-    info.second = mInitColor;
-    inspect->emplace_back(info);
-    info.first = "LittleFriedColor";
-    info.second = mLittleFriedColor;
-    inspect->emplace_back(info);
-    info.first = "UsuallyColor";
-    info.second = mUsuallyColor;
-    inspect->emplace_back(info);
-    info.first = "FriedColor";
-    info.second = mFriedColor;
-    inspect->emplace_back(info);
-    info.first = "BurntColor";
-    info.second = mBurntColor;
-    inspect->emplace_back(info);
+    inspect->emplace_back("InitColor", mInitColor);
+    inspect->emplace_back("LittleFriedColor", mLittleFriedColor);
+    inspect->emplace_back("UsuallyColor", mUsuallyColor);
+    inspect->emplace_back("FriedColor", mFriedColor);
+    inspect->emplace_back("BurntColor", mBurntColor);
 }
 
 void ChickenColorChanger::initialize() {

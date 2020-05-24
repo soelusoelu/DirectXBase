@@ -59,25 +59,14 @@ void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::
 }
 
 void Text::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Text";
-    info.second = mText;
-    inspect->emplace_back(info);
-    info.first = "Position";
-    info.second = mPosition;
-    inspect->emplace_back(info);
-    info.first = "Scale";
-    info.second = mScale;
-    inspect->emplace_back(info);
-    info.first = "Color";
-    info.second = mColor;
-    inspect->emplace_back(info);
-    info.first = "Alpha";
-    info.second = mAlpha;
-    inspect->emplace_back(info);
-    info.first = "IsRightJustified";
-    info.second = mIsRightJustified;
-    inspect->emplace_back(info);
+    Component::drawDebugInfo(inspect);
+
+    inspect->emplace_back("Text", mText);
+    inspect->emplace_back("Position", mPosition);
+    inspect->emplace_back("Scale", mScale);
+    inspect->emplace_back("Color", mColor);
+    inspect->emplace_back("Alpha", mAlpha);
+    inspect->emplace_back("IsRightJustified", mIsRightJustified);
 }
 
 void Text::setText(const std::string & text) {

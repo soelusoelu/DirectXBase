@@ -78,15 +78,9 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
         info.second = "HIT_MOVE";
     }
     inspect->emplace_back(info);
-    info.first = "MoveSpeed";
-    info.second = mMoveSpeed;
-    inspect->emplace_back(info);
-    info.first = "ClimbSpeed";
-    info.second = mClimbSpeed;
-    inspect->emplace_back(info);
-    info.first = "RestartTimer";
-    info.second = mRestartTimer->limitTime();
-    inspect->emplace_back(info);
+    inspect->emplace_back("MoveSpeed", mMoveSpeed);
+    inspect->emplace_back("ClimbSpeed", mClimbSpeed);
+    inspect->emplace_back("RestartTimer", mRestartTimer->limitTime());
 }
 
 void Bird::waiting() {

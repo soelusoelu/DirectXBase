@@ -52,10 +52,7 @@ void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void MeshComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Color";
-    info.second = mColor;
-    inspect->emplace_back(info);
+    inspect->emplace_back("Color", mColor);
 }
 
 bool MeshComponent::isVisible() const {

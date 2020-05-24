@@ -40,13 +40,8 @@ void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson:
 }
 
 void Score::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Score";
-    info.second = mScore;
-    inspect->emplace_back(info);
-    info.first = "HighScore";
-    info.second = mHighScore;
-    inspect->emplace_back(info);
+    inspect->emplace_back("Score", mScore);
+    inspect->emplace_back("HighScore", mHighScore);
 }
 
 void Score::addScore(int score) {

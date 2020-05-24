@@ -25,19 +25,10 @@ void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "LittleBadScore";
-    info.second = mLittleBadScore;
-    inspect->emplace_back(info);
-    info.first = "UsuallyScore";
-    info.second = mUsuallyScore;
-    inspect->emplace_back(info);
-    info.first = "GoodScore";
-    info.second = mGoodScore;
-    inspect->emplace_back(info);
-    info.first = "BadScore";
-    info.second = mBadScore;
-    inspect->emplace_back(info);
+    inspect->emplace_back("LittleBadScore", mLittleBadScore);
+    inspect->emplace_back("UsuallyScore", mUsuallyScore);
+    inspect->emplace_back("GoodScore", mGoodScore);
+    inspect->emplace_back("BadScore", mBadScore);
 }
 
 int ScoreEvaluation::evaluateScore(const IChickenFry& chicken) const {

@@ -32,6 +32,11 @@ void Collider::finalize() {
     }
 }
 
+void Collider::drawDebugInfo(DebugInfoList* inspect) const {
+    inspect->emplace_back("IsAutoUpdate", mIsAutoUpdate);
+    inspect->emplace_back("Enable", mEnable);
+}
+
 void Collider::onSetActive(bool value) {
     (value) ? enabled() : disabled();
 }

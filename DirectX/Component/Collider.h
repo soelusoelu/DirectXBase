@@ -20,6 +20,7 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void finalize() override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     virtual void onSetActive(bool value) override;
     //当たり判定を有効化
     void enabled();
@@ -39,11 +40,11 @@ public:
 
 protected:
     bool mIsAutoUpdate;
+    bool mEnable;
 
 private:
     CollPtrList mPreviousCollider;
     CollPtrList mCurrentCollider;
-    bool mEnable;
 
     static Physics* mPhysics;
 };

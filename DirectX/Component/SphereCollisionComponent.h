@@ -12,6 +12,7 @@ public:
     SphereCollisionComponent();
     ~SphereCollisionComponent();
     virtual void start() override;
+    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
     virtual void onUpdateWorldTransform() override;
     void set(const Vector3& center, float radius);
     const Sphere& getSphere() const;

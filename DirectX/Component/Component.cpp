@@ -3,7 +3,7 @@
 Component::Component(int updateOrder) :
     mOwner(),
     mUpdateOrder(updateOrder),
-    mType("") {
+    mComponentName("") {
 }
 
 Component::~Component() = default;
@@ -17,5 +17,5 @@ int Component::getUpdateOrder() const {
 }
 
 const std::string& Component::getComponentName() const {
-    return mType;
+    return mComponentName;
 }

@@ -38,10 +38,7 @@ void TransparentMeshComponent::loadProperties(const rapidjson::Value & inObj) {
 void TransparentMeshComponent::drawDebugInfo(DebugInfoList * inspect) const {
     MeshComponent::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "Alpha";
-    info.second = mAlpha;
-    inspect->emplace_back(info);
+    inspect->emplace_back("Alpha", mAlpha);
 }
 
 void TransparentMeshComponent::setMesh(const std::string & fileName) {

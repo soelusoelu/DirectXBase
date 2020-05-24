@@ -43,12 +43,23 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     if (JsonHelper::getVector2(inObj, "position", &vec2)) {
         transform()->setPosition(vec2);
     }
+    float value;
+    if (JsonHelper::getFloat(inObj, "rotation", &value)) {
+        transform()->setRotation(value);
+    }
     if (JsonHelper::getVector2(inObj, "scale", &vec2)) {
         transform()->setScale(vec2);
     }
-    float rot;
-    if (JsonHelper::getFloat(inObj, "rotation", &rot)) {
-        transform()->setRotation(rot);
+    Vector3 vec3;
+    if (JsonHelper::getVector3(inObj, "color", &vec3)) {
+        setColor(vec3);
+    }
+    if (JsonHelper::getFloat(inObj, "alpha", &value)) {
+        setAlpha(value);
+    }
+    Vector4 vec4;
+    if (JsonHelper::getVector4(inObj, "uv", &vec4)) {
+        setUV(vec4.x, vec4.y, vec4.z, vec4.w);
     }
     if (JsonHelper::getString(inObj, "pivot", &str)) {
         Pivot pivot = Pivot::NONE;
@@ -66,28 +77,14 @@ void SpriteComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, 
 void SpriteComponent::drawDebugInfo(DebugInfoList* inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "FileName";
-    info.second = fileName();
-    inspect->emplace_back(info);
-    info.first = "Position";
-    info.second = transform()->getPosition();
-    inspect->emplace_back(info);
-    info.first = "Rotation";
-    info.second = transform()->getRotation();
-    inspect->emplace_back(info);
-    info.first = "Scale";
-    info.second = transform()->getScale();
-    inspect->emplace_back(info);
-    info.first = "Color";
-    info.second = getColor();
-    inspect->emplace_back(info);
-    info.first = "UV";
-    info.second = getUV();
-    inspect->emplace_back(info);
-    info.first = "TextureSize";
-    info.second = getTextureSize();
-    inspect->emplace_back(info);
+    inspect->emplace_back("FileName", fileName());
+    inspect->emplace_back("IsActive", getActive());
+    inspect->emplace_back("Position", transform()->getPosition());
+    inspect->emplace_back("Rotation", transform()->getRotation());
+    inspect->emplace_back("Scale", transform()->getScale());
+    inspect->emplace_back("Color", getColor());
+    inspect->emplace_back("UV", getUV());
+    inspect->emplace_back("TextureSize", getTextureSize());
 }
 
 void SpriteComponent::update() {

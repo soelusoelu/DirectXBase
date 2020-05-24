@@ -73,6 +73,10 @@ void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getBool(inObj, "isJumpRoll", &mIsJumpRoll);
 }
 
+void PlayerChickenConnection::drawDebugInfo(DebugInfoList* inspect) const {
+    inspect->emplace_back("IsJumpRoll", mIsJumpRoll);
+}
+
 void PlayerChickenConnection::setPlayer(const GameObject & player) {
     mPlayer = player.componentManager()->getComponent<PlayerComponent>();
 }

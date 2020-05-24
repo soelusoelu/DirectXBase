@@ -49,10 +49,7 @@ void PlayerWalk::loadProperties(const rapidjson::Value & inObj) {
 void PlayerWalk::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "MoveSpeed";
-    info.second = mMoveSpeed;
-    inspect->emplace_back(info);
+    inspect->emplace_back("MoveSpeed", mMoveSpeed);
 }
 
 const Vector3& PlayerWalk::getMoveDirection() const {

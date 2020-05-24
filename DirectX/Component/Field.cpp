@@ -33,11 +33,6 @@ void Field::loadProperties(const rapidjson::Value & inObj) {
 void Field::drawDebugInfo(DebugInfoList * inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "IsRoll";
-    info.second = mIsRoll;
-    inspect->emplace_back(info);
-    info.first = "RollSpeed";
-    info.second = mRollSpeed;
-    inspect->emplace_back(info);
+    inspect->emplace_back("IsRoll", mIsRoll);
+    inspect->emplace_back("RollSpeed", mRollSpeed);
 }

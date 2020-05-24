@@ -34,16 +34,9 @@ void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
 void SoundComponent::drawDebugInfo(DebugInfoList* inspect) const {
     Component::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "FileName";
-    info.second = mFileName;
-    inspect->emplace_back(info);
-    info.first = "Volume";
-    info.second = mVolume;
-    inspect->emplace_back(info);
-    info.first = "IsFirstPlay";
-    info.second = mIsFirstPlay;
-    inspect->emplace_back(info);
+    inspect->emplace_back("FileName", mFileName);
+    inspect->emplace_back("Volume", mVolume);
+    inspect->emplace_back("IsFirstPlay", mIsFirstPlay);
 }
 
 void SoundComponent::playBGM() {
