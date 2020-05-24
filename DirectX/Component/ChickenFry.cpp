@@ -6,6 +6,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
+#include "../DebugLayer/Debug.h"
+#include "../Utility/StringUtil.h"
 
 ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
     Component(owner, "ChickenFry"),
@@ -192,6 +194,7 @@ void ChickenFry::choiceEasyAndHardSurface() {
 
 void ChickenFry::choiceBottomSurface() {
     auto dir = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
+    //auto dir = Vector3::transform(Vector3::down, owner()->transform()->getRotation());
 
     static const Vector3 dirs[] = {
         Vector3::up,
@@ -221,6 +224,10 @@ void ChickenFry::choiceBottomSurface() {
         }
     }
     mCurrentBottomSurface = sur;
+
+    //auto dot = Vector3::dot(Vector3::down, dir);
+    //auto cos = Math::acos(dot) * Math::rad2Deg;
+    //Debug::log(StringUtil::floatToString(dot, 5));
 }
 
 void ChickenFry::frying() {

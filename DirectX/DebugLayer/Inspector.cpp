@@ -9,7 +9,6 @@
 #include "../Utility/StringUtil.h"
 #include <any>
 #include <list>
-#include <string>
 
 Inspector::Inspector(DrawString* drawString) :
     mDrawString(drawString),
@@ -63,10 +62,10 @@ void Inspector::drawInspect() const {
         return;
     }
 
-    drawTag(actor);
-    drawTransform(actor->transform());
+    drawTag(*actor);
+    drawTransform(*actor->transform());
 
-    auto compList = actor->componentManager()->getAllComponents();
+    const auto& compList = actor->componentManager()->getAllComponents();
     //アクターがコンポーネントを所持していなければ終了
     if (compList.empty()) {
         return;
@@ -75,20 +74,20 @@ void Inspector::drawInspect() const {
     auto drawPos = mComponentPosition;
     //全コンポーネントの情報を表示
     for (const auto& comp : compList) {
-        drawComponent(comp, &drawPos);
+        drawComponent(*comp, &drawPos);
         drawPos.x = mComponentPosition.x;
         drawPos.y += mCharHeight * 2;
     }
 }
 
-void Inspector::drawTag(const GameObjectPtr& target) const {
-    auto tag = target->tag();
+void Inspector::drawTag(const GameObject& target) const {
+    auto tag = target.tag();
     auto pos = Vector2(mInspectorPositionX + (Window::debugWidth() - mInspectorPositionX) / 2.f, 0.f);
     pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
     mDrawString->drawString(tag, pos, mTagScale);
 }
 
-void Inspector::drawTransform(const TransformPtr& target) const {
+void Inspector::drawTransform(const Transform3D& target) const {
     auto pos = mTransformPosition;
     mDrawString->drawString("Transform", pos, mElementScale);
     pos.x = mElementPositionX;
@@ -101,37 +100,37 @@ void Inspector::drawTransform(const TransformPtr& target) const {
     drawScale(target, pos);
 }
 
-void Inspector::drawPosition(const TransformPtr& target, const Vector2 & position) const {
+void Inspector::drawPosition(const Transform3D& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Position", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto tPos = target->getPosition();
+    auto tPos = target.getPosition();
     mDrawString->drawString(InspectHelper::vector3ToString(tPos), pos, mElementScale);
 }
 
-void Inspector::drawRotation(const TransformPtr& target, const Vector2 & position) const {
+void Inspector::drawRotation(const Transform3D& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Rotation", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto rot = target->getRotation().euler();
+    auto rot = target.getRotation().euler();
     mDrawString->drawString(InspectHelper::vector3ToString(rot), pos, mElementScale);
 }
 
-void Inspector::drawScale(const TransformPtr& target, const Vector2 & position) const {
+void Inspector::drawScale(const Transform3D& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Scale", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto scale = target->getScale();
+    auto scale = target.getScale();
     mDrawString->drawString(InspectHelper::vector3ToString(scale), pos, mElementScale);
 }
 
-void Inspector::drawComponent(const ComponentPtr& component, Vector2 * position) const {
+void Inspector::drawComponent(const Component& component, Vector2 * position) const {
     auto pos = *position;
-    mDrawString->drawString(component->getTypeName(), pos, mElementScale);
+    mDrawString->drawString(component.getTypeName(), pos, mElementScale);
 
     //コンポーネントのデバッグ情報を取得
     std::list<std::pair<std::string, std::any>> debugInfo;
-    component->drawDebugInfo(&debugInfo);
+    component.drawDebugInfo(&debugInfo);
 
     //すべてのデバッグ情報を描画
     for (const auto& info : debugInfo) {

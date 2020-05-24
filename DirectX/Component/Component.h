@@ -16,14 +16,18 @@ protected:
     using DebugInfoList = std::list<DebugInfo>;
 
 protected:
-    Component(GameObjectPtr owner, const std::string& type, int updateOrder = 100);
+    Component(const GameObjectPtr& owner, const std::string& type, int updateOrder = 100);
 public:
+    //TODO: publicからprotectedにする
     virtual ~Component();
     //getComponentはここでして
     virtual void start() {};
+    //毎フレーム呼ばれる
     virtual void update() {};
     //loadPropertiesの直後に呼び出される
     virtual void awake() {};
+    //終了処理
+    virtual void finalize() {};
     //オーナーのTransformが更新されたら
     virtual void onUpdateWorldTransform() {};
     //アクティブ・非アクティブ時の切り替え

@@ -37,6 +37,13 @@ SceneManager::~SceneManager() {
     SAFE_DELETE(mMeshManager);
     SAFE_DELETE(mSpriteManager);
     SAFE_DELETE(mPhysics);
+
+    GameObject::setGameObjectManager(nullptr);
+    MeshComponent::setMeshManager(nullptr);
+    Sprite::setSpriteManager(nullptr);
+    SpriteComponent::setSpriteManager(nullptr);
+    Sprite3D::setSpriteManager(nullptr);
+    Collider::setPhysics(nullptr);
 }
 
 void SceneManager::initialize() {

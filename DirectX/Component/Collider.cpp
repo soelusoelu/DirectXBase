@@ -8,11 +8,7 @@ Collider::Collider(std::shared_ptr<GameObject> owner, const std::string& type) :
     mEnable(false) {
 }
 
-Collider::~Collider() {
-    if (mPhysics) {
-        mPhysics->remove(shared_from_this());
-    }
-}
+Collider::~Collider() = default;
 
 void Collider::start() {
     if (mPhysics) {
@@ -25,6 +21,15 @@ void Collider::update() {
     mPreviousCollider.resize(mCurrentCollider.size());
     std::copy(mCurrentCollider.begin(), mCurrentCollider.end(), mPreviousCollider.begin());
     mCurrentCollider.clear();
+}
+
+void Collider::finalize() {
+    mPreviousCollider.clear();
+    mCurrentCollider.clear();
+
+    if (mPhysics) {
+        mPhysics->remove(shared_from_this());
+    }
 }
 
 void Collider::onSetActive(bool value) {

@@ -1,7 +1,7 @@
 ﻿#include "ComponentManager.h"
 #include "Component.h"
 
-ComponentManager::ComponentManager(std::shared_ptr<GameObject> owner) :
+ComponentManager::ComponentManager(const std::shared_ptr<GameObject>& owner) :
     mOwner(owner) {
 }
 
@@ -36,22 +36,37 @@ void ComponentManager::update() {
     }
 }
 
-void ComponentManager::addComponent(ComponentPtr component) {
+void ComponentManager::finalize() {
+    for (auto&& comp : mStartComponents) {
+        comp->finalize();
+    }
+    for (auto&& comp : mComponents) {
+        comp->finalize();
+    }
+}
+
+void ComponentManager::addComponent(const ComponentPtr& component) {
     mStartComponents.emplace_back(component);
 }
 
 void ComponentManager::onUpdateWorldTransform() {
+    for (auto&& comp : mStartComponents) {
+        comp->onUpdateWorldTransform();
+    }
     for (auto&& comp : mComponents) {
         comp->onUpdateWorldTransform();
     }
 }
 
 void ComponentManager::onSetActive(bool value) {
+    for (auto&& comp : mStartComponents) {
+        comp->onSetActive(value);
+    }
     for (auto&& comp : mComponents) {
         comp->onSetActive(value);
     }
 }
 
-std::list<std::shared_ptr<Component>> ComponentManager::getAllComponents() const {
+const std::list<std::shared_ptr<Component>>& ComponentManager::getAllComponents() const {
     return mComponents;
 }

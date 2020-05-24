@@ -1,7 +1,7 @@
 ﻿#include "Component.h"
 #include "ComponentManager.h"
 
-Component::Component(GameObjectPtr owner, const std::string& type, int updateOrder) :
+Component::Component(const GameObjectPtr& owner, const std::string& type, int updateOrder) :
     mOwner(owner),
     mUpdateOrder(updateOrder),
     mType(type) {

@@ -3,6 +3,7 @@
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <memory>
+#include <string>
 
 class Component;
 class DrawString;
@@ -14,8 +15,6 @@ class Inspector {
     friend class InspectHelper;
 
     using GameObjectPtr = std::shared_ptr<GameObject>;
-    using ComponentPtr = std::shared_ptr<Component>;
-    using TransformPtr = std::shared_ptr<Transform3D>;
 
 public:
     Inspector(DrawString* drawString);
@@ -26,12 +25,12 @@ public:
     void drawInspect() const;
 
 private:
-    void drawTag(const GameObjectPtr& target) const;
-    void drawTransform(const TransformPtr& target) const;
-    void drawPosition(const TransformPtr& target, const Vector2& position) const;
-    void drawRotation(const TransformPtr& target, const Vector2& position) const;
-    void drawScale(const TransformPtr& target, const Vector2& position) const;
-    void drawComponent(const ComponentPtr& component, Vector2* position) const;
+    void drawTag(const GameObject& target) const;
+    void drawTransform(const Transform3D& target) const;
+    void drawPosition(const Transform3D& target, const Vector2& position) const;
+    void drawRotation(const Transform3D& target, const Vector2& position) const;
+    void drawScale(const Transform3D& target, const Vector2& position) const;
+    void drawComponent(const Component& component, Vector2* position) const;
 
 private:
     DrawString* mDrawString;

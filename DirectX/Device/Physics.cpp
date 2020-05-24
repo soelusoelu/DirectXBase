@@ -8,12 +8,12 @@
 Physics::Physics() = default;
 Physics::~Physics() = default;
 
-void Physics::add(const CollPtr& circle) {
-    mColliders.emplace_back(circle);
+void Physics::add(const CollPtr& collider) {
+    mColliders.emplace_back(collider);
 }
 
-void Physics::remove(const CollPtr& circle) {
-    auto itr = std::find(mColliders.begin(), mColliders.end(), circle);
+void Physics::remove(const CollPtr& collider) {
+    auto itr = std::find(mColliders.begin(), mColliders.end(), collider);
     if (itr != mColliders.end()) {
         std::iter_swap(itr, mColliders.end() - 1);
         mColliders.pop_back();
