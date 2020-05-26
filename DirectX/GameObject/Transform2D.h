@@ -65,9 +65,5 @@ private:
     Vector2 mScale;
     Vector2 mSize;
     bool mIsRecomputeTransform;
-
-    //スケーリングの際の基準となるサイズ
-    static constexpr int STANDARD_WINDOW_WIDTH = 1920;
-    static constexpr int STANDARD_WINDOW_HEIGHT = 1080;
 };
 

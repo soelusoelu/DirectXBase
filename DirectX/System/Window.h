@@ -8,12 +8,16 @@
 
 class Window {
 public:
+    Window();
+    ~Window();
     HRESULT initWindow(HINSTANCE, INT, INT);
     LRESULT msgProc(HWND, UINT, WPARAM, LPARAM);
     HWND gethWnd() const;
     void update();
     static int width();
     static int height();
+    static int standardWidth();
+    static int standardHeight();
     static int debugWidth();
     static int debugHeight();
     static Vector2 windowToClientSize();
@@ -26,6 +30,8 @@ private:
     HWND mhWnd;
     static int mWidth;
     static int mHeight;
+    static int mStandardWidth;
+    static int mStandardHeight;
     static int mDebugWidth;
     static int mDebugHeight;
     static Vector2 mWindowToClientSize;
