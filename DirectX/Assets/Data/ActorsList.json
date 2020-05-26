@@ -47,7 +47,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Player/testPlayer.fbx"
+            "fileName": "Player/NPlayer.fbx"
           }
         },
         {
