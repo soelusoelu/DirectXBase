@@ -18,14 +18,10 @@ void BirdOrbit::start() {
 }
 
 void BirdOrbit::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "secondsAgo", &mTimer);
 }
 
-void BirdOrbit::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void BirdOrbit::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("SecondsAgo", mTimer);
 }
 

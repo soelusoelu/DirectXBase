@@ -33,16 +33,13 @@ void PointLightComponent::start() {
 }
 
 void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getVector3(inObj, "color", &mColor);
-
     JsonHelper::getFloat(inObj, "innerRadius", &mInnerRadius);
     JsonHelper::getFloat(inObj, "outerRadius", &mOuterRadius);
     JsonHelper::getFloat(inObj, "intensity", &mIntensity);
 }
 
-void PointLightComponent::drawDebugInfo(DebugInfoList* inspect) const {
+void PointLightComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Color", mColor);
     inspect->emplace_back("InnerRadius", mInnerRadius);
     inspect->emplace_back("OuterRadius", mOuterRadius);

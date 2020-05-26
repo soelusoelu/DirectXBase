@@ -37,8 +37,6 @@ void Text::update() {
 }
 
 void Text::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getString(inObj, "text", &mText);
     JsonHelper::getVector2(inObj, "position", &mPosition);
     JsonHelper::getVector2(inObj, "scale", &mScale);
@@ -48,8 +46,6 @@ void Text::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
     JsonHelper::setString(alloc, inObj, "text", mText);
     JsonHelper::setVector2(alloc, inObj, "position", mPosition);
     JsonHelper::setVector2(alloc, inObj, "scale", mScale);
@@ -58,9 +54,7 @@ void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::
     JsonHelper::setBool(alloc, inObj, "rightJustified", mIsRightJustified);
 }
 
-void Text::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void Text::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Text", mText);
     inspect->emplace_back("Position", mPosition);
     inspect->emplace_back("Scale", mScale);

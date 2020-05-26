@@ -28,14 +28,12 @@ void Camera::update() {
 }
 
 void Camera::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "fov", &mFOV);
     JsonHelper::getFloat(inObj, "nearClip", &mNearClip);
     JsonHelper::getFloat(inObj, "farClip", &mFarClip);
 }
 
-void Camera::drawDebugInfo(DebugInfoList* inspect) const {
+void Camera::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FOV", mFOV);
     inspect->emplace_back("NearClip", mNearClip);
     inspect->emplace_back("FarClip", mFarClip);

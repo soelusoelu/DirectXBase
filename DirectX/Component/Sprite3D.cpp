@@ -64,8 +64,6 @@ void Sprite3D::onSetActive(bool value) {
 }
 
 void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getString(inObj, "fileName", &mFileName);
     bool isActive = true;
     if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
@@ -95,9 +93,7 @@ void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
-void Sprite3D::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void Sprite3D::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
     inspect->emplace_back("IsActive", getActive());
     inspect->emplace_back("Position", mTransform->getPosition());

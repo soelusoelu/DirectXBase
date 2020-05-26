@@ -16,8 +16,7 @@ public:
     virtual ~SpriteComponent();
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual void update() override;
     virtual void setSprite(const std::string& fileName) override;

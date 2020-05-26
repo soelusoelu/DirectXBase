@@ -61,8 +61,6 @@ void PlayerChickenConnection::update() {
 }
 
 void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     std::string src;
     if (JsonHelper::getString(inObj, "collectionKey", &src)) {
         Keyboard::stringToKeyCode(src, &mCollectionKey);
@@ -73,7 +71,7 @@ void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getBool(inObj, "isJumpRoll", &mIsJumpRoll);
 }
 
-void PlayerChickenConnection::drawDebugInfo(DebugInfoList* inspect) const {
+void PlayerChickenConnection::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("IsJumpRoll", mIsJumpRoll);
 }
 

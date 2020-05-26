@@ -9,15 +9,14 @@
 
 class GameObject;
 
-class Component {
-    friend class ComponentManager;
-
-    using GameObjectPtr = std::shared_ptr<GameObject>;
-protected:
+namespace ComponentDebug {
     using DebugInfo = std::pair<std::string, std::any>;
     using DebugInfoList = std::list<DebugInfo>;
+}
 
-protected:
+class Component {
+    using GameObjectPtr = std::shared_ptr<GameObject>;
+
 public:
     Component(int updateOrder = 100);
     virtual ~Component();
@@ -39,10 +38,13 @@ public:
     //Inspectorに表示する情報
     //first: 変数名
     //second: 値
-    virtual void drawDebugInfo(DebugInfoList* inspect) const {};
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {};
 
+    //コンポーネントがアタッチされているゲームオブジェクトを返す
     GameObjectPtr owner() const;
+    //アップデート優先数値を返す
     int getUpdateOrder() const;
+    //コンポーネントの名前を返す
     const std::string& getComponentName() const;
 
     //指定されたプロパティでコンポーネントを生成

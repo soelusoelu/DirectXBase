@@ -51,8 +51,6 @@ void FriedChickenComponent::update() {
 }
 
 void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getVector2(inObj, "randomRangePositionX", &mRandomRangePositionX);
     JsonHelper::getVector2(inObj, "randomRangePositionZ", &mRandomRangePositionZ);
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
@@ -60,7 +58,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
-void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
+void FriedChickenComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("RandomRangePositionX", mRandomRangePositionX);
     inspect->emplace_back("RandomRangePositionZ", mRandomRangePositionZ);
     inspect->emplace_back("RandomRangeScale", mRandomRangeScale);

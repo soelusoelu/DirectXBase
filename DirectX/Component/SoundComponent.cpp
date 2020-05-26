@@ -24,16 +24,12 @@ void SoundComponent::start() {
 }
 
 void SoundComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getString(inObj, "fileName", &mFileName);
     JsonHelper::getFloat(inObj, "volume", &mVolume);
     JsonHelper::getBool(inObj, "isFirstPlay", &mIsFirstPlay);
 }
 
-void SoundComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void SoundComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
     inspect->emplace_back("Volume", mVolume);
     inspect->emplace_back("IsFirstPlay", mIsFirstPlay);

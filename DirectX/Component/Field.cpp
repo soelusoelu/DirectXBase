@@ -24,15 +24,11 @@ void Field::update() {
 }
 
 void Field::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getBool(inObj, "isRoll", &mIsRoll);
     JsonHelper::getFloat(inObj, "rollSpeed", &mRollSpeed);
 }
 
-void Field::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void Field::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("IsRoll", mIsRoll);
     inspect->emplace_back("RollSpeed", mRollSpeed);
 }

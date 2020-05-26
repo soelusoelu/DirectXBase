@@ -9,7 +9,7 @@ public:
     ScoreEvaluation();
     ~ScoreEvaluation();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //揚げ状態によってスコアを評価
     int evaluateScore(const IChickenFry& chicken) const;
 

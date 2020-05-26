@@ -30,8 +30,6 @@ void ChickenColorChanger::start() {
 }
 
 void ChickenColorChanger::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getVector3(inObj, "initColor", &mInitColor);
     JsonHelper::getVector3(inObj, "littleFriedColor", &mLittleFriedColor);
     JsonHelper::getVector3(inObj, "usuallyColor", &mUsuallyColor);
@@ -39,9 +37,7 @@ void ChickenColorChanger::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
 }
 
-void ChickenColorChanger::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void ChickenColorChanger::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("InitColor", mInitColor);
     inspect->emplace_back("LittleFriedColor", mLittleFriedColor);
     inspect->emplace_back("UsuallyColor", mUsuallyColor);

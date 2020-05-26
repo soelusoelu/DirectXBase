@@ -19,7 +19,7 @@ public:
     ~TransparentMeshComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     virtual void setMesh(const std::string& fileName) override;
     virtual void setShader() override;
     virtual void draw() override;

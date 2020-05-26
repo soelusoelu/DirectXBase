@@ -18,7 +18,7 @@ public:
     ~ChickenColorChanger();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //初期化
     void initialize();
     //更新

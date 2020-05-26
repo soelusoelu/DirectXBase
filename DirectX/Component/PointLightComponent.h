@@ -15,7 +15,7 @@ public:
     ~PointLightComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void draw(const PointLight& pointLight) const;
     void setColor(const Vector3& color);
     void setInnerRadius(float radius);

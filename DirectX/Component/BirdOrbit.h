@@ -11,7 +11,7 @@ public:
     ~BirdOrbit();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void setActive(bool value);
     void setPositionZ(float z);
     float getTime() const;

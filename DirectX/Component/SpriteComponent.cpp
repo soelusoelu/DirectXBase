@@ -29,8 +29,6 @@ void SpriteComponent::onSetActive(bool value) {
 }
 
 void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     std::string str;
     if (JsonHelper::getString(inObj, "fileName", &str)) {
         setSprite(str);
@@ -68,15 +66,7 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
     }
 }
 
-void SpriteComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
-    JsonHelper::setString(alloc, inObj, "fileName", fileName());
-}
-
-void SpriteComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", fileName());
     inspect->emplace_back("IsActive", getActive());
     inspect->emplace_back("Position", transform()->getPosition());

@@ -55,8 +55,6 @@ void Bird::update() {
 }
 
 void Bird::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
     JsonHelper::getFloat(inObj, "climbSpeed", &mClimbSpeed);
     float time;
@@ -65,8 +63,8 @@ void Bird::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void Bird::drawDebugInfo(DebugInfoList * inspect) const {
-    DebugInfo info;
+void Bird::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    ComponentDebug::DebugInfo info;
     info.first = "State";
     if (mState == State::WAIT) {
         info.second = "WAIT";

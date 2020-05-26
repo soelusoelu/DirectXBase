@@ -16,15 +16,13 @@ ScoreEvaluation::ScoreEvaluation() :
 ScoreEvaluation::~ScoreEvaluation() = default;
 
 void ScoreEvaluation::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getInt(inObj, "littleBadScore", &mLittleBadScore);
     JsonHelper::getInt(inObj, "usuallyScore", &mUsuallyScore);
     JsonHelper::getInt(inObj, "goodScore", &mGoodScore);
     JsonHelper::getInt(inObj, "badScore", &mBadScore);
 }
 
-void ScoreEvaluation::drawDebugInfo(DebugInfoList* inspect) const {
+void ScoreEvaluation::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("LittleBadScore", mLittleBadScore);
     inspect->emplace_back("UsuallyScore", mUsuallyScore);
     inspect->emplace_back("GoodScore", mGoodScore);

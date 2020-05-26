@@ -35,8 +35,6 @@ void Title::update() {
 }
 
 void Title::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     std::string src;
     if (JsonHelper::getString(inObj, "enterKey", &src)) {
         Keyboard::stringToKeyCode(src, &mEnterKey);

@@ -43,7 +43,7 @@ public:
     virtual void start() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual bool isVisible() const override;
     virtual size_t getNumMaterial() const override;

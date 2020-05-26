@@ -32,7 +32,7 @@ void Collider::finalize() {
     }
 }
 
-void Collider::drawDebugInfo(DebugInfoList* inspect) const {
+void Collider::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("IsAutoUpdate", mIsAutoUpdate);
     inspect->emplace_back("Enable", mEnable);
 }

@@ -34,8 +34,6 @@ void PlayerWalk::start() {
 }
 
 void PlayerWalk::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
     std::string src;
     if (JsonHelper::getString(inObj, "rollKey", &src)) {
@@ -46,9 +44,7 @@ void PlayerWalk::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void PlayerWalk::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void PlayerWalk::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("MoveSpeed", mMoveSpeed);
 }
 

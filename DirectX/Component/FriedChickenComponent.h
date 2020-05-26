@@ -19,7 +19,7 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     const IChickenFry& getFry() const;
     //揚げ直す前の状態に戻す
     void initialize();

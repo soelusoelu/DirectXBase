@@ -49,8 +49,6 @@ void ChickenFry::onUpdateWorldTransform() {
 }
 
 void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "notFriedToLittleBadTimer", &mUsually[0]);
     JsonHelper::getFloat(inObj, "littleBadToUsuallyTimer", &mUsually[1]);
     JsonHelper::getFloat(inObj, "usuallyToGoodTimer", &mUsually[2]);
@@ -72,9 +70,7 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("CurrentBottomSurface", surfaceToString(mCurrentBottomSurface));
     inspect->emplace_back("EasySurface", surfaceToString(mEasySurface));
     inspect->emplace_back("HardSurface", surfaceToString(mHardSurface));

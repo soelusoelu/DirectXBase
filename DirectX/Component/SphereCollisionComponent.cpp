@@ -26,8 +26,8 @@ void SphereCollisionComponent::start() {
     }
 }
 
-void SphereCollisionComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
+void SphereCollisionComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    Collider::drawDebugInfo(inspect);
 
     inspect->emplace_back("Center", mSphere->center);
     inspect->emplace_back("Radius", mSphere->radius);

@@ -49,8 +49,6 @@ void FriedChickenManager::update() {
 }
 
 void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getInt(inObj, "startNum", &mStartNum);
     JsonHelper::getInt(inObj, "maxNum", &mMaxNum);
     float time;
@@ -59,7 +57,7 @@ void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
+void FriedChickenManager::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     inspect->emplace_back("StartNum", mStartNum);
     inspect->emplace_back("MaxNum", mMaxNum);
     inspect->emplace_back("CurrentMaxNum", mCurrentMaxNum);

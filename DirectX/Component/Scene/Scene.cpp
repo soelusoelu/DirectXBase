@@ -7,14 +7,9 @@ Scene::Scene() :
 
 Scene::~Scene() = default;
 
-void Scene::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
-    DebugInfo info;
+void Scene::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     for (const auto& tag : mTagsToNext) {
-        info.first = "ExclusionList";
-        info.second = tag;
-        inspect->emplace_back(info);
+        inspect->emplace_back("ExclusionList", tag);
     }
 }
 

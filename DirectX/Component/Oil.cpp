@@ -15,17 +15,13 @@ Oil::Oil() :
 Oil::~Oil() = default;
 
 void Oil::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "flowSpeed", &mFlowSpeed);
     JsonHelper::getFloat(inObj, "flowRangeX", &mFlowRangeX);
     JsonHelper::getFloat(inObj, "flowRangeZFore", &mFlowRangeZFore);
     JsonHelper::getFloat(inObj, "flowRangeZBack", &mFlowRangeZBack);
 }
 
-void Oil::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void Oil::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     inspect->emplace_back("FlowSpeed", mFlowSpeed);
     inspect->emplace_back("flowRangeX", mFlowRangeX);
     inspect->emplace_back("flowRangeZFore", mFlowRangeZFore);

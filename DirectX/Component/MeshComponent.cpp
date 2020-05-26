@@ -43,15 +43,13 @@ void MeshComponent::onSetActive(bool value) {
 }
 
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     std::string fileName;
     if (JsonHelper::getString(inObj, "fileName", &fileName)) {
         setMesh(fileName);
     }
 }
 
-void MeshComponent::drawDebugInfo(DebugInfoList* inspect) const {
+void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Color", mColor);
 }
 

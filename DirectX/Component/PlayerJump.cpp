@@ -28,8 +28,6 @@ void PlayerJump::update() {
 }
 
 void PlayerJump::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     std::string src;
     if (JsonHelper::getString(inObj, "jumpKey", &src)) {
         Keyboard::stringToKeyCode(src, &mJumpKey);
@@ -41,14 +39,12 @@ void PlayerJump::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "speed", &mSpeed);
 }
 
-void PlayerJump::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void PlayerJump::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Speed", mSpeed);
     inspect->emplace_back("MoveRate", mMoveRate);
     inspect->emplace_back("CanJump", mCanJump);
 
-    DebugInfo info;
+    ComponentDebug::DebugInfo info;
     info.first = "State";
     if (mCurrentState == State::JUMPING) {
         info.second = "JUMPING";

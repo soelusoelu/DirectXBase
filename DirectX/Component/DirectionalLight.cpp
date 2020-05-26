@@ -22,14 +22,11 @@ void DirectionalLight::onUpdateWorldTransform() {
 }
 
 void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
-    //向きと色を設定
     JsonHelper::getVector3(inObj, "direction", &mDirection);
     JsonHelper::getVector3(inObj, "color", &mColor);
 }
 
-void DirectionalLight::drawDebugInfo(DebugInfoList* inspect) const {
+void DirectionalLight::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Color", mColor);
 }
 

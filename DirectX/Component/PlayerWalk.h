@@ -15,7 +15,7 @@ public:
     ~PlayerWalk();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual const Vector3& getMoveDirection() const override;
 

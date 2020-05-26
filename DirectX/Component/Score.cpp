@@ -28,18 +28,14 @@ void Score::update() {
 }
 
 void Score::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getInt(inObj, "highScore", &mHighScore);
 }
 
 void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
     JsonHelper::setInt(alloc, inObj, "highScore", mHighScore);
 }
 
-void Score::drawDebugInfo(DebugInfoList* inspect) const {
+void Score::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Score", mScore);
     inspect->emplace_back("HighScore", mHighScore);
 }

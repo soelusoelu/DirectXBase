@@ -10,7 +10,7 @@ class Scene : public Component {
 public:
     Scene();
     ~Scene();
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //設定した次のシーンに遷移
     void next(const std::string& next);
     //次のシーンの取得

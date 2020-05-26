@@ -20,20 +20,14 @@ void Timer::update() {
 }
 
 void Timer::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "limit", &mLimitTime);
 }
 
 void Timer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
     JsonHelper::setFloat(alloc, inObj, "limit", mLimitTime);
 }
 
-void Timer::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
+void Timer::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("CurrentTime", mCurrentTime);
     inspect->emplace_back("LimitTime", mLimitTime);
     inspect->emplace_back("IsOverLimit", mIsOverLimit);

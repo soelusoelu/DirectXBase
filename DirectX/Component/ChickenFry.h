@@ -21,7 +21,7 @@ public:
     virtual void start() override;
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual void initialize() override;
     virtual void update() override;

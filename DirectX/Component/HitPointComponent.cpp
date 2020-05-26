@@ -12,13 +12,11 @@ HitPointComponent::HitPointComponent() :
 HitPointComponent::~HitPointComponent() = default;
 
 void HitPointComponent::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getInt(inObj, "HP", &mHP);
     JsonHelper::getInt(inObj, "maxHP", &mMaxHP);
 }
 
-void HitPointComponent::drawDebugInfo(DebugInfoList* inspect) const {
+void HitPointComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("HP", mHP);
     inspect->emplace_back("MaxHP", mMaxHP);
 }
