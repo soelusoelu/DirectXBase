@@ -8,6 +8,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     return gWindow->msgProc(hWnd, uMsg, wParam, lParam);
 }
 
+Window::Window() :
+    mhWnd(nullptr) {
+}
+
+Window::~Window() = default;
+
 HRESULT Window::initWindow(HINSTANCE hInstance, INT iX, INT iY) {
     gWindow = this;
     // ウィンドウの定義
@@ -68,6 +74,14 @@ int Window::height() {
     return mHeight;
 }
 
+int Window::standardWidth() {
+    return mStandardWidth;
+}
+
+int Window::standardHeight() {
+    return mStandardHeight;
+}
+
 int Window::debugWidth() {
     return mDebugWidth;
 }
@@ -90,6 +104,8 @@ void Window::loadProperties(const rapidjson::Value& inObj) {
         JsonHelper::getInt(windowObj, "releaseWindowWidth", &mWidth);
         JsonHelper::getInt(windowObj, "releaseWindowHeight", &mHeight);
 #endif // _DEBUG
+        JsonHelper::getInt(windowObj, "windowStandardWidth", &mStandardWidth);
+        JsonHelper::getInt(windowObj, "windowStandardHeight", &mStandardHeight);
         JsonHelper::getInt(windowObj, "windowDebugWidth", &mDebugWidth);
         JsonHelper::getInt(windowObj, "windowDebugHeight", &mDebugHeight);
     }
@@ -120,6 +136,8 @@ void Window::updateWindowToClientSize() {
 
 int Window::mWidth = 1080;
 int Window::mHeight = 720;
-int Window::mDebugWidth = 1500;
-int Window::mDebugHeight = 1000;
+int Window::mStandardWidth = 1920;
+int Window::mStandardHeight = 1080;
+int Window::mDebugWidth = 1920;
+int Window::mDebugHeight = 1080;
 Vector2 Window::mWindowToClientSize = Vector2::one;

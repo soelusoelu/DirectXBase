@@ -75,11 +75,17 @@ std::shared_ptr<GameObject> GameObjectManager::find(const std::string & tag) con
 std::shared_ptr<GameObject> GameObjectManager::randomFind(const std::string & tag) const {
     std::vector<GameObjectPtr> gameObjectArray;
     for (const auto& gameObject : mGameObjects) {
+        if (!gameObject->getActive()) {
+            continue;
+        }
         if (gameObject->tag() == tag) {
             gameObjectArray.emplace_back(gameObject);
         }
     }
     for (const auto& gameObject : mPendingGameObjects) {
+        if (!gameObject->getActive()) {
+            continue;
+        }
         if (gameObject->tag() == tag) {
             gameObjectArray.emplace_back(gameObject);
         }

@@ -9,7 +9,7 @@ enum class JoyCode;
 
 class ResultScene : public Component {
 public:
-    ResultScene(const std::shared_ptr<GameObject>& owner);
+    ResultScene();
     ~ResultScene();
     virtual void start() override;
     virtual void update() override;

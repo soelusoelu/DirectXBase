@@ -3,16 +3,14 @@
 #include "Component.h"
 #include "../Math/Math.h"
 
-class GameObject;
-
 class Camera : public Component {
 public:
-    Camera(std::shared_ptr<GameObject> owner);
+    Camera();
     ~Camera();
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     const Matrix4& getView() const;
     const Matrix4& getProjection() const;
     // View * Projection

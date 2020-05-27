@@ -12,8 +12,8 @@
 #include "../../Utility/LevelLoader.h"
 #include <string>
 
-ResultScene::ResultScene(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "ResultScene"),
+ResultScene::ResultScene() :
+    Component(),
     mScene(nullptr),
     mEnterKey(KeyCode::None),
     mEnterPad(JoyCode::None),
@@ -48,8 +48,6 @@ void ResultScene::update() {
 }
 
 void ResultScene::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     std::string src;
     if (JsonHelper::getString(inObj, "enterKey", &src)) {
         Keyboard::stringToKeyCode(src, &mEnterKey);

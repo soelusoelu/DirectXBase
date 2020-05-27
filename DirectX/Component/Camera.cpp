@@ -4,10 +4,9 @@
 #include "../Math/Plane.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-Camera::Camera(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Camera", 1000),
+Camera::Camera() :
+    Component(),
     mLookAt(Vector3::zero),
     mUp(Vector3::up),
     mFOV(45.f),
@@ -29,24 +28,15 @@ void Camera::update() {
 }
 
 void Camera::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "fov", &mFOV);
     JsonHelper::getFloat(inObj, "nearClip", &mNearClip);
     JsonHelper::getFloat(inObj, "farClip", &mFarClip);
 }
 
-void Camera::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "FOV";
-    info.second = StringUtil::floatToString(mFOV);
-    inspect->emplace_back(info);
-    info.first = "NearClip";
-    info.second = StringUtil::floatToString(mNearClip);
-    inspect->emplace_back(info);
-    info.first = "FarClip";
-    info.second = StringUtil::floatToString(mFarClip);
-    inspect->emplace_back(info);
+void Camera::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("FOV", mFOV);
+    inspect->emplace_back("NearClip", mNearClip);
+    inspect->emplace_back("FarClip", mFarClip);
 }
 
 const Matrix4& Camera::getView() const {

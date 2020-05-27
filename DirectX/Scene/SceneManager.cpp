@@ -14,6 +14,8 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/GameObjectManager.h"
+#include "../Input/Input.h"
+#include "../Input/Keyboard.h"
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
@@ -35,6 +37,13 @@ SceneManager::~SceneManager() {
     SAFE_DELETE(mMeshManager);
     SAFE_DELETE(mSpriteManager);
     SAFE_DELETE(mPhysics);
+
+    GameObject::setGameObjectManager(nullptr);
+    MeshComponent::setMeshManager(nullptr);
+    Sprite::setSpriteManager(nullptr);
+    SpriteComponent::setSpriteManager(nullptr);
+    Sprite3D::setSpriteManager(nullptr);
+    Collider::setPhysics(nullptr);
 }
 
 void SceneManager::initialize() {
@@ -71,6 +80,11 @@ void SceneManager::update() {
     mSpriteManager->update();
     //デバッグ
     DebugUtility::update();
+
+    //Escでゲーム終了
+    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
+        Game::quit();
+    }
 
     //シーン移行
     const auto& next = mCurrentScene->getNext();

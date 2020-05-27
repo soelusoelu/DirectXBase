@@ -1,7 +1,6 @@
 ﻿#include "GameObject.h"
 #include "GameObjectManager.h"
 #include "Transform3D.h"
-#include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Device/Time.h"
 
@@ -11,11 +10,12 @@ GameObject::GameObject(std::shared_ptr<Renderer> renderer) :
     mComponentManager(nullptr),
     mTag(""),
     mDestroyTimer(nullptr),
-    mSleepTimer(std::make_unique<Time>(0.f)),
     mState(State::ACTIVE) {
 }
 
-GameObject::~GameObject() = default;
+GameObject::~GameObject() {
+    mComponentManager->finalize();
+}
 
 void GameObject::update() {
     mComponentManager->start();
@@ -25,8 +25,6 @@ void GameObject::update() {
         computeWorldTransform();
 
         updateDestroyTimer();
-    } else if (mState == State::SLEEP) {
-        updateSleepTimer();
     }
 }
 
@@ -63,15 +61,6 @@ bool GameObject::isDead() const {
     return mState == State::DEAD;
 }
 
-void GameObject::sleep(float sec) {
-    mState = State::SLEEP;
-    mSleepTimer->setLimitTime(sec);
-}
-
-bool GameObject::isSleeping() const {
-    return mState == State::SLEEP;
-}
-
 void GameObject::setTag(const std::string& tag) {
     mTag = tag;
 }
@@ -80,15 +69,15 @@ const std::string& GameObject::tag() const {
     return mTag;
 }
 
-std::shared_ptr<Renderer> GameObject::renderer() const {
+const std::shared_ptr<Renderer>& GameObject::renderer() const {
     return mRenderer;
 }
 
-std::shared_ptr<Transform3D> GameObject::transform() const {
+const std::shared_ptr<Transform3D>& GameObject::transform() const {
     return mTransform;
 }
 
-std::shared_ptr<ComponentManager> GameObject::componentManager() const {
+const std::shared_ptr<ComponentManager>& GameObject::componentManager() const {
     return mComponentManager;
 }
 
@@ -118,7 +107,7 @@ void GameObject::initialize() {
     }
 
     mTransform = std::make_shared<Transform3D>(shared_from_this());
-    mComponentManager = std::make_shared<ComponentManager>(shared_from_this());
+    mComponentManager = std::make_shared<ComponentManager>();
 }
 
 void GameObject::updateDestroyTimer() {
@@ -128,13 +117,6 @@ void GameObject::updateDestroyTimer() {
     mDestroyTimer->update();
     if (mDestroyTimer->isTime()) {
         mState = State::DEAD;
-    }
-}
-
-void GameObject::updateSleepTimer() {
-    mSleepTimer->update();
-    if (mSleepTimer->isTime()) {
-        mState = State::ACTIVE;
     }
 }
 

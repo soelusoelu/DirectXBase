@@ -11,8 +11,8 @@
 #include "../Utility/LevelLoader.h"
 #include <cassert>
 
-Sprite3D::Sprite3D(std::shared_ptr<GameObject> owenr) :
-    Component(owenr, "Sprite3D", 500),
+Sprite3D::Sprite3D() :
+    Component(500),
     mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
@@ -29,7 +29,7 @@ Sprite3D::~Sprite3D() {
 
 void Sprite3D::start() {
     if (mFileName.empty()) {
-        Debug::logWarning(getTypeName() + ": No filename.");
+        Debug::logWarning(getComponentName() + ": No filename.");
         return;
     }
 
@@ -64,30 +64,43 @@ void Sprite3D::onSetActive(bool value) {
 }
 
 void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getString(inObj, "fileName", &mFileName);
-    Vector2 scale;
-    if (JsonHelper::getVector2(inObj, "scale", &scale)) {
-        mTransform->setScale(Vector3(scale, 1.f));
+    bool isActive = true;
+    if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
+        setActive(isActive);
     }
-    Vector3 color;
-    if (JsonHelper::getVector3(inObj, "color", &color)) {
-        setColor(color);
+    Vector3 vec3;
+    if (JsonHelper::getVector3(inObj, "position", &vec3)) {
+        mTransform->setPosition(vec3);
+    }
+    if (JsonHelper::getVector3(inObj, "rotation", &vec3)) {
+        mTransform->rotate(vec3);
+    }
+    Vector2 vec2;
+    if (JsonHelper::getVector2(inObj, "scale", &vec2)) {
+        mTransform->setScale(Vector3(vec2, 1.f));
+    }
+    if (JsonHelper::getVector3(inObj, "color", &vec3)) {
+        setColor(vec3);
     }
     float alpha;
     if (JsonHelper::getFloat(inObj, "alpha", &alpha)) {
         setAlpha(alpha);
     }
+    Vector4 vec4;
+    if (JsonHelper::getVector4(inObj, "uv", &vec4)) {
+        setUV(vec4.x, vec4.y, vec4.z, vec4.w);
+    }
 }
 
-void Sprite3D::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
-    DebugInfo info;
-    info.first = "FileName";
-    info.second = mFileName;
-    inspect->emplace_back(info);
+void Sprite3D::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("FileName", mFileName);
+    inspect->emplace_back("IsActive", getActive());
+    inspect->emplace_back("Position", mTransform->getPosition());
+    inspect->emplace_back("Rotation", mTransform->getRotation().euler());
+    inspect->emplace_back("Scale", mTransform->getScale());
+    inspect->emplace_back("Color", mColor);
+    inspect->emplace_back("UV", mUV);
 }
 
 void Sprite3D::draw(const Matrix4& viewProj) const {

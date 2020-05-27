@@ -13,10 +13,9 @@
 #include "../System/DirectX.h"
 #include "../System/Texture.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-TransparentMeshComponent::TransparentMeshComponent(std::shared_ptr<GameObject> owner) :
-    MeshComponent(owner, "TransparentMeshComponent"),
+TransparentMeshComponent::TransparentMeshComponent() :
+    MeshComponent(),
     mDirLight(nullptr),
     mAlpha(1.f) {
 }
@@ -33,17 +32,13 @@ void TransparentMeshComponent::start() {
 void TransparentMeshComponent::loadProperties(const rapidjson::Value & inObj) {
     MeshComponent::loadProperties(inObj);
 
-    float alpha;
     JsonHelper::getFloat(inObj, "alpha", &mAlpha);
 }
 
-void TransparentMeshComponent::drawDebugInfo(DebugInfoList * inspect) const {
+void TransparentMeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     MeshComponent::drawDebugInfo(inspect);
 
-    DebugInfo info;
-    info.first = "Alpha";
-    info.second = StringUtil::floatToString(mAlpha);
-    inspect->emplace_back(info);
+    inspect->emplace_back("Alpha", mAlpha);
 }
 
 void TransparentMeshComponent::setMesh(const std::string & fileName) {

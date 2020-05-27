@@ -1,21 +1,21 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "../GameObject/Transform2D.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <string>
 
+enum class Pivot;
+
 class Text : public Component {
 public:
-    Text(std::shared_ptr<GameObject> owner);
+    Text();
     ~Text();
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void setText(const std::string& text);
-    void setText(int number);
     const std::string& text() const;
     void setPosition(const Vector2& pos);
     const Vector2& getPosition() const;

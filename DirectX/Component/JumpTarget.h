@@ -8,7 +8,7 @@ class Sprite3D;
 
 class JumpTarget : public Component {
 public:
-    JumpTarget(std::shared_ptr<GameObject> owner);
+    JumpTarget();
     ~JumpTarget();
     virtual void start() override;
     virtual void update() override;

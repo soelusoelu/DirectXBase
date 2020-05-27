@@ -1,6 +1,7 @@
 ﻿#include "Inspector.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
+#include "../DebugLayer/Debug.h"
 #include "../Device/DrawString.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
@@ -8,7 +9,6 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 #include <list>
-#include <string>
 
 Inspector::Inspector(DrawString* drawString) :
     mDrawString(drawString),
@@ -62,10 +62,10 @@ void Inspector::drawInspect() const {
         return;
     }
 
-    drawTag(actor);
-    drawTransform(actor->transform());
+    drawTag(*actor);
+    drawTransform(*actor->transform());
 
-    auto compList = actor->componentManager()->getAllComponents();
+    const auto& compList = actor->componentManager()->getAllComponents();
     //アクターがコンポーネントを所持していなければ終了
     if (compList.empty()) {
         return;
@@ -74,20 +74,20 @@ void Inspector::drawInspect() const {
     auto drawPos = mComponentPosition;
     //全コンポーネントの情報を表示
     for (const auto& comp : compList) {
-        drawComponent(comp, &drawPos);
+        drawComponent(*comp, &drawPos);
         drawPos.x = mComponentPosition.x;
         drawPos.y += mCharHeight * 2;
     }
 }
 
-void Inspector::drawTag(const GameObjectPtr& target) const {
-    auto tag = target->tag();
+void Inspector::drawTag(const GameObject& target) const {
+    auto tag = target.tag();
     auto pos = Vector2(mInspectorPositionX + (Window::debugWidth() - mInspectorPositionX) / 2.f, 0.f);
     pos.x -= DrawString::WIDTH * mTagScale.x * tag.length() / 2.f;
     mDrawString->drawString(tag, pos, mTagScale);
 }
 
-void Inspector::drawTransform(const TransformPtr& target) const {
+void Inspector::drawTransform(const Transform3D& target) const {
     auto pos = mTransformPosition;
     mDrawString->drawString("Transform", pos, mElementScale);
     pos.x = mElementPositionX;
@@ -100,37 +100,37 @@ void Inspector::drawTransform(const TransformPtr& target) const {
     drawScale(target, pos);
 }
 
-void Inspector::drawPosition(const TransformPtr& target, const Vector2 & position) const {
+void Inspector::drawPosition(const Transform3D& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Position", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto tPos = target->getPosition();
-    mDrawString->drawString(InspectHelper::vector3ToString(tPos), pos, mElementScale);
+    auto tPos = target.getPosition();
+    mDrawString->drawString(vector3ToString(tPos), pos, mElementScale);
 }
 
-void Inspector::drawRotation(const TransformPtr& target, const Vector2 & position) const {
+void Inspector::drawRotation(const Transform3D& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Rotation", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto rot = target->getRotation().euler();
-    mDrawString->drawString(InspectHelper::vector3ToString(rot), pos, mElementScale);
+    auto rot = target.getRotation().euler();
+    mDrawString->drawString(vector3ToString(rot), pos, mElementScale);
 }
 
-void Inspector::drawScale(const TransformPtr& target, const Vector2 & position) const {
+void Inspector::drawScale(const Transform3D& target, const Vector2 & position) const {
     auto pos = position;
     mDrawString->drawString("Scale", pos, mElementScale);
     pos.x = mValuePositionX;
-    auto scale = target->getScale();
-    mDrawString->drawString(InspectHelper::vector3ToString(scale), pos, mElementScale);
+    auto scale = target.getScale();
+    mDrawString->drawString(vector3ToString(scale), pos, mElementScale);
 }
 
-void Inspector::drawComponent(const ComponentPtr& component, Vector2 * position) const {
+void Inspector::drawComponent(const Component& component, Vector2 * position) const {
     auto pos = *position;
-    mDrawString->drawString(component->getTypeName(), pos, mElementScale);
+    mDrawString->drawString(component.getComponentName(), pos, mElementScale);
 
     //コンポーネントのデバッグ情報を取得
-    std::list<std::pair<std::string, std::string>> debugInfo;
-    component->drawDebugInfo(&debugInfo);
+    ComponentDebug::DebugInfoList debugInfo;
+    component.drawDebugInfo(&debugInfo);
 
     //すべてのデバッグ情報を描画
     for (const auto& info : debugInfo) {
@@ -142,20 +142,59 @@ void Inspector::drawComponent(const ComponentPtr& component, Vector2 * position)
         pos.y += mCharHeight;
         mDrawString->drawString(ele, pos, mElementScale);
         pos.x = mValuePositionX;
-        mDrawString->drawString(info.second, pos, mElementScale);
+        mDrawString->drawString(anyToString(info.second), pos, mElementScale);
     }
 
     *position = pos;
 }
 
-std::string InspectHelper::vector2ToString(const Vector2 & vec) {
+std::string Inspector::anyToString(const std::any& src) const {
+    if (!src.has_value()) {
+        return "";
+    }
+
+    const auto& type = src.type();
+    std::string str;
+    if (type == typeid(int)) {
+        auto value = std::any_cast<int>(src);
+        str = StringUtil::intToString(value);
+    } else if (type == typeid(float)) {
+        auto value = std::any_cast<float>(src);
+        str = StringUtil::floatToString(value);
+    } else if (type == typeid(bool)) {
+        auto value = std::any_cast<bool>(src);
+        str = StringUtil::boolToString(value);
+    } else if (type == typeid(const char*)) {
+        str = std::any_cast<const char*>(src);
+    } else if (type == typeid(std::string)) {
+        str = std::any_cast<std::string>(src);
+    } else if (type == typeid(Vector2)) {
+        auto value = std::any_cast<Vector2>(src);
+        str = vector2ToString(value);
+    } else if (type == typeid(Vector3)) {
+        auto value = std::any_cast<Vector3>(src);
+        str = vector3ToString(value);
+    } else if (type == typeid(Vector4)) {
+        auto value = std::any_cast<Vector4>(src);
+        str = vector4ToString(value);
+    } else if (type == typeid(Quaternion)) {
+        auto value = std::any_cast<Quaternion>(src);
+        str = quaternionToString(value);
+    } else {
+        Debug::logWarning(src.type().name());
+    }
+
+    return str;
+}
+
+std::string Inspector::vector2ToString(const Vector2& vec) const {
     auto x = "X " + minusPosition(vec.x);
     x.resize(10);
     auto y = "Y " + minusPosition(vec.y);
     return x + y;
 }
 
-std::string InspectHelper::vector3ToString(const Vector3 & vec) {
+std::string Inspector::vector3ToString(const Vector3& vec) const {
     auto x = "X " + minusPosition(vec.x);
     x.resize(10);
     auto y = "Y " + minusPosition(vec.y);
@@ -164,7 +203,18 @@ std::string InspectHelper::vector3ToString(const Vector3 & vec) {
     return x + y + z;
 }
 
-std::string InspectHelper::quaternionToString(const Quaternion & quaternion) {
+std::string Inspector::vector4ToString(const Vector4& vec) const {
+    auto x = "X " + minusPosition(vec.x);
+    x.resize(10);
+    auto y = "Y " + minusPosition(vec.y);
+    y.resize(10);
+    auto z = "Z " + minusPosition(vec.z);
+    z.resize(10);
+    auto w = "W " + minusPosition(vec.w);
+    return x + y + z + w;
+}
+
+std::string Inspector::quaternionToString(const Quaternion& quaternion) const {
     auto x = "X " + minusPosition(quaternion.x);
     x.resize(10);
     auto y = "Y " + minusPosition(quaternion.y);
@@ -175,7 +225,7 @@ std::string InspectHelper::quaternionToString(const Quaternion & quaternion) {
     return x + y + z + w;
 }
 
-std::string InspectHelper::minusPosition(float value) {
+std::string Inspector::minusPosition(float value) const {
     auto s = StringUtil::floatToString(value);
     return (value < 0.f) ? s : " " + s;
 }

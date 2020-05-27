@@ -6,7 +6,7 @@ class Text;
 
 class Result : public Component {
 public:
-    Result(std::shared_ptr<GameObject> owner);
+    Result();
     ~Result();
     virtual void start() override;
     virtual void update() override;

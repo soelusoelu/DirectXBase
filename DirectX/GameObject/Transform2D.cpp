@@ -19,8 +19,8 @@ bool Transform2D::computeWorldTransform() {
         mWorldTransform = Matrix4::createScale(Vector3(mSize, 1.f)); //テクスチャサイズに
         mWorldTransform *= Matrix4::createTranslation(Vector3(-mPivot, 0.f)); //中心 + ピボットを原点に
 
-        auto w = static_cast<float>(Window::width()) / static_cast<float>(STANDARD_WINDOW_WIDTH);
-        auto h = static_cast<float>(Window::height()) / static_cast<float>(STANDARD_WINDOW_HEIGHT);
+        auto w = static_cast<float>(Window::width()) / static_cast<float>(Window::standardWidth());
+        auto h = static_cast<float>(Window::height()) / static_cast<float>(Window::standardHeight());
         mWorldTransform *= Matrix4::createScale(Vector3(getScale() * Vector2(w, h), 1.f));
         mWorldTransform *= Matrix4::createRotationZ(mRotation);
         mWorldTransform *= Matrix4::createTranslation(Vector3(getPosition() * Vector2(w, h), 1.f));
@@ -132,6 +132,34 @@ void Transform2D::setSize(const Vector2 & size) {
 
 const Vector2& Transform2D::getSize() const {
     return mSize;
+}
+
+void Transform2D::stringToPivot(const std::string& src, Pivot* dst) {
+    auto pivot = Pivot::NONE;
+
+    if (src == "LeftTop") {
+        pivot = Pivot::LEFT_TOP;
+    } else if (src == "CenterTop") {
+        pivot = Pivot::CENTER_TOP;
+    } else if (src == "RightTop") {
+        pivot = Pivot::RIGHT_TOP;
+    } else if (src == "CenterLeft") {
+        pivot = Pivot::CENTER_LEFT;
+    } else if (src == "Center") {
+        pivot = Pivot::CENTER;
+    } else if (src == "CenterRight") {
+        pivot = Pivot::CENTER_RIGHT;
+    } else if (src == "LeftBottom") {
+        pivot = Pivot::LEFT_BOTTOM;
+    } else if (src == "CenterBottom") {
+        pivot = Pivot::CETNER_BOTTOM;
+    } else if (src == "RightBottom") {
+        pivot = Pivot::RIGHT_BOTTOM;
+    }
+
+    if (pivot != Pivot::NONE) {
+        *dst = pivot;
+    }
 }
 
 void Transform2D::shouldRecomputeTransform() {

@@ -1,6 +1,7 @@
 #include "SpriteComponent.h"
 #include "ComponentManager.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/Transform2D.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../System/BlendDesc.h"
@@ -14,8 +15,8 @@
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 
-SpriteComponent::SpriteComponent(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type),
+SpriteComponent::SpriteComponent() :
+    Component(500),
     mSprite(nullptr) {
 }
 
@@ -28,18 +29,52 @@ void SpriteComponent::onSetActive(bool value) {
 }
 
 void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
-    std::string fileName;
-    if (JsonHelper::getString(inObj, "fileName", &fileName)) {
-        setSprite(fileName);
+    std::string str;
+    if (JsonHelper::getString(inObj, "fileName", &str)) {
+        setSprite(str);
+    }
+    bool isActive = true;
+    if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
+        setActive(isActive);
+    }
+    Vector2 vec2;
+    if (JsonHelper::getVector2(inObj, "position", &vec2)) {
+        transform()->setPosition(vec2);
+    }
+    float value;
+    if (JsonHelper::getFloat(inObj, "rotation", &value)) {
+        transform()->setRotation(value);
+    }
+    if (JsonHelper::getVector2(inObj, "scale", &vec2)) {
+        transform()->setScale(vec2);
+    }
+    Vector3 vec3;
+    if (JsonHelper::getVector3(inObj, "color", &vec3)) {
+        setColor(vec3);
+    }
+    if (JsonHelper::getFloat(inObj, "alpha", &value)) {
+        setAlpha(value);
+    }
+    Vector4 vec4;
+    if (JsonHelper::getVector4(inObj, "uv", &vec4)) {
+        setUV(vec4.x, vec4.y, vec4.z, vec4.w);
+    }
+    if (JsonHelper::getString(inObj, "pivot", &str)) {
+        Pivot pivot = Pivot::NONE;
+        Transform2D::stringToPivot(str, &pivot);
+        transform()->setPivot(pivot);
     }
 }
 
-void SpriteComponent::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
-    JsonHelper::setString(alloc, inObj, "fileName", fileName());
+void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("FileName", fileName());
+    inspect->emplace_back("IsActive", getActive());
+    inspect->emplace_back("Position", transform()->getPosition());
+    inspect->emplace_back("Rotation", transform()->getRotation());
+    inspect->emplace_back("Scale", transform()->getScale());
+    inspect->emplace_back("Color", getColor());
+    inspect->emplace_back("UV", getUV());
+    inspect->emplace_back("TextureSize", getTextureSize());
 }
 
 void SpriteComponent::update() {

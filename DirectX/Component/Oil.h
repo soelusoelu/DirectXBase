@@ -8,10 +8,10 @@ class Oil : public Component {
     using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:
-    Oil(std::shared_ptr<GameObject> owner);
+    Oil();
     ~Oil();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void flow(const GameObjectPtr& gameObject);
 
 private:

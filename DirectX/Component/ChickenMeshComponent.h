@@ -10,7 +10,7 @@ struct ChickenMeshConstantBuffer {
 
 class ChickenMeshComponent : public MeshComponent {
 public:
-    ChickenMeshComponent(std::shared_ptr<GameObject> owner);
+    ChickenMeshComponent();
     ~ChickenMeshComponent();
     virtual void setMesh(const std::string& fileName) override;
     virtual void setShader() override;

@@ -14,11 +14,11 @@ class PlayerJump : public Component, public IPlayerJump {
     };
 
 public:
-    PlayerJump(std::shared_ptr<GameObject> owner);
+    PlayerJump();
     ~PlayerJump();
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual bool isJumpStart() const override;
     virtual bool isJumping() const override;

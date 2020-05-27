@@ -15,13 +15,13 @@ class ChickenFry : public Component, public IChickenFry {
     using TimerPtrArray = std::vector<TimerPtr>;
 
 public:
-    ChickenFry(std::shared_ptr<GameObject> owner);
+    ChickenFry();
     ~ChickenFry();
     virtual void awake() override;
     virtual void start() override;
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual void initialize() override;
     virtual void update() override;

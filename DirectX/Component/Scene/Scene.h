@@ -8,9 +8,9 @@ class Scene : public Component {
     using StringSet = std::unordered_set<std::string>;
 
 public:
-    Scene(const std::shared_ptr<GameObject>& owner);
+    Scene();
     ~Scene();
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //設定した次のシーンに遷移
     void next(const std::string& next);
     //次のシーンの取得

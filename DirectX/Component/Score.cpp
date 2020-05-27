@@ -5,8 +5,8 @@
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-Score::Score(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Score"),
+Score::Score() :
+    Component(),
     mText(nullptr),
     mScore(0),
     mHighScore(0) {
@@ -23,30 +23,21 @@ void Score::update() {
         mHighScore = mScore;
     }
     if (mText) {
-        mText->setText(mScore);
+        mText->setText(StringUtil::intToString(mScore));
     }
 }
 
 void Score::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getInt(inObj, "highScore", &mHighScore);
 }
 
 void Score::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
     JsonHelper::setInt(alloc, inObj, "highScore", mHighScore);
 }
 
-void Score::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Score";
-    info.second = StringUtil::intToString(mScore);
-    inspect->emplace_back(info);
-    info.first = "HighScore";
-    info.second = StringUtil::intToString(mHighScore);
-    inspect->emplace_back(info);
+void Score::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("Score", mScore);
+    inspect->emplace_back("HighScore", mHighScore);
 }
 
 void Score::addScore(int score) {

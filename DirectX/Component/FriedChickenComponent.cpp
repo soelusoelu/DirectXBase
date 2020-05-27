@@ -2,23 +2,23 @@
 #include "ChickenFry.h"
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Inspector.h"
+#include "SoundComponent.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-FriedChickenComponent::FriedChickenComponent(std::shared_ptr<GameObject> owner) :
-    Component(owner, "FriedChickenComponent"),
+FriedChickenComponent::FriedChickenComponent() :
+    Component(),
     mFry(nullptr),
     mState(State::FRY),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
     mRollSpeed(60.f),
-    mFallSpeed(1.f) {
+    mFallSpeed(1.f),
+    mIsWaitingColliction(false) {
 }
 
 FriedChickenComponent::~FriedChickenComponent() = default;
@@ -39,17 +39,18 @@ void FriedChickenComponent::update() {
     if (mState == State::FRY) {
         if (mFry) {
             mFry->update();
+            tooBurnt();
             autoCollection();
         }
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
+    } else if (mState == State::TOO_BURNT) {
+        tooBurntUpdate();
     }
 }
 
 void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getVector2(inObj, "randomRangePositionX", &mRandomRangePositionX);
     JsonHelper::getVector2(inObj, "randomRangePositionZ", &mRandomRangePositionZ);
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
@@ -57,23 +58,12 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
-void FriedChickenComponent::drawDebugInfo(DebugInfoList * inspect) const {
-    DebugInfo info;
-    info.first = "RandomRangePositionX";
-    info.second = InspectHelper::vector2ToString(mRandomRangePositionX);
-    inspect->emplace_back(info);
-    info.first = "RandomRangePositionZ";
-    info.second = InspectHelper::vector2ToString(mRandomRangePositionZ);
-    inspect->emplace_back(info);
-    info.first = "RandomRangeScale";
-    info.second = InspectHelper::vector2ToString(mRandomRangeScale);
-    inspect->emplace_back(info);
-    info.first = "RollSpeed";
-    info.second = StringUtil::floatToString(mRollSpeed);
-    inspect->emplace_back(info);
-    info.first = "FallSpeed";
-    info.second = StringUtil::floatToString(mFallSpeed);
-    inspect->emplace_back(info);
+void FriedChickenComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("RandomRangePositionX", mRandomRangePositionX);
+    inspect->emplace_back("RandomRangePositionZ", mRandomRangePositionZ);
+    inspect->emplace_back("RandomRangeScale", mRandomRangeScale);
+    inspect->emplace_back("RollSpeed", mRollSpeed);
+    inspect->emplace_back("FallSpeed", mFallSpeed);
 }
 
 const IChickenFry& FriedChickenComponent::getFry() const {
@@ -83,6 +73,8 @@ const IChickenFry& FriedChickenComponent::getFry() const {
 void FriedChickenComponent::initialize() {
     //アクティブ化
     owner()->setActive(true);
+
+    mIsWaitingColliction = false;
 
     //ランダムで位置を決める
     auto pos = Random::randomRange(
@@ -105,7 +97,7 @@ void FriedChickenComponent::initialize() {
 }
 
 void FriedChickenComponent::finishFryed() {
-    mState = State::WAITING_COLLECTION;
+    mIsWaitingColliction = true;
 }
 
 void FriedChickenComponent::eaten() {
@@ -128,21 +120,38 @@ bool FriedChickenComponent::isFalling() const {
 }
 
 bool FriedChickenComponent::isFinished() const {
-    return mState == State::WAITING_COLLECTION;
+    return mIsWaitingColliction;
 }
 
 bool FriedChickenComponent::isEaten() const {
     return mState == State::EATEN;
 }
 
-void FriedChickenComponent::autoCollection() {
-    bool isFinish = mFry->isBurntAllSurfaces();
-    if (!isFinish) {
-        isFinish = mFry->isTooBurnt();
-    }
+bool FriedChickenComponent::isTooBurnt() const {
+    return mState == State::TOO_BURNT;
+}
 
-    if (isFinish) {
-        mState = State::WAITING_COLLECTION;
+void FriedChickenComponent::tooBurnt() {
+    if (mFry->isTooBurnt()) {
+        auto sound = owner()->componentManager()->getComponent<SoundComponent>();
+        sound->playSE();
+
+        mState = State::TOO_BURNT;
+    }
+}
+
+void FriedChickenComponent::tooBurntUpdate() {
+    auto trans = owner()->transform();
+    trans->translate(Vector3::down * Time::deltaTime);
+
+    if (trans->getPosition().y < -3.f) {
+        finishFryed();
+    }
+}
+
+void FriedChickenComponent::autoCollection() {
+    if (mFry->isBurntAllSurfaces()) {
+        finishFryed();
     }
 }
 

@@ -47,7 +47,11 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
+<<<<<<< HEAD
             "fileName": "Player/NPlayer.fbx"
+=======
+            "fileName": "Player/Player2.fbx"
+>>>>>>> 819a7f05f96418e110ac6634e8e26b223a78cd0d
           }
         },
         {
@@ -145,6 +149,18 @@
             "friedColor": [ 0.8, 0.3, 0.1 ],
             "burntColor": [ 0.1, 0.1, 0.1 ]
           }
+        },
+        {
+          "type": "SphereCollisionComponent",
+          "properties": {
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "蒸発・蒸気・ジュー02_koge.wav",
+            "volume": 0.3
+          }
         }
       ]
     },
@@ -156,7 +172,7 @@
           "properties": {
             "startNum": 1,
             "maxNum": 5,
-            "replenishTimer": 30.0
+            "replenishTimer": 20.0
           }
         },
         {
@@ -193,13 +209,14 @@
           "type": "Bird",
           "properties": {
             "moveSpeed": 20.0,
+            "climbSpeed": 10.0,
             "restartTimer": 20.0
           }
         },
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Bird/tonbi4.fbx"
+            "fileName": "Bird/tonbi4_sankaku.fbx"
           }
         },
         {
@@ -212,7 +229,14 @@
           "type": "Sprite3D",
           "properties": {
             "fileName": "block.png",
+            "isActive": false,
+            "rotation": [ 90.0, 0.0, 0.0 ],
             "scale": [ 30.0, 1.0 ]
+          }
+        },
+        {
+          "type": "SphereCollisionComponent",
+          "properties": {
           }
         },
         {
@@ -256,14 +280,54 @@
         {
           "type": "SpriteComponent",
           "properties": {
-            "fileName": "12Title.png"
+            "fileName": "Title.png"
           }
         },
         {
           "type": "SoundComponent",
           "properties": {
             "fileName": "title.wav",
-            "volume": 0.1,
+            "volume": 0.01,
+            "isFirstPlay": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "OperationExplanation",
+      "components": [
+        {
+          "type": "Scene",
+          "properties": {
+          }
+        },
+        {
+          "type": "OperationExplanation",
+          "properties": {
+            "enterKey": "Space",
+            "enterPad": "A"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "Sousa.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "NowLoading.png",
+            "isActive": false,
+            "position": [ 1920.0, 1130.0 ],
+            "pivot": "RightBottom"
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Shokunin.wav",
+            "volume": 0.01,
             "isFirstPlay": true
           }
         }
@@ -286,8 +350,16 @@
           "type": "SoundComponent",
           "properties": {
             "fileName": "gameplay.wav",
-            "volume": 0.1,
-            "isFirstPlay": true
+            "volume": 0.01,
+            "isFirstPlay": false
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "karaage.wav",
+            "volume": 0.3,
+            "isFirstPlay": false
           }
         }
       ]
@@ -310,8 +382,8 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "result.wav",
-            "volume": 0.1,
+            "fileName": "江戸のぶらり旅_result.wav",
+            "volume": 0.01,
             "isFirstPlay": true
           }
         }

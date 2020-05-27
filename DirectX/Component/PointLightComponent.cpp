@@ -4,7 +4,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/Renderer.h"
 #include "../Light/PointLight.h"
 #include "../Mesh/Material.h"
@@ -15,10 +14,9 @@
 #include "../System/SubResourceDesc.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-PointLightComponent::PointLightComponent(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PointLightComponent"),
+PointLightComponent::PointLightComponent() :
+    Component(),
     mCamera(nullptr),
     mColor(ColorPalette::white),
     mInnerRadius(0.5f),
@@ -35,37 +33,17 @@ void PointLightComponent::start() {
 }
 
 void PointLightComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
-    Vector3 color;
-    if (JsonHelper::getVector3(inObj, "color", &color)) {
-        mColor = color;
-    }
-
-    float f;
+    JsonHelper::getVector3(inObj, "color", &mColor);
     JsonHelper::getFloat(inObj, "innerRadius", &mInnerRadius);
-    if (JsonHelper::getFloat(inObj, "outerRadius", &f)) {
-        mOuterRadius = f;
-    }
-    if (JsonHelper::getFloat(inObj, "intensity", &f)) {
-        mIntensity = f;
-    }
+    JsonHelper::getFloat(inObj, "outerRadius", &mOuterRadius);
+    JsonHelper::getFloat(inObj, "intensity", &mIntensity);
 }
 
-void PointLightComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Color";
-    info.second = InspectHelper::vector3ToString(mColor);
-    inspect->emplace_back(info);
-    info.first = "InnerRadius";
-    info.second = StringUtil::floatToString(mInnerRadius);
-    inspect->emplace_back(info);
-    info.first = "OuterRadius";
-    info.second = StringUtil::floatToString(mOuterRadius);
-    inspect->emplace_back(info);
-    info.first = "Intensity";
-    info.second = StringUtil::floatToString(mIntensity);
-    inspect->emplace_back(info);
+void PointLightComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("Color", mColor);
+    inspect->emplace_back("InnerRadius", mInnerRadius);
+    inspect->emplace_back("OuterRadius", mOuterRadius);
+    inspect->emplace_back("Intensity", mIntensity);
 }
 
 void PointLightComponent::draw(const PointLight& pointLight) const {

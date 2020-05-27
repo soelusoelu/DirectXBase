@@ -8,8 +8,8 @@
 #include "../../Utility/LevelLoader.h"
 #include <string>
 
-Title::Title(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "Title"),
+Title::Title() :
+    Component(),
     mScene(nullptr),
     mEnterKey(KeyCode::None),
     mEnterPad(JoyCode::None) {
@@ -30,13 +30,11 @@ void Title::update() {
 #endif // _DEBUG
 
     if (isEnd) {
-        mScene->next("GamePlay");
+        mScene->next("OperationExplanation");
     }
 }
 
-void Title::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
+void Title::loadProperties(const rapidjson::Value & inObj) {
     std::string src;
     if (JsonHelper::getString(inObj, "enterKey", &src)) {
         Keyboard::stringToKeyCode(src, &mEnterKey);

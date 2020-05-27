@@ -9,17 +9,17 @@ class FriedChickenComponent : public Component {
     enum class State {
         FRY,
         FALL,
-        WAITING_COLLECTION,
+        TOO_BURNT,
         EATEN
     };
 
 public:
-    FriedChickenComponent(std::shared_ptr<GameObject> owner);
+    FriedChickenComponent();
     ~FriedChickenComponent();
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     const IChickenFry& getFry() const;
     //揚げ直す前の状態に戻す
     void initialize();
@@ -38,8 +38,13 @@ public:
     bool isFinished() const;
     //食われたか
     bool isEaten() const;
+    //焦げすぎたか
+    bool isTooBurnt() const;
 
 private:
+    //焦げすぎた場合
+    void tooBurnt();
+    void tooBurntUpdate();
     //揚げ終わったら状態遷移させる
     void autoCollection();
     //空中から落下させる
@@ -55,4 +60,5 @@ private:
     Vector2 mRandomRangeScale;
     float mRollSpeed;
     float mFallSpeed;
+    bool mIsWaitingColliction;
 };

@@ -7,6 +7,7 @@
 #include "../../Component/Oil.h"
 #include "../../Component/PlayerChickenConnection.h"
 #include "../../Component/Score.h"
+#include "../../Component/SoundComponent.h"
 #include "../../Component/Timer.h"
 #include "../../DebugLayer/DebugUtility.h"
 #include "../../DebugLayer/Inspector.h"
@@ -16,11 +17,10 @@
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
-#include "../../System/Game.h"
 #include "../../Utility/LevelLoader.h"
 
-GamePlay::GamePlay(const std::shared_ptr<GameObject>& owner) :
-    Component(owner, "GamePlay"),
+GamePlay::GamePlay() :
+    Component(),
     mScene(nullptr),
     mFriedChickenManager(nullptr),
     mPCConnection(nullptr),
@@ -59,6 +59,11 @@ void GamePlay::awake() {
 void GamePlay::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
     mScene->addObjectToNext("Score");
+
+    auto sounds = owner()->componentManager()->getComponents<SoundComponent>();
+    for (const auto& sound : sounds) {
+        sound->playBGM();
+    }
 }
 
 void GamePlay::update() {
@@ -91,9 +96,6 @@ void GamePlay::update() {
         mScene->next("ResultScene");
     }
 
-    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
-        Game::quit();
-    }
     //リセット
 #ifdef _DEBUG
     if (Input::keyboard()->getKeyDown(KeyCode::R)) {

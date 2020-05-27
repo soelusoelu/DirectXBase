@@ -2,17 +2,13 @@
 #include "../Device/Physics.h"
 #include <algorithm>
 
-Collider::Collider(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type, 500),
+Collider::Collider() :
+    Component(500),
     mIsAutoUpdate(true),
     mEnable(false) {
 }
 
-Collider::~Collider() {
-    if (mPhysics) {
-        mPhysics->remove(shared_from_this());
-    }
-}
+Collider::~Collider() = default;
 
 void Collider::start() {
     if (mPhysics) {
@@ -25,6 +21,20 @@ void Collider::update() {
     mPreviousCollider.resize(mCurrentCollider.size());
     std::copy(mCurrentCollider.begin(), mCurrentCollider.end(), mPreviousCollider.begin());
     mCurrentCollider.clear();
+}
+
+void Collider::finalize() {
+    mPreviousCollider.clear();
+    mCurrentCollider.clear();
+
+    if (mPhysics) {
+        mPhysics->remove(shared_from_this());
+    }
+}
+
+void Collider::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("IsAutoUpdate", mIsAutoUpdate);
+    inspect->emplace_back("Enable", mEnable);
 }
 
 void Collider::onSetActive(bool value) {
@@ -49,7 +59,7 @@ void Collider::automation() {
     }
 }
 
-void Collider::addHitCollider(CollPtr hit) {
+void Collider::addHitCollider(const CollPtr& hit) {
     mCurrentCollider.emplace_back(hit);
 }
 

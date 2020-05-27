@@ -6,15 +6,14 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-ChickenFry::ChickenFry(std::shared_ptr<GameObject> owner) :
-    Component(owner, "ChickenFry"),
+ChickenFry::ChickenFry() :
+    Component(),
     mColorChanger(nullptr),
     mCurrentBottomSurface(ChickenSurface::BOTTOM),
     mEasySurface(ChickenSurface::BOTTOM),
     mHardSurface(ChickenSurface::BOTTOM),
-    mTooBurntTimer(std::make_unique<Time>(0.f)),
+    mTooBurntTimer(std::make_unique<Time>()),
     mUsually(getNumFryState() - 1),
     mEasy(getNumFryState() - 1),
     mHard(getNumFryState() - 1),
@@ -50,8 +49,6 @@ void ChickenFry::onUpdateWorldTransform() {
 }
 
 void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "notFriedToLittleBadTimer", &mUsually[0]);
     JsonHelper::getFloat(inObj, "littleBadToUsuallyTimer", &mUsually[1]);
     JsonHelper::getFloat(inObj, "usuallyToGoodTimer", &mUsually[2]);
@@ -73,25 +70,11 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void ChickenFry::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
-    DebugInfo info;
-    info.first = "CurrentBottomSurface";
-    info.second = surfaceToString(mCurrentBottomSurface);
-    inspect->emplace_back(info);
-
-    info.first = "EasySurface";
-    info.second = surfaceToString(mEasySurface);
-    inspect->emplace_back(info);
-
-    info.first = "HardSurface";
-    info.second = surfaceToString(mHardSurface);
-    inspect->emplace_back(info);
-
-    info.first = "TooBurntTiemr";
-    info.second = StringUtil::floatToString(mTooBurntTimer->currentTime());
-    inspect->emplace_back(info);
+void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("CurrentBottomSurface", surfaceToString(mCurrentBottomSurface));
+    inspect->emplace_back("EasySurface", surfaceToString(mEasySurface));
+    inspect->emplace_back("HardSurface", surfaceToString(mHardSurface));
+    inspect->emplace_back("TooBurntTiemr", mTooBurntTimer->currentTime());
 }
 
 void ChickenFry::initialize() {
@@ -192,8 +175,6 @@ void ChickenFry::choiceEasyAndHardSurface() {
 }
 
 void ChickenFry::choiceBottomSurface() {
-    auto dir = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
-
     static const Vector3 dirs[] = {
         Vector3::up,
         Vector3::down,
@@ -203,21 +184,20 @@ void ChickenFry::choiceBottomSurface() {
         Vector3::back,
     };
     static const ChickenSurface dirSurfaces[] = {
-        ChickenSurface::BOTTOM,
         ChickenSurface::UP,
+        ChickenSurface::BOTTOM,
         ChickenSurface::RIGHT,
         ChickenSurface::LEFT,
-        ChickenSurface::BACK,
         ChickenSurface::FORE,
+        ChickenSurface::BACK,
     };
 
     float min = Math::infinity;
     auto sur = ChickenSurface::UP;
-    float dist = 0.f;
     for (size_t i = 0; i < 6; i++) {
-        dist = (dirs[i] - dir).lengthSq();
-        if (dist < min) {
-            min = dist;
+        auto dir = Vector3::transform(dirs[i], owner()->transform()->getRotation());
+        if (dir.y < min) {
+            min = dir.y;
             sur = dirSurfaces[i];
         }
     }

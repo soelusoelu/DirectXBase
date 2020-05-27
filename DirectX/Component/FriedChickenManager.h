@@ -16,13 +16,13 @@ class FriedChickenManager : public Component {
     using GameObjectPtrList = std::list<GameObjectPtr>;
 
 public:
-    FriedChickenManager(std::shared_ptr<GameObject> owner);
+    FriedChickenManager();
     ~FriedChickenManager();
     virtual void awake() override;
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //ターゲットから一番近い唐揚げを検索
     ChickenPtr findNearestChicken(const GameObject& target) const;
     //excludeを除くターゲットから一番近い唐揚げを検索

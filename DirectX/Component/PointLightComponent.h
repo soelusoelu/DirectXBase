@@ -11,11 +11,11 @@ struct PointLight;
 
 class PointLightComponent : public Component, public std::enable_shared_from_this<PointLightComponent> {
 public:
-    PointLightComponent(std::shared_ptr<GameObject> owner);
+    PointLightComponent();
     ~PointLightComponent();
     virtual void start() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void draw(const PointLight& pointLight) const;
     void setColor(const Vector3& color);
     void setInnerRadius(float radius);

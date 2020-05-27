@@ -4,6 +4,7 @@
 #define TO_STRING(X) # X;
 
 #include "../Math/Math.h"
+#include <any>
 #include <string>
 #include <vector>
 
@@ -28,6 +29,10 @@ public:
     static std::string vector2ToString(const Vector2& vec, int decimalDigits = 2);
     //Vector3からstringへの変換
     static std::string vector3ToString(const Vector3& vec, int decimalDigits = 2);
+    //Vector4からstringへの変換
+    static std::string vector4ToString(const Vector4& vec, int decimalDigits = 2);
     //Quaternionからstringへの変換
     static std::string quaternionToString(const Quaternion& quaternion, int decimalDigits = 2);
+    //anyからstringへの変換
+    static std::string anyToString(const std::any& src);
 };

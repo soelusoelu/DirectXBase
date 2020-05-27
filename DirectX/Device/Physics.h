@@ -13,9 +13,9 @@ class Physics {
 public:
     Physics();
     ~Physics();
-    //ボックスコンポーネントの追加・削除
-    void add(const CollPtr& circle);
-    void remove(const CollPtr& circle);
+    //コライダーの追加・削除
+    void add(const CollPtr& collider);
+    void remove(const CollPtr& collider);
     //全削除
     void clear();
     //総当たり判定

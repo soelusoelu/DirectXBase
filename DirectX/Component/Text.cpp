@@ -1,13 +1,12 @@
 ﻿#include "Text.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
-Text::Text(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Text", 500),
+Text::Text() :
+    Component(500),
     mText(""),
     mPosition(Vector2::zero),
     mScale(Vector2::one),
@@ -38,8 +37,6 @@ void Text::update() {
 }
 
 void Text::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getString(inObj, "text", &mText);
     JsonHelper::getVector2(inObj, "position", &mPosition);
     JsonHelper::getVector2(inObj, "scale", &mScale);
@@ -49,8 +46,6 @@ void Text::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
     JsonHelper::setString(alloc, inObj, "text", mText);
     JsonHelper::setVector2(alloc, inObj, "position", mPosition);
     JsonHelper::setVector2(alloc, inObj, "scale", mScale);
@@ -59,34 +54,17 @@ void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::
     JsonHelper::setBool(alloc, inObj, "rightJustified", mIsRightJustified);
 }
 
-void Text::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Text";
-    info.second = mText;
-    inspect->emplace_back(info);
-    info.first = "Position";
-    info.second = InspectHelper::vector2ToString(mPosition);
-    inspect->emplace_back(info);
-    info.first = "Scale";
-    info.second = InspectHelper::vector2ToString(mScale);
-    inspect->emplace_back(info);
-    info.first = "Color";
-    info.second = InspectHelper::vector3ToString(mColor);
-    inspect->emplace_back(info);
-    info.first = "Alpha";
-    info.second = StringUtil::floatToString(mAlpha);
-    inspect->emplace_back(info);
-    info.first = "RightJustified";
-    info.second = StringUtil::boolToString(mIsRightJustified);
-    inspect->emplace_back(info);
+void Text::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("Text", mText);
+    inspect->emplace_back("Position", mPosition);
+    inspect->emplace_back("Scale", mScale);
+    inspect->emplace_back("Color", mColor);
+    inspect->emplace_back("Alpha", mAlpha);
+    inspect->emplace_back("IsRightJustified", mIsRightJustified);
 }
 
 void Text::setText(const std::string & text) {
     mText = text;
-}
-
-void Text::setText(int number) {
-    mText = StringUtil::intToString(number);
 }
 
 const std::string& Text::text() const {

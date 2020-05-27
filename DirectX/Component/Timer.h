@@ -4,12 +4,12 @@
 
 class Timer : public Component {
 public:
-    Timer(std::shared_ptr<GameObject> owner);
+    Timer();
     ~Timer();
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //設定を最初の状態に戻す
     void reset();
     //カウントアップタイムがリミットタイムを超えたか

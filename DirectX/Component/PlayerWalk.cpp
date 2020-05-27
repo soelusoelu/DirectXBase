@@ -10,11 +10,10 @@
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 #include <string>
 
-PlayerWalk::PlayerWalk(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerWalk"),
+PlayerWalk::PlayerWalk() :
+    Component(),
     mCamera(nullptr),
     mMoveDir(Vector3::zero),
     mRollKey(KeyCode::None),
@@ -35,8 +34,6 @@ void PlayerWalk::start() {
 }
 
 void PlayerWalk::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
     std::string src;
     if (JsonHelper::getString(inObj, "rollKey", &src)) {
@@ -47,13 +44,8 @@ void PlayerWalk::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void PlayerWalk::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
-    DebugInfo info;
-    info.first = "MoveSpeed";
-    info.second = StringUtil::floatToString(mMoveSpeed);
-    inspect->emplace_back(info);
+void PlayerWalk::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("MoveSpeed", mMoveSpeed);
 }
 
 const Vector3& PlayerWalk::getMoveDirection() const {

@@ -38,12 +38,12 @@ class MeshComponent : public Component, public IMesh, public std::enable_shared_
     };
 
 public:
-    MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type = "MeshComponent");
+    MeshComponent();
     virtual ~MeshComponent();
     virtual void start() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual bool isVisible() const override;
     virtual size_t getNumMaterial() const override;

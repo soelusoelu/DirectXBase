@@ -6,13 +6,15 @@
 
 class GameObject;
 
+//要修正
 class DirectionalLight : public Component {
 public:
-    DirectionalLight(std::shared_ptr<GameObject> owner);
+    DirectionalLight();
     ~DirectionalLight();
+    virtual void awake() override;
     virtual void onUpdateWorldTransform() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     const Vector3& getDirection() const;
     void setDirection(const Vector3& dir);
     const Vector3& getColor() const;

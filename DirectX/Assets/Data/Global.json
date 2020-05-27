@@ -6,6 +6,8 @@
       "windowHeight": 576,
       "releaseWindowWidth": 1920,
       "releaseWindowHeight": 1080,
+      "windowStandardWidth": 1920,
+      "windowStandardHeight": 1080,
       "windowDebugWidth": 1920,
       "windowDebugHeight": 1080
     },

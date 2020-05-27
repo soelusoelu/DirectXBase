@@ -4,8 +4,8 @@
 #include "../GameObject/GameObject.h"
 #include "../Utility/StringUtil.h"
 
-Result::Result(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Result"),
+Result::Result() :
+    Component(),
     mText(nullptr),
     mScore(0) {
 }

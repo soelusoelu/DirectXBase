@@ -2,20 +2,17 @@
 
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
+#include <any>
 #include <memory>
+#include <string>
 
 class Component;
 class DrawString;
 class GameObject;
-class Renderer;
 class Transform3D;
 
 class Inspector {
-    friend class InspectHelper;
-
     using GameObjectPtr = std::shared_ptr<GameObject>;
-    using ComponentPtr = std::shared_ptr<Component>;
-    using TransformPtr = std::shared_ptr<Transform3D>;
 
 public:
     Inspector(DrawString* drawString);
@@ -26,12 +23,19 @@ public:
     void drawInspect() const;
 
 private:
-    void drawTag(const GameObjectPtr& target) const;
-    void drawTransform(const TransformPtr& target) const;
-    void drawPosition(const TransformPtr& target, const Vector2& position) const;
-    void drawRotation(const TransformPtr& target, const Vector2& position) const;
-    void drawScale(const TransformPtr& target, const Vector2& position) const;
-    void drawComponent(const ComponentPtr& component, Vector2* position) const;
+    void drawTag(const GameObject& target) const;
+    void drawTransform(const Transform3D& target) const;
+    void drawPosition(const Transform3D& target, const Vector2& position) const;
+    void drawRotation(const Transform3D& target, const Vector2& position) const;
+    void drawScale(const Transform3D& target, const Vector2& position) const;
+    void drawComponent(const Component& component, Vector2* position) const;
+
+    std::string anyToString(const std::any& src) const;
+    std::string vector2ToString(const Vector2& vec) const;
+    std::string vector3ToString(const Vector3& vec) const;
+    std::string vector4ToString(const Vector4& vec) const;
+    std::string quaternionToString(const Quaternion& quaternion) const;
+    std::string minusPosition(float value) const;
 
 private:
     DrawString* mDrawString;
@@ -54,14 +58,4 @@ private:
     float mCharHeight;
     //変数名の表示限界文字数
     int mMaxElementCharCount;
-};
-
-class InspectHelper {
-public:
-    static std::string vector2ToString(const Vector2& vec);
-    static std::string vector3ToString(const Vector3& vec);
-    static std::string quaternionToString(const Quaternion& quaternion);
-
-private:
-    static std::string minusPosition(float value);
 };

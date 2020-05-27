@@ -12,19 +12,16 @@ class ComponentManager {
     using ComponentPtrList = std::list<ComponentPtr>;
 
 public:
-    ComponentManager(std::shared_ptr<GameObject> owner);
+    ComponentManager();
     ~ComponentManager();
     //各コンポーネントのstartを一度だけ実行
     void start();
     //所有するすべてのコンポーネントを更新
     void update();
+    //所有するすべてのコンポーネントの終了処理を実行
+    void finalize();
     //コンポーネントの追加
-    void addComponent(ComponentPtr component);
-
-    template<typename T>
-    void addComponent() {
-        mStartComponents.emplace_back(std::make_shared<T>(mOwner.lock()));
-    }
+    void addComponent(const ComponentPtr& component);
 
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
     void onUpdateWorldTransform();
@@ -32,7 +29,7 @@ public:
     void onSetActive(bool value);
 
     //全コンポーネントの取得
-    ComponentPtrList getAllComponents() const;
+    const ComponentPtrList& getAllComponents() const;
     //コンポーネントの取得
     template<typename T>
     std::shared_ptr<T> getComponent() const {
@@ -73,7 +70,6 @@ public:
     }
 
 private:
-    std::weak_ptr<GameObject> mOwner;
     ComponentPtrList mStartComponents;
     ComponentPtrList mComponents;
 };

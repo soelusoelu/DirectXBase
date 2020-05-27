@@ -13,12 +13,14 @@ class Collider : public Component, public std::enable_shared_from_this<Collider>
     using CollPtrList = std::list<CollPtr>;
 
 protected:
-    Collider(std::shared_ptr<GameObject> owner, const std::string& type);
+    Collider();
     virtual ~Collider();
 
 public:
     virtual void start() override;
     virtual void update() override;
+    virtual void finalize() override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     virtual void onSetActive(bool value) override;
     //当たり判定を有効化
     void enabled();
@@ -29,7 +31,7 @@ public:
     //衝突判定の自動化
     void automation();
     //コライダーを追加
-    void addHitCollider(CollPtr hit);
+    void addHitCollider(const CollPtr& hit);
     CollPtrList onCollisionEnter();
     CollPtrList onCollisionStay();
     CollPtrList onCollisionExit();
@@ -38,11 +40,11 @@ public:
 
 protected:
     bool mIsAutoUpdate;
+    bool mEnable;
 
 private:
     CollPtrList mPreviousCollider;
     CollPtrList mCurrentCollider;
-    bool mEnable;
 
     static Physics* mPhysics;
 };

@@ -33,6 +33,7 @@
 #include "../Component/Timer.h"
 #include "../Component/TransparentMeshComponent.h"
 #include "../Component/Scene/GamePlay.h"
+#include "../Component/Scene/OperationExplanation.h"
 #include "../Component/Scene/ResultScene.h"
 #include "../Component/Scene/Scene.h"
 #include "../Component/Scene/Title.h"
@@ -72,6 +73,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(Timer);
     ADD_COMPONENT(TransparentMeshComponent);
     ADD_COMPONENT(GamePlay);
+    ADD_COMPONENT(OperationExplanation);
     ADD_COMPONENT(ResultScene);
     ADD_COMPONENT(Scene);
     ADD_COMPONENT(Title);
@@ -170,7 +172,7 @@ void GameObjectFactory::loadComponents(const GameObjectPtr& gameObject, const ra
             continue;
         }
         //新規コンポーネントを生成
-        itr->second(gameObject, compObj["properties"]);
+        itr->second(gameObject, type, compObj["properties"]);
     }
 }
 

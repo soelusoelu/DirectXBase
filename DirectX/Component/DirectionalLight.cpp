@@ -4,34 +4,30 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-DirectionalLight::DirectionalLight(std::shared_ptr<GameObject> owner) :
-    Component(owner, "DirectionalLight"),
+DirectionalLight::DirectionalLight() :
+    Component(),
     mDirection(Vector3::zero),
     mColor(Vector3::one) {
 }
 
 DirectionalLight::~DirectionalLight() = default;
 
+void DirectionalLight::awake() {
+    owner()->transform()->rotate(mDirection);
+}
+
 void DirectionalLight::onUpdateWorldTransform() {
     mDirection = Vector3::transform(Vector3::up, owner()->transform()->getRotation());
 }
 
 void DirectionalLight::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
-    //向きと色を設定
     JsonHelper::getVector3(inObj, "direction", &mDirection);
     JsonHelper::getVector3(inObj, "color", &mColor);
-    owner()->transform()->rotate(mDirection);
 }
 
-void DirectionalLight::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Color";
-    info.second = StringUtil::vector3ToString(mColor);
-    inspect->emplace_back(info);
+void DirectionalLight::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("Color", mColor);
 }
 
 const Vector3& DirectionalLight::getDirection() const {

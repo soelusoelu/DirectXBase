@@ -1,7 +1,6 @@
 ﻿#include "MeshComponent.h"
 #include "Camera.h"
 #include "ComponentManager.h"
-#include "../DebugLayer/Inspector.h"
 #include "../Device/AssetsManager.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
@@ -15,8 +14,8 @@
 #include "../System/Texture.h"
 #include "../Utility/LevelLoader.h"
 
-MeshComponent::MeshComponent(std::shared_ptr<GameObject> owner, const std::string& type) :
-    Component(owner, type),
+MeshComponent::MeshComponent() :
+    Component(),
     mMesh(nullptr),
     mShader(nullptr),
     mCamera(nullptr),
@@ -44,19 +43,14 @@ void MeshComponent::onSetActive(bool value) {
 }
 
 void MeshComponent::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     std::string fileName;
     if (JsonHelper::getString(inObj, "fileName", &fileName)) {
         setMesh(fileName);
     }
 }
 
-void MeshComponent::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "Color";
-    info.second = InspectHelper::vector3ToString(mColor);
-    inspect->emplace_back(info);
+void MeshComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("Color", mColor);
 }
 
 bool MeshComponent::isVisible() const {

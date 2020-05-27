@@ -1,10 +1,9 @@
 ﻿#include "Timer.h"
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-Timer::Timer(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Timer", 50),
+Timer::Timer() :
+    Component(50),
     mCurrentTime(0.f),
     mLimitTime(0.f),
     mIsOverLimit(false) {
@@ -21,28 +20,17 @@ void Timer::update() {
 }
 
 void Timer::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "limit", &mLimitTime);
 }
 
 void Timer::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    Component::saveProperties(alloc, inObj);
-
     JsonHelper::setFloat(alloc, inObj, "limit", mLimitTime);
 }
 
-void Timer::drawDebugInfo(DebugInfoList* inspect) const {
-    DebugInfo info;
-    info.first = "CurrentTime";
-    info.second = StringUtil::floatToString(mCurrentTime);
-    inspect->emplace_back(info);
-    info.first = "LimitTime";
-    info.second = StringUtil::floatToString(mLimitTime);
-    inspect->emplace_back(info);
-    info.first = "IsOverLimit";
-    info.second = StringUtil::boolToString(mIsOverLimit);
-    inspect->emplace_back(info);
+void Timer::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("CurrentTime", mCurrentTime);
+    inspect->emplace_back("LimitTime", mLimitTime);
+    inspect->emplace_back("IsOverLimit", mIsOverLimit);
 }
 
 void Timer::reset() {

@@ -13,7 +13,7 @@ class GBuffer;
 struct PointLight;
 class PointLightComponent;
 
-class Renderer : public std::enable_shared_from_this<Renderer> {
+class Renderer {
 public:
     Renderer();
     ~Renderer();

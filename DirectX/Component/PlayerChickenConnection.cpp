@@ -13,8 +13,8 @@
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
-PlayerChickenConnection::PlayerChickenConnection(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerChickenConnection", 150),
+PlayerChickenConnection::PlayerChickenConnection() :
+    Component(150),
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
@@ -61,8 +61,6 @@ void PlayerChickenConnection::update() {
 }
 
 void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     std::string src;
     if (JsonHelper::getString(inObj, "collectionKey", &src)) {
         Keyboard::stringToKeyCode(src, &mCollectionKey);
@@ -71,6 +69,10 @@ void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
         JoyPad::stringToJoyCode(src, &mCollectionPad);
     }
     JsonHelper::getBool(inObj, "isJumpRoll", &mIsJumpRoll);
+}
+
+void PlayerChickenConnection::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("IsJumpRoll", mIsJumpRoll);
 }
 
 void PlayerChickenConnection::setPlayer(const GameObject & player) {
@@ -114,6 +116,9 @@ void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenCompone
 }
 
 void PlayerChickenConnection::setChickenPosUnderThePlayer() {
+    if (mChicken->isTooBurnt()) {
+        return;
+    }
     auto pos = mPlayer->owner()->transform()->getPosition();
     pos.y = 0;
     mChicken->owner()->transform()->setPosition(pos);

@@ -9,7 +9,7 @@ enum class JoyCode;
 
 class Title : public Component {
 public:
-    Title(const std::shared_ptr<GameObject>& owner);
+    Title();
     ~Title();
     virtual void start() override;
     virtual void update() override;

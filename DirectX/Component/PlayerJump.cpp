@@ -6,11 +6,10 @@
 #include "../Input/JoyPad.h"
 #include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 #include <string>
 
-PlayerJump::PlayerJump(std::shared_ptr<GameObject> owner) :
-    Component(owner, "PlayerJump", 5),
+PlayerJump::PlayerJump() :
+    Component(5),
     mCurrentState(State::NONE),
     mPreviousState(State::NONE),
     mJumpStartPosition(Vector3::zero),
@@ -29,8 +28,6 @@ void PlayerJump::update() {
 }
 
 void PlayerJump::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     std::string src;
     if (JsonHelper::getString(inObj, "jumpKey", &src)) {
         Keyboard::stringToKeyCode(src, &mJumpKey);
@@ -42,20 +39,12 @@ void PlayerJump::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "speed", &mSpeed);
 }
 
-void PlayerJump::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
+void PlayerJump::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("Speed", mSpeed);
+    inspect->emplace_back("MoveRate", mMoveRate);
+    inspect->emplace_back("CanJump", mCanJump);
 
-    DebugInfo info;
-    info.first = "Speed";
-    info.second = StringUtil::floatToString(mSpeed);
-    inspect->emplace_back(info);
-    info.first = "MoveRate";
-    info.second = StringUtil::floatToString(mMoveRate);
-    inspect->emplace_back(info);
-    info.first = "CanJump";
-    info.second = StringUtil::boolToString(mCanJump);
-    inspect->emplace_back(info);
-
+    ComponentDebug::DebugInfo info;
     info.first = "State";
     if (mCurrentState == State::JUMPING) {
         info.second = "JUMPING";

@@ -4,23 +4,25 @@
 #include "FriedChickenComponent.h"
 #include "MeshComponent.h"
 #include "SoundComponent.h"
+#include "SphereCollisionComponent.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-Bird::Bird(std::shared_ptr<GameObject> owner) :
-    Component(owner, "Bird"),
+Bird::Bird() :
+    Component(),
     mOrbit(nullptr),
     mRestartTimer(std::make_unique<Time>()),
     mMesh(nullptr),
+    mCollider(nullptr),
     mSound(nullptr),
     mTarget(nullptr),
     mState(State::WAIT),
-    mMoveSpeed(0.f) {
+    mMoveSpeed(0.f),
+    mClimbSpeed(0.f) {
 }
 
 Bird::~Bird() = default;
@@ -30,11 +32,11 @@ void Bird::start() {
     mOrbit = compMana->getComponent<BirdOrbit>();
     mMesh = compMana->getComponent<MeshComponent>();
     mMesh->setActive(false);
+    mCollider = compMana->getComponent<SphereCollisionComponent>();
     mSound = compMana->getComponent<SoundComponent>();
     auto t = owner()->transform();
     t->rotate(Vector3::up, 90.f);
     t->rotate(Vector3::forward, 90.f);
-    t->setPivot(Vector3::up * mMesh->getRadius());
 }
 
 void Bird::update() {
@@ -46,21 +48,23 @@ void Bird::update() {
         move();
         takeChicken();
         isEndMoving();
+    } else if (mState == State::HIT_MOVE) {
+        hitMove();
+        isEndMoving();
     }
 }
 
 void Bird::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
+    JsonHelper::getFloat(inObj, "climbSpeed", &mClimbSpeed);
     float time;
     if (JsonHelper::getFloat(inObj, "restartTimer", &time)) {
         mRestartTimer->setLimitTime(time);
     }
 }
 
-void Bird::drawDebugInfo(DebugInfoList * inspect) const {
-    DebugInfo info;
+void Bird::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    ComponentDebug::DebugInfo info;
     info.first = "State";
     if (mState == State::WAIT) {
         info.second = "WAIT";
@@ -68,14 +72,13 @@ void Bird::drawDebugInfo(DebugInfoList * inspect) const {
         info.second = "PREDICT_LINE";
     } else if (mState == State::MOVE) {
         info.second = "MOVE";
+    } else if (mState == State::HIT_MOVE) {
+        info.second = "HIT_MOVE";
     }
     inspect->emplace_back(info);
-    info.first = "MoveSpeed";
-    info.second = StringUtil::floatToString(mMoveSpeed);
-    inspect->emplace_back(info);
-    info.first = "RestartTimer";
-    info.second = StringUtil::floatToString(mRestartTimer->limitTime());
-    inspect->emplace_back(info);
+    inspect->emplace_back("MoveSpeed", mMoveSpeed);
+    inspect->emplace_back("ClimbSpeed", mClimbSpeed);
+    inspect->emplace_back("RestartTimer", mRestartTimer->limitTime());
 }
 
 void Bird::waiting() {
@@ -104,27 +107,30 @@ void Bird::move() {
     owner()->transform()->translate(Vector3::left * Time::deltaTime * mMoveSpeed);
 }
 
+void Bird::hitMove() {
+    auto amount = Vector3::zero;
+    amount.x = -mMoveSpeed * Time::deltaTime;
+    amount.y = mClimbSpeed * Time::deltaTime;;
+    owner()->transform()->translate(amount);
+}
+
 void Bird::takeChicken() {
     if (!mTarget) {
         return;
     }
-    auto birdPos = owner()->transform()->getPosition();
-    auto targetPos = mTarget->transform()->getPosition();
-    //鳥が唐揚げの右側にいるときのみ
-    if (birdPos.x < targetPos.x) {
-        return;
-    }
-    //鳥と唐揚げの距離が近いときのみ
-    if (Math::abs(birdPos.x - targetPos.x) > 1.f) {
-        return;
-    }
-    if (Math::abs(birdPos.z - targetPos.z) > 1.f) {
-        return;
+
+    std::shared_ptr<GameObject> hit = nullptr;
+    for (const auto& col : mCollider->onCollisionEnter()) {
+        if (col->owner()->tag() != "FriedChicken") {
+            continue;
+        }
+        hit = col->owner();
+        break;
     }
 
-    auto fc = mTarget->componentManager()->getComponent<FriedChickenComponent>();
-    if (fc) {
-        fc->eaten();
+    if (hit) {
+        hit->componentManager()->getComponent<FriedChickenComponent>()->eaten();
+        mState = State::HIT_MOVE;
     }
 }
 

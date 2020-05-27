@@ -9,15 +9,14 @@
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-FriedChickenManager::FriedChickenManager(std::shared_ptr<GameObject> owner) :
-    Component(owner, "FriedChickenManager", 200),
+FriedChickenManager::FriedChickenManager() :
+    Component(200),
     mScoreEvaluation(nullptr),
     mStartNum(0),
     mMaxNum(0),
     mCurrentMaxNum(0),
-    mReplenishTimer(std::make_unique<Time>(0.f)) {
+    mReplenishTimer(std::make_unique<Time>()) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
@@ -50,8 +49,6 @@ void FriedChickenManager::update() {
 }
 
 void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getInt(inObj, "startNum", &mStartNum);
     JsonHelper::getInt(inObj, "maxNum", &mMaxNum);
     float time;
@@ -60,17 +57,10 @@ void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void FriedChickenManager::drawDebugInfo(DebugInfoList * inspect) const {
-    DebugInfo info;
-    info.first = "StartNum";
-    info.second = StringUtil::intToString(mStartNum);
-    inspect->emplace_back(info);
-    info.first = "MaxNum";
-    info.second = StringUtil::intToString(mMaxNum);
-    inspect->emplace_back(info);
-    info.first = "CurrentMaxNum";
-    info.second = StringUtil::intToString(mCurrentMaxNum);
-    inspect->emplace_back(info);
+void FriedChickenManager::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
+    inspect->emplace_back("StartNum", mStartNum);
+    inspect->emplace_back("MaxNum", mMaxNum);
+    inspect->emplace_back("CurrentMaxNum", mCurrentMaxNum);
 }
 
 std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject& target) const {
@@ -118,6 +108,9 @@ int FriedChickenManager::getEvaluatedScore() const {
     int score = 0;
     for (const auto& chicken : mChickens) {
         if (!chicken->isFinished()) {
+            continue;
+        }
+        if (chicken->isTooBurnt()) {
             continue;
         }
         const auto& fry = chicken->getFry();

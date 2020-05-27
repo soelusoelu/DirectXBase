@@ -4,10 +4,9 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
-BirdOrbit::BirdOrbit(std::shared_ptr<GameObject> owner) :
-    Component(owner, "BirdOrbit"),
+BirdOrbit::BirdOrbit() :
+    Component(),
     mTimer(0.f),
     mSprite(nullptr) {
 }
@@ -16,23 +15,14 @@ BirdOrbit::~BirdOrbit() = default;
 
 void BirdOrbit::start() {
     mSprite = owner()->componentManager()->getComponent<Sprite3D>();
-    mSprite->transform()->rotate(Vector3::right, 90.f);
-    mSprite->setActive(false);
 }
 
 void BirdOrbit::loadProperties(const rapidjson::Value & inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getFloat(inObj, "secondsAgo", &mTimer);
 }
 
-void BirdOrbit::drawDebugInfo(DebugInfoList * inspect) const {
-    Component::drawDebugInfo(inspect);
-
-    DebugInfo info;
-    info.first = "SecondsAgo";
-    info.second = StringUtil::floatToString(mTimer);
-    inspect->emplace_back(info);
+void BirdOrbit::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("SecondsAgo", mTimer);
 }
 
 void BirdOrbit::setActive(bool value) {

@@ -8,10 +8,10 @@ class GameObject;
 
 class HitPointComponent : public Component {
 public:
-    HitPointComponent(std::shared_ptr<GameObject> onwer);
+    HitPointComponent();
     ~HitPointComponent();
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void takeDamage(int damage);
     void takeHeal(int heal);
     void setHP(int hp, bool isChangeMax = true);

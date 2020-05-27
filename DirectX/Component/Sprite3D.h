@@ -17,13 +17,13 @@ class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D>
     };
 
 public:
-    Sprite3D(std::shared_ptr<GameObject> owenr);
+    Sprite3D();
     ~Sprite3D();
     virtual void start() override;
     virtual void update() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    virtual void drawDebugInfo(DebugInfoList* inspect) const override;
+    virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     //描画
     void draw(const Matrix4& viewProj) const;

@@ -2,13 +2,12 @@
 #include "ChickenMeshComponent.h"
 #include "ComponentManager.h"
 #include "../DebugLayer/Debug.h"
-#include "../Debuglayer/Inspector.h"
 #include "../GameObject/GameObject.h"
 #include "../Mesh/Material.h"
 #include "../Utility/LevelLoader.h"
 
-ChickenColorChanger::ChickenColorChanger(std::shared_ptr<GameObject> owner) :
-    Component(owner, "ChickenColorChanger"),
+ChickenColorChanger::ChickenColorChanger() :
+    Component(),
     mInitColor(Vector3::zero),
     mLittleFriedColor(Vector3::zero),
     mUsuallyColor(Vector3::zero),
@@ -31,8 +30,6 @@ void ChickenColorChanger::start() {
 }
 
 void ChickenColorChanger::loadProperties(const rapidjson::Value& inObj) {
-    Component::loadProperties(inObj);
-
     JsonHelper::getVector3(inObj, "initColor", &mInitColor);
     JsonHelper::getVector3(inObj, "littleFriedColor", &mLittleFriedColor);
     JsonHelper::getVector3(inObj, "usuallyColor", &mUsuallyColor);
@@ -40,25 +37,12 @@ void ChickenColorChanger::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector3(inObj, "burntColor", &mBurntColor);
 }
 
-void ChickenColorChanger::drawDebugInfo(DebugInfoList* inspect) const {
-    Component::drawDebugInfo(inspect);
-
-    DebugInfo info;
-    info.first = "InitColor";
-    info.second = InspectHelper::vector3ToString(mInitColor);
-    inspect->emplace_back(info);
-    info.first = "LittleFriedColor";
-    info.second = InspectHelper::vector3ToString(mLittleFriedColor);
-    inspect->emplace_back(info);
-    info.first = "UsuallyColor";
-    info.second = InspectHelper::vector3ToString(mUsuallyColor);
-    inspect->emplace_back(info);
-    info.first = "FriedColor";
-    info.second = InspectHelper::vector3ToString(mFriedColor);
-    inspect->emplace_back(info);
-    info.first = "BurntColor";
-    info.second = InspectHelper::vector3ToString(mBurntColor);
-    inspect->emplace_back(info);
+void ChickenColorChanger::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+    inspect->emplace_back("InitColor", mInitColor);
+    inspect->emplace_back("LittleFriedColor", mLittleFriedColor);
+    inspect->emplace_back("UsuallyColor", mUsuallyColor);
+    inspect->emplace_back("FriedColor", mFriedColor);
+    inspect->emplace_back("BurntColor", mBurntColor);
 }
 
 void ChickenColorChanger::initialize() {
@@ -85,7 +69,7 @@ void ChickenColorChanger::updateColor(ChickenSurface bottomSurface, FryState bot
     } else if (bottomState == FryState::BAD) {
         color = mBurntColor;
     } else {
-        Debug::logError(getTypeName() + ": Invalid state");
+        Debug::logError(getComponentName() + ": Invalid state");
     }
 
     getMaterial(bottomSurface)->diffuse = color;
