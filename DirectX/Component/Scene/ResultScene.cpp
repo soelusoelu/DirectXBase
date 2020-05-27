@@ -3,6 +3,7 @@
 #include "../ComponentManager.h"
 #include "../Result.h"
 #include "../Score.h"
+#include "../SoundComponent.h"
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectFactory.h"
 #include "../../GameObject/GameObjectManager.h"
@@ -30,6 +31,8 @@ void ResultScene::start() {
     auto resultObj = GameObjectCreater::createUI("Result");
     auto result = resultObj->componentManager()->getComponent<Result>();
     result->setScore(score->getScore());
+
+    owner()->componentManager()->getComponents<SoundComponent>().back()->playSE();
 
     scoreObj->destroy();
 }

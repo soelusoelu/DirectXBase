@@ -1,6 +1,7 @@
 #include "Title.h"
 #include "Scene.h"
 #include "../ComponentManager.h"
+#include "../SoundComponent.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
@@ -30,6 +31,7 @@ void Title::update() {
 #endif // _DEBUG
 
     if (isEnd) {
+        owner()->componentManager()->getComponents<SoundComponent>().back()->playSE();
         mScene->next("OperationExplanation");
     }
 }

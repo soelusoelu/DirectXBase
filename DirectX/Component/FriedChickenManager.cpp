@@ -3,6 +3,7 @@
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
 #include "ScoreEvaluation.h"
+#include "SoundComponent.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
@@ -13,6 +14,7 @@
 FriedChickenManager::FriedChickenManager() :
     Component(200),
     mScoreEvaluation(nullptr),
+    mSound(nullptr),
     mStartNum(0),
     mMaxNum(0),
     mCurrentMaxNum(0),
@@ -39,6 +41,7 @@ void FriedChickenManager::awake() {
 
 void FriedChickenManager::start() {
     mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
+    mSound = owner()->componentManager()->getComponent<SoundComponent>();
 }
 
 void FriedChickenManager::update() {
@@ -115,6 +118,10 @@ int FriedChickenManager::getEvaluatedScore() const {
         }
         const auto& fry = chicken->getFry();
         score += mScoreEvaluation->evaluateScore(fry);
+    }
+
+    if (score > 0) {
+        mSound->playSE();
     }
 
     return score;

@@ -179,6 +179,14 @@
             "goodScore": 10,
             "badScore": -3
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç÷Ç¢Ç®ë“Çø.wav",
+            "volume": 0.5,
+            "isFirstPlay": false
+          }
         }
       ]
     },
@@ -286,6 +294,14 @@
             "volume": 0.01,
             "isFirstPlay": true
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç÷Ç¢ÉâÉbÉVÉÉÉC.wav",
+            "volume": 0.5,
+            "isFirstPlay": false
+          }
         }
       ]
     },
@@ -381,6 +397,14 @@
             "fileName": "ç]åÀÇÃÇ‘ÇÁÇËó∑_result.wav",
             "volume": 0.01,
             "isFirstPlay": true
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç÷Ç¢Ç®ë“Çø.wav",
+            "volume": 1.0,
+            "isFirstPlay": false
           }
         }
       ]

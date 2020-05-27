@@ -8,6 +8,7 @@ class FriedChickenComponent;
 class GameObject;
 class ScoreEvaluation;
 class Time;
+class SoundComponent;
 
 class FriedChickenManager : public Component {
     using ChickenPtr = std::shared_ptr<FriedChickenComponent>;
@@ -44,6 +45,7 @@ private:
 
 private:
     std::shared_ptr<ScoreEvaluation> mScoreEvaluation;
+    std::shared_ptr<SoundComponent> mSound;
     //揚げてる最中の唐揚げ
     ChickenPtrList mChickens;
     //待機中の唐揚げ
