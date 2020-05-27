@@ -47,11 +47,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-<<<<<<< HEAD
-            "fileName": "Player/NPlayer.fbx"
-=======
             "fileName": "Player/Player2.fbx"
->>>>>>> 819a7f05f96418e110ac6634e8e26b223a78cd0d
           }
         },
         {
