@@ -160,7 +160,7 @@ void PlayerChickenConnection::collection() {
     //    return;
     //}
     //すべての面が普通以上で
-    if (!mChicken->getFry().isUpSelectState(FryState::NOT_FRIED)) {
+    if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
         return;
     }
 

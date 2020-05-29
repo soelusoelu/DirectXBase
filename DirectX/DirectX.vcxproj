@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\ChickenRise.cpp" />
     <ClCompile Include="Component\BirdOrbit.cpp" />
     <ClCompile Include="Component\ChickenColorChanger.cpp" />
     <ClCompile Include="Component\ChickenFry.cpp" />
@@ -270,6 +271,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\ChickenRise.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
     <ClInclude Include="Component\ChickenColorChanger.h" />
     <ClInclude Include="Component\ChickenFry.h" />

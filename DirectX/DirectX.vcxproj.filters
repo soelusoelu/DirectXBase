@@ -117,6 +117,7 @@
     <ClCompile Include="Component\Scene\GamePlay.cpp" />
     <ClCompile Include="Component\Scene\Title.cpp" />
     <ClCompile Include="Component\Scene\OperationExplanation.cpp" />
+    <ClCompile Include="Component\ChickenRise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -248,5 +249,6 @@
     <ClInclude Include="Component\Scene\GamePlay.h" />
     <ClInclude Include="Component\Scene\Title.h" />
     <ClInclude Include="Component\Scene\OperationExplanation.h" />
+    <ClInclude Include="Component\ChickenRise.h" />
   </ItemGroup>
 </Project>

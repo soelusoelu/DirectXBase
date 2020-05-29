@@ -6,6 +6,7 @@
 #include "../Component/ChickenColorChanger.h"
 #include "../Component/ChickenFry.h"
 #include "../Component/ChickenMeshComponent.h"
+#include "../Component/ChickenRise.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
@@ -48,6 +49,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(ChickenColorChanger);
     ADD_COMPONENT(ChickenFry);
     ADD_COMPONENT(ChickenMeshComponent);
+    ADD_COMPONENT(ChickenRise);
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(Field);
     ADD_COMPONENT(FriedChickenComponent);

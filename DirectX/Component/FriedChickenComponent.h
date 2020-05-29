@@ -5,6 +5,8 @@
 #include "../Math/Math.h"
 #include <memory>
 
+class ChickenRise;
+
 class FriedChickenComponent : public Component {
     enum class State {
         FRY,
@@ -54,21 +56,17 @@ private:
     void autoCollection();
     //空中から落下させる
     void fall();
-    //上昇させる
-    void up();
-    //上昇終了
-    void upEnd();
     //油に浸かったら揚げ始める
     void soakedInOil();
 
 private:
     std::shared_ptr<IChickenFry> mFry;
+    std::shared_ptr<ChickenRise> mRise;
     State mState;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;
     Vector2 mRandomRangeScale;
     float mRollSpeed;
     float mFallSpeed;
-    float mUpSpeed;
     bool mIsWaitingColliction;
 };
