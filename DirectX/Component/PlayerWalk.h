@@ -28,4 +28,7 @@ private:
     JoyCode mRollPad;
     float mMoveSpeed;
     float mMeshRadius;
+    float mClampFore;
+    float mClampBack;
+    float mClampX;
 };
