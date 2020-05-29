@@ -9,6 +9,7 @@ class FriedChickenComponent : public Component {
     enum class State {
         FRY,
         FALL,
+        UP,
         TOO_BURNT,
         EATEN
     };
@@ -25,6 +26,8 @@ public:
     void initialize();
     //強制的に揚げ終わる
     void finishFryed();
+    //上昇モード突入
+    void setUp();
     //食われる
     void eaten();
     //その場で唐揚げを回転させる
@@ -34,6 +37,8 @@ public:
     bool isFrying() const;
     //落ちている途中か
     bool isFalling() const;
+    //上昇している途中か
+    bool isUP() const;
     //揚げ終わっているか
     bool isFinished() const;
     //食われたか
@@ -49,6 +54,10 @@ private:
     void autoCollection();
     //空中から落下させる
     void fall();
+    //上昇させる
+    void up();
+    //上昇終了
+    void upEnd();
     //油に浸かったら揚げ始める
     void soakedInOil();
 
@@ -60,5 +69,6 @@ private:
     Vector2 mRandomRangeScale;
     float mRollSpeed;
     float mFallSpeed;
+    float mUpSpeed;
     bool mIsWaitingColliction;
 };

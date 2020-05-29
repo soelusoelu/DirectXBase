@@ -155,14 +155,16 @@ void PlayerChickenConnection::collection() {
     if (!mJumpTarget) {
         return;
     }
+    //半分の面が良い以上で
     //if (!mChicken->getFry().isBurntHalfSurfaces()) {
     //    return;
     //}
-    if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
+    //すべての面が普通以上で
+    if (!mChicken->getFry().isUpSelectState(FryState::NOT_FRIED)) {
         return;
     }
 
-    mChicken->finishFryed();
+    mChicken->setUp();
 
     auto pos = mJumpTarget->owner()->transform()->getPosition();
     mPlayer->owner()->transform()->setPosition(pos);

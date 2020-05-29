@@ -16,8 +16,9 @@ FriedChickenComponent::FriedChickenComponent() :
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
-    mRollSpeed(60.f),
-    mFallSpeed(1.f),
+    mRollSpeed(0.f),
+    mFallSpeed(0.f),
+    mUpSpeed(0.f),
     mIsWaitingColliction(false) {
 }
 
@@ -45,6 +46,9 @@ void FriedChickenComponent::update() {
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
+    } else if (mState == State::UP) {
+        up();
+        upEnd();
     } else if (mState == State::TOO_BURNT) {
         tooBurntUpdate();
     }
@@ -56,6 +60,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getVector2(inObj, "randomRangeScale", &mRandomRangeScale);
     JsonHelper::getFloat(inObj, "rollSpeed", &mRollSpeed);
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
+    JsonHelper::getFloat(inObj, "upSpeed", &mUpSpeed);
 }
 
 void FriedChickenComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
@@ -64,6 +69,7 @@ void FriedChickenComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect
     inspect->emplace_back("RandomRangeScale", mRandomRangeScale);
     inspect->emplace_back("RollSpeed", mRollSpeed);
     inspect->emplace_back("FallSpeed", mFallSpeed);
+    inspect->emplace_back("UpSpeed", mUpSpeed);
 }
 
 const IChickenFry& FriedChickenComponent::getFry() const {
@@ -100,6 +106,10 @@ void FriedChickenComponent::finishFryed() {
     mIsWaitingColliction = true;
 }
 
+void FriedChickenComponent::setUp() {
+    mState = State::UP;
+}
+
 void FriedChickenComponent::eaten() {
     mState = State::EATEN;
 }
@@ -117,6 +127,10 @@ bool FriedChickenComponent::isFrying() const {
 
 bool FriedChickenComponent::isFalling() const {
     return mState == State::FALL;
+}
+
+bool FriedChickenComponent::isUP() const {
+    return mState == State::UP;
 }
 
 bool FriedChickenComponent::isFinished() const {
@@ -157,6 +171,17 @@ void FriedChickenComponent::autoCollection() {
 
 void FriedChickenComponent::fall() {
     owner()->transform()->translate(Vector3::down * mFallSpeed * Time::deltaTime);
+}
+
+void FriedChickenComponent::up() {
+    owner()->transform()->translate(Vector3::up * mUpSpeed * Time::deltaTime);
+}
+
+void FriedChickenComponent::upEnd() {
+    auto posY = owner()->transform()->getPosition().y;
+    if (posY > 6.f) {
+        finishFryed();
+    }
 }
 
 void FriedChickenComponent::soakedInOil() {
