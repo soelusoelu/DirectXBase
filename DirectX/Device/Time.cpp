@@ -30,6 +30,10 @@ void Time::setLimitTime(float sec) {
     mLimitTime = sec;
 }
 
+void Time::setCurrentTime(float sec) {
+    mCurrentTime = sec;
+}
+
 float Time::currentTime() const {
     return mCurrentTime;
 }

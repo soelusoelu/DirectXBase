@@ -44,6 +44,7 @@ void ChickenFry::onUpdateWorldTransform() {
     auto previous = mCurrentBottomSurface;
     choiceBottomSurface();
     if (previous != mCurrentBottomSurface) {
+        resetBurnt();
         mTooBurntTimer->reset();
     }
 }
@@ -214,6 +215,24 @@ void ChickenFry::updateTimerIfBurntBottomSurface() {
     }
 
     mTooBurntTimer->update();
+}
+
+void ChickenFry::resetBurnt() {
+    for (size_t i = 0; i < 6; i++) {
+        if (getFryState(i) != FryState::GOOD) {
+            continue;
+        }
+        auto sumUsually = mBurntTime - mUsually[3];
+        auto sumEasy = mEasyBurntTime - mEasy[3];
+        auto sumHard = mHardBurntTime - mHard[3];
+        if (i == static_cast<unsigned>(mEasySurface)) {
+            mFryTimer[i]->setCurrentTime(sumEasy);
+        } else if (i == static_cast<unsigned>(mHardSurface)) {
+            mFryTimer[i]->setCurrentTime(sumHard);
+        } else {
+            mFryTimer[i]->setCurrentTime(sumUsually);
+        }
+    }
 }
 
 int ChickenFry::getNumSurface() const {
