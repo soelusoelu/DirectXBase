@@ -155,7 +155,10 @@ void PlayerChickenConnection::collection() {
     if (!mJumpTarget) {
         return;
     }
-    if (!mChicken->getFry().isBurntHalfSurfaces()) {
+    //if (!mChicken->getFry().isBurntHalfSurfaces()) {
+    //    return;
+    //}
+    if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
         return;
     }
 

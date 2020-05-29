@@ -132,6 +132,17 @@ bool ChickenFry::isBurntHalfSurfaces() const {
     return (count >= getNumSurface() / 2);
 }
 
+bool ChickenFry::isUpSelectState(FryState state) const {
+    for (size_t i = 0; i < getNumSurface(); i++) {
+        auto s = getFryState(i);
+        if (static_cast<unsigned>(s) < static_cast<unsigned>(state)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 FryState ChickenFry::getFryState(ChickenSurface surface) const {
     return getFryState(static_cast<unsigned>(surface));
 }
