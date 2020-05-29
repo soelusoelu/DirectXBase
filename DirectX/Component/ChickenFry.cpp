@@ -71,7 +71,7 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     inspect->emplace_back("CurrentBottomSurface", surfaceToString(mCurrentBottomSurface));
     inspect->emplace_back("EasySurface", surfaceToString(mEasySurface));
     inspect->emplace_back("HardSurface", surfaceToString(mHardSurface));
@@ -98,8 +98,9 @@ void ChickenFry::update() {
     frying();
     updateTimerIfBurntBottomSurface();
 
-    if (mColorChanger) {
-        mColorChanger->update(mCurrentBottomSurface, getFryState(mCurrentBottomSurface));
+    mColorChanger->update(mCurrentBottomSurface, getFryState(mCurrentBottomSurface));
+    if (isTooBurnt()) {
+        mColorChanger->changeAllSurfaces(FryState::BAD);
     }
 }
 

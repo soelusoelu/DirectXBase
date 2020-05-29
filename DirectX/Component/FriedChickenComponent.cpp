@@ -40,7 +40,7 @@ void FriedChickenComponent::update() {
         if (mFry) {
             mFry->update();
             tooBurnt();
-            autoCollection();
+            //autoCollection();
         }
     } else if (mState == State::FALL) {
         fall();
