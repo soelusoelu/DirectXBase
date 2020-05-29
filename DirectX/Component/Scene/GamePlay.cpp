@@ -42,14 +42,14 @@ void GamePlay::awake() {
     mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
     mPCConnection->setPlayer(*p);
     mPCConnection->setChicken(c);
-    GameObjectCreater::create("Bird");
+    //GameObjectCreater::create("Bird");
     auto score = GameObjectCreater::createUI("Score");
     mScore = score->componentManager()->getComponent<Score>();
     auto tl = GameObjectCreater::createUI("TimeLimit");
     mTimeLimitTimer = tl->componentManager()->getComponent<Timer>();
     auto jt = GameObjectCreater::createUI("JumpTarget");
     mJumpTarget = jt->componentManager()->getComponent<JumpTarget>();
-    GameObjectCreater::create("Field");
+    //GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
 

@@ -41,13 +41,14 @@
     {
       "type": "Player",
       "properties": {
-        "scale": [ 0.5, 0.5, 0.5 ]
+        "scale": [ 0.5, 0.5, 0.5 ],
+        "rotation": [ -90.0, -90.0, 0.0 ]
       },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Player/Player2.fbx"
+            "fileName": "Player/Player_.fbx"
           }
         },
         {
