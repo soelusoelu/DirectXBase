@@ -23,6 +23,10 @@
 #include "../Component/PlayerWalk.h"
 #include "../Component/PointLightComponent.h"
 #include "../Component/Result.h"
+#include "../Component/ResultChicken.h"
+#include "../Component/ResultChickenFall.h"
+#include "../Component/ResultChickenManager.h"
+#include "../Component/ResultRank.h"
 #include "../Component/Score.h"
 #include "../Component/ScoreEvaluation.h"
 #include "../Component/SoundComponent.h"
@@ -64,6 +68,10 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(PlayerWalk);
     ADD_COMPONENT(PointLightComponent);
     ADD_COMPONENT(Result);
+    ADD_COMPONENT(ResultChicken);
+    ADD_COMPONENT(ResultChickenFall);
+    ADD_COMPONENT(ResultChickenManager);
+    ADD_COMPONENT(ResultRank);
     ADD_COMPONENT(Score);
     ADD_COMPONENT(ScoreEvaluation);
     ADD_COMPONENT(SoundComponent);

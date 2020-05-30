@@ -208,6 +208,10 @@
     <ClCompile Include="Component\Scene\Scene.cpp" />
     <ClCompile Include="Component\Scene\Title.cpp" />
     <ClCompile Include="Component\Scene\OperationExplanation.cpp" />
+    <ClCompile Include="Component\ResultChickenFall.cpp" />
+    <ClCompile Include="Component\ResultRank.cpp" />
+    <ClCompile Include="Component\ResultChicken.cpp" />
+    <ClCompile Include="Component\ResultChickenManager.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -328,6 +332,10 @@
     <ClInclude Include="Component\Scene\Scene.h" />
     <ClInclude Include="Component\Scene\Title.h" />
     <ClInclude Include="Component\Scene\OperationExplanation.h" />
+    <ClInclude Include="Component\ResultChickenFall.h" />
+    <ClInclude Include="Component\ResultRank.h" />
+    <ClInclude Include="Component\ResultChicken.h" />
+    <ClInclude Include="Component\ResultChickenManager.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />

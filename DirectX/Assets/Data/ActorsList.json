@@ -279,6 +279,69 @@
       ]
     },
     {
+      "type": "ResultChicken",
+      "components": [
+        {
+          "type": "ResultChicken",
+          "properties": {
+          }
+        },
+        {
+          "type": "ResultRank",
+          "properties": {
+            "low": 50,
+            "middle": 100,
+            "high": 200,
+            "lowTextureName": "ResultLow.png",
+            "middleTextureName": "ResultMiddle.png",
+            "highTextureName": "ResultHigh.png",
+            "superTextureName": "ResultSuper.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "ResultBG.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+          }
+        }
+      ]
+    },
+    {
+      "type": "ResultChickenFall",
+      "components": [
+        {
+          "type": "ResultChickenFall",
+          "properties": {
+            "randomFallSpeedMin": 700.0,
+            "randomFallSpeedMax": 1000.0,
+            "rotateSpeed": 180.0
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "ResultChicken.png"
+          }
+        }
+      ]
+    },
+    {
+      "type": "ResultChickenManager",
+      "components": [
+        {
+          "type": "ResultChickenManager",
+          "properties": {
+            "fallsNum": 30
+          }
+        }
+      ]
+    },
+    {
       "type": "Title",
       "components": [
         {

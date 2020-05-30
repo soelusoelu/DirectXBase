@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "../ComponentManager.h"
 #include "../Result.h"
+#include "../ResultChicken.h"
 #include "../Score.h"
 #include "../SoundComponent.h"
 #include "../../GameObject/GameObject.h"
@@ -28,11 +29,16 @@ void ResultScene::start() {
     auto scoreObj = owner()->getGameObjectManager()->find("Score");
     auto score = scoreObj->componentManager()->getComponent<Score>();
 
-    auto resultObj = GameObjectCreater::createUI("Result");
-    auto result = resultObj->componentManager()->getComponent<Result>();
-    result->setScore(score->getScore());
+    auto resultChicken = GameObjectCreater::create("ResultChicken");
+    auto resChi = resultChicken->componentManager()->getComponent<ResultChicken>();
+    resChi->initialize(score->getScore());
+    auto rcm = GameObjectCreater::create("ResultChickenManager");
 
-    owner()->componentManager()->getComponents<SoundComponent>().back()->playSE();
+    //auto resultObj = GameObjectCreater::createUI("Result");
+    //auto result = resultObj->componentManager()->getComponent<Result>();
+    //result->setScore(score->getScore());
+
+    //owner()->componentManager()->getComponents<SoundComponent>().back()->playSE();
 
     scoreObj->destroy();
 }
