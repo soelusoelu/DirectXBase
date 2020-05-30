@@ -10,6 +10,7 @@
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
+#include "../Component/Fade.h"
 #include "../Component/Field.h"
 #include "../Component/FriedChickenComponent.h"
 #include "../Component/FriedChickenManager.h"
@@ -22,7 +23,6 @@
 #include "../Component/PlayerJump.h"
 #include "../Component/PlayerWalk.h"
 #include "../Component/PointLightComponent.h"
-#include "../Component/Result.h"
 #include "../Component/ResultChicken.h"
 #include "../Component/ResultChickenFall.h"
 #include "../Component/ResultChickenManager.h"
@@ -55,6 +55,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(ChickenRise);
     ADD_COMPONENT(DirectionalLight);
+    ADD_COMPONENT(Fade);
     ADD_COMPONENT(Field);
     ADD_COMPONENT(FriedChickenComponent);
     ADD_COMPONENT(FriedChickenManager);
@@ -67,7 +68,6 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(PlayerJump);
     ADD_COMPONENT(PlayerWalk);
     ADD_COMPONENT(PointLightComponent);
-    ADD_COMPONENT(Result);
     ADD_COMPONENT(ResultChicken);
     ADD_COMPONENT(ResultChickenFall);
     ADD_COMPONENT(ResultChickenManager);

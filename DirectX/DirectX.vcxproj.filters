@@ -98,7 +98,6 @@
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="Component\PlayerChickenConnection.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
-    <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
@@ -122,6 +121,7 @@
     <ClCompile Include="Component\ResultRank.cpp" />
     <ClCompile Include="Component\ResultChicken.cpp" />
     <ClCompile Include="Component\ResultChickenManager.cpp" />
+    <ClCompile Include="Component\Fade.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -227,7 +227,6 @@
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="Component\PlayerChickenConnection.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
-    <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Component\Bird.h" />
@@ -258,5 +257,6 @@
     <ClInclude Include="Component\ResultRank.h" />
     <ClInclude Include="Component\ResultChicken.h" />
     <ClInclude Include="Component\ResultChickenManager.h" />
+    <ClInclude Include="Component\Fade.h" />
   </ItemGroup>
 </Project>

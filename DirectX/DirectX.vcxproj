@@ -167,10 +167,10 @@
     <ClCompile Include="Component\ChickenFry.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
+    <ClCompile Include="Component\Fade.cpp" />
     <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerJump.cpp" />
-    <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
@@ -282,6 +282,7 @@
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\ChickenMeshComponent.h" />
     <ClInclude Include="Component\ChickenSurface.h" />
+    <ClInclude Include="Component\Fade.h" />
     <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IChickenFry.h" />
     <ClInclude Include="Component\IMesh.h" />
@@ -289,7 +290,6 @@
     <ClInclude Include="Component\IPlayerWalk.h" />
     <ClInclude Include="Component\PlayerComponent.h" />
     <ClInclude Include="Component\PlayerJump.h" />
-    <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />

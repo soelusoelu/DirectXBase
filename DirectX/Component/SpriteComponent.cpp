@@ -17,10 +17,13 @@
 
 SpriteComponent::SpriteComponent() :
     Component(500),
+    mDrawOrder(0),
     mSprite(nullptr) {
 }
 
-SpriteComponent::~SpriteComponent() {
+SpriteComponent::~SpriteComponent() = default;
+
+void SpriteComponent::finalize() {
     mSprite->destroy();
 }
 
@@ -29,6 +32,7 @@ void SpriteComponent::onSetActive(bool value) {
 }
 
 void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getInt(inObj, "drawOrder", &mDrawOrder);
     std::string str;
     if (JsonHelper::getString(inObj, "fileName", &str)) {
         setSprite(str);
@@ -75,6 +79,7 @@ void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) cons
     inspect->emplace_back("Color", getColor());
     inspect->emplace_back("UV", getUV());
     inspect->emplace_back("TextureSize", getTextureSize());
+    inspect->emplace_back("DrawOrder", mDrawOrder);
 }
 
 void SpriteComponent::update() {
@@ -142,29 +147,11 @@ const std::string& SpriteComponent::fileName() const {
     return mSprite->fileName();
 }
 
-void SpriteComponent::draw() const {
-    auto proj = Matrix4::identity;
-    //原点をスクリーン左上にするために平行移動
-    proj.m[3][0] = -1.f;
-    proj.m[3][1] = 1.f;
-    //ピクセル単位で扱うために
-    proj.m[0][0] = 2.f / Window::width();
-    proj.m[1][1] = -2.f / Window::height();
+int SpriteComponent::getDrawOrder() const {
+    return mDrawOrder;
+}
 
-    //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
-    //バーテックスバッファーをセット
-    Texture::vertexBuffer->setVertexBuffer();
-    //インデックスバッファーをセット
-    Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
-    //デプステスト無効化
-    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
-    //通常合成
-    BlendDesc bd;
-    bd.renderTarget.srcBlend = Blend::SRC_ALPHA;
-    bd.renderTarget.destBlend = Blend::INV_SRC_ALPHA;
-    Singleton<DirectX>::instance().blendState()->setBlendState(bd);
-
+void SpriteComponent::draw(const Matrix4& proj) const {
     mSprite->draw(proj);
 }
 

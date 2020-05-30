@@ -115,7 +115,7 @@ void Renderer::renderFromTexture(const Camera& camera, const DirectionalLight& d
 
 void Renderer::renderSprite() const {
     //プリミティブ・トポロジーをセット
-    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_STRIP);
+    Singleton<DirectX>::instance().setPrimitive(PrimitiveType::PRIMITIVE_TYPE_TRIANGLE_LIST);
     //インデックスバッファーをセット
     Texture::indexBuffer->setIndexBuffer(Format::FORMAT_R16_UINT);
     //通常合成

@@ -1,10 +1,8 @@
 ﻿#include "ResultScene.h"
 #include "Scene.h"
 #include "../ComponentManager.h"
-#include "../Result.h"
 #include "../ResultChicken.h"
 #include "../Score.h"
-#include "../SoundComponent.h"
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectFactory.h"
 #include "../../GameObject/GameObjectManager.h"
@@ -17,6 +15,7 @@
 ResultScene::ResultScene() :
     Component(),
     mScene(nullptr),
+    mResult(nullptr),
     mEnterKey(KeyCode::None),
     mEnterPad(JoyCode::None),
     mScore(0) {
@@ -30,20 +29,17 @@ void ResultScene::start() {
     auto score = scoreObj->componentManager()->getComponent<Score>();
 
     auto resultChicken = GameObjectCreater::create("ResultChicken");
-    auto resChi = resultChicken->componentManager()->getComponent<ResultChicken>();
-    resChi->initialize(score->getScore());
-    auto rcm = GameObjectCreater::create("ResultChickenManager");
-
-    //auto resultObj = GameObjectCreater::createUI("Result");
-    //auto result = resultObj->componentManager()->getComponent<Result>();
-    //result->setScore(score->getScore());
-
-    //owner()->componentManager()->getComponents<SoundComponent>().back()->playSE();
+    mResult = resultChicken->componentManager()->getComponent<ResultChicken>();
+    mResult->initialize(score->getScore());
 
     scoreObj->destroy();
 }
 
 void ResultScene::update() {
+    if (!mResult->isResult()) {
+        return;
+    }
+
     auto isEnd = Input::joyPad()->getJoyDown(mEnterPad);
 #ifdef _DEBUG
     if (!isEnd) {

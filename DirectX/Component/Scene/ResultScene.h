@@ -4,6 +4,7 @@
 #include <memory>
 
 class Scene;
+class ResultChicken;
 enum class KeyCode;
 enum class JoyCode;
 
@@ -17,6 +18,7 @@ public:
 
 private:
     std::shared_ptr<Scene> mScene;
+    std::shared_ptr<ResultChicken> mResult;
     KeyCode mEnterKey;
     JoyCode mEnterPad;
     int mScore;

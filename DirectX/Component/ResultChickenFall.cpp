@@ -14,8 +14,7 @@ ResultChickenFall::ResultChickenFall() :
     mRandomFallSpeedMin(0.f),
     mRandomFallSpeedMax(0.f),
     mFallSpeed(0.f),
-    mRotateSpeed(0.f)
-{
+    mRotateSpeed(0.f) {
 }
 
 ResultChickenFall::~ResultChickenFall() = default;

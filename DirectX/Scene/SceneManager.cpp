@@ -118,7 +118,7 @@ void SceneManager::draw() const {
     //2Dスプライト
     auto proj = Matrix4::identity;
     mRenderer->renderSprite2D(&proj);
-    mSpriteManager->drawComponents();
+    mSpriteManager->drawComponents(proj);
     mSpriteManager->draw(proj);
     //テキスト一括描画
     mRenderer->getDrawString()->drawAll(proj);

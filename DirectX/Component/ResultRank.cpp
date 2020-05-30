@@ -20,7 +20,7 @@ ResultRank::ResultRank() :
 ResultRank::~ResultRank() = default;
 
 void ResultRank::start() {
-    mSprite = owner()->componentManager()->getComponents<SpriteComponent>().back();
+    mSprite = owner()->componentManager()->getComponent<SpriteComponent>();
     selectTexture();
     mSprite->setActive(false);
 }

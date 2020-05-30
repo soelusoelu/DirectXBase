@@ -22,7 +22,7 @@ public:
     ~SpriteManager();
     void update();
     void draw(const Matrix4& proj) const;
-    void drawComponents() const;
+    void drawComponents(const Matrix4& proj) const;
     void draw3Ds(const Matrix4& viewProj) const;
     void add(const SpritePtr& add);
     void addComponent(const SpriteComponentPtr& add);

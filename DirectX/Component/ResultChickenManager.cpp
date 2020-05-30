@@ -1,14 +1,11 @@
 ﻿#include "ResultChickenManager.h"
-#include "ComponentManager.h"
-#include "ResultChickenFall.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Utility/LevelLoader.h"
 
 ResultChickenManager::ResultChickenManager() :
     Component(),
-    mFallsNum(0)
-{
+    mFallsNum(0) {
 }
 
 ResultChickenManager::~ResultChickenManager() = default;
@@ -16,8 +13,13 @@ ResultChickenManager::~ResultChickenManager() = default;
 void ResultChickenManager::awake() {
     for (size_t i = 0; i < mFallsNum; i++) {
         auto gameObject = GameObjectCreater::create("ResultChickenFall");
-        auto rcf = gameObject->componentManager()->getComponent<ResultChickenFall>();
-        mChickens.emplace_back(rcf);
+        mChickens.emplace_back(gameObject);
+    }
+}
+
+void ResultChickenManager::finalize() {
+    for (auto&& c : mChickens) {
+        c->destroy();
     }
 }
 

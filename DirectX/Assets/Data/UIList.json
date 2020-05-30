@@ -38,7 +38,7 @@
         {
           "type": "Sprite3D",
           "properties": {
-            "fileName": "ArrowDown2.png",
+            "fileName": "ArrowDown.png",
             "scale": [ 1.0, 1.0 ]
           }
         },
@@ -71,23 +71,7 @@
         {
           "type": "Timer",
           "properties": {
-            "limit": 3.0
-          }
-        }
-      ]
-    },
-    {
-      "type": "Result",
-      "components": [
-        {
-          "type": "Result",
-          "properties": {
-          }
-        },
-        {
-          "type": "Text",
-          "properties": {
-            "position": [ 800.0, 400.0 ]
+            "limit": 90.0
           }
         }
       ]

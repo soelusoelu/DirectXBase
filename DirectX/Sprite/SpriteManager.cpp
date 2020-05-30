@@ -41,7 +41,7 @@ void SpriteManager::draw(const Matrix4& proj) const {
     }
 }
 
-void SpriteManager::drawComponents() const {
+void SpriteManager::drawComponents(const Matrix4& proj) const {
     if (mSpriteComponents.empty()) {
         return;
     }
@@ -50,7 +50,7 @@ void SpriteManager::drawComponents() const {
         if (!sprite->getActive() || sprite->isDead()) {
             continue;
         }
-        sprite->draw();
+        sprite->draw(proj);
     }
 }
 
@@ -72,7 +72,14 @@ void SpriteManager::add(const SpritePtr& add) {
 }
 
 void SpriteManager::addComponent(const SpriteComponentPtr& add) {
-    mSpriteComponents.emplace_back(add);
+    int order = add->getDrawOrder();
+    auto itr = mSpriteComponents.begin();
+    for (; itr != mSpriteComponents.end(); ++itr) {
+        if (order < (*itr)->getDrawOrder()) {
+            break;
+        }
+    }
+    mSpriteComponents.insert(itr, add);
 }
 
 void SpriteManager::add3D(const Sprite3DPtr& add) {

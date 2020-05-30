@@ -40,4 +40,6 @@ public:
     virtual const Shader& shader() const = 0;
     //ファイル名の取得
     virtual const std::string& fileName() const = 0;
+    //描画優先番号の取得
+    virtual int getDrawOrder() const = 0;
 };

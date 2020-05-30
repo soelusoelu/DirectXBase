@@ -30,6 +30,8 @@ public:
     //文字を右詰めにするか
     void setRightJustified(bool value);
     bool getRightJustified() const;
+    void setActive(bool value);
+    bool getActive() const;
 
 private:
     std::string mText;
@@ -39,4 +41,5 @@ private:
     float mAlpha;
     Pivot mPivot;
     bool mIsRightJustified;
+    bool mIsActive;
 };

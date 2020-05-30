@@ -284,8 +284,39 @@
         {
           "type": "ResultChicken",
           "properties": {
+            "fallToFadeTimer": 2.0,
+            "enterKey": "Space",
+            "enterPad": "A"
           }
         },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "ResultBG1.png"
+          }
+        },
+        {
+          "type": "Text",
+          "properties": {
+            "position": [ 800.0, 50.0 ],
+            "scale": [ 3.0, 3.0 ],
+            "pivot": "CenterTop",
+            "isActive": false
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "‚Ö‚¢‚¨‘Ò‚¿.wav",
+            "volume": 1.0,
+            "isFirstPlay": false
+          }
+        }
+      ]
+    },
+    {
+      "type": "ResultRank",
+      "components": [
         {
           "type": "ResultRank",
           "properties": {
@@ -301,12 +332,7 @@
         {
           "type": "SpriteComponent",
           "properties": {
-            "fileName": "ResultBG.png"
-          }
-        },
-        {
-          "type": "SpriteComponent",
-          "properties": {
+            "drawOrder": 5
           }
         }
       ]
@@ -325,6 +351,7 @@
         {
           "type": "SpriteComponent",
           "properties": {
+            "drawOrder": 3,
             "fileName": "ResultChicken.png"
           }
         }
@@ -473,13 +500,24 @@
             "volume": 0.01,
             "isFirstPlay": true
           }
+        }
+      ]
+    },
+    {
+      "type": "Fade",
+      "components": [
+        {
+          "type": "Fade",
+          "properties": {
+            "fadeSpeed": 1.0
+          }
         },
         {
-          "type": "SoundComponent",
+          "type": "SpriteComponent",
           "properties": {
-            "fileName": "‚Ö‚¢‚¨‘Ò‚¿.wav",
-            "volume": 1.0,
-            "isFirstPlay": false
+            "drawOrder": 10,
+            "fileName": "Fade.png",
+            "isActive": false
           }
         }
       ]

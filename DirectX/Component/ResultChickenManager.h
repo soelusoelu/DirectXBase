@@ -4,21 +4,22 @@
 #include <list>
 #include <memory>
 
-class ResultChickenFall;
+class GameObject;
 
 class ResultChickenManager : public Component {
-    using ChickenFallPtr = std::shared_ptr<ResultChickenFall>;
-    using ChickenFallPtrList = std::list<ChickenFallPtr>;
+    using GameObjectPtr = std::shared_ptr<GameObject>;
+    using GameObjectPtrList = std::list<GameObjectPtr>;
 
 public:
     ResultChickenManager();
     ~ResultChickenManager();
     virtual void awake() override;
+    virtual void finalize() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
 private:
-    ChickenFallPtrList mChickens;
+    GameObjectPtrList mChickens;
     int mFallsNum;
 };
 

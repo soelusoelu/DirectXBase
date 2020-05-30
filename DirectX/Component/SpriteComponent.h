@@ -14,6 +14,7 @@ class SpriteComponent : public Component, public ISprite, public std::enable_sha
 public:
     SpriteComponent();
     virtual ~SpriteComponent();
+    virtual void finalize() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
@@ -34,8 +35,9 @@ public:
     virtual const Texture& texture() const override;
     virtual const Shader& shader() const override;
     virtual const std::string& fileName() const override;
+    virtual int getDrawOrder() const override;
 
-    virtual void draw() const;
+    virtual void draw(const Matrix4& proj) const;
 
     static void setSpriteManager(SpriteManager* manager);
 
@@ -44,6 +46,7 @@ private:
 
 protected:
     std::shared_ptr<Sprite> mSprite;
+    int mDrawOrder;
 
     static SpriteManager* mSpriteManager;
 };
