@@ -22,8 +22,6 @@ ResultChicken::ResultChicken() :
     mFade(nullptr),
     mFallToFadeTimer(std::make_unique<Time>()),
     mState(State::FALL),
-    mEnterKey(KeyCode::None),
-    mEnterPad(JoyCode::None),
     mScore(0) {
 }
 
@@ -54,10 +52,10 @@ void ResultChicken::update() {
 
     }
 
-    auto isEnd = Input::joyPad()->getJoyDown(mEnterPad);
+    auto isEnd = Input::joyPad()->getEnter();
 #ifdef _DEBUG
     if (!isEnd) {
-        isEnd = Input::keyboard()->getKeyDown(mEnterKey);
+        isEnd = Input::keyboard()->getEnter();
     }
 #endif // _DEBUG
     if (isEnd && !isResult()) {
@@ -69,13 +67,6 @@ void ResultChicken::loadProperties(const rapidjson::Value & inObj) {
     float timer;
     if (JsonHelper::getFloat(inObj, "fallToFadeTimer", &timer)) {
         mFallToFadeTimer->setLimitTime(timer);
-    }
-    std::string src;
-    if (JsonHelper::getString(inObj, "enterKey", &src)) {
-        Keyboard::stringToKeyCode(src, &mEnterKey);
-    }
-    if (JsonHelper::getString(inObj, "enterPad", &src)) {
-        JoyPad::stringToJoyCode(src, &mEnterPad);
     }
 }
 

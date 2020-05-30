@@ -14,7 +14,7 @@ Mouse::~Mouse() {
     SAFE_RELEASE(mMouseDevice);
 }
 
-bool Mouse::initialize(HWND hWnd, LPDIRECTINPUT8 directInput) {
+bool Mouse::initialize(HWND hWnd, IDirectInput8* directInput) {
     mhWnd = hWnd;
 
     // 「DirectInputデバイス」オブジェクトの作成

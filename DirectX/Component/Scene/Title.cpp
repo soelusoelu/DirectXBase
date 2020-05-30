@@ -6,14 +6,11 @@
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
-#include "../../Utility/LevelLoader.h"
 #include <string>
 
 Title::Title() :
     Component(),
-    mScene(nullptr),
-    mEnterKey(KeyCode::None),
-    mEnterPad(JoyCode::None) {
+    mScene(nullptr) {
 }
 
 Title::~Title() = default;
@@ -23,25 +20,15 @@ void Title::start() {
 }
 
 void Title::update() {
-    auto isEnd = Input::joyPad()->getJoyDown(mEnterPad);
+    auto isEnd = Input::joyPad()->getEnter();
 #ifdef _DEBUG
     if (!isEnd) {
-        isEnd = Input::keyboard()->getKeyDown(mEnterKey);
+        isEnd = Input::keyboard()->getEnter();
     }
 #endif // _DEBUG
 
     if (isEnd) {
         owner()->componentManager()->getComponents<SoundComponent>().back()->playSE();
         mScene->next("OperationExplanation");
-    }
-}
-
-void Title::loadProperties(const rapidjson::Value & inObj) {
-    std::string src;
-    if (JsonHelper::getString(inObj, "enterKey", &src)) {
-        Keyboard::stringToKeyCode(src, &mEnterKey);
-    }
-    if (JsonHelper::getString(inObj, "enterPad", &src)) {
-        JoyPad::stringToJoyCode(src, &mEnterPad);
     }
 }

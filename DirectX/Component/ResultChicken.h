@@ -9,8 +9,6 @@ class ResultChickenManager;
 class Fade;
 class Time;
 class Text;
-enum class KeyCode;
-enum class JoyCode;
 
 class ResultChicken : public Component {
     enum class State {
@@ -40,7 +38,5 @@ private:
     std::unique_ptr<Time> mFallToFadeTimer;
     std::shared_ptr<Text> mText;
     State mState;
-    KeyCode mEnterKey;
-    JoyCode mEnterPad;
     int mScore;
 };

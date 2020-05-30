@@ -19,7 +19,7 @@ class Mouse {
 public:
     Mouse();
     ~Mouse();
-    bool initialize(HWND hWnd, LPDIRECTINPUT8 directInput);
+    bool initialize(HWND hWnd, IDirectInput8* directInput);
     void update();
     //キーが押された瞬間
     bool getMouseDown(MouseCode button);
@@ -33,7 +33,7 @@ public:
     static void stringToJoyCode(const std::string& src, MouseCode* dst);
 
 private:
-    LPDIRECTINPUTDEVICE8 mMouseDevice;
+    IDirectInputDevice8* mMouseDevice;
     DIMOUSESTATE2 mCurrentMouseState;
     DIMOUSESTATE2 mPreviousMouseState;
     HWND mhWnd;

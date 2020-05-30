@@ -23,6 +23,11 @@ bool Input::initialize(HWND hWnd) {
     return true;
 }
 
+void Input::loadProperties(const rapidjson::Value& inObj) {
+    mKeyboard->loadProperties(inObj);
+    mJoyPad->loadProperties(inObj);
+}
+
 void Input::end() {
     SAFE_RELEASE(mDirectInput);
     SAFE_DELETE(mKeyboard);
@@ -48,7 +53,7 @@ JoyPad* Input::joyPad() {
     return mJoyPad;
 }
 
-LPDIRECTINPUT8 Input::mDirectInput = nullptr;
+IDirectInput8* Input::mDirectInput = nullptr;
 Keyboard* Input::mKeyboard = nullptr;
 Mouse* Input::mMouse = nullptr;
 JoyPad* Input::mJoyPad = nullptr;

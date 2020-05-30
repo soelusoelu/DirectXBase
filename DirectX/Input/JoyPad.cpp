@@ -1,20 +1,22 @@
 ﻿#include "JoyPad.h"
 #include "Input.h"
 #include "../System/Game.h"
+#include "../Utility/LevelLoader.h"
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE*, VOID*);
 BOOL CALLBACK enumObjectsCallback(const DIDEVICEOBJECTINSTANCE*, VOID*);
 
 JoyPad::JoyPad() :
     mCurrentJoyState(),
-    mPreviousJoyState() {
+    mPreviousJoyState(),
+    mEnterPad(JoyCode::None) {
 }
 
 JoyPad::~JoyPad() {
     SAFE_RELEASE(mPadDevice);
 }
 
-bool JoyPad::initialize(HWND hWnd, LPDIRECTINPUT8 directInput) {
+bool JoyPad::initialize(HWND hWnd, IDirectInput8* directInput) {
     //利用可能なゲームコントローラーの列挙関数を実行
     if (FAILED(directInput->EnumDevices(DI8DEVCLASS_GAMECTRL, enumJoysticksCallback, NULL, DIEDFL_ATTACHEDONLY))) {
         return false;
@@ -38,6 +40,13 @@ bool JoyPad::initialize(HWND hWnd, LPDIRECTINPUT8 directInput) {
     mPadDevice->Acquire();
 
     return true;
+}
+
+void JoyPad::loadProperties(const rapidjson::Value& inObj) {
+    std::string src;
+    if (JsonHelper::getString(inObj, "enterPad", &src)) {
+        stringToJoyCode(src, &mEnterPad);
+    }
 }
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext) {
@@ -105,6 +114,10 @@ Vector2 JoyPad::rightStick() const {
     return temp;
 }
 
+bool JoyPad::getEnter() const {
+    return getJoyDown(mEnterPad);
+}
+
 void JoyPad::stringToJoyCode(const std::string& src, JoyCode* dst) {
     auto joy = JoyCode::None;
 
@@ -135,4 +148,4 @@ void JoyPad::stringToJoyCode(const std::string& src, JoyCode* dst) {
     }
 }
 
-LPDIRECTINPUTDEVICE8 JoyPad::mPadDevice = nullptr;
+IDirectInputDevice8* JoyPad::mPadDevice = nullptr;

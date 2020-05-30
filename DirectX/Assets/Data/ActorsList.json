@@ -379,8 +379,6 @@
         {
           "type": "Title",
           "properties": {
-            "enterKey": "Space",
-            "enterPad": "A"
           }
         },
         {

@@ -3,18 +3,13 @@
 #include "../ComponentManager.h"
 #include "../SpriteComponent.h"
 #include "../../GameObject/GameObject.h"
-#include "../../GameObject/Transform2D.h"
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
-#include "../../Utility/LevelLoader.h"
-#include <string>
 
 OperationExplanation::OperationExplanation() :
     Component(),
     mScene(nullptr),
-    mEnterKey(KeyCode::None),
-    mEnterPad(JoyCode::None),
     mIsEnd(false) {
 }
 
@@ -25,10 +20,10 @@ void OperationExplanation::start() {
 }
 
 void OperationExplanation::update() {
-    auto isEnd = Input::joyPad()->getJoyDown(mEnterPad);
+    auto isEnd = Input::joyPad()->getEnter();
 #ifdef _DEBUG
     if (!isEnd) {
-        isEnd = Input::keyboard()->getKeyDown(mEnterKey);
+        isEnd = Input::keyboard()->getEnter();
     }
 #endif // _DEBUG
 
@@ -39,15 +34,5 @@ void OperationExplanation::update() {
         auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
         sprites.back()->setActive(true);
         mIsEnd = true;
-    }
-}
-
-void OperationExplanation::loadProperties(const rapidjson::Value & inObj) {
-    std::string src;
-    if (JsonHelper::getString(inObj, "enterKey", &src)) {
-        Keyboard::stringToKeyCode(src, &mEnterKey);
-    }
-    if (JsonHelper::getString(inObj, "enterPad", &src)) {
-        JoyPad::stringToJoyCode(src, &mEnterPad);
     }
 }
