@@ -72,7 +72,7 @@
           "properties": {
             "jumpKey": "Space",
             "jumpPad": "A",
-            "speed": 2.0
+            "speed": 0.5
           }
         }
       ]
