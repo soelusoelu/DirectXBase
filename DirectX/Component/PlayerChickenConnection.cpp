@@ -57,6 +57,7 @@ void PlayerChickenConnection::update() {
 
         rollChicken();
         collection();
+        tooBurntUnderThePlayer();
     }
 }
 
@@ -142,6 +143,13 @@ void PlayerChickenConnection::rollChicken() {
     mChicken->roll(dir);
 }
 
+void PlayerChickenConnection::setPlayerPosOnTheJumpTarget() {
+    auto pos = mJumpTarget->owner()->transform()->getPosition();
+    mPlayer->owner()->transform()->setPosition(pos);
+    setPlayerPosOnTheChicken(*mJumpTarget);
+    mChicken = mJumpTarget;
+}
+
 void PlayerChickenConnection::collection() {
     bool isPressed = Input::joyPad()->getJoyDown(mCollectionPad);
 #ifdef _DEBUG
@@ -166,8 +174,18 @@ void PlayerChickenConnection::collection() {
 
     mChicken->setUp();
 
-    auto pos = mJumpTarget->owner()->transform()->getPosition();
-    mPlayer->owner()->transform()->setPosition(pos);
-    setPlayerPosOnTheChicken(*mJumpTarget);
-    mChicken = mJumpTarget;
+    setPlayerPosOnTheJumpTarget();
+}
+
+void PlayerChickenConnection::tooBurntUnderThePlayer() {
+    if (!mChicken) {
+        return;
+    }
+    if (!mJumpTarget) {
+        return;
+    }
+    if (!mChicken->isTooBurnt()) {
+        return;
+    }
+    setPlayerPosOnTheJumpTarget();
 }
