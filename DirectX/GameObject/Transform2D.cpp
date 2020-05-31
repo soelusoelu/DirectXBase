@@ -71,33 +71,33 @@ void Transform2D::rotate(float angle) {
     shouldRecomputeTransform();
 }
 
-void Transform2D::setPivot(Pivot pivot) {
+void Transform2D::setPivot(Pivot::Pivot pivot) {
     switch (pivot) {
-    case Pivot::LEFT_TOP:
+    case Pivot::Pivot::LEFT_TOP:
         mPivot = Vector2::zero;
         break;
-    case Pivot::CENTER_TOP:
+    case Pivot::Pivot::CENTER_TOP:
         mPivot.x = mSize.x / 2.f;
         break;
-    case Pivot::RIGHT_TOP:
+    case Pivot::Pivot::RIGHT_TOP:
         mPivot.x = mSize.x;
         break;
-    case Pivot::CENTER_LEFT:
+    case Pivot::Pivot::CENTER_LEFT:
         mPivot.y = mSize.y / 2.f;
         break;
-    case Pivot::CENTER:
+    case Pivot::Pivot::CENTER:
         mPivot = mSize / 2.f;
         break;
-    case Pivot::CENTER_RIGHT:
+    case Pivot::Pivot::CENTER_RIGHT:
         mPivot = Vector2(mSize.x, mSize.y / 2.f);
         break;
-    case Pivot::LEFT_BOTTOM:
+    case Pivot::Pivot::LEFT_BOTTOM:
         mPivot.y = mSize.y;
         break;
-    case Pivot::CETNER_BOTTOM:
+    case Pivot::Pivot::CETNER_BOTTOM:
         mPivot = Vector2(mSize.x / 2.f, mSize.y);
         break;
-    case Pivot::RIGHT_BOTTOM:
+    case Pivot::Pivot::RIGHT_BOTTOM:
         mPivot = mSize;
         break;
     default:
@@ -132,34 +132,6 @@ void Transform2D::setSize(const Vector2 & size) {
 
 const Vector2& Transform2D::getSize() const {
     return mSize;
-}
-
-void Transform2D::stringToPivot(const std::string& src, Pivot* dst) {
-    auto pivot = Pivot::NONE;
-
-    if (src == "LeftTop") {
-        pivot = Pivot::LEFT_TOP;
-    } else if (src == "CenterTop") {
-        pivot = Pivot::CENTER_TOP;
-    } else if (src == "RightTop") {
-        pivot = Pivot::RIGHT_TOP;
-    } else if (src == "CenterLeft") {
-        pivot = Pivot::CENTER_LEFT;
-    } else if (src == "Center") {
-        pivot = Pivot::CENTER;
-    } else if (src == "CenterRight") {
-        pivot = Pivot::CENTER_RIGHT;
-    } else if (src == "LeftBottom") {
-        pivot = Pivot::LEFT_BOTTOM;
-    } else if (src == "CenterBottom") {
-        pivot = Pivot::CETNER_BOTTOM;
-    } else if (src == "RightBottom") {
-        pivot = Pivot::RIGHT_BOTTOM;
-    }
-
-    if (pivot != Pivot::NONE) {
-        *dst = pivot;
-    }
 }
 
 void Transform2D::shouldRecomputeTransform() {

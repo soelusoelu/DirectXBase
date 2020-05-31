@@ -44,7 +44,7 @@ void DrawString::clear() {
     mParamsString.clear();
 }
 
-void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, Pivot pivot) {
+void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, Pivot::Pivot pivot) {
     ParamInt param;
     param.number = number;
     param.position = position;
@@ -54,7 +54,7 @@ void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 
     mParamsInt.emplace_back(param);
 }
 
-void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, Pivot pivot) {
+void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, Pivot::Pivot pivot) {
     ParamFloat param;
     param.number = number;
     param.position = position;
@@ -65,7 +65,7 @@ void DrawString::drawNumber(float number, const Vector2 & position, const Vector
     mParamsFloat.emplace_back(param);
 }
 
-void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot pivot) {
+void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot::Pivot pivot) {
     ParamString param;
     param.alphabet = alphabet;
     param.position = position;
@@ -216,32 +216,32 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     }
 }
 
-void DrawString::computePositionFromPivot(Vector2 * pos, const Vector2 & size, Pivot pivot) const {
+void DrawString::computePositionFromPivot(Vector2 * pos, const Vector2 & size, Pivot::Pivot pivot) const {
     switch (pivot) {
-    case Pivot::CENTER_TOP:
+    case Pivot::Pivot::CENTER_TOP:
         pos->x -= size.x / 2.f;
         break;
-    case Pivot::RIGHT_TOP:
+    case Pivot::Pivot::RIGHT_TOP:
         pos->x -= size.x;
         break;
-    case Pivot::CENTER_LEFT:
+    case Pivot::Pivot::CENTER_LEFT:
         pos->y -= size.y / 2.f;
         break;
-    case Pivot::CENTER:
+    case Pivot::Pivot::CENTER:
         *pos -= size / 2.f;
         break;
-    case Pivot::CENTER_RIGHT:
+    case Pivot::Pivot::CENTER_RIGHT:
         pos->x -= size.x;
         pos->y -= size.y / 2.f;
         break;
-    case Pivot::LEFT_BOTTOM:
+    case Pivot::Pivot::LEFT_BOTTOM:
         pos->y -= size.y;
         break;
-    case Pivot::CETNER_BOTTOM:
+    case Pivot::Pivot::CETNER_BOTTOM:
         pos->x -= size.x / 2.f;
         pos->y -= size.y;
         break;
-    case Pivot::RIGHT_BOTTOM:
+    case Pivot::Pivot::RIGHT_BOTTOM:
         *pos -= size;
         break;
     default:

@@ -212,6 +212,7 @@
     <ClCompile Include="Component\ResultRank.cpp" />
     <ClCompile Include="Component\ResultChicken.cpp" />
     <ClCompile Include="Component\ResultChickenManager.cpp" />
+    <ClCompile Include="GameObject\Pivot.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -336,6 +337,7 @@
     <ClInclude Include="Component\ResultRank.h" />
     <ClInclude Include="Component\ResultChicken.h" />
     <ClInclude Include="Component\ResultChickenManager.h" />
+    <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />

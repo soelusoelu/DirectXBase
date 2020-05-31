@@ -353,7 +353,8 @@
           "type": "SpriteComponent",
           "properties": {
             "drawOrder": 3,
-            "fileName": "ResultChicken.png"
+            "fileName": "ResultChicken.png",
+            "pivot": "Center"
           }
         }
       ]

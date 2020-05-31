@@ -21,11 +21,9 @@ ResultChickenFall::~ResultChickenFall() = default;
 
 void ResultChickenFall::start() {
     mSprite = owner()->componentManager()->getComponent<SpriteComponent>();
-    const auto& t = mSprite->transform();
-    t->setPivot(Pivot::CENTER);
     initialize();
     auto randomPosY = Random::randomRange(0.f, static_cast<float>(Window::standardHeight()));
-    t->translate(Vector2::up * randomPosY);
+    mSprite->transform()->translate(Vector2::up * randomPosY);
 }
 
 void ResultChickenFall::update() {

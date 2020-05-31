@@ -1,6 +1,7 @@
 #include "SpriteComponent.h"
 #include "ComponentManager.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/Pivot.h"
 #include "../GameObject/Transform2D.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
@@ -64,8 +65,8 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
         setUV(vec4.x, vec4.y, vec4.z, vec4.w);
     }
     if (JsonHelper::getString(inObj, "pivot", &str)) {
-        Pivot pivot = Pivot::NONE;
-        Transform2D::stringToPivot(str, &pivot);
+        Pivot::Pivot pivot = Pivot::Pivot::NONE;
+        Pivot::stringToPivot(str, &pivot);
         transform()->setPivot(pivot);
     }
 }

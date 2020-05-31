@@ -1,11 +1,10 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "../GameObject/Pivot.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <string>
-
-enum class Pivot;
 
 class Text : public Component {
 public:
@@ -24,8 +23,8 @@ public:
     const Vector3& getColor() const;
     void setAlpha(float alpha);
     float getAlpha() const;
-    void setPivot(Pivot pivot);
-    Pivot getPivot() const;
+    void setPivot(Pivot::Pivot pivot);
+    Pivot::Pivot getPivot() const;
     void setActive(bool value);
     bool getActive() const;
 
@@ -35,6 +34,6 @@ private:
     Vector2 mScale;
     Vector3 mColor;
     float mAlpha;
-    Pivot mPivot;
+    Pivot::Pivot mPivot;
     bool mIsActive;
 };
