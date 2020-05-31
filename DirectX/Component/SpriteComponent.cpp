@@ -135,6 +135,10 @@ bool SpriteComponent::isDead() const {
     return mSprite->isDead();
 }
 
+void SpriteComponent::changeTexture(const std::string& fileName) {
+    mSprite->changeTexture(fileName);
+}
+
 const Texture& SpriteComponent::texture() const {
     return mSprite->texture();
 }

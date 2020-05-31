@@ -416,23 +416,25 @@
         {
           "type": "OperationExplanation",
           "properties": {
-            "enterKey": "Space",
-            "enterPad": "A"
+            "operationTextures": [
+              "sousa1.png",
+              "sousa2.png"
+            ]
           }
         },
         {
           "type": "SpriteComponent",
           "properties": {
-            "fileName": "Sousa.png"
           }
         },
         {
           "type": "SpriteComponent",
           "properties": {
+            "drawOrder": 1,
             "fileName": "NowLoading.png",
             "isActive": false,
-            "position": [ 1920.0, 1130.0 ],
-            "pivot": "RightBottom"
+            "position": [ 1920.0, -50.0 ],
+            "pivot": "RightTop"
           }
         },
         {
@@ -487,8 +489,6 @@
         {
           "type": "ResultScene",
           "properties": {
-            "enterKey": "Space",
-            "enterPad": "A"
           }
         },
         {

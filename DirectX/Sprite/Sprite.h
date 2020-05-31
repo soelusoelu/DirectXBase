@@ -43,6 +43,8 @@ public:
     void setActive(bool value);
     bool getActive() const;
     bool isDead() const;
+    //テクスチャの張替え
+    void changeTexture(const std::string& fileName);
     //テクスチャの取得
     const Texture& texture() const;
     //シェーダーの取得

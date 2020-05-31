@@ -34,6 +34,8 @@ public:
     virtual void setActive(bool value) = 0;
     virtual bool getActive() const = 0;
     virtual bool isDead() const = 0;
+    //テクスチャの張替え
+    virtual void changeTexture(const std::string& fileName) = 0;
     //テクスチャ
     virtual const Texture& texture() const = 0;
     //シェーダーの取得

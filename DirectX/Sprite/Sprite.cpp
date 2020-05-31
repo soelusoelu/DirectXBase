@@ -13,7 +13,7 @@
 
 Sprite::Sprite(const std::string& fileName) :
     mTransform(std::make_shared<Transform2D>()),
-    mTexture(Singleton<AssetsManager>::instance().createTexture(fileName)),
+    mTexture(nullptr),
     mShader(Singleton<AssetsManager>::instance().createShader("Texture.hlsl")),
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
@@ -21,12 +21,8 @@ Sprite::Sprite(const std::string& fileName) :
     mState(State::ACTIVE),
     mFileName(fileName) {
 
-    //デスクをもとにサイズ取得
-    auto desc = mTexture->desc();
-    mTextureSize = Vector2(desc.width, desc.height);
-
-    //Transformに通知
-    mTransform->setSize(mTextureSize);
+    //テクスチャ生成
+    changeTexture(fileName);
 
     mShader->createConstantBuffer(sizeof(TextureConstantBuffer), 0);
 
@@ -150,6 +146,23 @@ bool Sprite::getActive() const {
 
 bool Sprite::isDead() const {
     return mState == State::DEAD;
+}
+
+void Sprite::changeTexture(const std::string& fileName) {
+    if (mTexture) {
+        mTexture.reset();
+    }
+    mTexture = Singleton<AssetsManager>::instance().createTexture(fileName);
+
+    //デスクをもとにサイズ取得
+    const auto& desc = mTexture->desc();
+    mTextureSize = Vector2(desc.width, desc.height);
+
+    //Transformに通知
+    mTransform->setSize(mTextureSize);
+
+    //ファイル名変更
+    mFileName = fileName;
 }
 
 const Texture& Sprite::texture() const {

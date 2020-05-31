@@ -32,6 +32,7 @@ public:
     virtual void setActive(bool value) override;
     virtual bool getActive() const override;
     virtual bool isDead() const override;
+    virtual void changeTexture(const std::string& fileName) override;
     virtual const Texture& texture() const override;
     virtual const Shader& shader() const override;
     virtual const std::string& fileName() const override;
