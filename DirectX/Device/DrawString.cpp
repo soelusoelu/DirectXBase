@@ -52,18 +52,6 @@ void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 
     mParamsInt.emplace_back(param);
 }
 
-void DrawString::drawNumberRightJustified(int number, const Vector2 & position, const Vector2 & scale, Pivot pivot) {
-    //桁数計算(本当は=1)
-    int digit = 0;
-    for (int i = number; i >= 10; i /= 10) {
-        digit++;
-    }
-
-    auto pos = position;
-    pos.x -= WIDTH * digit * scale.x;
-    drawNumber(number, pos, scale, pivot);
-}
-
 void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, Pivot pivot) {
     ParamFloat param;
     param.number = number;
@@ -73,18 +61,6 @@ void DrawString::drawNumber(float number, const Vector2 & position, const Vector
     param.pivot = pivot;
 
     mParamsFloat.emplace_back(param);
-}
-
-void DrawString::drawNumberRightJustified(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits) {
-    int digit = 0;
-    for (int i = number; i >= 10; i /= 10) {
-        digit++;
-    }
-
-    auto pos = position;
-    pos.x -= (WIDTH * digit + WIDTH * decimalDigits) * scale.x;
-    pos.x -= PERIOD_WIDTH * scale.x; //ピリオドの分
-    drawNumber(number, pos, scale, decimalDigits, Pivot::LEFT_TOP);
 }
 
 void DrawString::drawString(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot pivot) {
@@ -97,12 +73,6 @@ void DrawString::drawString(const std::string & alphabet, const Vector2 & positi
     param.pivot = pivot;
 
     mParamsString.emplace_back(param);
-}
-
-void DrawString::drawStringRightJustified(const std::string & alphabet, const Vector2 & position, const Vector2 & scale, const Vector3 & color, float alpha, Pivot pivot) {
-    auto pos = position;
-    pos.x -= alphabet.length() * WIDTH * scale.x;
-    drawString(alphabet, pos, scale, color, alpha, Pivot::LEFT_TOP);
 }
 
 void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
@@ -198,15 +168,20 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
     auto alpha = param.alpha;
     auto pivot = param.pivot;
 
-    const float width = WIDTH * scale.x;
+    //描画する文字の横幅
+    const float OFFSET_X = WIDTH * scale.x;
+    //描画する文字列のサイズを計算
+    auto size = Vector2(alphabet.length() * OFFSET_X, HEIGHT * scale.y);
+    //ピボットから描画位置を調整
+    computePositionFromPivot(&pos, size, pivot);
 
+    mFontSprite->transform()->setScale(scale);
+    mFontSprite->setColor(color);
+    mFontSprite->setAlpha(alpha);
     for (const auto& c : alphabet) {
         mFontSprite->transform()->setPosition(pos);
-        mFontSprite->transform()->setScale(scale);
-        mFontSprite->setColor(color);
-        mFontSprite->setAlpha(alpha);
 
-        int t = c;
+        int t = static_cast<int>(c);
         t = Math::clamp<int>(t, 32, 127);
         t -= 32;
 
@@ -215,12 +190,45 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
         float top = t / WIDTH_CHAR_COUNT;
         top /= HEIGHT_CHAR_COUNT;
         mFontSprite->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
-        mFontSprite->transform()->setPivot(pivot);
 
         //ワールド座標を更新するため
         mFontSprite->update();
         mFontSprite->draw(proj);
 
-        pos.x += width;
+        //描画位置を1文字分ずらす
+        pos.x += OFFSET_X;
+    }
+}
+
+void DrawString::computePositionFromPivot(Vector2 * pos, const Vector2 & size, Pivot pivot) const {
+    switch (pivot) {
+    case Pivot::CENTER_TOP:
+        pos->x -= size.x / 2.f;
+        break;
+    case Pivot::RIGHT_TOP:
+        pos->x -= size.x;
+        break;
+    case Pivot::CENTER_LEFT:
+        pos->y -= size.y / 2.f;
+        break;
+    case Pivot::CENTER:
+        *pos -= size / 2.f;
+        break;
+    case Pivot::CENTER_RIGHT:
+        pos->x -= size.x;
+        pos->y -= size.y / 2.f;
+        break;
+    case Pivot::LEFT_BOTTOM:
+        pos->y -= size.y;
+        break;
+    case Pivot::CETNER_BOTTOM:
+        pos->x -= size.x / 2.f;
+        pos->y -= size.y;
+        break;
+    case Pivot::RIGHT_BOTTOM:
+        *pos -= size;
+        break;
+    default:
+        break;
     }
 }

@@ -22,9 +22,7 @@ void Score::update() {
     if (mScore > mHighScore) {
         mHighScore = mScore;
     }
-    if (mText) {
-        mText->setText(StringUtil::intToString(mScore));
-    }
+    mText->setText(StringUtil::intToString(mScore));
 }
 
 void Score::loadProperties(const rapidjson::Value& inObj) {

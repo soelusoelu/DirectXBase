@@ -2,15 +2,15 @@
 #include "ComponentManager.h"
 #include "Text.h"
 #include "Timer.h"
-#include "../Device/DrawString.h"
 #include "../GameObject/GameObject.h"
-#include "../System/Window.h"
+#include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
 TimeLimit::TimeLimit() :
     Component(),
     mText(nullptr),
-    mTimer(nullptr) {
+    mTimer(nullptr),
+    mDecimalDigit(0) {
 }
 
 TimeLimit::~TimeLimit() = default;
@@ -21,11 +21,13 @@ void TimeLimit::start() {
 }
 
 void TimeLimit::update() {
-    auto pos = 1920.f / 2.f;
-    auto s = StringUtil::floatToString(mTimer->currentDownTime());
-    pos -= s.length() * DrawString::WIDTH * mText->getScale().x / 2.f;
-    if (mText) {
-        mText->setText(s);
-        mText->setPosition(Vector2(pos, 0.f));
+    auto time = mTimer->currentDownTime();
+    if (time < 0.f) {
+        time = 0.f;
     }
+    mText->setText(StringUtil::floatToString(time, mDecimalDigit));
+}
+
+void TimeLimit::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getInt(inObj, "decimalDigit", &mDecimalDigit);
 }

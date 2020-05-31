@@ -2,6 +2,7 @@
 #include "../Device/DrawString.h"
 #include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/Transform2D.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
 
@@ -13,7 +14,6 @@ Text::Text() :
     mColor(ColorPalette::white),
     mAlpha(1.f),
     mPivot(Pivot::LEFT_TOP),
-    mIsRightJustified(false),
     mIsActive(true) {
 }
 
@@ -26,18 +26,11 @@ void Text::update() {
 
     auto split = StringUtil::split(mText, '\n');
     auto pos = mPosition;
-    auto ds = owner()->renderer()->getDrawString();
+    const auto& ds = owner()->renderer()->getDrawString();
 
-    if (mIsRightJustified) {
-        for (const auto& s : split) {
-            ds->drawStringRightJustified(s, pos, mScale, mColor, mAlpha, mPivot);
-            pos.y += DrawString::HEIGHT * mScale.y;
-        }
-    } else {
-        for (const auto& s : split) {
-            ds->drawString(s, pos, mScale, mColor, mAlpha, mPivot);
-            pos.y += DrawString::HEIGHT * mScale.y;
-        }
+    for (const auto& s : split) {
+        ds->drawString(s, pos, mScale, mColor, mAlpha, mPivot);
+        pos.y += DrawString::HEIGHT * mScale.y;
     }
 }
 
@@ -47,18 +40,11 @@ void Text::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector2(inObj, "scale", &mScale);
     JsonHelper::getVector3(inObj, "color", &mColor);
     JsonHelper::getFloat(inObj, "alpha", &mAlpha);
-    JsonHelper::getBool(inObj, "rightJustified", &mIsRightJustified);
+    std::string src;
+    if (JsonHelper::getString(inObj, "pivot", &src)) {
+        Transform2D::stringToPivot(src, &mPivot);
+    }
     JsonHelper::getBool(inObj, "isActive", &mIsActive);
-}
-
-void Text::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
-    JsonHelper::setString(alloc, inObj, "text", mText);
-    JsonHelper::setVector2(alloc, inObj, "position", mPosition);
-    JsonHelper::setVector2(alloc, inObj, "scale", mScale);
-    JsonHelper::setVector3(alloc, inObj, "color", mColor);
-    JsonHelper::setFloat(alloc, inObj, "alpha", mAlpha);
-    JsonHelper::setBool(alloc, inObj, "rightJustified", mIsRightJustified);
-    JsonHelper::setBool(alloc, inObj, "isActive", mIsActive);
 }
 
 void Text::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
@@ -67,7 +53,6 @@ void Text::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("Scale", mScale);
     inspect->emplace_back("Color", mColor);
     inspect->emplace_back("Alpha", mAlpha);
-    inspect->emplace_back("IsRightJustified", mIsRightJustified);
     inspect->emplace_back("IsActive", mIsActive);
 }
 
@@ -117,14 +102,6 @@ void Text::setPivot(Pivot pivot) {
 
 Pivot Text::getPivot() const {
     return mPivot;
-}
-
-void Text::setRightJustified(bool value) {
-    mIsRightJustified = value;
-}
-
-bool Text::getRightJustified() const {
-    return mIsRightJustified;
 }
 
 void Text::setActive(bool value) {
