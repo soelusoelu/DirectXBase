@@ -26,6 +26,7 @@ public:
         const Vector2& scale = Vector2::one,
         Pivot pivot = Pivot::LEFT_TOP
     );
+    //ちゃんと動くかわからん
     void drawNumber(
         float number,
         const Vector2& position,

@@ -6,7 +6,9 @@
 
 DrawString::DrawString() :
     mNumberSprite(nullptr),
-    mFontSprite(nullptr) {
+    mFontSprite(nullptr),
+    mNumberFileName(""),
+    mFontFileName("") {
 }
 
 DrawString::~DrawString() = default;
@@ -87,25 +89,35 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
         number = 0;
     }
 
-    const float width = WIDTH * scale.x;
+    //桁数計算
+    int digit = 1;
+    for (int i = number; i >= 10; i /= 10) {
+        digit++;
+    }
+
+    //描画する文字の横幅
+    const float OFFSET_X = WIDTH * scale.x;
+    //描画する文字列のサイズを計算
+    auto size = Vector2(digit * OFFSET_X, HEIGHT * scale.y);
+    //ピボットから描画位置を調整
+    computePositionFromPivot(&pos, size, pivot);
 
     //数字を文字列化し、1文字ずつ取り出す
-    for (auto n : std::to_string(number)) {
+    mNumberSprite->transform()->setScale(scale);
+    for (const auto& n : std::to_string(number)) {
         mNumberSprite->transform()->setPosition(pos);
-        mNumberSprite->transform()->setScale(scale);
         //数字のテクスチャが数字1つにつき幅32高さ64
         //文字と文字を引き算し、整数値を取得している
         float num = (n - '0') * WIDTH;
         num /= SPRITE_WIDTH;
         mNumberSprite->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
-        mNumberSprite->transform()->setPivot(pivot);
 
-        //ワールド座標を更新するため
-        mNumberSprite->update();
+        //ワールド座標を更新し、描画
+        mNumberSprite->transform()->computeWorldTransform();
         mNumberSprite->draw(proj);
 
         //1文字描画したら1桁分右にずらす
-        pos.x += width;
+        pos.x += OFFSET_X;
     }
 }
 
@@ -122,40 +134,44 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
         number = 0;
     }
 
-    const float width = WIDTH * scale.x;
-    const float periodWidth = PERIOD_WIDTH * scale.x;
-
     //小数部分の桁数指定
     auto num = StringUtil::floatToString(number, decimalDigits);
 
+    //描画する文字の横幅
+    const float OFFSET_X = WIDTH * scale.x;
+    const float OFFSET_PERIOD_X = PERIOD_WIDTH * scale.x;
+    //描画する文字列のサイズを計算
+    auto size = Vector2((num.length() - 1) * OFFSET_X + OFFSET_PERIOD_X, HEIGHT * scale.y);
+    //ピボットから描画位置を調整
+    computePositionFromPivot(&pos, size, pivot);
+
     //数字を文字列化し、1文字ずつ取り出す
-    for (auto n : num) {
+    mNumberSprite->transform()->setScale(scale);
+    for (const auto& n : num) {
         mNumberSprite->transform()->setPosition(pos);
-        mNumberSprite->transform()->setScale(scale);
         //数字のテクスチャが数字1つにつき幅32高さ64
         //文字と文字を引き算し、整数値を取得している
-        float widthAmount = 0.f;
+        float offsetX = 0.f;
         if (n == '.') {
             constexpr float num = 10 * WIDTH_RATE; //ピリオドは画像の10番目
             mNumberSprite->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
 
             //「.」のときは1文字の半分ずらす
-            widthAmount = periodWidth;
+            offsetX = PERIOD_WIDTH;
         } else {
             float num = (n - '0') * WIDTH;
             num /= SPRITE_WIDTH;
             mNumberSprite->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
 
             //1文字描画したら1桁分右にずらす
-            widthAmount = width;
+            offsetX = OFFSET_X;
         }
-        mNumberSprite->transform()->setPivot(pivot);
 
-        //ワールド座標を更新するため
-        mNumberSprite->update();
+        //ワールド座標を更新し、描画
+        mNumberSprite->transform()->computeWorldTransform();
         mNumberSprite->draw(proj);
 
-        pos.x += widthAmount;
+        pos.x += offsetX;
     }
 }
 
@@ -191,8 +207,8 @@ void DrawString::drawString(const ParamString & param, const Matrix4 & proj) con
         top /= HEIGHT_CHAR_COUNT;
         mFontSprite->setUV(left, top, left + WIDTH_RATE, top + FONT_HEIGHT_RATE);
 
-        //ワールド座標を更新するため
-        mFontSprite->update();
+        //ワールド座標を更新し、描画
+        mFontSprite->transform()->computeWorldTransform();
         mFontSprite->draw(proj);
 
         //描画位置を1文字分ずらす
