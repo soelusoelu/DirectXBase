@@ -244,10 +244,11 @@
         {
           "type": "Sprite3D",
           "properties": {
-            "fileName": "block.png",
+            "fileName": "pixel.png",
             "isActive": false,
             "rotation": [ 90.0, 0.0, 0.0 ],
-            "scale": [ 30.0, 1.0 ]
+            "scale": [ 30.0, 1.0 ],
+            "color": [ 1.0, 0.0, 0.0 ]
           }
         },
         {
@@ -514,8 +515,10 @@
           "type": "SpriteComponent",
           "properties": {
             "drawOrder": 10,
-            "fileName": "Fade.png",
-            "isActive": false
+            "fileName": "pixel.png",
+            "isActive": false,
+            "scale": [ 1920.0, 1080.0 ],
+            "color": [ 0.0, 0.0, 0.0 ]
           }
         }
       ]
