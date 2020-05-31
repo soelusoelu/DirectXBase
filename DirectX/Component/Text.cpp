@@ -13,7 +13,7 @@ Text::Text() :
     mScale(Vector2::one),
     mColor(ColorPalette::white),
     mAlpha(1.f),
-    mPivot(Pivot::Pivot::LEFT_TOP),
+    mPivot(Pivot::LEFT_TOP),
     mIsActive(true) {
 }
 
@@ -42,7 +42,7 @@ void Text::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getFloat(inObj, "alpha", &mAlpha);
     std::string src;
     if (JsonHelper::getString(inObj, "pivot", &src)) {
-        Pivot::stringToPivot(src, &mPivot);
+        PivotFunc::stringToPivot(src, &mPivot);
     }
     JsonHelper::getBool(inObj, "isActive", &mIsActive);
 }
@@ -96,11 +96,11 @@ float Text::getAlpha() const {
     return mAlpha;
 }
 
-void Text::setPivot(Pivot::Pivot pivot) {
+void Text::setPivot(Pivot pivot) {
     mPivot = pivot;
 }
 
-Pivot::Pivot Text::getPivot() const {
+Pivot Text::getPivot() const {
     return mPivot;
 }
 

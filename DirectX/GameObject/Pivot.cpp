@@ -1,6 +1,6 @@
 ﻿#include "Pivot.h"
 
-void Pivot::stringToPivot(const std::string& src, Pivot* dst) {
+void PivotFunc::stringToPivot(const std::string& src, Pivot* dst) {
     auto pivot = Pivot::NONE;
 
     if (src == "LeftTop") {

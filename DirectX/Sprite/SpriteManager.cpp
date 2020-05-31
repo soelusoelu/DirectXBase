@@ -2,27 +2,12 @@
 #include "Sprite.h"
 #include "../Component/Sprite3D.h"
 #include "../Component/SpriteComponent.h"
-#include "../Device/Renderer.h"
-#include "../GameObject/Transform2D.h"
-#include "../System/BlendDesc.h"
-#include "../System/BlendState.h"
-#include "../System/DepthStencilState.h"
-#include "../System/DirectX.h"
-#include "../System/Format.h"
-#include "../System/Game.h"
-#include "../System/IndexBuffer.h"
-#include "../System/Texture.h"
-#include "../System/VertexBuffer.h"
 
 SpriteManager::SpriteManager() = default;
-
 SpriteManager::~SpriteManager() = default;
 
 void SpriteManager::update() {
     for (auto&& sprite : mSprites) {
-        sprite->update();
-    }
-    for (auto&& sprite : mSpriteComponents) {
         sprite->update();
     }
     remove();

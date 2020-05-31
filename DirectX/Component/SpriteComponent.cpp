@@ -1,4 +1,4 @@
-#include "SpriteComponent.h"
+﻿#include "SpriteComponent.h"
 #include "ComponentManager.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Pivot.h"
@@ -23,6 +23,10 @@ SpriteComponent::SpriteComponent() :
 }
 
 SpriteComponent::~SpriteComponent() = default;
+
+void SpriteComponent::update() {
+    mSprite->update();
+}
 
 void SpriteComponent::finalize() {
     mSprite->destroy();
@@ -65,8 +69,8 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
         setUV(vec4.x, vec4.y, vec4.z, vec4.w);
     }
     if (JsonHelper::getString(inObj, "pivot", &str)) {
-        Pivot::Pivot pivot = Pivot::Pivot::NONE;
-        Pivot::stringToPivot(str, &pivot);
+        Pivot pivot = Pivot::NONE;
+        PivotFunc::stringToPivot(str, &pivot);
         transform()->setPivot(pivot);
     }
 }
@@ -83,8 +87,8 @@ void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) cons
     inspect->emplace_back("DrawOrder", mDrawOrder);
 }
 
-void SpriteComponent::update() {
-    mSprite->update();
+void SpriteComponent::draw(const Matrix4& proj) const {
+    mSprite->draw(proj);
 }
 
 void SpriteComponent::setSprite(const std::string& fileName) {
@@ -156,10 +160,6 @@ int SpriteComponent::getDrawOrder() const {
     return mDrawOrder;
 }
 
-void SpriteComponent::draw(const Matrix4& proj) const {
-    mSprite->draw(proj);
-}
-
 void SpriteComponent::setSpriteManager(SpriteManager* manager) {
     mSpriteManager = manager;
 }
@@ -169,5 +169,3 @@ void SpriteComponent::addToManager() {
         mSpriteManager->addComponent(shared_from_this());
     }
 }
-
-SpriteManager* SpriteComponent::mSpriteManager = nullptr;

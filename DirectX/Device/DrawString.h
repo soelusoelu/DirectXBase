@@ -25,7 +25,7 @@ public:
         int number,
         const Vector2& position,
         const Vector2& scale = Vector2::one,
-        Pivot::Pivot pivot = Pivot::Pivot::LEFT_TOP
+        Pivot pivot = Pivot::LEFT_TOP
     );
     //ちゃんと動くかわからん
     void drawNumber(
@@ -33,7 +33,7 @@ public:
         const Vector2& position,
         const Vector2& scale = Vector2::one,
         int decimalDigits = 1,
-        Pivot::Pivot pivot = Pivot::Pivot::LEFT_TOP
+        Pivot pivot = Pivot::LEFT_TOP
     );
     void drawString(
         const std::string& alphabet,
@@ -41,7 +41,7 @@ public:
         const Vector2& scale = Vector2::one,
         const Vector3& color = ColorPalette::white,
         float alpha = 1.f,
-        Pivot::Pivot pivot = Pivot::Pivot::LEFT_TOP
+        Pivot pivot = Pivot::LEFT_TOP
     );
 
 private:
@@ -49,14 +49,14 @@ private:
         int number;
         Vector2 position;
         Vector2 scale;
-        Pivot::Pivot pivot;
+        Pivot pivot;
     };
     struct ParamFloat {
         float number;
         Vector2 position;
         Vector2 scale;
         int decimalDigits;
-        Pivot::Pivot pivot;
+        Pivot pivot;
     };
     struct ParamString {
         std::string alphabet;
@@ -64,14 +64,14 @@ private:
         Vector2 scale;
         Vector3 color;
         float alpha;
-        Pivot::Pivot pivot;
+        Pivot pivot;
     };
 
     void drawInt(const ParamInt& param, const Matrix4& proj) const;
     void drawFloat(const ParamFloat& param, const Matrix4& proj) const;
     void drawString(const ParamString& param, const Matrix4& proj) const;
     //ピボットから描画位置を調整
-    void computePositionFromPivot(Vector2* pos, const Vector2& size, Pivot::Pivot pivot) const;
+    void computePositionFromPivot(Vector2* pos, const Vector2& size, Pivot pivot) const;
 
 public:
     static constexpr int WIDTH = 32; //画像1文字の横幅

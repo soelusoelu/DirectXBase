@@ -25,7 +25,7 @@ public:
     void rotate(float angle);
 
     //ピボット位置
-    void setPivot(Pivot::Pivot pivot);
+    void setPivot(Pivot pivot);
     const Vector2& getPivot() const;
 
     //倍率で拡縮

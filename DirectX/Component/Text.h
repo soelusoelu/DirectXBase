@@ -23,8 +23,8 @@ public:
     const Vector3& getColor() const;
     void setAlpha(float alpha);
     float getAlpha() const;
-    void setPivot(Pivot::Pivot pivot);
-    Pivot::Pivot getPivot() const;
+    void setPivot(Pivot pivot);
+    Pivot getPivot() const;
     void setActive(bool value);
     bool getActive() const;
 
@@ -34,6 +34,6 @@ private:
     Vector2 mScale;
     Vector3 mColor;
     float mAlpha;
-    Pivot::Pivot mPivot;
+    Pivot mPivot;
     bool mIsActive;
 };

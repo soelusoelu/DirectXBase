@@ -4,7 +4,6 @@
 #include <memory>
 #include <list>
 
-class Renderer;
 class Sprite;
 class Sprite3D;
 class SpriteComponent;

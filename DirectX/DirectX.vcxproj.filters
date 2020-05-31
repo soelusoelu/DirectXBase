@@ -244,7 +244,6 @@
     <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IChickenFry.h" />
     <ClInclude Include="Component\IMesh.h" />
-    <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
     <ClInclude Include="Component\Scene\ResultScene.h" />

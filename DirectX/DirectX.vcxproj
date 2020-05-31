@@ -311,7 +311,6 @@
     <ClInclude Include="GameObject\GameObjectFactory.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Scene\GamePlay.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />

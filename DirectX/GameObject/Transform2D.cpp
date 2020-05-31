@@ -71,33 +71,33 @@ void Transform2D::rotate(float angle) {
     shouldRecomputeTransform();
 }
 
-void Transform2D::setPivot(Pivot::Pivot pivot) {
+void Transform2D::setPivot(Pivot pivot) {
     switch (pivot) {
-    case Pivot::Pivot::LEFT_TOP:
+    case Pivot::LEFT_TOP:
         mPivot = Vector2::zero;
         break;
-    case Pivot::Pivot::CENTER_TOP:
+    case Pivot::CENTER_TOP:
         mPivot.x = mSize.x / 2.f;
         break;
-    case Pivot::Pivot::RIGHT_TOP:
+    case Pivot::RIGHT_TOP:
         mPivot.x = mSize.x;
         break;
-    case Pivot::Pivot::CENTER_LEFT:
+    case Pivot::CENTER_LEFT:
         mPivot.y = mSize.y / 2.f;
         break;
-    case Pivot::Pivot::CENTER:
+    case Pivot::CENTER:
         mPivot = mSize / 2.f;
         break;
-    case Pivot::Pivot::CENTER_RIGHT:
+    case Pivot::CENTER_RIGHT:
         mPivot = Vector2(mSize.x, mSize.y / 2.f);
         break;
-    case Pivot::Pivot::LEFT_BOTTOM:
+    case Pivot::LEFT_BOTTOM:
         mPivot.y = mSize.y;
         break;
-    case Pivot::Pivot::CETNER_BOTTOM:
+    case Pivot::CETNER_BOTTOM:
         mPivot = Vector2(mSize.x / 2.f, mSize.y);
         break;
-    case Pivot::Pivot::RIGHT_BOTTOM:
+    case Pivot::RIGHT_BOTTOM:
         mPivot = mSize;
         break;
     default:
