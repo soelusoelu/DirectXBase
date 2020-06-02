@@ -11,6 +11,8 @@ public:
     bool isTime() const;
     //リミットタイムの再設定
     void setLimitTime(float sec);
+    //カウントアップタイムの強制設定
+    void setCurrentTime(float sec);
     //現在のカウントアップタイムを返す
     float currentTime() const;
     //リミットタイムを返す

@@ -1,6 +1,7 @@
 ﻿#include "FriedChickenComponent.h"
 #include "ChickenFry.h"
 #include "ChickenMeshComponent.h"
+#include "ChickenRise.h"
 #include "ComponentManager.h"
 #include "SoundComponent.h"
 #include "../Device/Random.h"
@@ -12,12 +13,13 @@
 FriedChickenComponent::FriedChickenComponent() :
     Component(),
     mFry(nullptr),
+    mRise(nullptr),
     mState(State::FRY),
     mRandomRangePositionX(Vector2::zero),
     mRandomRangePositionZ(Vector2::zero),
     mRandomRangeScale(Vector2::one),
-    mRollSpeed(60.f),
-    mFallSpeed(1.f),
+    mRollSpeed(0.f),
+    mFallSpeed(0.f),
     mIsWaitingColliction(false) {
 }
 
@@ -25,6 +27,7 @@ FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
     mFry = owner()->componentManager()->getComponent<ChickenFry>();
+    mRise = owner()->componentManager()->getComponent<ChickenRise>();
 
     initialize();
     //y軸を0にして最初から揚げ状態でスタート
@@ -40,11 +43,16 @@ void FriedChickenComponent::update() {
         if (mFry) {
             mFry->update();
             tooBurnt();
-            autoCollection();
+            //autoCollection();
         }
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
+    } else if (mState == State::UP) {
+        mRise->rise();
+        if (mRise->isEnd()) {
+            finishFryed();
+        }
     } else if (mState == State::TOO_BURNT) {
         tooBurntUpdate();
     }
@@ -58,7 +66,7 @@ void FriedChickenComponent::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "fallSpeed", &mFallSpeed);
 }
 
-void FriedChickenComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+void FriedChickenComponent::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     inspect->emplace_back("RandomRangePositionX", mRandomRangePositionX);
     inspect->emplace_back("RandomRangePositionZ", mRandomRangePositionZ);
     inspect->emplace_back("RandomRangeScale", mRandomRangeScale);
@@ -88,9 +96,8 @@ void FriedChickenComponent::initialize() {
     t->setScale(scale);
 
     //揚げる面の初期化
-    if (mFry) {
-        mFry->initialize();
-    }
+    mFry->initialize();
+    mRise->initialize();
 
     //空中からの落下状態に設定
     mState = State::FALL;
@@ -98,6 +105,10 @@ void FriedChickenComponent::initialize() {
 
 void FriedChickenComponent::finishFryed() {
     mIsWaitingColliction = true;
+}
+
+void FriedChickenComponent::setUp() {
+    mState = State::UP;
 }
 
 void FriedChickenComponent::eaten() {
@@ -117,6 +128,10 @@ bool FriedChickenComponent::isFrying() const {
 
 bool FriedChickenComponent::isFalling() const {
     return mState == State::FALL;
+}
+
+bool FriedChickenComponent::isUP() const {
+    return mState == State::UP;
 }
 
 bool FriedChickenComponent::isFinished() const {

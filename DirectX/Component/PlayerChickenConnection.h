@@ -36,7 +36,9 @@ private:
     void setChickenPosUnderThePlayer();
     void trackingJumpTarget();
     void rollChicken();
+    void setPlayerPosOnTheJumpTarget();
     void collection();
+    void tooBurntUnderThePlayer();
 
 private:
     std::shared_ptr<PlayerComponent> mPlayer;

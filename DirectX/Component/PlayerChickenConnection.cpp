@@ -57,6 +57,7 @@ void PlayerChickenConnection::update() {
 
         rollChicken();
         collection();
+        tooBurntUnderThePlayer();
     }
 }
 
@@ -142,6 +143,13 @@ void PlayerChickenConnection::rollChicken() {
     mChicken->roll(dir);
 }
 
+void PlayerChickenConnection::setPlayerPosOnTheJumpTarget() {
+    auto pos = mJumpTarget->owner()->transform()->getPosition();
+    mPlayer->owner()->transform()->setPosition(pos);
+    setPlayerPosOnTheChicken(*mJumpTarget);
+    mChicken = mJumpTarget;
+}
+
 void PlayerChickenConnection::collection() {
     bool isPressed = Input::joyPad()->getJoyDown(mCollectionPad);
 #ifdef _DEBUG
@@ -155,14 +163,29 @@ void PlayerChickenConnection::collection() {
     if (!mJumpTarget) {
         return;
     }
-    if (!mChicken->getFry().isBurntHalfSurfaces()) {
+    //半分の面が良い以上で
+    //if (!mChicken->getFry().isBurntHalfSurfaces()) {
+    //    return;
+    //}
+    //すべての面が普通以上で
+    if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
         return;
     }
 
-    mChicken->finishFryed();
+    mChicken->setUp();
 
-    auto pos = mJumpTarget->owner()->transform()->getPosition();
-    mPlayer->owner()->transform()->setPosition(pos);
-    setPlayerPosOnTheChicken(*mJumpTarget);
-    mChicken = mJumpTarget;
+    setPlayerPosOnTheJumpTarget();
+}
+
+void PlayerChickenConnection::tooBurntUnderThePlayer() {
+    if (!mChicken) {
+        return;
+    }
+    if (!mJumpTarget) {
+        return;
+    }
+    if (!mChicken->isTooBurnt()) {
+        return;
+    }
+    setPlayerPosOnTheJumpTarget();
 }

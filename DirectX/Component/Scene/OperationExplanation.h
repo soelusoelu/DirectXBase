@@ -2,10 +2,11 @@
 
 #include "../Component.h"
 #include <memory>
+#include <string>
+#include <vector>
 
 class Scene;
-enum class KeyCode;
-enum class JoyCode;
+class SpriteComponent;
 
 class OperationExplanation : public Component {
 public:
@@ -16,8 +17,13 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
 
 private:
+    //クリックするごとに操作説明の画像を更新
+    void nextSprite();
+
+private:
     std::shared_ptr<Scene> mScene;
-    KeyCode mEnterKey;
-    JoyCode mEnterPad;
+    std::shared_ptr<SpriteComponent> mSprite;
+    std::vector<std::string> mOperationTextures;
+    unsigned mCurrentIndex;
     bool mIsEnd;
 };

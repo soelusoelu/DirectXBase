@@ -44,6 +44,7 @@ void ChickenFry::onUpdateWorldTransform() {
     auto previous = mCurrentBottomSurface;
     choiceBottomSurface();
     if (previous != mCurrentBottomSurface) {
+        resetBurnt();
         mTooBurntTimer->reset();
     }
 }
@@ -70,7 +71,7 @@ void ChickenFry::loadProperties(const rapidjson::Value & inObj) {
     }
 }
 
-void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
+void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     inspect->emplace_back("CurrentBottomSurface", surfaceToString(mCurrentBottomSurface));
     inspect->emplace_back("EasySurface", surfaceToString(mEasySurface));
     inspect->emplace_back("HardSurface", surfaceToString(mHardSurface));
@@ -97,8 +98,9 @@ void ChickenFry::update() {
     frying();
     updateTimerIfBurntBottomSurface();
 
-    if (mColorChanger) {
-        mColorChanger->update(mCurrentBottomSurface, getFryState(mCurrentBottomSurface));
+    mColorChanger->update(mCurrentBottomSurface, getFryState(mCurrentBottomSurface));
+    if (isTooBurnt()) {
+        mColorChanger->changeAllSurfaces(FryState::BAD);
     }
 }
 
@@ -128,6 +130,17 @@ bool ChickenFry::isBurntHalfSurfaces() const {
     }
 
     return (count >= getNumSurface() / 2);
+}
+
+bool ChickenFry::isUpSelectState(FryState state) const {
+    for (size_t i = 0; i < getNumSurface(); i++) {
+        auto s = getFryState(i);
+        if (static_cast<unsigned>(s) < static_cast<unsigned>(state)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 FryState ChickenFry::getFryState(ChickenSurface surface) const {
@@ -214,6 +227,24 @@ void ChickenFry::updateTimerIfBurntBottomSurface() {
     }
 
     mTooBurntTimer->update();
+}
+
+void ChickenFry::resetBurnt() {
+    for (size_t i = 0; i < 6; i++) {
+        if (getFryState(i) != FryState::GOOD) {
+            continue;
+        }
+        auto sumUsually = mBurntTime - mUsually[3];
+        auto sumEasy = mEasyBurntTime - mEasy[3];
+        auto sumHard = mHardBurntTime - mHard[3];
+        if (i == static_cast<unsigned>(mEasySurface)) {
+            mFryTimer[i]->setCurrentTime(sumEasy);
+        } else if (i == static_cast<unsigned>(mHardSurface)) {
+            mFryTimer[i]->setCurrentTime(sumHard);
+        } else {
+            mFryTimer[i]->setCurrentTime(sumUsually);
+        }
+    }
 }
 
 int ChickenFry::getNumSurface() const {

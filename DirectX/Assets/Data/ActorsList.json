@@ -41,13 +41,14 @@
     {
       "type": "Player",
       "properties": {
-        "scale": [ 0.5, 0.5, 0.5 ]
+        "scale": [ 0.5, 0.5, 0.5 ],
+        "rotation": [ -90.0, -90.0, 0.0 ]
       },
       "components": [
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Player/Player2.fbx"
+            "fileName": "Player/Player_.fbx"
           }
         },
         {
@@ -59,6 +60,9 @@
           "type": "PlayerWalk",
           "properties": {
             "moveSpeed": 5.0,
+            "clampFore": -4.0,
+            "clampBack": 6.0,
+            "clampX": 7.0,
             "rollKey": "LeftShift",
             "rollPad": "B"
           }
@@ -68,7 +72,7 @@
           "properties": {
             "jumpKey": "Space",
             "jumpPad": "A",
-            "speed": 1.0
+            "speed": 0.5
           }
         }
       ]
@@ -109,7 +113,7 @@
           "type": "FriedChickenComponent",
           "properties": {
             "randomRangePositionX": [ -5.0, 5.0 ],
-            "randomRangePositionZ": [ -5.0, 5.0 ],
+            "randomRangePositionZ": [ -3.0, 5.0 ],
             "randomRangeScale": [ 0.05, 0.1 ],
             "rollSpeed": 180.0,
             "fallSpeed": 3.0
@@ -147,6 +151,14 @@
           }
         },
         {
+          "type": "ChickenRise",
+          "properties": {
+            "upSpeed": 4.5,
+            "rotateSpeed": 800.0,
+            "rotateRateOfUp": 0.3
+          }
+        },
+        {
           "type": "SphereCollisionComponent",
           "properties": {
           }
@@ -178,6 +190,14 @@
             "usuallyScore": 3,
             "goodScore": 10,
             "badScore": -3
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç÷Ç¢Ç®ë“Çø.wav",
+            "volume": 0.5,
+            "isFirstPlay": false
           }
         }
       ]
@@ -224,10 +244,11 @@
         {
           "type": "Sprite3D",
           "properties": {
-            "fileName": "block.png",
+            "fileName": "pixel.png",
             "isActive": false,
             "rotation": [ 90.0, 0.0, 0.0 ],
-            "scale": [ 30.0, 1.0 ]
+            "scale": [ 30.0, 1.0 ],
+            "color": [ 1.0, 0.0, 0.0 ]
           }
         },
         {
@@ -259,6 +280,97 @@
       ]
     },
     {
+      "type": "ResultChicken",
+      "components": [
+        {
+          "type": "ResultChicken",
+          "properties": {
+            "fallToFadeTimer": 2.0,
+            "enterKey": "Space",
+            "enterPad": "A"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "ResultBG1.png"
+          }
+        },
+        {
+          "type": "Text",
+          "properties": {
+            "position": [ 800.0, 50.0 ],
+            "scale": [ 3.0, 3.0 ],
+            "pivot": "CenterTop",
+            "isActive": false
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç÷Ç¢Ç®ë“Çø.wav",
+            "volume": 1.0,
+            "isFirstPlay": false
+          }
+        }
+      ]
+    },
+    {
+      "type": "ResultRank",
+      "components": [
+        {
+          "type": "ResultRank",
+          "properties": {
+            "low": 50,
+            "middle": 100,
+            "high": 200,
+            "lowTextureName": "ResultLow.png",
+            "middleTextureName": "ResultMiddle.png",
+            "highTextureName": "ResultHigh.png",
+            "superTextureName": "ResultSuper.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "drawOrder": 5
+          }
+        }
+      ]
+    },
+    {
+      "type": "ResultChickenFall",
+      "components": [
+        {
+          "type": "ResultChickenFall",
+          "properties": {
+            "randomFallSpeedMin": 700.0,
+            "randomFallSpeedMax": 1000.0,
+            "rotateSpeed": 180.0
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "drawOrder": 3,
+            "fileName": "ResultChicken.png",
+            "pivot": "Center"
+          }
+        }
+      ]
+    },
+    {
+      "type": "ResultChickenManager",
+      "components": [
+        {
+          "type": "ResultChickenManager",
+          "properties": {
+            "fallsNum": 30
+          }
+        }
+      ]
+    },
+    {
       "type": "Title",
       "components": [
         {
@@ -269,8 +381,6 @@
         {
           "type": "Title",
           "properties": {
-            "enterKey": "Space",
-            "enterPad": "A"
           }
         },
         {
@@ -286,6 +396,14 @@
             "volume": 0.01,
             "isFirstPlay": true
           }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç÷Ç¢ÉâÉbÉVÉÉÉC.wav",
+            "volume": 0.5,
+            "isFirstPlay": false
+          }
         }
       ]
     },
@@ -300,23 +418,25 @@
         {
           "type": "OperationExplanation",
           "properties": {
-            "enterKey": "Space",
-            "enterPad": "A"
+            "operationTextures": [
+              "sousa1.png",
+              "sousa2.png"
+            ]
           }
         },
         {
           "type": "SpriteComponent",
           "properties": {
-            "fileName": "Sousa.png"
           }
         },
         {
           "type": "SpriteComponent",
           "properties": {
+            "drawOrder": 1,
             "fileName": "NowLoading.png",
             "isActive": false,
-            "position": [ 1920.0, 1130.0 ],
-            "pivot": "RightBottom"
+            "position": [ 1920.0, -50.0 ],
+            "pivot": "RightTop"
           }
         },
         {
@@ -371,8 +491,6 @@
         {
           "type": "ResultScene",
           "properties": {
-            "enterKey": "Space",
-            "enterPad": "A"
           }
         },
         {
@@ -381,6 +499,27 @@
             "fileName": "ç]åÀÇÃÇ‘ÇÁÇËó∑_result.wav",
             "volume": 0.01,
             "isFirstPlay": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "Fade",
+      "components": [
+        {
+          "type": "Fade",
+          "properties": {
+            "fadeSpeed": 1.0
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "drawOrder": 10,
+            "fileName": "pixel.png",
+            "isActive": false,
+            "scale": [ 1920.0, 1080.0 ],
+            "color": [ 0.0, 0.0, 0.0 ]
           }
         }
       ]

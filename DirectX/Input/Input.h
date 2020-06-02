@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../System/DirectXIncLib.h"
+#include <rapidjson/document.h>
 #include <dinput.h>
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib, "dinput8.lib")
@@ -11,7 +12,9 @@ class Mouse;
 
 class Input {
 public:
+    static void create();
     static bool initialize(HWND hWnd);
+    static void loadProperties(const rapidjson::Value& inObj);
     static void end();
     static void update();
 
@@ -20,7 +23,7 @@ public:
     static JoyPad* joyPad();
 
 public:
-    static LPDIRECTINPUT8 mDirectInput;
+    static IDirectInput8* mDirectInput;
 
 private:
     static Keyboard* mKeyboard;

@@ -98,7 +98,7 @@ void PlayerJump::canJump(bool value) {
 }
 
 void PlayerJump::move() {
-    mMoveRate += Time::deltaTime * mSpeed;
+    mMoveRate += Time::deltaTime / mSpeed;
     auto l = Vector3::lerp(mJumpStartPosition, mJumpTargetPosition, mMoveRate);
     owner()->transform()->setPosition(l);
 }

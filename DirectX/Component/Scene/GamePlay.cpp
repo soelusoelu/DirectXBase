@@ -92,12 +92,13 @@ void GamePlay::update() {
     auto score = mFriedChickenManager->getEvaluatedScore();
     mScore->addScore(score);
 
+    //タイマーが0になったらシーン切り替え
     if (mTimeLimitTimer->isTime()) {
         mScene->next("ResultScene");
     }
 
-    //リセット
 #ifdef _DEBUG
+    //リセット
     if (Input::keyboard()->getKeyDown(KeyCode::R)) {
         mScene->next("GamePlay");
     }

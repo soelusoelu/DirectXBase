@@ -5,22 +5,28 @@
 #include "Mouse.h"
 #include "../System/Game.h"
 
+void Input::create() {
+    mKeyboard = new Keyboard();
+    mMouse = new Mouse();
+    mJoyPad = new JoyPad();
+}
+
 bool Input::initialize(HWND hWnd) {
     // 「DirectInput」オブジェクトの作成
     if (FAILED(DirectInput8Create(GetModuleHandle(NULL), DIRECTINPUT_VERSION, IID_IDirectInput8, (VOID**)&mDirectInput, NULL))) {
         return false;
     }
 
-    mKeyboard = new Keyboard();
     mKeyboard->initialize(hWnd, mDirectInput);
-
-    mMouse = new Mouse();
     mMouse->initialize(hWnd, mDirectInput);
-
-    mJoyPad = new JoyPad();
     mJoyPad->initialize(hWnd, mDirectInput);
 
     return true;
+}
+
+void Input::loadProperties(const rapidjson::Value& inObj) {
+    mKeyboard->loadProperties(inObj);
+    mJoyPad->loadProperties(inObj);
 }
 
 void Input::end() {
@@ -48,7 +54,7 @@ JoyPad* Input::joyPad() {
     return mJoyPad;
 }
 
-LPDIRECTINPUT8 Input::mDirectInput = nullptr;
+IDirectInput8* Input::mDirectInput = nullptr;
 Keyboard* Input::mKeyboard = nullptr;
 Mouse* Input::mMouse = nullptr;
 JoyPad* Input::mJoyPad = nullptr;

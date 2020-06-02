@@ -5,8 +5,6 @@
 #include "../Utility/Collision.h"
 #include <memory>
 
-class GameObject;
-
 class SphereCollisionComponent : public Collider {
 public:
     SphereCollisionComponent();

@@ -3,6 +3,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <vector>
 
 class Component;
 class GameObject;
@@ -30,6 +31,7 @@ public:
 
     //全コンポーネントの取得
     const ComponentPtrList& getAllComponents() const;
+
     //コンポーネントの取得
     template<typename T>
     std::shared_ptr<T> getComponent() const {
@@ -49,10 +51,11 @@ public:
         //最後まで見つからなければnullptrを返す
         return comp;
     }
+
     //指定した型のコンポーネントをすべて取得
     template<typename T>
-    std::list<std::shared_ptr<T>> getComponents() const {
-        std::list<std::shared_ptr<T>> components;
+    std::vector<std::shared_ptr<T>> getComponents() const {
+        std::vector<std::shared_ptr<T>> components;
         for (const auto& c : mStartComponents) {
             auto comp = std::dynamic_pointer_cast<T>(c);
             if (comp) {

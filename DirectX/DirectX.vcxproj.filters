@@ -98,7 +98,6 @@
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="Component\PlayerChickenConnection.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
-    <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
@@ -117,6 +116,13 @@
     <ClCompile Include="Component\Scene\GamePlay.cpp" />
     <ClCompile Include="Component\Scene\Title.cpp" />
     <ClCompile Include="Component\Scene\OperationExplanation.cpp" />
+    <ClCompile Include="Component\ChickenRise.cpp" />
+    <ClCompile Include="Component\ResultChickenFall.cpp" />
+    <ClCompile Include="Component\ResultRank.cpp" />
+    <ClCompile Include="Component\ResultChicken.cpp" />
+    <ClCompile Include="Component\ResultChickenManager.cpp" />
+    <ClCompile Include="Component\Fade.cpp" />
+    <ClCompile Include="GameObject\Pivot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -222,7 +228,6 @@
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="Component\PlayerChickenConnection.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
-    <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Component\Bird.h" />
@@ -239,7 +244,6 @@
     <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IChickenFry.h" />
     <ClInclude Include="Component\IMesh.h" />
-    <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
     <ClInclude Include="Component\Scene\ResultScene.h" />
@@ -248,5 +252,12 @@
     <ClInclude Include="Component\Scene\GamePlay.h" />
     <ClInclude Include="Component\Scene\Title.h" />
     <ClInclude Include="Component\Scene\OperationExplanation.h" />
+    <ClInclude Include="Component\ChickenRise.h" />
+    <ClInclude Include="Component\ResultChickenFall.h" />
+    <ClInclude Include="Component\ResultRank.h" />
+    <ClInclude Include="Component\ResultChicken.h" />
+    <ClInclude Include="Component\ResultChickenManager.h" />
+    <ClInclude Include="Component\Fade.h" />
+    <ClInclude Include="GameObject\Pivot.h" />
   </ItemGroup>
 </Project>

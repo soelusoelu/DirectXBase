@@ -1,10 +1,8 @@
 ﻿#include "PlayerComponent.h"
 #include "ComponentManager.h"
-#include "MeshComponent.h"
 #include "PlayerJump.h"
 #include "PlayerWalk.h"
 #include "../GameObject/GameObject.h"
-#include "../GameObject/Transform3D.h"
 
 PlayerComponent::PlayerComponent() :
     Component(10),
@@ -19,11 +17,6 @@ PlayerComponent::~PlayerComponent() = default;
 void PlayerComponent::start() {
     mWalk = owner()->componentManager()->getComponent<PlayerWalk>();
     mJump = owner()->componentManager()->getComponent<PlayerJump>();
-
-    auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
-    if (mesh) {
-        owner()->transform()->setPivot(Vector3::down * mesh->getRadius());
-    }
 }
 
 void PlayerComponent::update() {

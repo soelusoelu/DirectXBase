@@ -224,7 +224,10 @@ size_t Transform3D::getChildCount() const {
 void Transform3D::loadProperties(const rapidjson::Value& inObj) {
     //位置、回転、スケールを読み込む
     JsonHelper::getVector3(inObj, "position", &mPosition);
-    JsonHelper::getQuaternion(inObj, "rotation", &mRotation);
+    Vector3 rot;
+    if (JsonHelper::getVector3(inObj, "rotation", &rot)) {
+        rotate(rot);
+    }
     JsonHelper::getVector3(inObj, "scale", &mScale);
     computeWorldTransform();
 }
@@ -232,7 +235,7 @@ void Transform3D::loadProperties(const rapidjson::Value& inObj) {
 void Transform3D::saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const {
     //位置、回転、スケールを書き込む
     JsonHelper::setVector3(alloc, inObj, "position", mPosition);
-    JsonHelper::setQuaternion(alloc, inObj, "rotation", mRotation);
+    JsonHelper::setVector3(alloc, inObj, "rotation", mRotation.euler());
     JsonHelper::setVector3(alloc, inObj, "scale", mScale);
 }
 

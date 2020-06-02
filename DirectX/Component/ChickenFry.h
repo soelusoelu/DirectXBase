@@ -28,6 +28,7 @@ public:
     virtual bool isBurntAllSurfaces() const override;
     virtual bool isTooBurnt() const override;
     virtual bool isBurntHalfSurfaces() const override;
+    virtual bool isUpSelectState(FryState state) const override;
     virtual FryState getFryState(ChickenSurface surface) const override;
     virtual FryState getFryState(unsigned surfaceIndex) const override;
 
@@ -40,6 +41,8 @@ private:
     void frying();
     //下の面が焦げてたらタイマーを進める
     void updateTimerIfBurntBottomSurface();
+    //すべての面の焦げ状態をリセット
+    void resetBurnt();
     //面の数の取得
     int getNumSurface() const;
     //揚げ状態の数の取得

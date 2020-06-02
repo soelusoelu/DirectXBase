@@ -1,17 +1,19 @@
 ﻿#include "Keyboard.h"
 #include "../System/Game.h"
+#include "../Utility/LevelLoader.h"
 
 Keyboard::Keyboard() :
     mKeyDevice(nullptr),
     mCurrentKeys(),
-    mPreviousKeys() {
+    mPreviousKeys(),
+    mEnterKey(KeyCode::None) {
 }
 
 Keyboard::~Keyboard() {
     SAFE_RELEASE(mKeyDevice);
 }
 
-bool Keyboard::initialize(HWND hWnd, LPDIRECTINPUT8 directInput) {
+bool Keyboard::initialize(HWND hWnd, IDirectInput8* directInput) {
     // 「DirectInputデバイス」オブジェクトの作成
     if (FAILED(directInput->CreateDevice(GUID_SysKeyboard, &mKeyDevice, NULL))) {
         return false;
@@ -30,6 +32,13 @@ bool Keyboard::initialize(HWND hWnd, LPDIRECTINPUT8 directInput) {
     return true;
 }
 
+void Keyboard::loadProperties(const rapidjson::Value& inObj) {
+    std::string src;
+    if (JsonHelper::getString(inObj, "enterKey", &src)) {
+        stringToKeyCode(src, &mEnterKey);
+    }
+}
+
 void Keyboard::update() {
     memcpy_s(mPreviousKeys, sizeof(mPreviousKeys), mCurrentKeys, sizeof(mCurrentKeys));
 
@@ -39,19 +48,19 @@ void Keyboard::update() {
     }
 }
 
-bool Keyboard::getKeyDown(KeyCode key) {
+bool Keyboard::getKeyDown(KeyCode key) const {
     return (mCurrentKeys[static_cast<BYTE>(key)] & 0x80 && !(mPreviousKeys[static_cast<BYTE>(key)] & 0x80));
 }
 
-bool Keyboard::getKey(KeyCode key) {
+bool Keyboard::getKey(KeyCode key) const {
     return mCurrentKeys[static_cast<BYTE>(key)] & 0x80;
 }
 
-bool Keyboard::getKeyUp(KeyCode key) {
+bool Keyboard::getKeyUp(KeyCode key) const {
     return (!(mCurrentKeys[static_cast<BYTE>(key)] & 0x80) && mPreviousKeys[static_cast<BYTE>(key)] & 0x80);
 }
 
-int Keyboard::horizontal() {
+int Keyboard::horizontal() const {
     if (getKey(KeyCode::A) || getKey(KeyCode::LeftArrow)) {
         return -1;
     } else if (getKey(KeyCode::D) || getKey(KeyCode::RightArrow)) {
@@ -61,7 +70,7 @@ int Keyboard::horizontal() {
     }
 }
 
-int Keyboard::vertical() {
+int Keyboard::vertical() const {
     if (getKey(KeyCode::W) || getKey(KeyCode::UpArrow)) {
         return 1;
     } else if (getKey(KeyCode::S) || getKey(KeyCode::DownArrow)) {
@@ -69,6 +78,10 @@ int Keyboard::vertical() {
     } else {
         return 0;
     }
+}
+
+bool Keyboard::getEnter() const {
+    return getKeyDown(mEnterKey);
 }
 
 void Keyboard::stringToKeyCode(const std::string& src, KeyCode* dst) {

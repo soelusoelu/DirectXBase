@@ -23,10 +23,14 @@ public:
     void initialize();
     //更新
     void update(ChickenSurface bottomSurface, FryState bottomState);
+    //すべての面を一色にする
+    void changeAllSurfaces(FryState state);
 
 private:
     //揚げ具合によって色を変える
     void updateColor(ChickenSurface bottomSurface, FryState bottomState);
+    //指定した揚げ状態の色を取得
+    Vector3 getColor(FryState state);
     //指定した面のマテリアルの取得
     MaterialPtr getMaterial(ChickenSurface surface) const;
 

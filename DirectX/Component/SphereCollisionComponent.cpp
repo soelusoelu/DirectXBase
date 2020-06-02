@@ -1,7 +1,6 @@
 ﻿#include "SphereCollisionComponent.h"
 #include "MeshComponent.h"
 #include "../Component/ComponentManager.h"
-#include "../Device/Renderer.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 

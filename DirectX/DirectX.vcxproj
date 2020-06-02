@@ -161,15 +161,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\ChickenRise.cpp" />
     <ClCompile Include="Component\BirdOrbit.cpp" />
     <ClCompile Include="Component\ChickenColorChanger.cpp" />
     <ClCompile Include="Component\ChickenFry.cpp" />
     <ClCompile Include="Component\Bird.cpp" />
     <ClCompile Include="Component\ChickenMeshComponent.cpp" />
+    <ClCompile Include="Component\Fade.cpp" />
     <ClCompile Include="Component\Field.cpp" />
     <ClCompile Include="Component\PlayerComponent.cpp" />
     <ClCompile Include="Component\PlayerJump.cpp" />
-    <ClCompile Include="Component\Result.cpp" />
     <ClCompile Include="Component\Text.cpp" />
     <ClCompile Include="Component\TimeLimit.cpp" />
     <ClCompile Include="DebugLayer\DebugUtility.cpp" />
@@ -207,6 +208,11 @@
     <ClCompile Include="Component\Scene\Scene.cpp" />
     <ClCompile Include="Component\Scene\Title.cpp" />
     <ClCompile Include="Component\Scene\OperationExplanation.cpp" />
+    <ClCompile Include="Component\ResultChickenFall.cpp" />
+    <ClCompile Include="Component\ResultRank.cpp" />
+    <ClCompile Include="Component\ResultChicken.cpp" />
+    <ClCompile Include="Component\ResultChickenManager.cpp" />
+    <ClCompile Include="GameObject\Pivot.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
@@ -270,12 +276,14 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\ChickenRise.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
     <ClInclude Include="Component\ChickenColorChanger.h" />
     <ClInclude Include="Component\ChickenFry.h" />
     <ClInclude Include="Component\Bird.h" />
     <ClInclude Include="Component\ChickenMeshComponent.h" />
     <ClInclude Include="Component\ChickenSurface.h" />
+    <ClInclude Include="Component\Fade.h" />
     <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IChickenFry.h" />
     <ClInclude Include="Component\IMesh.h" />
@@ -283,7 +291,6 @@
     <ClInclude Include="Component\IPlayerWalk.h" />
     <ClInclude Include="Component\PlayerComponent.h" />
     <ClInclude Include="Component\PlayerJump.h" />
-    <ClInclude Include="Component\Result.h" />
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
@@ -304,7 +311,6 @@
     <ClInclude Include="GameObject\GameObjectFactory.h" />
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="Component\ISprite.h" />
     <ClInclude Include="Component\Scene\GamePlay.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />
@@ -326,6 +332,11 @@
     <ClInclude Include="Component\Scene\Scene.h" />
     <ClInclude Include="Component\Scene\Title.h" />
     <ClInclude Include="Component\Scene\OperationExplanation.h" />
+    <ClInclude Include="Component\ResultChickenFall.h" />
+    <ClInclude Include="Component\ResultRank.h" />
+    <ClInclude Include="Component\ResultChicken.h" />
+    <ClInclude Include="Component\ResultChickenManager.h" />
+    <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />

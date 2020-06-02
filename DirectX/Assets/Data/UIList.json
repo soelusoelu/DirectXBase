@@ -16,7 +16,7 @@
             "scale": [ 1.0, 1.0 ],
             "color": [ 1.0, 1.0, 1.0 ],
             "alpha": 1.0,
-            "rightJustified": true
+            "pivot": "RightTop"
           }
         },
         {
@@ -26,8 +26,7 @@
             "position": [ 1600.0, 0.0 ],
             "scale": [ 1.0, 1.0 ],
             "color": [ 1.0, 1.0, 1.0 ],
-            "alpha": 1.0,
-            "rightJustified": false
+            "alpha": 1.0
           }
         }
       ]
@@ -38,7 +37,7 @@
         {
           "type": "Sprite3D",
           "properties": {
-            "fileName": "ArrowDown2.png",
+            "fileName": "ArrowDown.png",
             "scale": [ 1.0, 1.0 ]
           }
         },
@@ -57,37 +56,23 @@
         {
           "type": "TimeLimit",
           "properties": {
+            "decimalDigit": 2
           }
         },
         {
           "type": "Text",
           "properties": {
+            "position": [ 960.0, 0.0 ],
             "scale": [ 1.0, 1.0 ],
             "color": [ 1.0, 1.0, 1.0 ],
             "alpha": 1.0,
-            "rightJustified": false
+            "pivot": "CenterTop"
           }
         },
         {
           "type": "Timer",
           "properties": {
             "limit": 90.0
-          }
-        }
-      ]
-    },
-    {
-      "type": "Result",
-      "components": [
-        {
-          "type": "Result",
-          "properties": {
-          }
-        },
-        {
-          "type": "Text",
-          "properties": {
-            "position": [ 800.0, 400.0 ]
           }
         }
       ]

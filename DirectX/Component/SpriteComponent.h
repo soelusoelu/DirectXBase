@@ -1,41 +1,58 @@
-#pragma once
+﻿#pragma once
 
 #include "Component.h"
-#include "ISprite.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <string>
 
+class Shader;
 class Sprite;
 class SpriteManager;
+class Texture;
 class Transform2D;
 
-class SpriteComponent : public Component, public ISprite, public std::enable_shared_from_this<SpriteComponent> {
+class SpriteComponent : public Component, public std::enable_shared_from_this<SpriteComponent> {
 public:
     SpriteComponent();
     virtual ~SpriteComponent();
+    virtual void update() override;
+    virtual void finalize() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
-    virtual void update() override;
-    virtual void setSprite(const std::string& fileName) override;
-    virtual const std::shared_ptr<Transform2D>& transform() const override;
-    virtual void setColor(const Vector3& color) override;
-    virtual void setColor(float r, float g, float b) override;
-    virtual void setAlpha(float alpha) override;
-    virtual const Vector4& getColor() const override;
-    virtual void setUV(float l, float t, float r, float b) override;
-    virtual const Vector4& getUV() const override;
-    virtual const Vector2& getTextureSize() const override;
-    virtual void setActive(bool value) override;
-    virtual bool getActive() const override;
-    virtual bool isDead() const override;
-    virtual const Texture& texture() const override;
-    virtual const Shader& shader() const override;
-    virtual const std::string& fileName() const override;
+    //描画
+    void draw(const Matrix4& proj) const;
 
-    virtual void draw() const;
+    //スプライトを生成しセット
+    void setSprite(const std::string& fileName);
+    //トランスフォーム
+    const std::shared_ptr<Transform2D>& transform() const;
+    //色味
+    void setColor(const Vector3& color);
+    void setColor(float r, float g, float b);
+    //不透明度(0～1、1が不透明, 0が透明)
+    void setAlpha(float alpha);
+    const Vector4& getColor() const;
+    //切り取り範囲(left, top, right, bottom, 0～1)
+    void setUV(float l, float t, float r, float b);
+    const Vector4& getUV() const;
+    //テクスチャサイズの取得
+    const Vector2& getTextureSize() const;
+    //状態管理
+    void setActive(bool value);
+    bool getActive() const;
+    bool isDead() const;
+    //テクスチャの張替え
+    void changeTexture(const std::string& fileName);
+    //テクスチャ
+    const Texture& texture() const;
+    //シェーダーの取得
+    const Shader& shader() const;
+    //ファイル名の取得
+    const std::string& fileName() const;
+    //描画優先番号の取得
+    int getDrawOrder() const;
 
     static void setSpriteManager(SpriteManager* manager);
 
@@ -44,7 +61,8 @@ private:
 
 protected:
     std::shared_ptr<Sprite> mSprite;
+    int mDrawOrder;
 
-    static SpriteManager* mSpriteManager;
+    static inline SpriteManager* mSpriteManager = nullptr;
 };
 

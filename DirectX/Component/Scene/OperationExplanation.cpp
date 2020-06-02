@@ -7,14 +7,13 @@
 #include "../../Input/Input.h"
 #include "../../Input/JoyPad.h"
 #include "../../Input/Keyboard.h"
+#include "../../System/Window.h"
 #include "../../Utility/LevelLoader.h"
-#include <string>
 
 OperationExplanation::OperationExplanation() :
     Component(),
     mScene(nullptr),
-    mEnterKey(KeyCode::None),
-    mEnterPad(JoyCode::None),
+    mCurrentIndex(0),
     mIsEnd(false) {
 }
 
@@ -22,32 +21,44 @@ OperationExplanation::~OperationExplanation() = default;
 
 void OperationExplanation::start() {
     mScene = owner()->componentManager()->getComponent<Scene>();
+    mSprite = owner()->componentManager()->getComponent<SpriteComponent>();
+    mSprite->setSprite(mOperationTextures[mCurrentIndex]);
+    //操作説明の画像が、ウィンドウサイズと違ってたから修正してる
+    mSprite->transform()->setScale(Vector2(
+        1.f,
+        static_cast<float>(Window::standardHeight()) / mSprite->getTextureSize().y
+    ));
 }
 
 void OperationExplanation::update() {
-    auto isEnd = Input::joyPad()->getJoyDown(mEnterPad);
-#ifdef _DEBUG
-    if (!isEnd) {
-        isEnd = Input::keyboard()->getKeyDown(mEnterKey);
-    }
-#endif // _DEBUG
-
     if (mIsEnd) {
         mScene->next("GamePlay");
     }
-    if (isEnd) {
+    nextSprite();
+}
+
+void OperationExplanation::loadProperties(const rapidjson::Value& inObj) {
+    JsonHelper::getStringArray(inObj, "operationTextures", &mOperationTextures);
+}
+
+void OperationExplanation::nextSprite() {
+    auto isClick = Input::joyPad()->getEnter();
+#ifdef _DEBUG
+    if (!isClick) {
+        isClick = Input::keyboard()->getEnter();
+    }
+#endif // _DEBUG
+
+    if (!isClick) {
+        return;
+    }
+
+    mCurrentIndex++;
+    if (mCurrentIndex < mOperationTextures.size()) {
+        mSprite->changeTexture(mOperationTextures[mCurrentIndex]);
+    } else {
         auto sprites = owner()->componentManager()->getComponents<SpriteComponent>();
         sprites.back()->setActive(true);
         mIsEnd = true;
-    }
-}
-
-void OperationExplanation::loadProperties(const rapidjson::Value & inObj) {
-    std::string src;
-    if (JsonHelper::getString(inObj, "enterKey", &src)) {
-        Keyboard::stringToKeyCode(src, &mEnterKey);
-    }
-    if (JsonHelper::getString(inObj, "enterPad", &src)) {
-        JoyPad::stringToJoyCode(src, &mEnterPad);
     }
 }

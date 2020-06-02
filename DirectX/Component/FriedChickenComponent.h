@@ -5,10 +5,13 @@
 #include "../Math/Math.h"
 #include <memory>
 
+class ChickenRise;
+
 class FriedChickenComponent : public Component {
     enum class State {
         FRY,
         FALL,
+        UP,
         TOO_BURNT,
         EATEN
     };
@@ -25,6 +28,8 @@ public:
     void initialize();
     //強制的に揚げ終わる
     void finishFryed();
+    //上昇モード突入
+    void setUp();
     //食われる
     void eaten();
     //その場で唐揚げを回転させる
@@ -34,6 +39,8 @@ public:
     bool isFrying() const;
     //落ちている途中か
     bool isFalling() const;
+    //上昇している途中か
+    bool isUP() const;
     //揚げ終わっているか
     bool isFinished() const;
     //食われたか
@@ -54,6 +61,7 @@ private:
 
 private:
     std::shared_ptr<IChickenFry> mFry;
+    std::shared_ptr<ChickenRise> mRise;
     State mState;
     Vector2 mRandomRangePositionX;
     Vector2 mRandomRangePositionZ;

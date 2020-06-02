@@ -2,27 +2,12 @@
 #include "Sprite.h"
 #include "../Component/Sprite3D.h"
 #include "../Component/SpriteComponent.h"
-#include "../Device/Renderer.h"
-#include "../GameObject/Transform2D.h"
-#include "../System/BlendDesc.h"
-#include "../System/BlendState.h"
-#include "../System/DepthStencilState.h"
-#include "../System/DirectX.h"
-#include "../System/Format.h"
-#include "../System/Game.h"
-#include "../System/IndexBuffer.h"
-#include "../System/Texture.h"
-#include "../System/VertexBuffer.h"
 
 SpriteManager::SpriteManager() = default;
-
 SpriteManager::~SpriteManager() = default;
 
 void SpriteManager::update() {
     for (auto&& sprite : mSprites) {
-        sprite->update();
-    }
-    for (auto&& sprite : mSpriteComponents) {
         sprite->update();
     }
     remove();
@@ -41,7 +26,7 @@ void SpriteManager::draw(const Matrix4& proj) const {
     }
 }
 
-void SpriteManager::drawComponents() const {
+void SpriteManager::drawComponents(const Matrix4& proj) const {
     if (mSpriteComponents.empty()) {
         return;
     }
@@ -50,7 +35,7 @@ void SpriteManager::drawComponents() const {
         if (!sprite->getActive() || sprite->isDead()) {
             continue;
         }
-        sprite->draw();
+        sprite->draw(proj);
     }
 }
 
@@ -72,7 +57,14 @@ void SpriteManager::add(const SpritePtr& add) {
 }
 
 void SpriteManager::addComponent(const SpriteComponentPtr& add) {
-    mSpriteComponents.emplace_back(add);
+    int order = add->getDrawOrder();
+    auto itr = mSpriteComponents.begin();
+    for (; itr != mSpriteComponents.end(); ++itr) {
+        if (order < (*itr)->getDrawOrder()) {
+            break;
+        }
+    }
+    mSpriteComponents.insert(itr, add);
 }
 
 void SpriteManager::add3D(const Sprite3DPtr& add) {

@@ -55,24 +55,35 @@ void ChickenColorChanger::update(ChickenSurface bottomSurface, FryState bottomSt
     updateColor(bottomSurface, bottomState);
 }
 
+void ChickenColorChanger::changeAllSurfaces(FryState state) {
+    auto color = getColor(state);
+    for (auto&& mat : mMaterials) {
+        mat->diffuse = color;
+    }
+}
+
 void ChickenColorChanger::updateColor(ChickenSurface bottomSurface, FryState bottomState) {
+    getMaterial(bottomSurface)->diffuse = getColor(bottomState);
+}
+
+Vector3 ChickenColorChanger::getColor(FryState state) {
     auto color = ColorPalette::black;
 
-    if (bottomState == FryState::NOT_FRIED) {
+    if (state == FryState::NOT_FRIED) {
         color = mInitColor;
-    } else if (bottomState == FryState::LITTLE_BAD) {
+    } else if (state == FryState::LITTLE_BAD) {
         color = mLittleFriedColor;
-    } else if (bottomState == FryState::USUALLY) {
+    } else if (state == FryState::USUALLY) {
         color = mUsuallyColor;
-    } else if (bottomState == FryState::GOOD) {
+    } else if (state == FryState::GOOD) {
         color = mFriedColor;
-    } else if (bottomState == FryState::BAD) {
+    } else if (state == FryState::BAD) {
         color = mBurntColor;
     } else {
         Debug::logError(getComponentName() + ": Invalid state");
     }
 
-    getMaterial(bottomSurface)->diffuse = color;
+    return color;
 }
 
 std::shared_ptr<Material> ChickenColorChanger::getMaterial(ChickenSurface surface) const {

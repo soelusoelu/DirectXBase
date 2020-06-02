@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../System/DirectXIncLib.h"
+#include <rapidjson/document.h>
 #include <dinput.h>
 #include <string>
 
@@ -75,22 +76,26 @@ class Keyboard {
 public:
     Keyboard();
     ~Keyboard();
-    bool initialize(HWND hWnd, LPDIRECTINPUT8 directInput);
+    bool initialize(HWND hWnd, IDirectInput8* directInput);
+    void loadProperties(const rapidjson::Value& inObj);
     void update();
     //キーが押された瞬間
-    bool getKeyDown(KeyCode key);
+    bool getKeyDown(KeyCode key) const;
     //キーが押され続けているか
-    bool getKey(KeyCode key);
+    bool getKey(KeyCode key) const;
     //キーが離れた瞬間
-    bool getKeyUp(KeyCode key);
+    bool getKeyUp(KeyCode key) const;
     //縦横
-    int horizontal();
-    int vertical();
+    int horizontal() const;
+    int vertical() const;
+    //決定キーが押された瞬間か
+    bool getEnter() const;
     //文字列をKeyCodeに変換
     static void stringToKeyCode(const std::string& src, KeyCode* dst);
 
 private:
-    LPDIRECTINPUTDEVICE8 mKeyDevice;
+    IDirectInputDevice8* mKeyDevice;
     byte mCurrentKeys[256];
     byte mPreviousKeys[256];
+    KeyCode mEnterKey;
 };
