@@ -119,8 +119,8 @@
           "type": "ChickenFry",
           "properties": {
             "notFriedToLittleBadTimer": 0.0,
-            "littleBadToUsuallyTimer": 7.0,
-            "usuallyToGoodTimer": 6.0,
+            "littleBadToUsuallyTimer": 6.0,
+            "usuallyToGoodTimer": 5.0,
             "goodToBadTimer": 6.0,
 
             "easyNotFriedToLittleBadTimer": 0.0,
@@ -129,7 +129,7 @@
             "easyGoodToBadTimer": 5.0,
 
             "hardNotFriedToLittleBadTimer": 0.0,
-            "hardLittleBadToUsuallyTimer": 10.0,
+            "hardLittleBadToUsuallyTimer": 8.0,
             "hardUsuallyToGoodTimer": 7.0,
             "hardGoodToBadTimer": 7.0,
 
