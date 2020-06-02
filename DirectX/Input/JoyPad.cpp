@@ -1,5 +1,6 @@
 ﻿#include "JoyPad.h"
 #include "Input.h"
+#include "../Math/Math.h"
 #include "../System/Game.h"
 #include "../Utility/LevelLoader.h"
 

@@ -1,8 +1,9 @@
 ﻿#pragma once
 
-#include "../Math/Math.h"
 #include <dinput.h>
 #include <string>
+
+class Vector2;
 
 enum class MouseCode {
     LeftButton = 0,
@@ -28,7 +29,7 @@ public:
     //キーが離れた瞬間
     bool getMouseUp(MouseCode button);
     //マウスのウィンドウ位置
-    const Vector2& getMousePosition();
+    Vector2 getMousePosition();
     //文字列をMouseCodeに変換
     static void stringToJoyCode(const std::string& src, MouseCode* dst);
 
@@ -37,5 +38,6 @@ private:
     DIMOUSESTATE2 mCurrentMouseState;
     DIMOUSESTATE2 mPreviousMouseState;
     HWND mhWnd;
-    Vector2 mMousePosition;
+    float mMousePositionX;
+    float mMousePositionY;
 };

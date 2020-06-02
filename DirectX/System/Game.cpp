@@ -49,22 +49,24 @@ void Game::run(HINSTANCE hInstance) {
 
 bool Game::initialize() {
     mWindow = std::make_unique<Window>();
-    mWindow->initWindow(mInstance, 0, 0);
-    mhWnd = mWindow->gethWnd();
 
     mRenderer = std::make_shared<Renderer>();
     mFPSCounter = std::make_unique<FPSCounter>();
     Singleton<GameObjectFactory>::instance().initialize(mRenderer);
     DebugUtility::create();
-    Input::initialize(mhWnd);
+    Input::create();
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
+
+    mWindow->initWindow(mInstance, 0, 0);
+    mhWnd = mWindow->gethWnd();
 
     Singleton<DirectX>::instance().initialize(mhWnd);
     mRenderer->initialize();
 
     Random::initialize();
     DebugUtility::initialize();
+    Input::initialize(mhWnd);
     mSceneManager->initialize();
 
     return true;

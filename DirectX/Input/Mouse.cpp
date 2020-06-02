@@ -1,4 +1,5 @@
 ﻿#include "Mouse.h"
+#include "../Math/Math.h"
 #include "../System/Game.h"
 #include "../System/Window.h"
 
@@ -7,7 +8,8 @@ Mouse::Mouse() :
     mCurrentMouseState(),
     mPreviousMouseState(),
     mhWnd(nullptr),
-    mMousePosition(Vector2::zero) {
+    mMousePositionX(0.f),
+    mMousePositionY(0.f) {
 }
 
 Mouse::~Mouse() {
@@ -47,16 +49,18 @@ void Mouse::update() {
     POINT point;
     GetCursorPos(&point);
     ScreenToClient(mhWnd, &point);
-    mMousePosition.x = point.x;
-    mMousePosition.y = point.y;
-    mMousePosition.x *= Window::windowToClientSize().x;
-    mMousePosition.y *= Window::windowToClientSize().y;
+    mMousePositionX = point.x;
+    mMousePositionY = point.y;
+    mMousePositionX *= Window::windowToClientSize().x;
+    mMousePositionY *= Window::windowToClientSize().y;
 
     //マウス座標をウィンドウ幅でクランプ
 #ifdef _DEBUG
-    mMousePosition.clamp(Vector2::zero, Vector2(Window::debugWidth(), Window::debugHeight()));
+    mMousePositionX = Math::clamp<float>(mMousePositionX, 0.f, static_cast<float>(Window::debugWidth()));
+    mMousePositionY = Math::clamp<float>(mMousePositionY, 0.f, static_cast<float>(Window::debugHeight()));
 #else
-    mMousePosition.clamp(Vector2::zero, Vector2(Window::width(), Window::height()));
+    mMousePositionX = Math::clamp<float>(mMousePositionX, 0.f, static_cast<float>(Window::width()));
+    mMousePositionY = Math::clamp<float>(mMousePositionY, 0.f, static_cast<float>(Window::height()));
 #endif // _DEBUG
 }
 
@@ -72,8 +76,8 @@ bool Mouse::getMouseUp(MouseCode button) {
     return (!(mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80) && mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80);
 }
 
-const Vector2& Mouse::getMousePosition() {
-    return mMousePosition;
+Vector2 Mouse::getMousePosition() {
+    return Vector2(mMousePositionX, mMousePositionY);
 }
 
 void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {

@@ -12,6 +12,7 @@ class Mouse;
 
 class Input {
 public:
+    static void create();
     static bool initialize(HWND hWnd);
     static void loadProperties(const rapidjson::Value& inObj);
     static void end();

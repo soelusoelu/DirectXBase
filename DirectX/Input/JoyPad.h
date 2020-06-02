@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "../Math/Math.h"
 #include <rapidjson/document.h>
 #include <dinput.h>
 #include <string>
+
+class Vector2;
 
 enum class JoyCode {
     A = 0,
