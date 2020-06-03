@@ -7,6 +7,7 @@
 class GameObject;
 class PlayerComponent;
 class FriedChickenComponent;
+class SoundComponent;
 enum class KeyCode;
 enum class JoyCode;
 
@@ -49,6 +50,8 @@ private:
 
     //唐揚げのメッシュ半径
     float mChickenRadius;
+
+    std::shared_ptr<SoundComponent> mSound;
 
     KeyCode mCollectionKey;
     JoyCode mCollectionPad;

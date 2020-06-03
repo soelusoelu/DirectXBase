@@ -42,10 +42,13 @@ private:
     void moveToWait();
     //唐揚げを補充する
     void replenish();
+    //揚がってんねぇ
+    void goodFriedSound();
 
 private:
     std::shared_ptr<ScoreEvaluation> mScoreEvaluation;
     std::shared_ptr<SoundComponent> mSound;
+    std::shared_ptr<SoundComponent> mGoodFriedSound;
     //揚げてる最中の唐揚げ
     ChickenPtrList mChickens;
     //待機中の唐揚げ
@@ -58,4 +61,6 @@ private:
     int mCurrentMaxNum;
     //補充する時間間隔
     std::unique_ptr<Time> mReplenishTimer;
+    //揚げた個数
+    int mFriedNum;
 };

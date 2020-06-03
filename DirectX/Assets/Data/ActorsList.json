@@ -196,8 +196,14 @@
           "type": "SoundComponent",
           "properties": {
             "fileName": "Ç¢Ç¡ÇøÇÂÇ†Ç™ÇË.wav",
-            "volume": 0.5,
-            "isFirstPlay": false
+            "volume": 1.0
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "Ç†Ç™Ç¡ÇƒÇÒÇÀ.wav",
+            "volume": 1.0
           }
         }
       ]
@@ -211,6 +217,13 @@
             "collectionKey": "E",
             "collectionPad": "X",
             "isJumpRoll": false
+          }
+        },
+        {
+          "type": "SoundComponent",
+          "properties": {
+            "fileName": "ê∂èƒÇØÇæÇº.wav",
+            "volume": 1.5
           }
         }
       ]
@@ -324,10 +337,10 @@
             "low": 500,
             "middle": 1000,
             "high": 2000,
-            "lowTextureName": "ResultLow.png",
-            "middleTextureName": "ResultMiddle.png",
-            "highTextureName": "ResultHigh.png",
-            "superTextureName": "ResultSuper.png"
+            "lowTextureName": "ResultLow2.png",
+            "middleTextureName": "ResultMiddle2.png",
+            "highTextureName": "ResultHigh2.png",
+            "superTextureName": "ResultSuper2.png"
           }
         },
         {

@@ -15,10 +15,12 @@ FriedChickenManager::FriedChickenManager() :
     Component(200),
     mScoreEvaluation(nullptr),
     mSound(nullptr),
+    mGoodFriedSound(nullptr),
     mStartNum(0),
     mMaxNum(0),
     mCurrentMaxNum(0),
-    mReplenishTimer(std::make_unique<Time>()) {
+    mReplenishTimer(std::make_unique<Time>()),
+    mFriedNum(0) {
 }
 
 FriedChickenManager::~FriedChickenManager() = default;
@@ -40,8 +42,11 @@ void FriedChickenManager::awake() {
 }
 
 void FriedChickenManager::start() {
-    mScoreEvaluation = owner()->componentManager()->getComponent<ScoreEvaluation>();
-    mSound = owner()->componentManager()->getComponent<SoundComponent>();
+    const auto& compMana = owner()->componentManager();
+    mScoreEvaluation = compMana->getComponent<ScoreEvaluation>();
+    auto sounds = compMana->getComponents<SoundComponent>();
+    mSound = sounds[0];
+    mGoodFriedSound = sounds[1];
 }
 
 void FriedChickenManager::update() {
@@ -49,6 +54,7 @@ void FriedChickenManager::update() {
     increaseTheMaximumNumber();
     moveToWait();
     replenish();
+    goodFriedSound();
 }
 
 void FriedChickenManager::loadProperties(const rapidjson::Value & inObj) {
@@ -66,11 +72,11 @@ void FriedChickenManager::drawDebugInfo(ComponentDebug::DebugInfoList * inspect)
     inspect->emplace_back("CurrentMaxNum", mCurrentMaxNum);
 }
 
-std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject& target) const {
+std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject & target) const {
     return findNearestChicken(target, nullptr);
 }
 
-std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject& target, const ChickenPtr & exclude) const {
+std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject & target, const ChickenPtr & exclude) const {
     float nearest = Math::infinity;
     ChickenPtr chicken = nullptr;
     for (const auto& c : mChickens) {
@@ -154,6 +160,8 @@ void FriedChickenManager::moveToWait() {
             mWaitingChickens.emplace_back(*itr);
             (*itr)->owner()->setActive(false);
             itr = mChickens.erase(itr);
+
+            mFriedNum++;
         } else {
             ++itr;
         }
@@ -173,4 +181,20 @@ void FriedChickenManager::replenish() {
     mWaitingChickens.erase(itr);
     chicken->initialize();
     mChickens.emplace_back(chicken);
+}
+
+void FriedChickenManager::goodFriedSound() {
+    static bool isPlay = false;
+    static float timer = 0.f;
+    if (isPlay) {
+        return;
+    }
+    if (mFriedNum < 3) {
+        return;
+    }
+    timer += Time::deltaTime;
+    if (timer > 10.f) {
+        mGoodFriedSound->playSE();
+        isPlay = true;
+    }
 }

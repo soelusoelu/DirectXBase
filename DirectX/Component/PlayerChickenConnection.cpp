@@ -6,6 +6,7 @@
 #include "IPlayerWalk.h"
 #include "MeshComponent.h"
 #include "PlayerComponent.h"
+#include "SoundComponent.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Input/Input.h"
@@ -19,6 +20,7 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mChicken(nullptr),
     mJumpTarget(nullptr),
     mChickenRadius(0.f),
+    mSound(nullptr),
     mCollectionKey(KeyCode::None),
     mCollectionPad(JoyCode::None),
     mIsJumpRoll(true) {
@@ -34,6 +36,7 @@ void PlayerChickenConnection::start() {
             mChickenRadius = mesh->getRadius();
         }
     }
+    mSound = owner()->componentManager()->getComponent<SoundComponent>();
 }
 
 void PlayerChickenConnection::update() {
@@ -169,6 +172,7 @@ void PlayerChickenConnection::collection() {
     //}
     //すべての面が普通以上で
     if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
+        mSound->playSE();
         return;
     }
 
