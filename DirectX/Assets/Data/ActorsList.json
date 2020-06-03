@@ -123,19 +123,19 @@
           "type": "ChickenFry",
           "properties": {
             "notFriedToLittleBadTimer": 0.0,
-            "littleBadToUsuallyTimer": 6.0,
+            "littleBadToUsuallyTimer": 5.0,
             "usuallyToGoodTimer": 5.0,
-            "goodToBadTimer": 6.0,
+            "goodToBadTimer": 10.0,
 
             "easyNotFriedToLittleBadTimer": 0.0,
-            "easyLittleBadToUsuallyTimer": 5.0,
+            "easyLittleBadToUsuallyTimer": 4.0,
             "easyUsuallyToGoodTimer": 5.0,
-            "easyGoodToBadTimer": 5.0,
+            "easyGoodToBadTimer": 10.0,
 
             "hardNotFriedToLittleBadTimer": 0.0,
-            "hardLittleBadToUsuallyTimer": 8.0,
+            "hardLittleBadToUsuallyTimer": 6.0,
             "hardUsuallyToGoodTimer": 7.0,
-            "hardGoodToBadTimer": 7.0,
+            "hardGoodToBadTimer": 10.0,
 
             "tooBurntTimer": 5.0
           }
@@ -180,16 +180,16 @@
           "properties": {
             "startNum": 1,
             "maxNum": 5,
-            "replenishTimer": 20.0
+            "replenishTimer": 15.0
           }
         },
         {
           "type": "ScoreEvaluation",
           "properties": {
             "littleBadScore": 0,
-            "usuallyScore": 3,
-            "goodScore": 10,
-            "badScore": -3
+            "usuallyScore": 30,
+            "goodScore": 100,
+            "badScore": -10
           }
         },
         {
@@ -299,7 +299,7 @@
         {
           "type": "Text",
           "properties": {
-            "position": [ 800.0, 50.0 ],
+            "position": [ 960.0, 50.0 ],
             "scale": [ 3.0, 3.0 ],
             "pivot": "CenterTop",
             "isActive": false
@@ -321,9 +321,9 @@
         {
           "type": "ResultRank",
           "properties": {
-            "low": 50,
-            "middle": 100,
-            "high": 200,
+            "low": 500,
+            "middle": 1000,
+            "high": 2000,
             "lowTextureName": "ResultLow.png",
             "middleTextureName": "ResultMiddle.png",
             "highTextureName": "ResultHigh.png",
