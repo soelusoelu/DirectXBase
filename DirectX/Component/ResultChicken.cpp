@@ -22,24 +22,34 @@ ResultChicken::ResultChicken() :
     mFade(nullptr),
     mFallToFadeTimer(std::make_unique<Time>()),
     mState(State::FALL),
-    mScore(0) {
+    mScore(0),
+    mIsSleepedFirstFrame(false) {
 }
 
 ResultChicken::~ResultChicken() = default;
 
-void ResultChicken::start() {
+void ResultChicken::awake() {
     auto rr = GameObjectCreater::create("ResultRank");
     mRank = rr->componentManager()->getComponent<ResultRank>();
-    mRank->initialize(mScore);
     mResultChickenManager = GameObjectCreater::create("ResultChickenManager");
     auto fadeObj = GameObjectCreater::create("Fade");
     mFade = fadeObj->componentManager()->getComponent<Fade>();
+}
+
+void ResultChicken::start() {
+    mRank->initialize(mScore);
 
     mText = owner()->componentManager()->getComponent<Text>();
     mText->setText(StringUtil::intToString(mScore));
 }
 
 void ResultChicken::update() {
+    //最初の1フレームは休む(無理やりバグ回避)
+    if (!mIsSleepedFirstFrame) {
+        mIsSleepedFirstFrame = true;
+        return;
+    }
+
     if (mState == State::FALL) {
         fallUpdate();
     } else if (mState == State::FADE) {
