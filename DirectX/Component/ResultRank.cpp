@@ -49,6 +49,10 @@ void ResultRank::initialize(int score) {
     selectRank(score);
 }
 
+Rank ResultRank::getRank() const {
+    return mRank;
+}
+
 void ResultRank::setActive(bool value) {
     mSprite->setActive(value);
 }

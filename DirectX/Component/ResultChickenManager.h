@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "Rank.h"
 #include <list>
 #include <memory>
 
@@ -13,13 +14,16 @@ class ResultChickenManager : public Component {
 public:
     ResultChickenManager();
     ~ResultChickenManager();
-    virtual void awake() override;
     virtual void finalize() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
+    void createChickensFromRank(Rank rank);
 
 private:
     GameObjectPtrList mChickens;
-    int mFallsNum;
+    int mLowNum;
+    int mMiddleNum;
+    int mHighNum;
+    int mSuperNum;
 };
 

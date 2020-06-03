@@ -365,7 +365,10 @@
         {
           "type": "ResultChickenManager",
           "properties": {
-            "fallsNum": 30
+            "lowNum": 5,
+            "middleNum": 15,
+            "highNum": 25,
+            "superNum": 40
           }
         }
       ]

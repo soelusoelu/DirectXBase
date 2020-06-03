@@ -1,6 +1,7 @@
 ﻿#include "ResultChicken.h"
 #include "ComponentManager.h"
 #include "Fade.h"
+#include "ResultChickenManager.h"
 #include "ResultRank.h"
 #include "SoundComponent.h"
 #include "Text.h"
@@ -38,6 +39,8 @@ void ResultChicken::awake() {
 
 void ResultChicken::start() {
     mRank->initialize(mScore);
+    auto rcm = mResultChickenManager->componentManager()->getComponent<ResultChickenManager>();
+    rcm->createChickensFromRank(mRank->getRank());
 
     mText = owner()->componentManager()->getComponent<Text>();
     mText->setText(StringUtil::intToString(mScore));

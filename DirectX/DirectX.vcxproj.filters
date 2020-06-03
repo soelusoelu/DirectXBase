@@ -259,5 +259,6 @@
     <ClInclude Include="Component\ResultChickenManager.h" />
     <ClInclude Include="Component\Fade.h" />
     <ClInclude Include="GameObject\Pivot.h" />
+    <ClInclude Include="Component\Rank.h" />
   </ItemGroup>
 </Project>

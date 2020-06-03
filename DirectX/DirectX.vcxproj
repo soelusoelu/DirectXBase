@@ -337,6 +337,7 @@
     <ClInclude Include="Component\ResultChicken.h" />
     <ClInclude Include="Component\ResultChickenManager.h" />
     <ClInclude Include="GameObject\Pivot.h" />
+    <ClInclude Include="Component\Rank.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />

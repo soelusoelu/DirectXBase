@@ -1,21 +1,13 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "Rank.h"
 #include <memory>
 #include <string>
 
 class SpriteComponent;
 
 class ResultRank : public Component {
-    enum class Rank {
-        LOW,
-        MIDDLE,
-        HIGH,
-        SUPER,
-
-        NONE
-    };
-
 public:
     ResultRank();
     ~ResultRank();
@@ -23,6 +15,7 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void initialize(int score);
+    Rank getRank() const;
     void setActive(bool value);
 
 private:
