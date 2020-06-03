@@ -195,7 +195,7 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "‚Ö‚¢‚¨‘Ò‚¿.wav",
+            "fileName": "‚¢‚Á‚¿‚å‚ ‚ª‚è.wav",
             "volume": 0.5,
             "isFirstPlay": false
           }
@@ -308,7 +308,7 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "‚Ö‚¢‚¨‘Ò‚¿.wav",
+            "fileName": "‚Ö‚¢‚¨‚Ü‚¿.wav",
             "volume": 1.0,
             "isFirstPlay": false
           }
@@ -400,7 +400,7 @@
         {
           "type": "SoundComponent",
           "properties": {
-            "fileName": "‚Ö‚¢ƒ‰ƒbƒVƒƒƒC.wav",
+            "fileName": "‚Ö‚¢‚ç‚Á‚µ‚á‚¢.wav",
             "volume": 0.5,
             "isFirstPlay": false
           }
