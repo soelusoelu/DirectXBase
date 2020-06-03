@@ -70,6 +70,7 @@ void FriedChickenManager::drawDebugInfo(ComponentDebug::DebugInfoList * inspect)
     inspect->emplace_back("StartNum", mStartNum);
     inspect->emplace_back("MaxNum", mMaxNum);
     inspect->emplace_back("CurrentMaxNum", mCurrentMaxNum);
+    inspect->emplace_back("FriedNum", mFriedNum);
 }
 
 std::shared_ptr<FriedChickenComponent> FriedChickenManager::findNearestChicken(const GameObject & target) const {
@@ -110,23 +111,22 @@ std::list<std::shared_ptr<GameObject>> FriedChickenManager::getFriedChickens() c
 }
 
 int FriedChickenManager::getEvaluatedScore() const {
-    if (!mScoreEvaluation) {
-        return 0;
-    }
-
     int score = 0;
     for (const auto& chicken : mChickens) {
-        if (!chicken->isFinished()) {
-            continue;
-        }
-        if (chicken->isTooBurnt()) {
+        if (!chicken->isWaitingScore()) {
             continue;
         }
         const auto& fry = chicken->getFry();
         score += mScoreEvaluation->evaluateScore(fry);
+
+        if (chicken->isRise()) { //上昇状態だったらスコアの加算状態を切る
+            chicken->setWaitingScore(false);
+        } else { //上昇していなかったら即回収
+            chicken->finishFryed();
+        }
     }
 
-    if (score > 0) {
+    if (score != 0) {
         mSound->playSE();
     }
 

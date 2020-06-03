@@ -177,6 +177,7 @@ void PlayerChickenConnection::collection() {
     }
 
     mChicken->setUp();
+    mChicken->setWaitingScore(true);
 
     setPlayerPosOnTheJumpTarget();
 }

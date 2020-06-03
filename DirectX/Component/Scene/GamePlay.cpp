@@ -90,7 +90,9 @@ void GamePlay::update() {
     }
     //スコアを加算
     auto score = mFriedChickenManager->getEvaluatedScore();
-    mScore->addScore(score);
+    if (score > 0) {
+        mScore->addScore(score);
+    }
 
     //タイマーが0になったらシーン切り替え
     if (mTimeLimitTimer->isTime()) {

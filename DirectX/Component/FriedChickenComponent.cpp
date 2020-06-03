@@ -20,7 +20,8 @@ FriedChickenComponent::FriedChickenComponent() :
     mRandomRangeScale(Vector2::one),
     mRollSpeed(0.f),
     mFallSpeed(0.f),
-    mIsWaitingColliction(false) {
+    mIsWaitingColliction(false),
+    mIsWaitingAddScore(false) {
 }
 
 FriedChickenComponent::~FriedChickenComponent() = default;
@@ -48,7 +49,7 @@ void FriedChickenComponent::update() {
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();
-    } else if (mState == State::UP) {
+    } else if (mState == State::RISE) {
         mRise->rise();
         if (mRise->isEnd()) {
             finishFryed();
@@ -83,6 +84,7 @@ void FriedChickenComponent::initialize() {
     owner()->setActive(true);
 
     mIsWaitingColliction = false;
+    mIsWaitingAddScore = false;
 
     //ランダムで位置を決める
     auto pos = Random::randomRange(
@@ -107,8 +109,12 @@ void FriedChickenComponent::finishFryed() {
     mIsWaitingColliction = true;
 }
 
+void FriedChickenComponent::setWaitingScore(bool value) {
+    mIsWaitingAddScore = value;
+}
+
 void FriedChickenComponent::setUp() {
-    mState = State::UP;
+    mState = State::RISE;
 }
 
 void FriedChickenComponent::eaten() {
@@ -130,12 +136,16 @@ bool FriedChickenComponent::isFalling() const {
     return mState == State::FALL;
 }
 
-bool FriedChickenComponent::isUP() const {
-    return mState == State::UP;
+bool FriedChickenComponent::isRise() const {
+    return mState == State::RISE;
 }
 
 bool FriedChickenComponent::isFinished() const {
     return mIsWaitingColliction;
+}
+
+bool FriedChickenComponent::isWaitingScore() const {
+    return mIsWaitingAddScore;
 }
 
 bool FriedChickenComponent::isEaten() const {
