@@ -36,10 +36,6 @@ void ResultChicken::start() {
     mFade = fadeObj->componentManager()->getComponent<Fade>();
 
     mText = owner()->componentManager()->getComponent<Text>();
-    auto scoreStr = StringUtil::intToString(mScore);
-    auto textPosX = Window::standardWidth() / 2.f;
-    textPosX -= DrawString::WIDTH * mText->getScale().x * scoreStr.length() / 2.f;
-    mText->setPosition(Vector2(textPosX, mText->getPosition().y));
     mText->setText(StringUtil::intToString(mScore));
 }
 
