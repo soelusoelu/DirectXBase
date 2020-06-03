@@ -299,7 +299,7 @@
         {
           "type": "Text",
           "properties": {
-            "position": [ 800.0, 50.0 ],
+            "position": [ 960.0, 50.0 ],
             "scale": [ 3.0, 3.0 ],
             "pivot": "CenterTop",
             "isActive": false
