@@ -20,6 +20,7 @@ class ResultChicken : public Component {
 public:
     ResultChicken();
     ~ResultChicken();
+    virtual void awake() override;
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
@@ -39,4 +40,5 @@ private:
     std::shared_ptr<Text> mText;
     State mState;
     int mScore;
+    bool mIsSleepedFirstFrame;
 };
