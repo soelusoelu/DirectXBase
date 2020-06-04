@@ -20,7 +20,8 @@ public:
     Sprite3D();
     ~Sprite3D();
     virtual void start() override;
-    virtual void update() override;
+    virtual void lateUpdate() override;
+    virtual void finalize() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;

@@ -4,7 +4,7 @@
 #include <memory>
 
 class Text;
-class Timer;
+class Time;
 
 class TimeLimit : public Component {
 public:
@@ -13,9 +13,10 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
+    bool isTime() const;
 
 private:
     std::shared_ptr<Text> mText;
-    std::shared_ptr<Timer> mTimer;
+    std::unique_ptr<Time> mTimer;
     int mDecimalDigit;
 };

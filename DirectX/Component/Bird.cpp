@@ -83,7 +83,7 @@ void Bird::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
 
 void Bird::waiting() {
     mRestartTimer->update();
-    auto temp = mRestartTimer->limitTime() - mRestartTimer->currentTime();
+    auto temp = mRestartTimer->countDownTime();
     if (temp <= mOrbit->getTime()) {
         mState = State::PREDICT_LINE;
         initialize();

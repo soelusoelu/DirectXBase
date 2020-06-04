@@ -23,7 +23,7 @@ void Camera::start() {
     calcPerspectiveFOV(Window::width(), Window::height());
 }
 
-void Camera::update() {
+void Camera::lateUpdate() {
     calcLookAt();
 }
 

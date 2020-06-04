@@ -8,7 +8,7 @@
 #include "../../Component/PlayerChickenConnection.h"
 #include "../../Component/Score.h"
 #include "../../Component/SoundComponent.h"
-#include "../../Component/Timer.h"
+#include "../../Component/TimeLimit.h"
 #include "../../DebugLayer/DebugUtility.h"
 #include "../../DebugLayer/Inspector.h"
 #include "../../GameObject/GameObject.h"
@@ -25,7 +25,7 @@ GamePlay::GamePlay() :
     mFriedChickenManager(nullptr),
     mPCConnection(nullptr),
     mScore(nullptr),
-    mTimeLimitTimer(nullptr),
+    mTimeLimit(nullptr),
     mJumpTarget(nullptr),
     mOil(nullptr),
     mIsFirstSleep(false) {
@@ -46,10 +46,10 @@ void GamePlay::awake() {
     auto score = GameObjectCreater::createUI("Score");
     mScore = score->componentManager()->getComponent<Score>();
     auto tl = GameObjectCreater::createUI("TimeLimit");
-    mTimeLimitTimer = tl->componentManager()->getComponent<Timer>();
+    mTimeLimit = tl->componentManager()->getComponent<TimeLimit>();
     auto jt = GameObjectCreater::createUI("JumpTarget");
     mJumpTarget = jt->componentManager()->getComponent<JumpTarget>();
-    GameObjectCreater::create("Field");
+    //GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
 
@@ -95,7 +95,7 @@ void GamePlay::update() {
     }
 
     //タイマーが0になったらシーン切り替え
-    if (mTimeLimitTimer->isTime()) {
+    if (mTimeLimit->isTime()) {
         mScene->next("ResultScene");
     }
 

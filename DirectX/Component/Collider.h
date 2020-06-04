@@ -18,7 +18,7 @@ protected:
 
 public:
     virtual void start() override;
-    virtual void update() override;
+    virtual void lateUpdate() override;
     virtual void finalize() override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     virtual void onSetActive(bool value) override;

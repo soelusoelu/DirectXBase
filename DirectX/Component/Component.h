@@ -18,7 +18,7 @@ class Component {
     using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:
-    Component(int updateOrder = 100);
+    Component();
     virtual ~Component();
     //loadPropertiesの直後に呼び出される
     virtual void awake() {};
@@ -44,8 +44,6 @@ public:
 
     //コンポーネントがアタッチされているゲームオブジェクトを返す
     GameObjectPtr owner() const;
-    //アップデート優先数値を返す
-    int getUpdateOrder() const;
     //コンポーネントの名前を返す
     const std::string& getComponentName() const;
 
@@ -62,6 +60,5 @@ public:
 
 private:
     std::weak_ptr<GameObject> mOwner;
-    int mUpdateOrder;
     std::string mComponentName;
 };

@@ -4,7 +4,7 @@
 #include "../Component/ComponentManager.h"
 #include "../Device/Time.h"
 
-GameObject::GameObject(std::shared_ptr<Renderer> renderer) :
+GameObject::GameObject(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
     mTransform(nullptr),
     mComponentManager(nullptr),

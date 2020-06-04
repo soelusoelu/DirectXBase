@@ -12,7 +12,7 @@
 #include <cassert>
 
 Sprite3D::Sprite3D() :
-    Component(500),
+    Component(),
     mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
@@ -23,9 +23,7 @@ Sprite3D::Sprite3D() :
     mFileName("") {
 }
 
-Sprite3D::~Sprite3D() {
-    mState = State::DEAD;
-}
+Sprite3D::~Sprite3D() = default;
 
 void Sprite3D::start() {
     if (mFileName.empty()) {
@@ -55,8 +53,14 @@ void Sprite3D::start() {
     addToManager();
 }
 
-void Sprite3D::update() {
-    mTransform->computeWorldTransform();
+void Sprite3D::lateUpdate() {
+    if (getActive()) {
+        mTransform->computeWorldTransform();
+    }
+}
+
+void Sprite3D::finalize() {
+    mState = State::DEAD;
 }
 
 void Sprite3D::onSetActive(bool value) {

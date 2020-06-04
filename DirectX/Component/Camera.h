@@ -8,7 +8,7 @@ public:
     Camera();
     ~Camera();
     virtual void start() override;
-    virtual void update() override;
+    virtual void lateUpdate() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     const Matrix4& getView() const;

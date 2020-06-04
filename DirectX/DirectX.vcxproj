@@ -203,7 +203,6 @@
     <ClCompile Include="Component\Oil.cpp" />
     <ClCompile Include="Component\PlayerWalk.cpp" />
     <ClCompile Include="Component\Scene\ResultScene.cpp" />
-    <ClCompile Include="Component\Timer.cpp" />
     <ClCompile Include="Component\Sprite3D.cpp" />
     <ClCompile Include="Component\Scene\Scene.cpp" />
     <ClCompile Include="Component\Scene\Title.cpp" />
@@ -327,7 +326,6 @@
     <ClInclude Include="Component\Oil.h" />
     <ClInclude Include="Component\PlayerWalk.h" />
     <ClInclude Include="Component\Scene\ResultScene.h" />
-    <ClInclude Include="Component\Timer.h" />
     <ClInclude Include="Component\Sprite3D.h" />
     <ClInclude Include="Component\Scene\Scene.h" />
     <ClInclude Include="Component\Scene\Title.h" />

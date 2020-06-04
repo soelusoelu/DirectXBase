@@ -34,8 +34,12 @@ void Time::setCurrentTime(float sec) {
     mCurrentTime = sec;
 }
 
-float Time::currentTime() const {
+float Time::countUpTime() const {
     return mCurrentTime;
+}
+
+float Time::countDownTime() const {
+    return mLimitTime - mCurrentTime;
 }
 
 float Time::limitTime() const {

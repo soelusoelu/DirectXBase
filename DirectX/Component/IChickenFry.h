@@ -9,7 +9,7 @@ public:
     //初期化
     virtual void initialize() = 0;
     //毎フレーム更新
-    virtual void update() = 0;
+    virtual void fryUpdate() = 0;
     //すべての面が焦げたか
     virtual bool isBurntAllSurfaces() const = 0;
     //焦げた面が一定秒数以上揚げられてるか

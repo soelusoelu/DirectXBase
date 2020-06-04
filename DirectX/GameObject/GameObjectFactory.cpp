@@ -35,7 +35,6 @@
 #include "../Component/SpriteComponent.h"
 #include "../Component/Text.h"
 #include "../Component/TimeLimit.h"
-#include "../Component/Timer.h"
 #include "../Component/TransparentMeshComponent.h"
 #include "../Component/Scene/GamePlay.h"
 #include "../Component/Scene/OperationExplanation.h"
@@ -80,7 +79,6 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(SpriteComponent);
     ADD_COMPONENT(Text);
     ADD_COMPONENT(TimeLimit);
-    ADD_COMPONENT(Timer);
     ADD_COMPONENT(TransparentMeshComponent);
     ADD_COMPONENT(GamePlay);
     ADD_COMPONENT(OperationExplanation);

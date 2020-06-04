@@ -41,11 +41,9 @@ void FriedChickenComponent::start() {
 
 void FriedChickenComponent::update() {
     if (mState == State::FRY) {
-        if (mFry) {
-            mFry->update();
-            tooBurnt();
-            //autoCollection();
-        }
+        mFry->fryUpdate();
+        tooBurnt();
+        //autoCollection();
     } else if (mState == State::FALL) {
         fall();
         soakedInOil();

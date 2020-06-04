@@ -18,7 +18,7 @@ class GameObject : public std::enable_shared_from_this<GameObject> {
     };
 
 public:
-    GameObject(std::shared_ptr<Renderer> renderer);
+    GameObject(const std::shared_ptr<Renderer>& renderer);
     virtual ~GameObject();
 
     //更新

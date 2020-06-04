@@ -17,14 +17,14 @@
 #include "../Utility/LevelLoader.h"
 
 SpriteComponent::SpriteComponent() :
-    Component(500),
+    Component(),
     mDrawOrder(0),
     mSprite(nullptr) {
 }
 
 SpriteComponent::~SpriteComponent() = default;
 
-void SpriteComponent::update() {
+void SpriteComponent::lateUpdate() {
     mSprite->update();
 }
 

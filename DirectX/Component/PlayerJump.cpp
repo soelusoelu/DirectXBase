@@ -9,7 +9,7 @@
 #include <string>
 
 PlayerJump::PlayerJump() :
-    Component(5),
+    Component(),
     mCurrentState(State::NONE),
     mPreviousState(State::NONE),
     mJumpStartPosition(Vector3::zero),
@@ -22,10 +22,6 @@ PlayerJump::PlayerJump() :
 }
 
 PlayerJump::~PlayerJump() = default;
-
-void PlayerJump::update() {
-    mPreviousState = mCurrentState;
-}
 
 void PlayerJump::loadProperties(const rapidjson::Value & inObj) {
     std::string src;
@@ -54,6 +50,30 @@ void PlayerJump::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
+bool PlayerJump::isJumpStart() const {
+    return (mCurrentState == State::JUMPING && mPreviousState == State::NONE);
+}
+
+bool PlayerJump::isJumping() const {
+    return (mCurrentState == State::JUMPING);
+}
+
+bool PlayerJump::isJumpEnd() const {
+    return (mCurrentState == State::NONE && mPreviousState == State::JUMPING);
+}
+
+void PlayerJump::setTargetPosition(const Vector3 & pos) {
+    mJumpTargetPosition = pos;
+}
+
+void PlayerJump::canJump(bool value) {
+    mCanJump = value;
+}
+
+void PlayerJump::stateUpdate() {
+    mPreviousState = mCurrentState;
+}
+
 void PlayerJump::jump() {
     if (!mCanJump) {
         return;
@@ -75,26 +95,6 @@ void PlayerJump::jump() {
 void PlayerJump::jumpUpdate() {
     move();
     stop();
-}
-
-bool PlayerJump::isJumpStart() const {
-    return (mCurrentState == State::JUMPING && mPreviousState == State::NONE);
-}
-
-bool PlayerJump::isJumping() const {
-    return (mCurrentState == State::JUMPING);
-}
-
-bool PlayerJump::isJumpEnd() const {
-    return (mCurrentState == State::NONE && mPreviousState == State::JUMPING);
-}
-
-void PlayerJump::setTargetPosition(const Vector3 & pos) {
-    mJumpTargetPosition = pos;
-}
-
-void PlayerJump::canJump(bool value) {
-    mCanJump = value;
 }
 
 void PlayerJump::move() {

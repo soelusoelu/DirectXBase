@@ -24,7 +24,7 @@ public:
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
     virtual void initialize() override;
-    virtual void update() override;
+    virtual void fryUpdate() override;
     virtual bool isBurntAllSurfaces() const override;
     virtual bool isTooBurnt() const override;
     virtual bool isBurntHalfSurfaces() const override;

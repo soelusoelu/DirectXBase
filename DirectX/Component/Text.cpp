@@ -7,7 +7,7 @@
 #include "../Utility/StringUtil.h"
 
 Text::Text() :
-    Component(500),
+    Component(),
     mText(""),
     mPosition(Vector2::zero),
     mScale(Vector2::one),
@@ -19,7 +19,7 @@ Text::Text() :
 
 Text::~Text() = default;
 
-void Text::update() {
+void Text::lateUpdate() {
     if (!mIsActive) {
         return;
     }

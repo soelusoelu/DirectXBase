@@ -15,7 +15,7 @@
 #include "../Utility/LevelLoader.h"
 
 PlayerChickenConnection::PlayerChickenConnection() :
-    Component(150),
+    Component(),
     mPlayer(nullptr),
     mChicken(nullptr),
     mJumpTarget(nullptr),
@@ -40,7 +40,7 @@ void PlayerChickenConnection::start() {
 }
 
 void PlayerChickenConnection::update() {
-    const auto& jump = mPlayer->getJumpState();
+    auto jump = mPlayer->getJumpState();
     if (jump->isJumpStart()) {
         if (mIsJumpRoll) {
             mChicken->owner()->transform()->rotate(Vector3::right * 180.f);

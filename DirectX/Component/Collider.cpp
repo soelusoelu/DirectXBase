@@ -3,7 +3,7 @@
 #include <algorithm>
 
 Collider::Collider() :
-    Component(500),
+    Component(),
     mIsAutoUpdate(true),
     mEnable(false) {
 }
@@ -17,7 +17,7 @@ void Collider::start() {
     }
 }
 
-void Collider::update() {
+void Collider::lateUpdate() {
     mPreviousCollider.resize(mCurrentCollider.size());
     std::copy(mCurrentCollider.begin(), mCurrentCollider.end(), mPreviousCollider.begin());
     mCurrentCollider.clear();

@@ -16,7 +16,6 @@ class PlayerJump : public Component, public IPlayerJump {
 public:
     PlayerJump();
     ~PlayerJump();
-    virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
@@ -26,6 +25,8 @@ public:
     virtual void setTargetPosition(const Vector3& pos) override;
     virtual void canJump(bool value) override;
 
+    //状態を更新
+    void stateUpdate();
     //ジャンプ実行
     void jump();
     //メインアップデート

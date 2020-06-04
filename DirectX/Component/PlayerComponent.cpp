@@ -5,7 +5,7 @@
 #include "../GameObject/GameObject.h"
 
 PlayerComponent::PlayerComponent() :
-    Component(10),
+    Component(),
     mWalk(nullptr),
     mJump(nullptr),
     mState(State::WALK),
@@ -24,6 +24,8 @@ void PlayerComponent::update() {
         mIsWaitFirstFrame = true;
         return;
     }
+
+    mJump->stateUpdate();
 
     if (mState == State::WALK) {
         mWalk->walkUpdate();

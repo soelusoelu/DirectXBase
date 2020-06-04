@@ -15,7 +15,7 @@ class SpriteComponent : public Component, public std::enable_shared_from_this<Sp
 public:
     SpriteComponent();
     virtual ~SpriteComponent();
-    virtual void update() override;
+    virtual void lateUpdate() override;
     virtual void finalize() override;
     virtual void onSetActive(bool value) override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;

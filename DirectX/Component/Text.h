@@ -10,7 +10,7 @@ class Text : public Component {
 public:
     Text();
     ~Text();
-    virtual void update() override;
+    virtual void lateUpdate() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     void setText(const std::string& text);

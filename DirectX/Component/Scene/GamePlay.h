@@ -7,7 +7,7 @@ class Scene;
 class FriedChickenManager;
 class PlayerChickenConnection;
 class Score;
-class Timer;
+class TimeLimit;
 class JumpTarget;
 class Oil;
 
@@ -24,7 +24,7 @@ private:
     std::shared_ptr<FriedChickenManager> mFriedChickenManager;
     std::shared_ptr<PlayerChickenConnection> mPCConnection;
     std::shared_ptr<Score> mScore;
-    std::shared_ptr<Timer> mTimeLimitTimer;
+    std::shared_ptr<TimeLimit> mTimeLimit;
     std::shared_ptr<JumpTarget> mJumpTarget;
     std::shared_ptr<Oil> mOil;
     bool mIsFirstSleep;

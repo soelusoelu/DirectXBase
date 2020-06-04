@@ -14,7 +14,9 @@ public:
     //カウントアップタイムの強制設定
     void setCurrentTime(float sec);
     //現在のカウントアップタイムを返す
-    float currentTime() const;
+    float countUpTime() const;
+    //現在のカウントダウンタイムを返す
+    float countDownTime() const;
     //リミットタイムを返す
     float limitTime() const;
     //リミットタイムに対してのカウントアップタイムの比率

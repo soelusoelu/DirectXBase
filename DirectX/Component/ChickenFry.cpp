@@ -75,7 +75,7 @@ void ChickenFry::drawDebugInfo(ComponentDebug::DebugInfoList * inspect) const {
     inspect->emplace_back("CurrentBottomSurface", surfaceToString(mCurrentBottomSurface));
     inspect->emplace_back("EasySurface", surfaceToString(mEasySurface));
     inspect->emplace_back("HardSurface", surfaceToString(mHardSurface));
-    inspect->emplace_back("TooBurntTiemr", mTooBurntTimer->currentTime());
+    inspect->emplace_back("TooBurntTiemr", mTooBurntTimer->countUpTime());
 }
 
 void ChickenFry::initialize() {
@@ -94,7 +94,7 @@ void ChickenFry::initialize() {
     }
 }
 
-void ChickenFry::update() {
+void ChickenFry::fryUpdate() {
     frying();
     updateTimerIfBurntBottomSurface();
 
@@ -158,7 +158,7 @@ FryState ChickenFry::getFryState(unsigned surfaceIndex) const {
     }
 
     FryState state = FryState::NOT_FRIED;
-    auto current = mFryTimer[surfaceIndex]->currentTime();
+    auto current = mFryTimer[surfaceIndex]->countUpTime();
     float sum = 0.f;
     for (size_t i = 0; i < getNumFryState() - 1; i++) {
         sum += timer[i];

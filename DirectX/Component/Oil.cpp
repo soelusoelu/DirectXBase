@@ -5,7 +5,7 @@
 #include "../Utility/LevelLoader.h"
 
 Oil::Oil() :
-    Component(130),
+    Component(),
     mFlowSpeed(0.f),
     mFlowRangeX(0.f),
     mFlowRangeZFore(0.f),

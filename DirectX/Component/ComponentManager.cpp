@@ -13,17 +13,10 @@ void ComponentManager::start() {
         return;
     }
 
-    for (auto&& comp : mStartComponents) {
+    for (const auto& comp : mStartComponents) {
         comp->start();
 
-        int myOrder = comp->getUpdateOrder();
-        auto itr = mComponents.begin();
-        for (; itr != mComponents.end(); ++itr) {
-            if (myOrder < (*itr)->getUpdateOrder()) {
-                break;
-            }
-        }
-        mComponents.insert(itr, comp);
+        mComponents.emplace_back(comp);
     }
     mStartComponents.clear();
 }

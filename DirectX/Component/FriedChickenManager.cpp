@@ -12,7 +12,7 @@
 #include "../Utility/LevelLoader.h"
 
 FriedChickenManager::FriedChickenManager() :
-    Component(200),
+    Component(),
     mScoreEvaluation(nullptr),
     mSound(nullptr),
     mGoodFriedSound(nullptr),
@@ -36,6 +36,7 @@ void FriedChickenManager::awake() {
         auto f = GameObjectCreater::create("FriedChicken");
         auto c = f->componentManager()->getComponent<FriedChickenComponent>();
         mWaitingChickens.emplace_back(c);
+        f->setActive(false);
     }
 
     mCurrentMaxNum = mStartNum;
