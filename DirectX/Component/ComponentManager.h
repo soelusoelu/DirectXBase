@@ -19,6 +19,8 @@ public:
     void start();
     //所有するすべてのコンポーネントを更新
     void update();
+    //所有するすべてのコンポーネントを遅延更新
+    void lateUpdate();
     //所有するすべてのコンポーネントの終了処理を実行
     void finalize();
     //コンポーネントの追加

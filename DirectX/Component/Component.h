@@ -20,12 +20,14 @@ class Component {
 public:
     Component(int updateOrder = 100);
     virtual ~Component();
+    //loadPropertiesの直後に呼び出される
+    virtual void awake() {};
     //getComponentはここでして
     virtual void start() {};
     //毎フレーム呼ばれる
     virtual void update() {};
-    //loadPropertiesの直後に呼び出される
-    virtual void awake() {};
+    //全ゲームオブジェクトの全アップデート後に呼ばれる
+    virtual void lateUpdate() {};
     //終了処理
     virtual void finalize() {};
     //オーナーのTransformが更新されたら

@@ -21,10 +21,15 @@ void GameObject::update() {
     mComponentManager->start();
     if (getActive()) {
         mComponentManager->update();
+    }
+    updateDestroyTimer();
+}
+
+void GameObject::lateUpdate() {
+    if (getActive()) {
+        mComponentManager->lateUpdate();
 
         computeWorldTransform();
-
-        updateDestroyTimer();
     }
 }
 

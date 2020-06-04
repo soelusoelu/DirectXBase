@@ -16,8 +16,11 @@ GameObjectManager::~GameObjectManager() = default;
 
 void GameObjectManager::update() {
     mUpdatingGameObjects = true;
-    for (auto&& gameObject : mGameObjects) {
+    for (const auto& gameObject : mGameObjects) {
         gameObject->update();
+    }
+    for (const auto& gameObject : mGameObjects) {
+        gameObject->lateUpdate();
     }
     mUpdatingGameObjects = false;
 

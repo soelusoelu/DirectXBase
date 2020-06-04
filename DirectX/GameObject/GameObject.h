@@ -23,6 +23,8 @@ public:
 
     //更新
     void update();
+    //遅延更新
+    void lateUpdate();
 
     //削除
     void destroy();

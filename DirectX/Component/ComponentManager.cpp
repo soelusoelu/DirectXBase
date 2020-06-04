@@ -34,6 +34,12 @@ void ComponentManager::update() {
     }
 }
 
+void ComponentManager::lateUpdate() {
+    for (auto&& comp : mComponents) {
+        comp->lateUpdate();
+    }
+}
+
 void ComponentManager::finalize() {
     for (auto&& comp : mStartComponents) {
         comp->finalize();
