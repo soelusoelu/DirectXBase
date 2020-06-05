@@ -261,5 +261,6 @@
     <ClInclude Include="Component\Rank.h" />
     <ClInclude Include="Input\InputUtility.h" />
     <ClInclude Include="Input\IKeyboard.h" />
+    <ClInclude Include="Input\IMouse.h" />
   </ItemGroup>
 </Project>

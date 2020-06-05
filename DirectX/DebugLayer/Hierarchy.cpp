@@ -78,7 +78,7 @@ void Hierarchy::setGameObjectToButton(const GameObjectPtrList& gameObjects) {
 
 void Hierarchy::update() {
     auto mousePos = Input::mouse()->getMousePosition();
-    if (Input::mouse()->getMouseDown(MouseCode::LeftButton)) {
+    if (Input::mouse()->getMouseButtonDown(MouseCode::LeftButton)) {
         for (const auto& b : mButtons) {
             if (!b.first->containsPoint(mousePos)) {
                 continue;

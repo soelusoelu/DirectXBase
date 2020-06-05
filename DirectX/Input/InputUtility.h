@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "IKeyboard.h"
 #include "../System/DirectXIncLib.h"
 #include <rapidjson/document.h>
 #include <dinput.h>
@@ -25,7 +24,7 @@ public:
     static void update();
 
     //各種入力クラスにアクセス
-    static IKeyboard* keyboard();
+    static Keyboard* keyboard();
     static Mouse* mouse();
     static JoyPad* joyPad();
 

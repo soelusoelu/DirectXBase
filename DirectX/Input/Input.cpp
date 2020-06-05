@@ -5,7 +5,7 @@ IKeyboard* Input::keyboard() {
     return InputUtility::keyboard();
 }
 
-Mouse* Input::mouse() {
+IMouse* Input::mouse() {
     return InputUtility::mouse();
 }
 

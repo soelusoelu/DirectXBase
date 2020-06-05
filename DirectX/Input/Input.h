@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "IKeyboard.h"
+#include "IMouse.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "JoyPad.h"
@@ -8,7 +9,7 @@
 class Input {
 public:
     static IKeyboard* keyboard();
-    static Mouse* mouse();
+    static IMouse* mouse();
     static JoyPad* joyPad();
 
 private:

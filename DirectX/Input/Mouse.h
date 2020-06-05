@@ -1,35 +1,20 @@
 ﻿#pragma once
 
+#include "IMouse.h"
 #include <dinput.h>
 #include <string>
 
-class Vector2;
-
-enum class MouseCode {
-    LeftButton = 0,
-    RightButton = 1,
-    CenterButton = 2,
-    SideButton1 = 3,
-    SideButton2 = 4,
-    SideButton3 = 5,
-
-    None = 512
-};
-
-class Mouse {
+class Mouse : public IMouse {
 public:
     Mouse();
     ~Mouse();
+    virtual bool getMouseButtonDown(MouseCode button) override;
+    virtual bool getMouseButton(MouseCode button) override;
+    virtual bool getMouseButtonUp(MouseCode button) override;
+    virtual Vector2 getMousePosition() override;
+
     bool initialize(HWND hWnd, IDirectInput8* directInput);
     void update();
-    //キーが押された瞬間
-    bool getMouseDown(MouseCode button);
-    //キーが押され続けているか
-    bool getMouse(MouseCode button);
-    //キーが離れた瞬間
-    bool getMouseUp(MouseCode button);
-    //マウスのウィンドウ位置
-    Vector2 getMousePosition();
     //文字列をMouseCodeに変換
     static void stringToJoyCode(const std::string& src, MouseCode* dst);
 

@@ -16,6 +16,22 @@ Mouse::~Mouse() {
     SAFE_RELEASE(mMouseDevice);
 }
 
+bool Mouse::getMouseButtonDown(MouseCode button) {
+    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80 && !(mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80));
+}
+
+bool Mouse::getMouseButton(MouseCode button) {
+    return mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80;
+}
+
+bool Mouse::getMouseButtonUp(MouseCode button) {
+    return (!(mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80) && mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80);
+}
+
+Vector2 Mouse::getMousePosition() {
+    return Vector2(mMousePositionX, mMousePositionY);
+}
+
 bool Mouse::initialize(HWND hWnd, IDirectInput8* directInput) {
     mhWnd = hWnd;
 
@@ -62,22 +78,6 @@ void Mouse::update() {
     mMousePositionX = Math::clamp<float>(mMousePositionX, 0.f, static_cast<float>(Window::width()));
     mMousePositionY = Math::clamp<float>(mMousePositionY, 0.f, static_cast<float>(Window::height()));
 #endif // _DEBUG
-}
-
-bool Mouse::getMouseDown(MouseCode button) {
-    return (mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80 && !(mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80));
-}
-
-bool Mouse::getMouse(MouseCode button) {
-    return mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80;
-}
-
-bool Mouse::getMouseUp(MouseCode button) {
-    return (!(mCurrentMouseState.rgbButtons[static_cast<int>(button)] & 0x80) && mPreviousMouseState.rgbButtons[static_cast<int>(button)] & 0x80);
-}
-
-Vector2 Mouse::getMousePosition() {
-    return Vector2(mMousePositionX, mMousePositionY);
 }
 
 void Mouse::stringToJoyCode(const std::string& src, MouseCode* dst) {
