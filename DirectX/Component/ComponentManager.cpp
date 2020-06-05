@@ -21,23 +21,23 @@ void ComponentManager::start() {
     mStartComponents.clear();
 }
 
-void ComponentManager::update() {
-    for (auto&& comp : mComponents) {
+void ComponentManager::update() const  {
+    for (const auto& comp : mComponents) {
         comp->update();
     }
 }
 
-void ComponentManager::lateUpdate() {
-    for (auto&& comp : mComponents) {
+void ComponentManager::lateUpdate() const {
+    for (const auto& comp : mComponents) {
         comp->lateUpdate();
     }
 }
 
-void ComponentManager::finalize() {
-    for (auto&& comp : mStartComponents) {
+void ComponentManager::finalize() const {
+    for (const auto& comp : mStartComponents) {
         comp->finalize();
     }
-    for (auto&& comp : mComponents) {
+    for (const auto& comp : mComponents) {
         comp->finalize();
     }
 }
@@ -46,20 +46,20 @@ void ComponentManager::addComponent(const ComponentPtr& component) {
     mStartComponents.emplace_back(component);
 }
 
-void ComponentManager::onUpdateWorldTransform() {
-    for (auto&& comp : mStartComponents) {
+void ComponentManager::onUpdateWorldTransform() const {
+    for (const auto& comp : mStartComponents) {
         comp->onUpdateWorldTransform();
     }
-    for (auto&& comp : mComponents) {
+    for (const auto& comp : mComponents) {
         comp->onUpdateWorldTransform();
     }
 }
 
-void ComponentManager::onSetActive(bool value) {
-    for (auto&& comp : mStartComponents) {
+void ComponentManager::onSetActive(bool value) const {
+    for (const auto& comp : mStartComponents) {
         comp->onSetActive(value);
     }
-    for (auto&& comp : mComponents) {
+    for (const auto& comp : mComponents) {
         comp->onSetActive(value);
     }
 }

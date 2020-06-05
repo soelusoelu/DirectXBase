@@ -18,18 +18,18 @@ public:
     //各コンポーネントのstartを一度だけ実行
     void start();
     //所有するすべてのコンポーネントを更新
-    void update();
+    void update() const;
     //所有するすべてのコンポーネントを遅延更新
-    void lateUpdate();
+    void lateUpdate() const;
     //所有するすべてのコンポーネントの終了処理を実行
-    void finalize();
+    void finalize() const;
     //コンポーネントの追加
     void addComponent(const ComponentPtr& component);
 
     //所有するすべてのコンポーネントのonUpdateWorldTransformを実行
-    void onUpdateWorldTransform();
+    void onUpdateWorldTransform() const;
     //所有するすべてのコンポーネントのonSetActiveを実行
-    void onSetActive(bool value);
+    void onSetActive(bool value) const;
 
     //全コンポーネントの取得
     const ComponentPtrList& getAllComponents() const;
