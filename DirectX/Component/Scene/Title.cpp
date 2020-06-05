@@ -4,8 +4,6 @@
 #include "../SoundComponent.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Input/Input.h"
-#include "../../Input/JoyPad.h"
-#include "../../Input/Keyboard.h"
 #include <string>
 
 Title::Title() :

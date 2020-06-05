@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "Component.h"
+#include "../Input/Input.h"
 #include "../Math/Math.h"
 #include <memory>
 
@@ -8,8 +9,6 @@ class GameObject;
 class PlayerComponent;
 class FriedChickenComponent;
 class SoundComponent;
-enum class KeyCode;
-enum class JoyCode;
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection : public Component {

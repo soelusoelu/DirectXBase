@@ -6,9 +6,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
-#include "../Input/Input.h"
-#include "../Input/JoyPad.h"
-#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 #include <string>
 

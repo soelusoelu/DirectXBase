@@ -10,8 +10,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectFactory.h"
 #include "../Input/Input.h"
-#include "../Input/JoyPad.h"
-#include "../Input/Keyboard.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"

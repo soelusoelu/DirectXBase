@@ -9,7 +9,7 @@
 #include "../Device/Renderer.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObjectFactory.h"
-#include "../Input/Input.h"
+#include "../Input/InputUtility.h"
 #include "../Scene/SceneManager.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
@@ -20,7 +20,7 @@ Game::Game() {
 }
 
 Game::~Game() {
-    Input::end();
+    InputUtility::finalize();
     Texture::end();
     DebugUtility::finalize();
 }
@@ -54,7 +54,7 @@ bool Game::initialize() {
     mFPSCounter = std::make_unique<FPSCounter>();
     Singleton<GameObjectFactory>::instance().initialize(mRenderer);
     DebugUtility::create();
-    Input::create();
+    InputUtility::create();
     mSceneManager = std::make_unique<SceneManager>(mRenderer);
     Singleton<LevelLoader>::instance().loadGlobal(this, "Global.json");
 
@@ -66,7 +66,7 @@ bool Game::initialize() {
 
     Random::initialize();
     DebugUtility::initialize();
-    Input::initialize(mhWnd);
+    InputUtility::initialize(mhWnd);
     mSceneManager->initialize();
 
     return true;
@@ -76,7 +76,7 @@ void Game::mainLoop() {
     Singleton<DirectX>::instance().clearRenderTarget();
     Singleton<DirectX>::instance().clearDepthStencilView();
 
-    Input::update();
+    InputUtility::update();
     mWindow->update();
 
     mSceneManager->update();
@@ -91,7 +91,7 @@ void Game::loadProperties(const rapidjson::Value& inObj) {
     mRenderer->loadProperties(inObj);
     mFPSCounter->loadProperties(inObj);
     DebugUtility::loadProperties(inObj);
-    Input::loadProperties(inObj);
+    InputUtility::loadProperties(inObj);
 }
 
 void Game::quit() {

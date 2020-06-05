@@ -1,5 +1,5 @@
 ﻿#include "JoyPad.h"
-#include "Input.h"
+#include "InputUtility.h"
 #include "../Math/Math.h"
 #include "../System/Game.h"
 #include "../Utility/LevelLoader.h"
@@ -52,7 +52,7 @@ void JoyPad::loadProperties(const rapidjson::Value& inObj) {
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext) {
     // 「DirectInputデバイス」オブジェクトの作成
-    if (FAILED(Input::mDirectInput->CreateDevice(pdidInstance->guidInstance, &JoyPad::mPadDevice, NULL))) {
+    if (FAILED(InputUtility::mDirectInput->CreateDevice(pdidInstance->guidInstance, &JoyPad::mPadDevice, NULL))) {
         return DIENUM_CONTINUE;
     }
 

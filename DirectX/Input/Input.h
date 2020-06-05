@@ -1,32 +1,19 @@
 ﻿#pragma once
 
-#include "../System/DirectXIncLib.h"
-#include <rapidjson/document.h>
-#include <dinput.h>
-#pragma comment(lib,"dxguid.lib")
-#pragma comment(lib, "dinput8.lib")
-
-class JoyPad;
-class Keyboard;
-class Mouse;
+#include "Keyboard.h"
+#include "Mouse.h"
+#include "JoyPad.h"
 
 class Input {
 public:
-    static void create();
-    static bool initialize(HWND hWnd);
-    static void loadProperties(const rapidjson::Value& inObj);
-    static void end();
-    static void update();
-
     static Keyboard* keyboard();
     static Mouse* mouse();
     static JoyPad* joyPad();
 
-public:
-    static IDirectInput8* mDirectInput;
-
 private:
-    static Keyboard* mKeyboard;
-    static Mouse* mMouse;
-    static JoyPad* mJoyPad;
+    //生成、コピー禁止
+    Input() = delete;
+    ~Input() = delete;
+    Input(const Input&) = delete;
+    Input& operator=(const Input&) = delete;
 };

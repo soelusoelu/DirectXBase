@@ -2,12 +2,11 @@
 
 #include "Component.h"
 #include "IPlayerWalk.h"
+#include "../Input/Input.h"
 #include "../Math/Math.h"
 #include <memory>
 
 class Camera;
-enum class KeyCode;
-enum class JoyCode;
 
 class PlayerWalk : public Component, public IPlayerWalk {
 public:

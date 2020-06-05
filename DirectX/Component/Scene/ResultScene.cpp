@@ -7,8 +7,6 @@
 #include "../../GameObject/GameObjectFactory.h"
 #include "../../GameObject/GameObjectManager.h"
 #include "../../Input/Input.h"
-#include "../../Input/JoyPad.h"
-#include "../../Input/Keyboard.h"
 
 ResultScene::ResultScene() :
     Component(),

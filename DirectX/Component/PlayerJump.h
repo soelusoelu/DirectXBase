@@ -2,10 +2,8 @@
 
 #include "Component.h"
 #include "IPlayerJump.h"
+#include "../Input/Input.h"
 #include "../Math/Math.h"
-
-enum class KeyCode;
-enum class JoyCode;
 
 class PlayerJump : public Component, public IPlayerJump {
     enum class State {

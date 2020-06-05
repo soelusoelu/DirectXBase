@@ -190,6 +190,7 @@
     <ClCompile Include="GameObject\GameObjectManager.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="Component\Scene\GamePlay.cpp" />
+    <ClCompile Include="Input\InputUtility.cpp" />
     <ClCompile Include="Math\Vector2.cpp" />
     <ClCompile Include="Math\Matrix3.cpp" />
     <ClCompile Include="Math\Matrix4.cpp" />
@@ -311,6 +312,7 @@
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Component\Scene\GamePlay.h" />
+    <ClInclude Include="Input\InputUtility.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />
     <ClInclude Include="Math\Vector2.h" />

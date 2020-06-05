@@ -9,9 +9,6 @@
 #include "SoundComponent.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../Input/Input.h"
-#include "../Input/JoyPad.h"
-#include "../Input/Keyboard.h"
 #include "../Utility/LevelLoader.h"
 
 PlayerChickenConnection::PlayerChickenConnection() :
