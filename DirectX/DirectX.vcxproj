@@ -312,6 +312,7 @@
     <ClInclude Include="GameObject\GameObjectManager.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Component\Scene\GamePlay.h" />
+    <ClInclude Include="Input\IKeyboard.h" />
     <ClInclude Include="Input\InputUtility.h" />
     <ClInclude Include="Math\MathUtility.h" />
     <ClInclude Include="Math\Math.h" />

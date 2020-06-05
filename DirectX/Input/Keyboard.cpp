@@ -13,41 +13,6 @@ Keyboard::~Keyboard() {
     SAFE_RELEASE(mKeyDevice);
 }
 
-bool Keyboard::initialize(HWND hWnd, IDirectInput8* directInput) {
-    // 「DirectInputデバイス」オブジェクトの作成
-    if (FAILED(directInput->CreateDevice(GUID_SysKeyboard, &mKeyDevice, NULL))) {
-        return false;
-    }
-    // デバイスをキーボードに設定
-    if (FAILED(mKeyDevice->SetDataFormat(&c_dfDIKeyboard))) {
-        return false;
-    }
-    // 協調レベルの設定
-    if (FAILED(mKeyDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND))) {
-        return false;
-    }
-    // デバイスを「取得」する
-    mKeyDevice->Acquire();
-
-    return true;
-}
-
-void Keyboard::loadProperties(const rapidjson::Value& inObj) {
-    std::string src;
-    if (JsonHelper::getString(inObj, "enterKey", &src)) {
-        stringToKeyCode(src, &mEnterKey);
-    }
-}
-
-void Keyboard::update() {
-    memcpy_s(mPreviousKeys, sizeof(mPreviousKeys), mCurrentKeys, sizeof(mCurrentKeys));
-
-    HRESULT hr = mKeyDevice->Acquire();
-    if ((hr == DI_OK) || (hr == S_FALSE)) {
-        mKeyDevice->GetDeviceState(sizeof(mCurrentKeys), &mCurrentKeys);
-    }
-}
-
 bool Keyboard::getKeyDown(KeyCode key) const {
     return (mCurrentKeys[static_cast<BYTE>(key)] & 0x80 && !(mPreviousKeys[static_cast<BYTE>(key)] & 0x80));
 }
@@ -82,6 +47,41 @@ int Keyboard::vertical() const {
 
 bool Keyboard::getEnter() const {
     return getKeyDown(mEnterKey);
+}
+
+bool Keyboard::initialize(HWND hWnd, IDirectInput8* directInput) {
+    // 「DirectInputデバイス」オブジェクトの作成
+    if (FAILED(directInput->CreateDevice(GUID_SysKeyboard, &mKeyDevice, NULL))) {
+        return false;
+    }
+    // デバイスをキーボードに設定
+    if (FAILED(mKeyDevice->SetDataFormat(&c_dfDIKeyboard))) {
+        return false;
+    }
+    // 協調レベルの設定
+    if (FAILED(mKeyDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND))) {
+        return false;
+    }
+    // デバイスを「取得」する
+    mKeyDevice->Acquire();
+
+    return true;
+}
+
+void Keyboard::loadProperties(const rapidjson::Value& inObj) {
+    std::string src;
+    if (JsonHelper::getString(inObj, "enterKey", &src)) {
+        stringToKeyCode(src, &mEnterKey);
+    }
+}
+
+void Keyboard::update() {
+    memcpy_s(mPreviousKeys, sizeof(mPreviousKeys), mCurrentKeys, sizeof(mCurrentKeys));
+
+    HRESULT hr = mKeyDevice->Acquire();
+    if ((hr == DI_OK) || (hr == S_FALSE)) {
+        mKeyDevice->GetDeviceState(sizeof(mCurrentKeys), &mCurrentKeys);
+    }
 }
 
 void Keyboard::stringToKeyCode(const std::string& src, KeyCode* dst) {

@@ -1,12 +1,13 @@
 ﻿#pragma once
 
+#include "IKeyboard.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "JoyPad.h"
 
 class Input {
 public:
-    static Keyboard* keyboard();
+    static IKeyboard* keyboard();
     static Mouse* mouse();
     static JoyPad* joyPad();
 

@@ -260,5 +260,6 @@
     <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="Component\Rank.h" />
     <ClInclude Include="Input\InputUtility.h" />
+    <ClInclude Include="Input\IKeyboard.h" />
   </ItemGroup>
 </Project>

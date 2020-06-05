@@ -1,14 +1,15 @@
 ﻿#pragma once
 
+#include "IKeyboard.h"
 #include "../System/DirectXIncLib.h"
 #include <rapidjson/document.h>
 #include <dinput.h>
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib, "dinput8.lib")
 
-class JoyPad;
 class Keyboard;
 class Mouse;
+class JoyPad;
 
 class InputUtility {
 public:
@@ -24,7 +25,7 @@ public:
     static void update();
 
     //各種入力クラスにアクセス
-    static Keyboard* keyboard();
+    static IKeyboard* keyboard();
     static Mouse* mouse();
     static JoyPad* joyPad();
 

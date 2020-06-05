@@ -1,7 +1,7 @@
 ﻿#include "Input.h"
 #include "InputUtility.h"
 
-Keyboard* Input::keyboard() {
+IKeyboard* Input::keyboard() {
     return InputUtility::keyboard();
 }
 

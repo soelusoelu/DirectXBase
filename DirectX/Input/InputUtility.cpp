@@ -41,7 +41,7 @@ void InputUtility::update() {
     mJoyPad->update();
 }
 
-Keyboard* InputUtility::keyboard() {
+IKeyboard* InputUtility::keyboard() {
     return mKeyboard;
 }
 
