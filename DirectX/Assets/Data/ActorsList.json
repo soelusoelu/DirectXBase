@@ -412,12 +412,21 @@
         {
           "type": "Title",
           "properties": {
+            "fadeSpeed": 120.0
           }
         },
         {
           "type": "SpriteComponent",
           "properties": {
             "fileName": "Title.png"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "A.png",
+            "position": [ 960.0, 1080.0 ],
+            "pivot": "CenterBottom"
           }
         },
         {
