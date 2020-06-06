@@ -22,7 +22,9 @@ public:
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
+    //プレイヤーのセット
     void setPlayer(const GameObject& player);
+    //プレイヤーの足元の唐揚げのセット
     void setChicken(const ChickenPtr& chicken);
     const ChickenPtr& getChicken() const;
     //ジャンプターゲットが有効か
@@ -32,13 +34,22 @@ public:
     void setPlayerJumpTarget(const ChickenPtr& chicken);
 
 private:
+    //プレイヤーの位置を引数の唐揚げの上に設定
     void setPlayerPosOnTheChicken(const FriedChickenComponent& chicken);
+    //唐揚げの位置をプレイヤーの下に設定
     void setChickenPosUnderThePlayer();
+    //ジャンプする唐揚げを追いかける
     void trackingJumpTarget();
+    //プレイヤーの移動量に応じて唐揚げを回転させる
     void rollChicken();
+    //プレイヤーの位置をジャンプする唐揚げの上に設定
     void setPlayerPosOnTheJumpTarget();
+    //プレイヤーの足元の唐揚げを回収する
     void collection();
+    //プレイヤーの足元の唐揚げが焦げたときの処理
     void tooBurntUnderThePlayer();
+    //唐揚げが鳥に喰われたときの処理
+    void eatenChicken();
 
 private:
     std::shared_ptr<PlayerComponent> mPlayer;

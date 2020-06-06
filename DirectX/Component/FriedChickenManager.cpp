@@ -157,7 +157,7 @@ void FriedChickenManager::increaseTheMaximumNumber() {
 void FriedChickenManager::moveToWait() {
     auto itr = mChickens.begin();
     while (itr != mChickens.end()) {
-        if ((*itr)->isFinished() || (*itr)->isEaten()) {
+        if ((*itr)->isFinished()) {
             mWaitingChickens.emplace_back(*itr);
             (*itr)->owner()->setActive(false);
             itr = mChickens.erase(itr);

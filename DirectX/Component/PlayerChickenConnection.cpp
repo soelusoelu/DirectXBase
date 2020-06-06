@@ -58,6 +58,7 @@ void PlayerChickenConnection::update() {
         rollChicken();
         collection();
         tooBurntUnderThePlayer();
+        eatenChicken();
     }
 }
 
@@ -189,5 +190,21 @@ void PlayerChickenConnection::tooBurntUnderThePlayer() {
     if (!mChicken->isTooBurnt()) {
         return;
     }
+    setPlayerPosOnTheJumpTarget();
+}
+
+void PlayerChickenConnection::eatenChicken() {
+    if (!mChicken) {
+        return;
+    }
+    if (!mChicken->isEaten()) {
+        return;
+    }
+    if (!mJumpTarget) {
+        return;
+    }
+
+    mChicken->finishFryed();
+
     setPlayerPosOnTheJumpTarget();
 }
