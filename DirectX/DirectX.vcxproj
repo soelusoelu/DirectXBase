@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DebugLayer\Button.cpp" />
     <ClCompile Include="Component\ChickenExclamation.cpp" />
     <ClCompile Include="Component\ChickenRise.cpp" />
     <ClCompile Include="Component\BirdOrbit.cpp" />
@@ -214,8 +215,8 @@
     <ClCompile Include="Component\ResultChicken.cpp" />
     <ClCompile Include="Component\ResultChickenManager.cpp" />
     <ClCompile Include="GameObject\Pivot.cpp" />
+    <ClCompile Include="DebugLayer\Pause.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
-    <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
     <ClCompile Include="Mesh\FBX.cpp" />
@@ -277,6 +278,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DebugLayer\Button.h" />
     <ClInclude Include="Component\ChickenExclamation.h" />
     <ClInclude Include="Component\ChickenRise.h" />
     <ClInclude Include="Component\BirdOrbit.h" />
@@ -296,6 +298,7 @@
     <ClInclude Include="Component\Text.h" />
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
+    <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="Event\IObserver.h" />
     <ClInclude Include="Component\FryState.h" />
     <ClInclude Include="GameObject\Transform3D.h" />
@@ -342,8 +345,8 @@
     <ClInclude Include="Component\ResultChickenManager.h" />
     <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="Component\Rank.h" />
+    <ClInclude Include="DebugLayer\Pause.h" />
     <ClInclude Include="Utility\Directory.h" />
-    <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Input\JoyPad.h" />
     <ClInclude Include="Input\Keyboard.h" />
     <ClInclude Include="Mesh\FBX.h" />

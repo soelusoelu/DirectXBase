@@ -9,6 +9,7 @@ class FixedDebugInformation;
 class Hierarchy;
 class Inspector;
 class Log;
+class Pause;
 
 class DebugUtility {
     DebugUtility() = delete;
@@ -30,11 +31,13 @@ public:
     static FixedDebugInformation* fixedDebugInfo();
     static Hierarchy* hierarchy();
     static Inspector* inspector();
+    static Pause* pause();
 
 private:
-    static DrawString* mDrawString;
-    static Log* mLog;
-    static FixedDebugInformation* mFixedDebugInfo;
-    static Hierarchy* mHierarchy;
-    static Inspector* mInspector;
+    static inline DrawString* mDrawString = nullptr;
+    static inline Log* mLog = nullptr;
+    static inline FixedDebugInformation* mFixedDebugInfo = nullptr;
+    static inline Hierarchy* mHierarchy = nullptr;
+    static inline Inspector* mInspector = nullptr;
+    static inline Pause* mPause = nullptr;
 };

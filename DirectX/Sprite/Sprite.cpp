@@ -180,5 +180,3 @@ const std::string& Sprite::fileName() const {
 void Sprite::setSpriteManager(SpriteManager * manager) {
     mSpriteManager = manager;
 }
-
-SpriteManager* Sprite::mSpriteManager = nullptr;

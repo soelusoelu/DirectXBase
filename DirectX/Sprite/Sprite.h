@@ -65,6 +65,6 @@ private:
     State mState;
     std::string mFileName;
 
-    static SpriteManager* mSpriteManager;
+    static inline SpriteManager* mSpriteManager = nullptr;
 };
 

@@ -8,6 +8,7 @@
 #include "../Component/SpriteComponent.h"
 #include "../Component/Scene/Scene.h"
 #include "../DebugLayer/DebugUtility.h"
+#include "../DebugLayer/Pause.h"
 #include "../Device/DrawString.h"
 #include "../Device/Physics.h"
 #include "../Device/Renderer.h"
@@ -69,6 +70,17 @@ void SceneManager::update() {
     DebugUtility::drawStringClear();
     mShouldDraw = true;
 
+    //Escでゲーム終了
+    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
+        Game::quit();
+    }
+
+    //ポーズ中はデバッグだけアップデートを行う
+    if (DebugUtility::pause()->isPausing()) {
+        DebugUtility::update();
+        return;
+    }
+
     //全ゲームオブジェクトの更新
     mGameObjectManager->update();
     //総当たり判定
@@ -80,11 +92,6 @@ void SceneManager::update() {
     mSpriteManager->update();
     //デバッグ
     DebugUtility::update();
-
-    //Escでゲーム終了
-    if (Input::keyboard()->getKeyDown(KeyCode::Escape)) {
-        Game::quit();
-    }
 
     //シーン移行
     const auto& next = mCurrentScene->getNext();

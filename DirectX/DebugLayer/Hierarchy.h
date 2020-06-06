@@ -8,7 +8,7 @@
 
 class DrawString;
 class GameObject;
-class UIButton;
+class Button;
 
 class Hierarchy {
     using GameObjectPtr = std::shared_ptr<GameObject>;
@@ -26,7 +26,7 @@ public:
 
 private:
     DrawString* mDrawString;
-    std::list<std::pair<std::unique_ptr<UIButton>, GameObjectPtr>> mButtons;
+    std::list<std::pair<std::unique_ptr<Button>, GameObjectPtr>> mButtons;
     //画面に表示する行数
     int mNumRowsToDisplay;
     //行間

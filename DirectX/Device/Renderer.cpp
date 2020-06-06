@@ -161,6 +161,11 @@ void Renderer::renderToDebug(Matrix4* proj) const {
     //ピクセル単位で扱うために
     proj->m[0][0] = 2.f / Window::width();
     proj->m[1][1] = -2.f / Window::height();
+
+    //バーテックスバッファーをセット
+    Texture::vertexBuffer->setVertexBuffer();
+    //デプステスト無効化
+    Singleton<DirectX>::instance().depthStencilState()->depthTest(false);
 }
 
 void Renderer::removePointLight() {

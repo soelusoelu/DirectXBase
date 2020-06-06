@@ -1,12 +1,11 @@
 ﻿#include "Hierarchy.h"
+#include "Button.h"
 #include "../DebugLayer/DebugUtility.h"
 #include "../DebugLayer/Inspector.h"
 #include "../Device/DrawString.h"
 #include "../GameObject/GameObject.h"
 #include "../Input/Input.h"
-#include "../Input/Mouse.h"
 #include "../System/Window.h"
-#include "../UI/UIButton.h"
 #include "../Utility/LevelLoader.h"
 
 Hierarchy::Hierarchy(DrawString* drawString) :
@@ -54,7 +53,7 @@ void Hierarchy::initialize() {
     auto pos = mPosition;
     for (auto&& b : mButtons) {
         //全ボタンに当たり判定をつける
-        b.first = std::make_unique<UIButton>(nullptr, pos, Vector2(mInspectorPositionX - pos.x, mCharHeight));
+        b.first = std::make_unique<Button>(nullptr, pos, Vector2(mInspectorPositionX - pos.x, mCharHeight));
         b.second = nullptr;
         pos.y += mCharHeight + mLineSpace;
     }

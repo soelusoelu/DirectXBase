@@ -61,7 +61,6 @@
     <ClCompile Include="Mesh\VertexArray.cpp" />
     <ClCompile Include="Mesh\OBJ.cpp" />
     <ClCompile Include="Device\FPSCounter.cpp" />
-    <ClCompile Include="UI\UIButton.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="DebugLayer\Debug.cpp" />
     <ClCompile Include="DebugLayer\Log.cpp" />
@@ -124,6 +123,8 @@
     <ClCompile Include="GameObject\Pivot.cpp" />
     <ClCompile Include="Input\InputUtility.cpp" />
     <ClCompile Include="Component\ChickenExclamation.cpp" />
+    <ClCompile Include="DebugLayer\Pause.cpp" />
+    <ClCompile Include="DebugLayer\Button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -189,7 +190,6 @@
     <ClInclude Include="Mesh\VertexArray.h" />
     <ClInclude Include="Mesh\OBJ.h" />
     <ClInclude Include="Device\FPSCounter.h" />
-    <ClInclude Include="UI\UIButton.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="DebugLayer\Debug.h" />
     <ClInclude Include="DebugLayer\Log.h" />
@@ -264,5 +264,8 @@
     <ClInclude Include="Input\IKeyboard.h" />
     <ClInclude Include="Input\IMouse.h" />
     <ClInclude Include="Component\ChickenExclamation.h" />
+    <ClInclude Include="DebugLayer\Pause.h" />
+    <ClInclude Include="DebugLayer\Button.h" />
+    <ClInclude Include="DebugLayer\IButton.h" />
   </ItemGroup>
 </Project>

@@ -36,6 +36,10 @@
       "elementScale": [ 0.3, 0.3 ],
       "offsetCharCountX": 2
     },
+    "pause": {
+      "fileName": "pause.png",
+      "offset": [ 50.0, 15.0 ]
+    },
     "enterKey": "Space",
     "enterPad": "A"
   }
