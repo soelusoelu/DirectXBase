@@ -8,6 +8,7 @@
 #include <vector>
 
 class ChickenColorChanger;
+class ChickenExclamation;
 class Time;
 
 class ChickenFry : public Component, public IChickenFry {
@@ -49,9 +50,12 @@ private:
     int getNumFryState() const;
     //Surfaceを文字列化
     std::string surfaceToString(ChickenSurface surface) const;
+    //焦げそうになったらビックリマーク描画
+    void drawExclamation();
 
 private:
     std::shared_ptr<ChickenColorChanger> mColorChanger;
+    std::shared_ptr<ChickenExclamation> mExclamation;
     TimerPtrArray mFryTimer;
     ChickenSurface mCurrentBottomSurface;
     ChickenSurface mEasySurface;

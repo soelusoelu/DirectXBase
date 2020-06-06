@@ -169,6 +169,21 @@
             "fileName": "蒸発・蒸気・ジュー02_koge.wav",
             "volume": 0.3
           }
+        },
+        {
+          "type": "ChickenExclamation",
+          "properties": {
+            "burntSecondsAgo": 5.0,
+            "offsetPosition": [ 0.75, 0.5, 0.0 ]
+          }
+        },
+        {
+          "type": "Sprite3D",
+          "properties": {
+            "fileName": "ExclamationMark2.png",
+            "isActive": false,
+            "scale": [ 0.25, 0.25 ]
+          }
         }
       ]
     },

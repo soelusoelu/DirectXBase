@@ -123,6 +123,7 @@
     <ClCompile Include="Component\Fade.cpp" />
     <ClCompile Include="GameObject\Pivot.cpp" />
     <ClCompile Include="Input\InputUtility.cpp" />
+    <ClCompile Include="Component\ChickenExclamation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -262,5 +263,6 @@
     <ClInclude Include="Input\InputUtility.h" />
     <ClInclude Include="Input\IKeyboard.h" />
     <ClInclude Include="Input\IMouse.h" />
+    <ClInclude Include="Component\ChickenExclamation.h" />
   </ItemGroup>
 </Project>

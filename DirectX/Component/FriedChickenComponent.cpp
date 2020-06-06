@@ -27,8 +27,9 @@ FriedChickenComponent::FriedChickenComponent() :
 FriedChickenComponent::~FriedChickenComponent() = default;
 
 void FriedChickenComponent::start() {
-    mFry = owner()->componentManager()->getComponent<ChickenFry>();
-    mRise = owner()->componentManager()->getComponent<ChickenRise>();
+    const auto& compMana = owner()->componentManager();
+    mFry = compMana->getComponent<ChickenFry>();
+    mRise = compMana->getComponent<ChickenRise>();
 
     initialize();
     //y軸を0にして最初から揚げ状態でスタート

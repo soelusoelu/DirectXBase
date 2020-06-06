@@ -1,5 +1,6 @@
 ﻿#include "ChickenFry.h"
 #include "ChickenColorChanger.h"
+#include "ChickenExclamation.h"
 #include "ComponentManager.h"
 #include "../Device/Random.h"
 #include "../Device/Time.h"
@@ -10,6 +11,7 @@
 ChickenFry::ChickenFry() :
     Component(),
     mColorChanger(nullptr),
+    mExclamation(nullptr),
     mCurrentBottomSurface(ChickenSurface::BOTTOM),
     mEasySurface(ChickenSurface::BOTTOM),
     mHardSurface(ChickenSurface::BOTTOM),
@@ -38,6 +40,7 @@ void ChickenFry::awake() {
 
 void ChickenFry::start() {
     mColorChanger = owner()->componentManager()->getComponent<ChickenColorChanger>();
+    mExclamation = owner()->componentManager()->getComponent<ChickenExclamation>();
 }
 
 void ChickenFry::onUpdateWorldTransform() {
@@ -92,6 +95,9 @@ void ChickenFry::initialize() {
     if (mColorChanger) {
         mColorChanger->initialize();
     }
+    if (mExclamation) {
+        mExclamation->setActive(false);
+    }
 }
 
 void ChickenFry::fryUpdate() {
@@ -102,6 +108,7 @@ void ChickenFry::fryUpdate() {
     if (isTooBurnt()) {
         mColorChanger->changeAllSurfaces(FryState::BAD);
     }
+    drawExclamation();
 }
 
 bool ChickenFry::isBurntAllSurfaces() const {
@@ -273,4 +280,26 @@ std::string ChickenFry::surfaceToString(ChickenSurface surface) const {
     }
 
     return str;
+}
+
+void ChickenFry::drawExclamation() {
+    if (getFryState(mCurrentBottomSurface) != FryState::GOOD) {
+        mExclamation->setActive(false);
+        return;
+    }
+
+    float burntTime = 0.f;
+    auto bottom = static_cast<unsigned>(mCurrentBottomSurface);
+    if (bottom == static_cast<unsigned>(mEasySurface)) {
+        burntTime = mEasyBurntTime;
+    } else if (bottom == static_cast<unsigned>(mHardSurface)) {
+        burntTime = mHardBurntTime;
+    } else {
+        burntTime = mBurntTime;
+    }
+
+    if (mFryTimer[bottom]->countDownTime() < mExclamation->getTime()) {
+        mExclamation->setActive(true);
+        mExclamation->setPosition(owner()->transform()->getPosition());
+    }
 }

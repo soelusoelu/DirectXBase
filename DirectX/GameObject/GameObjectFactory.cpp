@@ -4,6 +4,7 @@
 #include "../Component/BirdOrbit.h"
 #include "../Component/Camera.h"
 #include "../Component/ChickenColorChanger.h"
+#include "../Component/ChickenExclamation.h"
 #include "../Component/ChickenFry.h"
 #include "../Component/ChickenMeshComponent.h"
 #include "../Component/ChickenRise.h"
@@ -50,6 +51,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(BirdOrbit);
     ADD_COMPONENT(Camera);
     ADD_COMPONENT(ChickenColorChanger);
+    ADD_COMPONENT(ChickenExclamation);
     ADD_COMPONENT(ChickenFry);
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(ChickenRise);
