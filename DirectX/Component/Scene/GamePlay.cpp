@@ -69,7 +69,7 @@ void GamePlay::update() {
         mIsFirstSleep = true;
         return;
     }
-    auto p = owner()->getGameObjectManager()->find("Player");
+    const auto& p = owner()->getGameObjectManager()->find("Player");
     //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
     auto c = mFriedChickenManager->findNearestChicken(*p, mPCConnection->getChicken());
     mPCConnection->setPlayerJumpTarget(c);

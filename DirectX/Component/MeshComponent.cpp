@@ -28,7 +28,7 @@ MeshComponent::MeshComponent() :
 MeshComponent::~MeshComponent() = default;
 
 void MeshComponent::start() {
-    auto camera = owner()->getGameObjectManager()->find("Camera");
+    const auto& camera = owner()->getGameObjectManager()->find("Camera");
     mCamera = camera->componentManager()->getComponent<Camera>();
 
     //半径と中心座標の取得

@@ -26,9 +26,9 @@ public:
     //指定のタグを除く、登録済みの全ゲームオブジェクトの削除
     void clearExceptSpecified(const StringSet& tags);
     //tagに一致するアクティブなゲームオブジェクトの検索
-    GameObjectPtr find(const std::string& tag) const;
+    const GameObjectPtr& find(const std::string& tag) const;
     //tagに一致するアクティブな全ゲームオブジェクトの検索
-    GameObjectPtrArray findGameObjects(const std::string& tag);
+    GameObjectPtrArray findGameObjects(const std::string& tag) const;
 
 private:
     //ゲームオブジェクトの削除

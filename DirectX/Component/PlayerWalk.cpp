@@ -25,7 +25,7 @@ PlayerWalk::PlayerWalk() :
 PlayerWalk::~PlayerWalk() = default;
 
 void PlayerWalk::start() {
-    auto camera = owner()->getGameObjectManager()->find("Camera");
+    const auto& camera = owner()->getGameObjectManager()->find("Camera");
     mCamera = camera->componentManager()->getComponent<Camera>();
     auto mesh = owner()->componentManager()->getComponent<MeshComponent>();
     if (mesh) {

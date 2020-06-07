@@ -2,11 +2,7 @@
 #include "Component.h"
 
 ComponentManager::ComponentManager() = default;
-
-ComponentManager::~ComponentManager() {
-    mStartComponents.clear();
-    mComponents.clear();
-}
+ComponentManager::~ComponentManager() = default;
 
 void ComponentManager::start() {
     if (mStartComponents.empty()) {
@@ -33,13 +29,16 @@ void ComponentManager::lateUpdate() const {
     }
 }
 
-void ComponentManager::finalize() const {
+void ComponentManager::finalize() {
     for (const auto& comp : mStartComponents) {
         comp->finalize();
     }
     for (const auto& comp : mComponents) {
         comp->finalize();
     }
+
+    mStartComponents.clear();
+    mComponents.clear();
 }
 
 void ComponentManager::addComponent(const ComponentPtr& component) {

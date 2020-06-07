@@ -22,7 +22,7 @@ public:
     //所有するすべてのコンポーネントを遅延更新
     void lateUpdate() const;
     //所有するすべてのコンポーネントの終了処理を実行
-    void finalize() const;
+    void finalize();
     //コンポーネントの追加
     void addComponent(const ComponentPtr& component);
 

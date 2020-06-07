@@ -25,7 +25,7 @@ TransparentMeshComponent::~TransparentMeshComponent() = default;
 void TransparentMeshComponent::start() {
     MeshComponent::start();
 
-    auto dirLight = owner()->getGameObjectManager()->find("DirectionalLight");
+    const auto& dirLight = owner()->getGameObjectManager()->find("DirectionalLight");
     mDirLight = dirLight->componentManager()->getComponent<DirectionalLight>();
 }
 

@@ -58,7 +58,7 @@ void GameObjectManager::clearExceptSpecified(const StringSet & tags) {
     mPendingGameObjects.clear();
 }
 
-std::shared_ptr<GameObject> GameObjectManager::find(const std::string & tag) const {
+const std::shared_ptr<GameObject>& GameObjectManager::find(const std::string & tag) const {
     for (const auto& gameObject : mGameObjects) {
         if (!gameObject->getActive()) {
             continue;
@@ -79,7 +79,7 @@ std::shared_ptr<GameObject> GameObjectManager::find(const std::string & tag) con
     return nullptr;
 }
 
-std::vector<std::shared_ptr<GameObject>> GameObjectManager::findGameObjects(const std::string& tag) {
+std::vector<std::shared_ptr<GameObject>> GameObjectManager::findGameObjects(const std::string& tag) const {
     GameObjectPtrArray gameObjectArray;
     for (const auto& gameObject : mGameObjects) {
         if (!gameObject->getActive()) {
