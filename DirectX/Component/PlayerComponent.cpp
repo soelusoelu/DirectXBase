@@ -17,6 +17,8 @@ PlayerComponent::~PlayerComponent() = default;
 void PlayerComponent::start() {
     mWalk = owner()->componentManager()->getComponent<PlayerWalk>();
     mJump = owner()->componentManager()->getComponent<PlayerJump>();
+    mJump->addJumpStartObserver([&]() {mState = State::JUMP; });
+    mJump->addJumpEndObserver([&]() { mState = State::WALK; });
 }
 
 void PlayerComponent::update() {
@@ -25,21 +27,11 @@ void PlayerComponent::update() {
         return;
     }
 
-    mJump->stateUpdate();
-
     if (mState == State::WALK) {
         mWalk->walkUpdate();
         mJump->jump();
-
-        if (mJump->isJumpStart()) {
-            mState = State::JUMP;
-        }
     } else if (mState == State::JUMP) {
         mJump->jumpUpdate();
-
-        if (mJump->isJumpEnd()) {
-            mState = State::WALK;
-        }
     }
 }
 

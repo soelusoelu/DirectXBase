@@ -34,24 +34,24 @@ void PlayerChickenConnection::start() {
         }
     }
     mSound = owner()->componentManager()->getComponent<SoundComponent>();
+
+    mPlayer->getJumpState()->addJumpStartObserver([&]() {
+        if (mIsJumpRoll) {
+            mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
+        }
+    });
+    mPlayer->getJumpState()->addJumpEndObserver([&]() {
+        mChicken = mJumpTarget;
+    });
 }
 
 void PlayerChickenConnection::update() {
     auto jump = mPlayer->getJumpState();
-    if (jump->isJumpStart()) {
-        if (mIsJumpRoll) {
-            mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
-        }
-    }
     if (jump->isJumping()) {
         trackingJumpTarget();
     }
-    if (jump->isJumpEnd()) {
-        mChicken = mJumpTarget;
-    }
     if (mPlayer->isWalking()) {
-        bool res = isJumpTarget();
-        jump->canJump(res);
+        jump->canJump(isJumpTarget());
         setPlayerPosOnTheChicken(*mChicken);
         setChickenPosUnderThePlayer();
 

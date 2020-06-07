@@ -1,4 +1,5 @@
 ﻿#include "PlayerJump.h"
+#include "../Device/Subject.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
@@ -7,8 +8,9 @@
 
 PlayerJump::PlayerJump() :
     Component(),
+    mJumpStartSubject(std::make_unique<Subject>()),
+    mJumpEndSubject(std::make_unique<Subject>()),
     mCurrentState(State::NONE),
-    mPreviousState(State::NONE),
     mJumpStartPosition(Vector3::zero),
     mJumpTargetPosition(Vector3::zero),
     mJumpKey(KeyCode::None),
@@ -47,16 +49,8 @@ void PlayerJump::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back(info);
 }
 
-bool PlayerJump::isJumpStart() const {
-    return (mCurrentState == State::JUMPING && mPreviousState == State::NONE);
-}
-
 bool PlayerJump::isJumping() const {
     return (mCurrentState == State::JUMPING);
-}
-
-bool PlayerJump::isJumpEnd() const {
-    return (mCurrentState == State::NONE && mPreviousState == State::JUMPING);
 }
 
 void PlayerJump::setTargetPosition(const Vector3 & pos) {
@@ -67,8 +61,12 @@ void PlayerJump::canJump(bool value) {
     mCanJump = value;
 }
 
-void PlayerJump::stateUpdate() {
-    mPreviousState = mCurrentState;
+void PlayerJump::addJumpStartObserver(const std::function<void()>& f) {
+    mJumpStartSubject->addObserver(f);
+}
+
+void PlayerJump::addJumpEndObserver(const std::function<void()>& f) {
+    mJumpEndSubject->addObserver(f);
 }
 
 void PlayerJump::jump() {
@@ -102,6 +100,7 @@ void PlayerJump::move() {
 
 void PlayerJump::stop() {
     if (mMoveRate >= 1.f) {
+        mJumpEndSubject->notify();
         mCurrentState = State::NONE;
     }
 }
@@ -110,4 +109,5 @@ void PlayerJump::startInitialize() {
     mCurrentState = State::JUMPING;
     mJumpStartPosition = owner()->transform()->getPosition();
     mMoveRate = 0.f;
+    mJumpStartSubject->notify();
 }

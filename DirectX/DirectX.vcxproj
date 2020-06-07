@@ -201,7 +201,7 @@
     <ClCompile Include="Component\SpriteComponent.cpp" />
     <ClCompile Include="Component\TransparentMeshComponent.cpp" />
     <ClCompile Include="Math\Plane.cpp" />
-    <ClCompile Include="Event\Subject.cpp" />
+    <ClCompile Include="Device\Subject.cpp" />
     <ClCompile Include="Component\ScoreEvaluation.cpp" />
     <ClCompile Include="Component\Oil.cpp" />
     <ClCompile Include="Component\PlayerWalk.cpp" />
@@ -299,7 +299,6 @@
     <ClInclude Include="Component\TimeLimit.h" />
     <ClInclude Include="DebugLayer\DebugUtility.h" />
     <ClInclude Include="DebugLayer\IButton.h" />
-    <ClInclude Include="Event\IObserver.h" />
     <ClInclude Include="Component\FryState.h" />
     <ClInclude Include="GameObject\Transform3D.h" />
     <ClInclude Include="Component\Camera.h" />
@@ -330,7 +329,7 @@
     <ClInclude Include="Component\SpriteComponent.h" />
     <ClInclude Include="Component\TransparentMeshComponent.h" />
     <ClInclude Include="Math\Plane.h" />
-    <ClInclude Include="Event\Subject.h" />
+    <ClInclude Include="Device\Subject.h" />
     <ClInclude Include="Component\ScoreEvaluation.h" />
     <ClInclude Include="Component\Oil.h" />
     <ClInclude Include="Component\PlayerWalk.h" />

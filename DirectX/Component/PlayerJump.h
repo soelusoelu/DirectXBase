@@ -4,6 +4,9 @@
 #include "IPlayerJump.h"
 #include "../Input/Input.h"
 #include "../Math/Math.h"
+#include <memory>
+
+class Subject;
 
 class PlayerJump : public Component, public IPlayerJump {
     enum class State {
@@ -17,14 +20,12 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
-    virtual bool isJumpStart() const override;
     virtual bool isJumping() const override;
-    virtual bool isJumpEnd() const override;
     virtual void setTargetPosition(const Vector3& pos) override;
     virtual void canJump(bool value) override;
+    virtual void addJumpStartObserver(const std::function<void()>& f) override;
+    virtual void addJumpEndObserver(const std::function<void()>& f) override;
 
-    //状態を更新
-    void stateUpdate();
     //ジャンプ実行
     void jump();
     //メインアップデート
@@ -39,8 +40,9 @@ private:
     void startInitialize();
 
 private:
+    std::unique_ptr<Subject> mJumpStartSubject;
+    std::unique_ptr<Subject> mJumpEndSubject;
     State mCurrentState;
-    State mPreviousState;
     Vector3 mJumpStartPosition;
     Vector3 mJumpTargetPosition;
     KeyCode mJumpKey;
