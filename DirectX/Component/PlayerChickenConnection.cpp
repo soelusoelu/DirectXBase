@@ -50,7 +50,7 @@ void PlayerChickenConnection::update() {
         mChicken = mJumpTarget;
     }
     if (mPlayer->isWalking()) {
-        bool res = (mJumpTarget) ? true : false;
+        bool res = isJumpTarget();
         jump->canJump(res);
         setPlayerPosOnTheChicken(*mChicken);
         setChickenPosUnderThePlayer();
