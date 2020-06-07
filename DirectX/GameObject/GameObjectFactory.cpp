@@ -8,6 +8,7 @@
 #include "../Component/ChickenFry.h"
 #include "../Component/ChickenMeshComponent.h"
 #include "../Component/ChickenRise.h"
+#include "../Component/CircleCollision.h"
 #include "../Component/Component.h"
 #include "../Component/ComponentManager.h"
 #include "../Component/DirectionalLight.h"
@@ -55,6 +56,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(ChickenFry);
     ADD_COMPONENT(ChickenMeshComponent);
     ADD_COMPONENT(ChickenRise);
+    ADD_COMPONENT(CircleCollision);
     ADD_COMPONENT(DirectionalLight);
     ADD_COMPONENT(Fade);
     ADD_COMPONENT(Field);

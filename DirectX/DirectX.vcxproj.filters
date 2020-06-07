@@ -125,6 +125,7 @@
     <ClCompile Include="DebugLayer\Pause.cpp" />
     <ClCompile Include="DebugLayer\Button.cpp" />
     <ClCompile Include="Device\Subject.cpp" />
+    <ClCompile Include="Component\CircleCollision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -266,5 +267,6 @@
     <ClInclude Include="DebugLayer\Button.h" />
     <ClInclude Include="DebugLayer\IButton.h" />
     <ClInclude Include="Device\Subject.h" />
+    <ClInclude Include="Component\CircleCollision.h" />
   </ItemGroup>
 </Project>

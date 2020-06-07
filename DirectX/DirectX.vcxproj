@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\CircleCollision.cpp" />
     <ClCompile Include="DebugLayer\Button.cpp" />
     <ClCompile Include="Component\ChickenExclamation.cpp" />
     <ClCompile Include="Component\ChickenRise.cpp" />
@@ -278,6 +279,7 @@
     <ClCompile Include="Math\Vector4.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\CircleCollision.h" />
     <ClInclude Include="DebugLayer\Button.h" />
     <ClInclude Include="Component\ChickenExclamation.h" />
     <ClInclude Include="Component\ChickenRise.h" />
