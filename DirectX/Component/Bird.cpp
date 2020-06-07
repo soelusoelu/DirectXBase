@@ -5,12 +5,14 @@
 #include "MeshComponent.h"
 #include "SoundComponent.h"
 #include "SphereCollisionComponent.h"
+#include "../Device/Random.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
 #include "../Device/Time.h"
 #include "../Utility/LevelLoader.h"
+#include <vector>
 
 Bird::Bird() :
     Component(),
@@ -143,7 +145,18 @@ void Bird::isEndMoving() {
 }
 
 void Bird::initialize() {
-    mTarget = owner()->getGameObjectManager()->randomFind("FriedChicken");
+    auto chickens = owner()->getGameObjectManager()->findGameObjects("FriedChicken");
+    std::vector<std::shared_ptr<GameObject>> result;
+    //アクティブな唐揚げのうち、揚げている途中のものだけ取り出す
+    for (const auto& chicken : chickens) {
+        auto comp = chicken->componentManager()->getComponent<FriedChickenComponent>();
+        if (comp->isFrying()) {
+            result.emplace_back(chicken);
+        }
+    }
+    auto randomIndex = Random::randomRange(0, result.size());
+    mTarget = result[randomIndex];
+
     auto posZ = mTarget->transform()->getPosition().z;
     owner()->transform()->setPosition(Vector3(15.f, 0.f, posZ));
     mMesh->setActive(true);

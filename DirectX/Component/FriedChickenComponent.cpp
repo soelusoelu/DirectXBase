@@ -55,6 +55,8 @@ void FriedChickenComponent::update() {
         }
     } else if (mState == State::TOO_BURNT) {
         tooBurntUpdate();
+    } else if (mState == State::EATEN) {
+        finishFryed();
     }
 }
 

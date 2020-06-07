@@ -204,7 +204,5 @@ void PlayerChickenConnection::eatenChicken() {
         return;
     }
 
-    mChicken->finishFryed();
-
     setPlayerPosOnTheJumpTarget();
 }
