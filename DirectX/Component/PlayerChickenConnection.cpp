@@ -35,12 +35,12 @@ void PlayerChickenConnection::start() {
     }
     mSound = owner()->componentManager()->getComponent<SoundComponent>();
 
-    mPlayer->getJumpState()->addJumpStartObserver([&]() {
+    mPlayer->getJumpState()->onJumpStart([&]() {
         if (mIsJumpRoll) {
             mChicken->owner()->transform()->rotate(Vector3::right * 180.f);
         }
     });
-    mPlayer->getJumpState()->addJumpEndObserver([&]() {
+    mPlayer->getJumpState()->onJumpEnd([&]() {
         mChicken = mJumpTarget;
     });
 }

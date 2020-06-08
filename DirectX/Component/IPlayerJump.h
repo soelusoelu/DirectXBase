@@ -13,7 +13,7 @@ public:
     //ジャンプできるか
     virtual void canJump(bool value) = 0;
     //ジャンプした瞬間のコールバック登録
-    virtual void addJumpStartObserver(const std::function<void()>& f) = 0;
+    virtual void onJumpStart(const std::function<void()>& f) = 0;
     //着地した瞬間のコールバック登録
-    virtual void addJumpEndObserver(const std::function<void()>& f) = 0;
+    virtual void onJumpEnd(const std::function<void()>& f) = 0;
 };

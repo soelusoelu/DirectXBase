@@ -23,8 +23,8 @@ public:
     virtual bool isJumping() const override;
     virtual void setTargetPosition(const Vector3& pos) override;
     virtual void canJump(bool value) override;
-    virtual void addJumpStartObserver(const std::function<void()>& f) override;
-    virtual void addJumpEndObserver(const std::function<void()>& f) override;
+    virtual void onJumpStart(const std::function<void()>& f) override;
+    virtual void onJumpEnd(const std::function<void()>& f) override;
 
     //ジャンプ実行
     void jump();

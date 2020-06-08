@@ -61,11 +61,11 @@ void PlayerJump::canJump(bool value) {
     mCanJump = value;
 }
 
-void PlayerJump::addJumpStartObserver(const std::function<void()>& f) {
+void PlayerJump::onJumpStart(const std::function<void()>& f) {
     mJumpStartSubject->addObserver(f);
 }
 
-void PlayerJump::addJumpEndObserver(const std::function<void()>& f) {
+void PlayerJump::onJumpEnd(const std::function<void()>& f) {
     mJumpEndSubject->addObserver(f);
 }
 
