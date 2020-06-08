@@ -2,16 +2,16 @@
 #include "BufferDesc.h"
 #include "DirectX.h"
 #include "Format.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "IndexBuffer.h"
 #include "Sampler.h"
 #include "SamplerDesc.h"
+#include "Shader.h"
 #include "ShaderResourceView.h"
 #include "SubResourceDesc.h"
 #include "Usage.h"
 #include "VertexBuffer.h"
 #include "../DebugLayer/Debug.h"
-#include "../Shader/Shader.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
@@ -34,9 +34,9 @@ Texture::Texture(const std::string& fileName, bool isSprite) :
 Texture::~Texture() = default;
 
 void Texture::end() {
-    SAFE_DELETE(vertexBuffer);
-    SAFE_DELETE(vertexBuffer3D);
-    SAFE_DELETE(indexBuffer);
+    safeDelete<VertexBuffer>(vertexBuffer);
+    safeDelete<VertexBuffer>(vertexBuffer3D);
+    safeDelete<IndexBuffer>(indexBuffer);
 }
 
 const TextureDesc& Texture::desc() const {

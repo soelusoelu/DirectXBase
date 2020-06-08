@@ -1,5 +1,5 @@
 ﻿#include "Time.h"
-#include "../System/DirectXIncLib.h"
+#include "../System/SystemInclude.h"
 
 Time::Time(float sec) :
     mCurrentTime(0.f),

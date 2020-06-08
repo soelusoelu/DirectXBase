@@ -3,7 +3,7 @@
 #include "Component.h"
 #include "IMesh.h"
 #include "../Math/Math.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>

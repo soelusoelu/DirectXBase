@@ -1,6 +1,6 @@
 ﻿#include "Buffer.h"
 #include "DirectX.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "Usage.h"
 
 Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data) :
@@ -14,7 +14,7 @@ Buffer::Buffer(const BufferDesc& desc, const SubResourceDesc* data) :
 }
 
 Buffer::~Buffer() {
-    SAFE_RELEASE(mBuffer);
+    safeRelease<ID3D11Buffer>(mBuffer);
 }
 
 const BufferDesc& Buffer::desc() const {

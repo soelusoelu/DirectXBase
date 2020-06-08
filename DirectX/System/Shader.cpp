@@ -1,12 +1,12 @@
 ﻿#include "Shader.h"
+#include "Buffer.h"
+#include "BufferDesc.h"
+#include "DirectX.h"
+#include "GlobalFunction.h"
+#include "InputElement.h"
+#include "InputElementDesc.h"
+#include "Usage.h"
 #include "../DebugLayer/Debug.h"
-#include "../System/Buffer.h"
-#include "../System/BufferDesc.h"
-#include "../System/DirectX.h"
-#include "../System/Game.h"
-#include "../System/InputElement.h"
-#include "../System/InputElementDesc.h"
-#include "../System/Usage.h"
 #include "../Utility/Directory.h"
 
 Shader::Shader(const std::string& fileName) :
@@ -20,9 +20,9 @@ Shader::Shader(const std::string& fileName) :
 }
 
 Shader::~Shader() {
-    SAFE_RELEASE(mCompileShader);
-    SAFE_RELEASE(mVertexShader);
-    SAFE_RELEASE(mPixelShader);
+    safeRelease<ID3D10Blob>(mCompileShader);
+    safeRelease<ID3D11VertexShader>(mVertexShader);
+    safeRelease<ID3D11PixelShader>(mPixelShader);
 }
 
 bool Shader::map(MappedSubResourceDesc* data, unsigned index, unsigned sub, D3D11_MAP type, unsigned flag) const {
@@ -89,7 +89,7 @@ void Shader::createVertexShader(const std::string& fileName) {
         return;
     }
     if (FAILED(Singleton<DirectX>::instance().device()->CreateVertexShader(mCompileShader->GetBufferPointer(), mCompileShader->GetBufferSize(), nullptr, &mVertexShader))) {
-        SAFE_RELEASE(mCompileShader);
+        safeRelease<ID3D10Blob>(mCompileShader);
         Debug::windowMessage(fileName + ": バーテックスシェーダー作成失敗");
         return;
     }
@@ -104,11 +104,11 @@ void Shader::createPixelShader(const std::string& fileName) {
         return;
     }
     if (FAILED(Singleton<DirectX>::instance().device()->CreatePixelShader(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(), nullptr, &mPixelShader))) {
-        SAFE_RELEASE(compiledShader);
+        safeRelease<ID3D10Blob>(compiledShader);
         Debug::windowMessage(fileName + ": ピクセルシェーダー作成失敗");
         return;
     }
-    SAFE_RELEASE(compiledShader);
+    safeRelease<ID3D10Blob>(compiledShader);
 }
 
 D3D11_MAPPED_SUBRESOURCE Shader::toMappedSubResource(const MappedSubResourceDesc* desc) const {

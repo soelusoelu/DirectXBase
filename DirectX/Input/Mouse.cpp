@@ -1,6 +1,6 @@
 ﻿#include "Mouse.h"
 #include "../Math/Math.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include "../System/Window.h"
 
 Mouse::Mouse() :
@@ -13,7 +13,7 @@ Mouse::Mouse() :
 }
 
 Mouse::~Mouse() {
-    SAFE_RELEASE(mMouseDevice);
+    safeRelease<IDirectInputDevice8>(mMouseDevice);
 }
 
 bool Mouse::getMouseButtonDown(MouseCode button) {

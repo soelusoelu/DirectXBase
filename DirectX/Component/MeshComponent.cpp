@@ -9,8 +9,8 @@
 #include "../Mesh/Material.h"
 #include "../Mesh/MeshManager.h"
 #include "../Mesh/VertexArray.h"
-#include "../Shader/Shader.h"
 #include "../System/DirectX.h"
+#include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../Utility/LevelLoader.h"
 

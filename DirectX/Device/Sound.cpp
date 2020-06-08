@@ -1,6 +1,6 @@
 ﻿#include "Sound.h"
 #include "Renderer.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include "../Utility/Directory.h"
 
 SoundBase::SoundBase() :
@@ -28,7 +28,7 @@ SoundBase::SoundBase() :
 }
 
 SoundBase::~SoundBase() {
-    SAFE_RELEASE(mXAudio2);
+    safeRelease<IXAudio2>(mXAudio2);
     CoUninitialize();
 }
 
@@ -87,8 +87,8 @@ Sound::Sound() :
 
 Sound::~Sound() {
     mSourceVoice->DestroyVoice();
-    SAFE_DELETE(mWavBuffer);
-    SAFE_DELETE(mWavFormat);
+    safeDelete<BYTE>(mWavBuffer);
+    safeDelete<WAVEFORMATEX>(mWavFormat);
 }
 
 void Sound::play(bool isLoop) {

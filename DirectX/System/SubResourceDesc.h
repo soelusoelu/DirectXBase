@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 
 struct SubResourceDesc {
     //初期化データへのポインタ

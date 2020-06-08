@@ -1,11 +1,9 @@
 ﻿#pragma once
 
-#include "../System/DirectXIncLib.h"
+#include "../System/SystemInclude.h"
 #include <rapidjson/document.h>
 #include <memory>
 
-class DrawString;
-class Renderer;
 class Time;
 
 class FPSCounter {

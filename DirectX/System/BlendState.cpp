@@ -1,6 +1,6 @@
 ﻿#include "BlendState.h"
 #include "DirectX.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 
 BlendState::BlendState() :
     mDesc() {
@@ -19,7 +19,7 @@ void BlendState::setBlendState(const BlendDesc & desc, unsigned renderTarget) {
     unsigned mask = 0xffffffff;
     Singleton<DirectX>::instance().deviceContext()->OMSetBlendState(blend, nullptr, mask);
 
-    SAFE_RELEASE(blend);
+    safeRelease<ID3D11BlendState>(blend);
 }
 
 const BlendDesc& BlendState::desc() const {

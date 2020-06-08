@@ -1,7 +1,7 @@
 ﻿#include "DirectX.h"
 #include "BlendState.h"
 #include "DepthStencilState.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "RasterizerState.h"
 #include "RenderTargetView.h"
 #include "Texture2D.h"
@@ -19,10 +19,10 @@ DirectX::DirectX() :
 }
 
 DirectX::~DirectX() {
-    SAFE_RELEASE(mDepthStencilView);
-    SAFE_RELEASE(mSwapChain);
-    SAFE_RELEASE(mDeviceContext);
-    SAFE_RELEASE(mDevice);
+    safeRelease(mDepthStencilView);
+    safeRelease(mSwapChain);
+    safeRelease(mDeviceContext);
+    safeRelease(mDevice);
 }
 
 void DirectX::initialize(const HWND& hWnd) {

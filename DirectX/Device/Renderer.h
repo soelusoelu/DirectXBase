@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../Math/Math.h"
-#include "../System/DirectXIncLib.h"
 #include <rapidjson/document.h>
 #include <list>
 #include <memory>

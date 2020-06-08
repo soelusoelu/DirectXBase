@@ -21,6 +21,7 @@
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
 #include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 
 SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
@@ -34,10 +35,10 @@ SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
 }
 
 SceneManager::~SceneManager() {
-    SAFE_DELETE(mGameObjectManager);
-    SAFE_DELETE(mMeshManager);
-    SAFE_DELETE(mSpriteManager);
-    SAFE_DELETE(mPhysics);
+    safeDelete<GameObjectManager>(mGameObjectManager);
+    safeDelete<MeshManager>(mMeshManager);
+    safeDelete<SpriteManager>(mSpriteManager);
+    safeDelete<Physics>(mPhysics);
 
     GameObject::setGameObjectManager(nullptr);
     MeshComponent::setMeshManager(nullptr);

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 #include "SubResourceDesc.h"
 #include "Texture2DDesc.h"
 

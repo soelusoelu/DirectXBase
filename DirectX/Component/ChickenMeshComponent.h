@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "MeshComponent.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 
 struct ChickenMeshConstantBuffer {
     ALIGN16 Matrix4 world; //ワールド行列

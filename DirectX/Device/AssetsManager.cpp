@@ -2,7 +2,7 @@
 #include "Sound.h"
 #include "../Mesh/FBX.h"
 #include "../Mesh/OBJ.h"
-#include "../Shader/Shader.h"
+#include "../System/Shader.h"
 #include "../System/Texture.h"
 #include "../Utility/FileUtil.h"
 

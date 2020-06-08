@@ -1,7 +1,7 @@
 ﻿#include "Texture2D.h"
 #include "DirectX.h"
 #include "Format.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "Usage.h"
 
 Texture2D::Texture2D(const Texture2DDesc& desc, const SubResourceDesc* data) :
@@ -20,7 +20,7 @@ Texture2D::Texture2D(ID3D11Texture2D* texture2D) :
 }
 
 Texture2D::~Texture2D() {
-    SAFE_RELEASE(mTexture2D);
+    safeRelease<ID3D11Texture2D>(mTexture2D);
 }
 
 ID3D11Texture2D* Texture2D::texture2D() const {

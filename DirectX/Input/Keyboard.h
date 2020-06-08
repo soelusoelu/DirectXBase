@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "IKeyboard.h"
-#include "../System/DirectXIncLib.h"
+#include "../System/SystemInclude.h"
 #include <rapidjson/document.h>
 #include <dinput.h>
 #include <string>

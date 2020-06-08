@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "DepthStencilDesc.h"
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 
 class DepthStencilState {
 public:

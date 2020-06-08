@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
 #include "RasterizerDesc.h"
+#include "SystemInclude.h"
 
 class RasterizerState {
 public:

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "ComparisonFunc.h"
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 
 //深度ステンシルテスト中に実行できるステンシル操作
 enum class StencilOP {

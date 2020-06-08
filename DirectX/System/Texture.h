@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 #include "TextureDesc.h"
 #include "../Math/Math.h"
 #include <memory>

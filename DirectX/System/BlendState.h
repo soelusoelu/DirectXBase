@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "BlendDesc.h"
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 #include <memory>
 
 class BlendState {

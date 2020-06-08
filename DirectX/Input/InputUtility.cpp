@@ -2,7 +2,7 @@
 #include "JoyPad.h"
 #include "Keyboard.h"
 #include "Mouse.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 
 void InputUtility::create() {
     mKeyboard = new Keyboard();
@@ -29,10 +29,10 @@ void InputUtility::loadProperties(const rapidjson::Value& inObj) {
 }
 
 void InputUtility::finalize() {
-    SAFE_RELEASE(mDirectInput);
-    SAFE_DELETE(mKeyboard);
-    SAFE_DELETE(mMouse);
-    SAFE_DELETE(mJoyPad);
+    safeRelease<IDirectInput8>(mDirectInput);
+    safeDelete<Keyboard>(mKeyboard);
+    safeDelete<Mouse>(mMouse);
+    safeDelete<JoyPad>(mJoyPad);
 }
 
 void InputUtility::update() {

@@ -3,7 +3,7 @@
 #include "VertexArray.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 #include "../Utility/StringUtil.h"
@@ -14,7 +14,7 @@ OBJ::OBJ() :
 }
 
 OBJ::~OBJ() {
-    SAFE_DELETE_ARRAY(mVertices);
+    safeDeleteArray<MeshVertex>(mVertices);
 }
 
 void OBJ::perse(const std::string& filePath) {

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 

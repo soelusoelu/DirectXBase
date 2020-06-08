@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "BufferDesc.h"
-#include "DirectXIncLib.h"
 #include "SamplerDesc.h"
 #include "SubResourceDesc.h"
+#include "SystemInclude.h"
 #include "Texture2DDesc.h"
 #include "../Utility/Singleton.h"
 #include <memory>

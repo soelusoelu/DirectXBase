@@ -1,6 +1,6 @@
 ﻿#include "RasterizerState.h"
 #include "DirectX.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 
 RasterizerState::RasterizerState() :
     mDesc() {
@@ -18,7 +18,7 @@ void RasterizerState::setRasterizerState(const RasterizerDesc & desc) {
 
     Singleton<DirectX>::instance().deviceContext()->RSSetState(rasterizer);
 
-    SAFE_RELEASE(rasterizer);
+    safeRelease<ID3D11RasterizerState>(rasterizer);
 }
 
 const RasterizerDesc& RasterizerState::desc() const {

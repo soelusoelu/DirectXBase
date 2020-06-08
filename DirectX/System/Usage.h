@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 
 enum class Usage {
     USAGE_DEFAULT, //GPU‚É‚æ‚é“Ç‚İ‘‚«

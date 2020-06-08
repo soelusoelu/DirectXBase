@@ -2,8 +2,8 @@
 #include "../Device/AssetsManager.h"
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
-#include "../Shader/Shader.h"
 #include "../System/InputElement.h"
+#include "../System/Shader.h"
 
 PointLight::PointLight() :
     shader(nullptr),

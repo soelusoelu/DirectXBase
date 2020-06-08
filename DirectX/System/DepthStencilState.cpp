@@ -1,7 +1,7 @@
 ﻿#include "DepthStencilState.h"
 #include "ComparisonFunc.h"
 #include "DirectX.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 
 DepthStencilState::DepthStencilState() :
     mDesc() {
@@ -36,7 +36,7 @@ void DepthStencilState::execute() const {
 
     Singleton<DirectX>::instance().deviceContext()->OMSetDepthStencilState(depthStencilState, 0);
 
-    SAFE_RELEASE(depthStencilState);
+    safeRelease<ID3D11DepthStencilState>(depthStencilState);
 }
 
 D3D11_DEPTH_STENCIL_DESC DepthStencilState::toDepthStencilDesc(const DepthStencilDesc & desc) const {

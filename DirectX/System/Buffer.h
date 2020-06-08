@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "BufferDesc.h"
-#include "DirectXIncLib.h"
 #include "SubResourceDesc.h"
+#include "SystemInclude.h"
 
 class Buffer {
 public:

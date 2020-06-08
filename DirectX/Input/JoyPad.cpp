@@ -1,7 +1,7 @@
 ﻿#include "JoyPad.h"
 #include "InputUtility.h"
 #include "../Math/Math.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include "../Utility/LevelLoader.h"
 
 BOOL CALLBACK enumJoysticksCallback(const DIDEVICEINSTANCE*, VOID*);
@@ -14,7 +14,7 @@ JoyPad::JoyPad() :
 }
 
 JoyPad::~JoyPad() {
-    SAFE_RELEASE(mPadDevice);
+    safeRelease<IDirectInputDevice8>(mPadDevice);
 }
 
 bool JoyPad::initialize(HWND hWnd, IDirectInput8* directInput) {

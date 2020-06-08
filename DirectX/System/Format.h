@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 
 enum class Format {
     FORMAT_UNKNOWN,

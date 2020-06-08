@@ -1,6 +1,6 @@
 ﻿#include "InputElement.h"
 #include "DirectX.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 
 InputElement::InputElement(const InputElementDesc desc[], unsigned numElements, ID3D10Blob* compile) :
     mDesc(&desc[0], &desc[numElements]) {
@@ -12,11 +12,11 @@ InputElement::InputElement(const InputElementDesc desc[], unsigned numElements, 
     //頂点インプットレイアウトを作成
     Singleton<DirectX>::instance().device()->CreateInputLayout(mElements, numElements, compile->GetBufferPointer(), compile->GetBufferSize(), &mInputLayout);
 
-    SAFE_DELETE_ARRAY(mElements);
+    safeDeleteArray<D3D11_INPUT_ELEMENT_DESC>(mElements);
 }
 
 InputElement::~InputElement() {
-    SAFE_RELEASE(mInputLayout);
+    safeRelease<ID3D11InputLayout>(mInputLayout);
 }
 
 size_t InputElement::size() const {

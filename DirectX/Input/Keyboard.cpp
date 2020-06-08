@@ -1,5 +1,5 @@
 ﻿#include "Keyboard.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include "../Utility/LevelLoader.h"
 
 Keyboard::Keyboard() :
@@ -10,7 +10,7 @@ Keyboard::Keyboard() :
 }
 
 Keyboard::~Keyboard() {
-    SAFE_RELEASE(mKeyDevice);
+    safeRelease<IDirectInputDevice8>(mKeyDevice);
 }
 
 bool Keyboard::getKeyDown(KeyCode key) const {

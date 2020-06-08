@@ -1,13 +1,8 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
+#include "SystemInclude.h"
 #include <rapidjson/document.h>
 #include <memory>
-
-#define SAFE_RELEASE(x) if(x) { (x)->Release(); (x) = nullptr; }
-#define SAFE_DELETE(x) if(x) { delete (x); (x) = nullptr; }
-#define SAFE_DELETE_ARRAY(x) if(x) { delete[] (x); (x) = nullptr; }
-#define ALIGN16 _declspec(align(16))
 
 class FPSCounter;
 class Renderer;
@@ -18,11 +13,19 @@ class Game {
 public:
     Game();
     ~Game();
+    //アプリケーションの実行
     void run(HINSTANCE);
-    bool initialize();
-    void mainLoop();
+    //グローバルファイルを読み込む
     void loadProperties(const rapidjson::Value& inObj);
+
+    //アプリケーションの終了
     static void quit();
+
+private:
+    //各クラスの初期化
+    bool initialize();
+    //メインループ
+    void mainLoop();
 
 private:
     std::unique_ptr<Window> mWindow;

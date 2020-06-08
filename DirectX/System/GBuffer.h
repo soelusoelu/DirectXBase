@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <vector>

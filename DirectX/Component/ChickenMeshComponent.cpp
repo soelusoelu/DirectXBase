@@ -6,8 +6,8 @@
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
 #include "../Mesh/VertexArray.h"
-#include "../Shader/Shader.h"
 #include "../System/DirectX.h"
+#include "../System/Shader.h"
 #include "../System/Texture.h"
 
 ChickenMeshComponent::ChickenMeshComponent() :

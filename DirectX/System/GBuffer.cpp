@@ -10,6 +10,7 @@
 #include "RenderTargetViewDesc.h"
 #include "Sampler.h"
 #include "SamplerDesc.h"
+#include "Shader.h"
 #include "ShaderResourceView.h"
 #include "ShaderResourceViewDesc.h"
 #include "SubResourceDesc.h"
@@ -24,7 +25,6 @@
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Mesh/OBJ.h"
-#include "../Shader/Shader.h"
 
 GBuffer::GBuffer() :
     mSampler(nullptr),

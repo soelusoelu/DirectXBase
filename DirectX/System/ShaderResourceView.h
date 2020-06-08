@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
 #include "ShaderResourceViewDesc.h"
+#include "SystemInclude.h"
 #include <memory>
 
 class Texture2D;

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
 #include "InputElementDesc.h"
+#include "SystemInclude.h"
 #include <vector>
 
 class InputElement {

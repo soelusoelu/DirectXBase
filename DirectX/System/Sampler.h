@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "DirectXIncLib.h"
 #include "SamplerDesc.h"
+#include "SystemInclude.h"
 
 class Sampler {
 public:

@@ -3,7 +3,7 @@
 #include "VertexArray.h"
 #include "../DebugLayer/Debug.h"
 #include "../Device/AssetsManager.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include "../Utility/Directory.h"
 #include "../Utility/FileUtil.h"
 
@@ -14,7 +14,7 @@ FBX::FBX() :
 }
 
 FBX::~FBX() {
-    SAFE_DELETE_ARRAY(mVertices);
+    safeDeleteArray<MeshVertex>(mVertices);
     //マネージャー解放
     if (mManager) {
         mManager->Destroy();

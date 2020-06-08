@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../Math/Math.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
 #include <memory>
 #include <vector>
 

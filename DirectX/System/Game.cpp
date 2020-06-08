@@ -47,6 +47,18 @@ void Game::run(HINSTANCE hInstance) {
     }
 }
 
+void Game::loadProperties(const rapidjson::Value& inObj) {
+    mWindow->loadProperties(inObj);
+    mRenderer->loadProperties(inObj);
+    mFPSCounter->loadProperties(inObj);
+    DebugUtility::loadProperties(inObj);
+    InputUtility::loadProperties(inObj);
+}
+
+void Game::quit() {
+    PostQuitMessage(0);
+}
+
 bool Game::initialize() {
     mWindow = std::make_unique<Window>();
 
@@ -84,16 +96,4 @@ void Game::mainLoop() {
 
     mFPSCounter->fixedFrame();
     Singleton<DirectX>::instance().present();
-}
-
-void Game::loadProperties(const rapidjson::Value& inObj) {
-    mWindow->loadProperties(inObj);
-    mRenderer->loadProperties(inObj);
-    mFPSCounter->loadProperties(inObj);
-    DebugUtility::loadProperties(inObj);
-    InputUtility::loadProperties(inObj);
-}
-
-void Game::quit() {
-    PostQuitMessage(0);
 }

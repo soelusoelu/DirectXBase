@@ -1,7 +1,7 @@
 ﻿#include "ShaderResourceView.h"
 #include "DirectX.h"
 #include "Format.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "Texture2D.h"
 
 ShaderResourceView::ShaderResourceView(std::shared_ptr<Texture2D> texture2D, const ShaderResourceViewDesc* desc) :
@@ -18,7 +18,7 @@ ShaderResourceView::ShaderResourceView(ID3D11ShaderResourceView* view) :
 }
 
 ShaderResourceView::~ShaderResourceView() {
-    SAFE_RELEASE(mShaderResourceView);
+    safeRelease<ID3D11ShaderResourceView>(mShaderResourceView);
 }
 
 void ShaderResourceView::setVSShaderResources(unsigned start, unsigned numViews) const {

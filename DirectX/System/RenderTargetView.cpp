@@ -1,7 +1,7 @@
 ﻿#include "RenderTargetView.h"
 #include "DirectX.h"
 #include "Format.h"
-#include "Game.h"
+#include "GlobalFunction.h"
 #include "Texture2D.h"
 
 RenderTargetView::RenderTargetView(std::shared_ptr<Texture2D> texture2D, const RenderTargetViewDesc* desc) :
@@ -14,7 +14,7 @@ RenderTargetView::RenderTargetView(std::shared_ptr<Texture2D> texture2D, const R
 }
 
 RenderTargetView::~RenderTargetView() {
-    SAFE_RELEASE(mRenderTargetView);
+    safeRelease<ID3D11RenderTargetView>(mRenderTargetView);
 }
 
 ID3D11RenderTargetView* RenderTargetView::getRenderTarget() const {
