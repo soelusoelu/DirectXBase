@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SystemInclude.h"
+#include "../System/SystemInclude.h"
 
 //新しいデータを保存する前に、ランタイムが新しいデータを既存のデータと比較する方法
 enum class ComparisonFunc {

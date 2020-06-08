@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "ShaderResourceViewDesc.h"
-#include "SystemInclude.h"
+#include "../System/SystemInclude.h"
 #include <memory>
 
 class Texture2D;

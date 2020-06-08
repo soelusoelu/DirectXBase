@@ -3,8 +3,8 @@
 #include "BufferDesc.h"
 #include "SamplerDesc.h"
 #include "SubResourceDesc.h"
-#include "SystemInclude.h"
 #include "Texture2DDesc.h"
+#include "../System/SystemInclude.h"
 #include "../Utility/Singleton.h"
 #include <memory>
 

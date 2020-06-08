@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "InputElementDesc.h"
-#include "SubResourceDesc.h"
 #include "SystemInclude.h"
+#include "../DirectX/InputElementDesc.h"
+#include "../DirectX/SubResourceDesc.h"
 #include <memory>
 #include <string>
 #include <vector>

@@ -1,4 +1,6 @@
 ﻿#include "SceneManager.h"
+#include "Game.h"
+#include "GlobalFunction.h"
 #include "../Component/Camera.h"
 #include "../Component/Collider.h"
 #include "../Component/ComponentManager.h"
@@ -20,8 +22,6 @@
 #include "../Mesh/MeshManager.h"
 #include "../Sprite/Sprite.h"
 #include "../Sprite/SpriteManager.h"
-#include "../System/Game.h"
-#include "../System/GlobalFunction.h"
 
 SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
@@ -35,10 +35,10 @@ SceneManager::SceneManager(const std::shared_ptr<Renderer>& renderer) :
 }
 
 SceneManager::~SceneManager() {
-    safeDelete<GameObjectManager>(mGameObjectManager);
-    safeDelete<MeshManager>(mMeshManager);
-    safeDelete<SpriteManager>(mSpriteManager);
-    safeDelete<Physics>(mPhysics);
+    safeDelete(mGameObjectManager);
+    safeDelete(mMeshManager);
+    safeDelete(mSpriteManager);
+    safeDelete(mPhysics);
 
     GameObject::setGameObjectManager(nullptr);
     MeshComponent::setMeshManager(nullptr);

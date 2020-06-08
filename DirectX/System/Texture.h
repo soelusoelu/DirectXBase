@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "SystemInclude.h"
-#include "TextureDesc.h"
+#include "../DirectX/TextureDesc.h"
 #include "../Math/Math.h"
 #include <memory>
 #include <string>

@@ -1,12 +1,12 @@
 ﻿#include "Shader.h"
-#include "Buffer.h"
-#include "BufferDesc.h"
-#include "DirectX.h"
 #include "GlobalFunction.h"
-#include "InputElement.h"
-#include "InputElementDesc.h"
-#include "Usage.h"
 #include "../DebugLayer/Debug.h"
+#include "../DirectX/Buffer.h"
+#include "../DirectX/BufferDesc.h"
+#include "../DirectX/DirectX.h"
+#include "../DirectX/InputElement.h"
+#include "../DirectX/InputElementDesc.h"
+#include "../DirectX/Usage.h"
 #include "../Utility/Directory.h"
 
 Shader::Shader(const std::string& fileName) :

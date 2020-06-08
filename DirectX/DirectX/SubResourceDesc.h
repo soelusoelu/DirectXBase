@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "SystemInclude.h"
+#include "../System/SystemInclude.h"
 
 struct SubResourceDesc {
     //初期化データへのポインタ

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "SamplerDesc.h"
-#include "SystemInclude.h"
+#include "../System/SystemInclude.h"
 
 class Sampler {
 public:

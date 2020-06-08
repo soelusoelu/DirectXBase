@@ -1,6 +1,6 @@
 ﻿#include "Sampler.h"
 #include "DirectX.h"
-#include "GlobalFunction.h"
+#include "../System/GlobalFunction.h"
 
 Sampler::Sampler(const SamplerDesc& desc) :
     mDesc(desc) {
@@ -8,7 +8,7 @@ Sampler::Sampler(const SamplerDesc& desc) :
 }
 
 Sampler::~Sampler() {
-    safeRelease<ID3D11SamplerState>(mSampler);
+    safeRelease(mSampler);
 }
 
 void Sampler::setVSSamplers(unsigned start, unsigned numSamplers) {

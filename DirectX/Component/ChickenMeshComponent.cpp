@@ -1,12 +1,12 @@
 ﻿#include "ChickenMeshComponent.h"
 #include "Camera.h"
 #include "../Device/AssetsManager.h"
+#include "../DirectX/DirectX.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
 #include "../Mesh/VertexArray.h"
-#include "../System/DirectX.h"
 #include "../System/Shader.h"
 #include "../System/Texture.h"
 

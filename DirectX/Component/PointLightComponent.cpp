@@ -1,6 +1,8 @@
 ﻿#include "PointLightComponent.h"
 #include "Camera.h"
 #include "ComponentManager.h"
+#include "../DirectX/DirectX.h"
+#include "../DirectX/SubResourceDesc.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/GameObjectManager.h"
 #include "../GameObject/Transform3D.h"
@@ -9,9 +11,7 @@
 #include "../Mesh/Material.h"
 #include "../Mesh/OBJ.h"
 #include "../Mesh/VertexArray.h"
-#include "../System/DirectX.h"
 #include "../System/Shader.h"
-#include "../System/SubResourceDesc.h"
 #include "../System/Window.h"
 #include "../Utility/LevelLoader.h"
 

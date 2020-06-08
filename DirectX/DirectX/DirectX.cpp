@@ -1,11 +1,11 @@
 ﻿#include "DirectX.h"
 #include "BlendState.h"
 #include "DepthStencilState.h"
-#include "GlobalFunction.h"
 #include "RasterizerState.h"
 #include "RenderTargetView.h"
 #include "Texture2D.h"
-#include "Window.h"
+#include "../System/GlobalFunction.h"
+#include "../System/Window.h"
 
 DirectX::DirectX() :
     mDevice(nullptr),

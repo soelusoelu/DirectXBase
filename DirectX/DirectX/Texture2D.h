@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "SystemInclude.h"
 #include "SubResourceDesc.h"
 #include "Texture2DDesc.h"
+#include "../System/SystemInclude.h"
 
 class Texture2D {
 public:

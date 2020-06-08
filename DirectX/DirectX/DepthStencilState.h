@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "DepthStencilDesc.h"
-#include "SystemInclude.h"
+#include "../System/SystemInclude.h"
 
 class DepthStencilState {
 public:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SystemInclude.h"
+#include "../System/SystemInclude.h"
 
 enum class Usage {
     USAGE_DEFAULT, //GPU‚É‚æ‚é“Ç‚İ‘‚«
