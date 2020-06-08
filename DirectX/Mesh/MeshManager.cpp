@@ -2,17 +2,16 @@
 #include "../Component/Camera.h"
 #include "../Component/MeshComponent.h"
 #include "../Device/Renderer.h"
+#include "../DirectX/BlendDesc.h"
+#include "../DirectX/BlendState.h"
+#include "../DirectX/DepthStencilState.h"
+#include "../DirectX/DirectX.h"
+#include "../DirectX/RasterizerDesc.h"
+#include "../DirectX/RasterizerState.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
-#include "../System/BlendDesc.h"
-#include "../System/BlendState.h"
-#include "../System/DepthStencilState.h"
-#include "../System/DirectX.h"
-#include "../System/RasterizerDesc.h"
-#include "../System/RasterizerState.h"
 
 MeshManager::MeshManager() = default;
-
 MeshManager::~MeshManager() = default;
 
 void MeshManager::update() {

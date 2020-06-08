@@ -65,7 +65,7 @@ size_t MeshComponent::getNumMaterial() const {
     return mMaterials.size();
 }
 
-std::shared_ptr<Material> MeshComponent::getMaterial(unsigned index) const {
+const std::shared_ptr<Material>& MeshComponent::getMaterial(unsigned index) const {
     return mMaterials[index];
 }
 

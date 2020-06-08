@@ -5,7 +5,6 @@
 
 class MeshComponent;
 class Camera;
-class DirectionalLight;
 
 class MeshManager {
     using MeshPtr = std::shared_ptr<MeshComponent>;

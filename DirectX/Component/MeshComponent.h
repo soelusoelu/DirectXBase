@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Component.h"
-#include "IMesh.h"
 #include "../Math/Math.h"
 #include "../System/GlobalFunction.h"
 #include <rapidjson/document.h>
@@ -27,7 +26,7 @@ class MeshManager;
 class Shader;
 struct Material;
 
-class MeshComponent : public Component, public IMesh, public std::enable_shared_from_this<MeshComponent> {
+class MeshComponent : public Component, public std::enable_shared_from_this<MeshComponent> {
     using MaterialPtr = std::shared_ptr<Material>;
     using MaterialPtrArray = std::vector<MaterialPtr>;
 
@@ -45,17 +44,24 @@ public:
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
 
-    virtual bool isVisible() const override;
-    virtual size_t getNumMaterial() const override;
-    virtual std::shared_ptr<Material> getMaterial(unsigned index) const override;
-    virtual const Vector3& getCenter() const override;
-    virtual float getRadius() const override;
-    virtual void setColor(const Vector3& color) override;
-    virtual const Vector3& getColor() const override;
-    virtual void destroy() override;
-    virtual void setActive(bool value) override;
-    virtual bool getActive() const override;
-    virtual bool isDead() const override;
+    //カメラに写っているか
+    bool isVisible() const;
+    //マテリアル数の取得
+    size_t getNumMaterial() const;
+    //マテリアルの取得
+    const MaterialPtr& getMaterial(unsigned index) const;
+    //中心座標の取得
+    const Vector3& getCenter() const;
+    //半径の取得
+    float getRadius() const;
+    //全体の色合い(シェーダー側で使用している必要あり)
+    void setColor(const Vector3& color);
+    const Vector3& getColor() const;
+    //状態
+    void destroy();
+    void setActive(bool value);
+    bool getActive() const;
+    bool isDead() const;
 
     virtual void setMesh(const std::string& fileName);
     virtual void setShader();

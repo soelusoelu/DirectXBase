@@ -292,7 +292,6 @@
     <ClInclude Include="Component\Fade.h" />
     <ClInclude Include="Component\Field.h" />
     <ClInclude Include="Component\IChickenFry.h" />
-    <ClInclude Include="Component\IMesh.h" />
     <ClInclude Include="Component\IPlayerJump.h" />
     <ClInclude Include="Component\IPlayerWalk.h" />
     <ClInclude Include="Component\PlayerComponent.h" />

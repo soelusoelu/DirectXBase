@@ -18,7 +18,7 @@ void PlayerComponent::start() {
     mWalk = owner()->componentManager()->getComponent<PlayerWalk>();
     mJump = owner()->componentManager()->getComponent<PlayerJump>();
     mJump->onJumpStart([&]() {mState = State::JUMP; });
-    mJump->addJumpEndObserver([&]() { mState = State::WALK; });
+    mJump->onJumpEnd([&]() { mState = State::WALK; });
 }
 
 void PlayerComponent::update() {
