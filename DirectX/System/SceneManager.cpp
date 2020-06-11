@@ -42,7 +42,6 @@ SceneManager::~SceneManager() {
 
     GameObject::setGameObjectManager(nullptr);
     MeshComponent::setMeshManager(nullptr);
-    Sprite::setSpriteManager(nullptr);
     SpriteComponent::setSpriteManager(nullptr);
     Sprite3D::setSpriteManager(nullptr);
     Collider::setPhysics(nullptr);
@@ -51,7 +50,6 @@ SceneManager::~SceneManager() {
 void SceneManager::initialize() {
     GameObject::setGameObjectManager(mGameObjectManager);
     MeshComponent::setMeshManager(mMeshManager);
-    Sprite::setSpriteManager(mSpriteManager);
     SpriteComponent::setSpriteManager(mSpriteManager);
     Sprite3D::setSpriteManager(mSpriteManager);
     Collider::setPhysics(mPhysics);
@@ -127,7 +125,6 @@ void SceneManager::draw() const {
     auto proj = Matrix4::identity;
     mRenderer->renderSprite2D(&proj);
     mSpriteManager->drawComponents(proj);
-    mSpriteManager->draw(proj);
     //テキスト一括描画
     mRenderer->getDrawString()->drawAll(proj);
 

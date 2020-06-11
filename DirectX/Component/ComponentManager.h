@@ -6,7 +6,6 @@
 #include <vector>
 
 class Component;
-class GameObject;
 
 class ComponentManager {
     using ComponentPtr = std::shared_ptr<Component>;

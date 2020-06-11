@@ -18,8 +18,8 @@ Sprite::Sprite(const std::string& fileName) :
     mTextureSize(Vector2::zero),
     mColor(ColorPalette::white, 1.f),
     mUV(0.f, 0.f, 1.f, 1.f),
-    mState(State::ACTIVE),
-    mFileName(fileName) {
+    mFileName(fileName),
+    mIsActive(true) {
 
     //テクスチャ生成
     changeTexture(fileName);
@@ -33,17 +33,13 @@ Sprite::Sprite(const std::string& fileName) :
     };
     constexpr unsigned numElements = sizeof(layout) / sizeof(layout[0]);
     mShader->createInputLayout(layout, numElements);
+
+    computeWorldTransform();
 }
 
 Sprite::~Sprite() = default;
 
-void Sprite::addToManager() {
-    if (mSpriteManager) {
-        mSpriteManager->add(shared_from_this());
-    }
-}
-
-void Sprite::update() {
+void Sprite::computeWorldTransform() {
     if (getActive()) {
         mTransform->computeWorldTransform();
     }
@@ -132,20 +128,12 @@ const Vector2& Sprite::getTextureSize() const {
     return mTextureSize;
 }
 
-void Sprite::destroy() {
-    mState = State::DEAD;
-}
-
 void Sprite::setActive(bool value) {
-    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+    mIsActive = value;
 }
 
 bool Sprite::getActive() const {
-    return mState == State::ACTIVE;
-}
-
-bool Sprite::isDead() const {
-    return mState == State::DEAD;
+    return mIsActive;
 }
 
 void Sprite::changeTexture(const std::string& fileName) {
@@ -175,8 +163,4 @@ const Shader& Sprite::shader() const {
 
 const std::string& Sprite::fileName() const {
     return mFileName;
-}
-
-void Sprite::setSpriteManager(SpriteManager * manager) {
-    mSpriteManager = manager;
 }

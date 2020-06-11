@@ -25,7 +25,7 @@ SpriteComponent::SpriteComponent() :
 SpriteComponent::~SpriteComponent() = default;
 
 void SpriteComponent::lateUpdate() {
-    mSprite->update();
+    mSprite->computeWorldTransform();
 }
 
 void SpriteComponent::finalize() {
@@ -77,13 +77,9 @@ void SpriteComponent::loadProperties(const rapidjson::Value& inObj) {
 
 void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", fileName());
-    inspect->emplace_back("IsActive", getActive());
     inspect->emplace_back("Position", transform()->getPosition());
     inspect->emplace_back("Rotation", transform()->getRotation());
     inspect->emplace_back("Scale", transform()->getScale());
-    inspect->emplace_back("Color", getColor());
-    inspect->emplace_back("UV", getUV());
-    inspect->emplace_back("TextureSize", getTextureSize());
     inspect->emplace_back("DrawOrder", mDrawOrder);
 }
 

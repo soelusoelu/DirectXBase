@@ -10,12 +10,6 @@ class Texture;
 class Transform3D;
 
 class Sprite3D : public Component, public std::enable_shared_from_this<Sprite3D> {
-    enum class State {
-        ACTIVE,
-        NON_ACTIVE,
-        DEAD
-    };
-
 public:
     Sprite3D();
     ~Sprite3D();
@@ -43,7 +37,6 @@ public:
     //状態管理
     void setActive(bool value);
     bool getActive() const;
-    bool isDead() const;
     //テクスチャの取得
     const Texture& texture() const;
     //シェーダーの取得
@@ -62,11 +55,11 @@ protected:
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<Texture> mTexture;
     std::shared_ptr<Shader> mShader;
-    State mState;
     Vector2 mTextureAspect;
     Vector4 mColor;
     Vector4 mUV;
     std::string mFileName;
+    bool mIsActive;
 
-    static SpriteManager* mSpriteManager;
+    static inline SpriteManager* mSpriteManager = nullptr;
 };

@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../GameObject/Object.h"
 #include <rapidjson/document.h>
 #include <any>
 #include <list>
@@ -14,7 +15,7 @@ namespace ComponentDebug {
     using DebugInfoList = std::list<DebugInfo>;
 }
 
-class Component {
+class Component : public Object {
     using GameObjectPtr = std::shared_ptr<GameObject>;
 
 public:

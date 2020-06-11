@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Object.h"
 #include <rapidjson/document.h>
 #include <memory>
 #include <string>
@@ -7,40 +8,30 @@
 class ComponentManager;
 class GameObjectManager;
 class Renderer;
-class Time;
 class Transform3D;
 
-class GameObject : public std::enable_shared_from_this<GameObject> {
-    enum class State {
-        ACTIVE,
-        NON_ACTIVE,
-        DEAD
-    };
-
+class GameObject final : public Object, public std::enable_shared_from_this<GameObject> {
 public:
     GameObject(const std::shared_ptr<Renderer>& renderer);
-    virtual ~GameObject();
+    ~GameObject();
 
     //更新
     void update();
     //遅延更新
     void lateUpdate();
 
-    //削除
-    void destroy();
-    void destroy(float sec);
-
     //ロード/セーブ
     void loadProperties(const rapidjson::Value& inObj);
     void saveProperties(rapidjson::Document::AllocatorType& alloc, rapidjson::Value* inObj) const;
 
-    //状態操作
-    virtual void setActive(bool value);
+    //アクティブ指定
+    void setActive(bool value);
+    //アクティブ状態の取得
     bool getActive() const;
-    bool isDead() const;
 
-    //タグ
+    //タグの設定
     void setTag(const std::string& tag);
+    //タグの取得
     const std::string& tag() const;
 
     //レンダラーの取得
@@ -52,30 +43,24 @@ public:
 
     //GameObjectManagerの登録
     static void setGameObjectManager(GameObjectManager* manager);
+    //GameObjectManagerの取得
     GameObjectManager* getGameObjectManager();
 
     //ゲームオブジェクトを生成
-    static std::shared_ptr<GameObject> create(std::shared_ptr<Renderer> renderer);
-
-protected:
-    //ワールド行列の更新
-    void computeWorldTransform();
+    static std::shared_ptr<GameObject> create(const std::shared_ptr<Renderer>& renderer);
 
 private:
     //初期化
     void initialize();
-    //DestroyTimerの更新
-    void updateDestroyTimer();
+    //ワールド行列の更新
+    void computeWorldTransform();
 
-protected:
+private:
     std::shared_ptr<Renderer> mRenderer;
     std::shared_ptr<Transform3D> mTransform;
     std::shared_ptr<ComponentManager> mComponentManager;
     std::string mTag;
-
-private:
-    std::unique_ptr<Time> mDestroyTimer;
-    State mState;
+    bool mIsActive;
 
     static GameObjectManager* mGameObjectManager;
 };

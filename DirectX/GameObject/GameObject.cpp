@@ -2,15 +2,13 @@
 #include "GameObjectManager.h"
 #include "Transform3D.h"
 #include "../Component/ComponentManager.h"
-#include "../Device/Time.h"
 
 GameObject::GameObject(const std::shared_ptr<Renderer>& renderer) :
     mRenderer(renderer),
     mTransform(nullptr),
     mComponentManager(nullptr),
     mTag(""),
-    mDestroyTimer(nullptr),
-    mState(State::ACTIVE) {
+    mIsActive(true) {
 }
 
 GameObject::~GameObject() {
@@ -33,17 +31,6 @@ void GameObject::lateUpdate() {
     }
 }
 
-void GameObject::destroy() {
-    mState = State::DEAD;
-}
-
-void GameObject::destroy(float sec) {
-    if (mDestroyTimer) {
-        return;
-    }
-    mDestroyTimer = std::make_unique<Time>(sec);
-}
-
 void GameObject::loadProperties(const rapidjson::Value& inObj) {
     mTransform->loadProperties(inObj);
 }
@@ -53,17 +40,13 @@ void GameObject::saveProperties(rapidjson::Document::AllocatorType& alloc, rapid
 }
 
 void GameObject::setActive(bool value) {
-    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+    mIsActive = value;
 
     mComponentManager->onSetActive(value);
 }
 
 bool GameObject::getActive() const {
-    return mState == State::ACTIVE;
-}
-
-bool GameObject::isDead() const {
-    return mState == State::DEAD;
+    return mIsActive;
 }
 
 void GameObject::setTag(const std::string& tag) {
@@ -94,16 +77,10 @@ GameObjectManager* GameObject::getGameObjectManager() {
     return mGameObjectManager;
 }
 
-std::shared_ptr<GameObject> GameObject::create(std::shared_ptr<Renderer> renderer) {
+std::shared_ptr<GameObject> GameObject::create(const std::shared_ptr<Renderer>& renderer) {
     auto obj = std::make_shared<GameObject>(renderer);
     obj->initialize();
     return obj;
-}
-
-void GameObject::computeWorldTransform() {
-    if (mTransform->computeWorldTransform()) {
-        mComponentManager->onUpdateWorldTransform();
-    }
 }
 
 void GameObject::initialize() {
@@ -115,13 +92,9 @@ void GameObject::initialize() {
     mComponentManager = std::make_shared<ComponentManager>();
 }
 
-void GameObject::updateDestroyTimer() {
-    if (!mDestroyTimer) {
-        return;
-    }
-    mDestroyTimer->update();
-    if (mDestroyTimer->isTime()) {
-        mState = State::DEAD;
+void GameObject::computeWorldTransform() {
+    if (mTransform->computeWorldTransform()) {
+        mComponentManager->onUpdateWorldTransform();
     }
 }
 

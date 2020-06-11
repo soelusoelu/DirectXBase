@@ -126,6 +126,7 @@
     <ClCompile Include="DirectX\Usage.cpp" />
     <ClCompile Include="DirectX\VertexBuffer.cpp" />
     <ClCompile Include="System\SceneManager.cpp" />
+    <ClCompile Include="GameObject\Object.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -268,5 +269,6 @@
     <ClInclude Include="DirectX\Usage.h" />
     <ClInclude Include="DirectX\VertexBuffer.h" />
     <ClInclude Include="System\SceneManager.h" />
+    <ClInclude Include="GameObject\Object.h" />
   </ItemGroup>
 </Project>

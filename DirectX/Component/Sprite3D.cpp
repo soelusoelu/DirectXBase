@@ -16,11 +16,11 @@ Sprite3D::Sprite3D() :
     mTransform(std::make_shared<Transform3D>()),
     mTexture(nullptr),
     mShader(nullptr),
-    mState(State::ACTIVE),
     mTextureAspect(Vector2::zero),
     mColor(Vector4(1.f, 1.f, 1.f, 1.f)),
     mUV(Vector4(0.f, 0.f, 1.f, 1.f)),
-    mFileName("") {
+    mFileName(""),
+    mIsActive(true) {
 }
 
 Sprite3D::~Sprite3D() = default;
@@ -60,7 +60,7 @@ void Sprite3D::lateUpdate() {
 }
 
 void Sprite3D::finalize() {
-    mState = State::DEAD;
+    destroy();
 }
 
 void Sprite3D::onSetActive(bool value) {
@@ -179,15 +179,11 @@ const Vector4& Sprite3D::getUV() const {
 }
 
 void Sprite3D::setActive(bool value) {
-    mState = (value) ? State::ACTIVE : State::NON_ACTIVE;
+    mIsActive = value;
 }
 
 bool Sprite3D::getActive() const {
-    return mState == State::ACTIVE;
-}
-
-bool Sprite3D::isDead() const {
-    return mState == State::DEAD;
+    return mIsActive;
 }
 
 const Texture& Sprite3D::texture() const {
@@ -211,5 +207,3 @@ void Sprite3D::addToManager() {
         mSpriteManager->add3D(shared_from_this());
     }
 }
-
-SpriteManager* Sprite3D::mSpriteManager = nullptr;
