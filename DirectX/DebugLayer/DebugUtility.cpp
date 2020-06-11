@@ -5,8 +5,8 @@
 #include "Log.h"
 #include "Pause.h"
 #include "../Device/DrawString.h"
-#include "../System/DirectXIncLib.h"
-#include "../System/Game.h"
+#include "../System/GlobalFunction.h"
+#include "../System/SystemInclude.h"
 
 void DebugUtility::create() {
     mDrawString = new DrawString();
@@ -36,12 +36,12 @@ void DebugUtility::initialize() {
 }
 
 void DebugUtility::finalize() {
-    SAFE_DELETE(mPause);
-    SAFE_DELETE(mInspector);
-    SAFE_DELETE(mHierarchy);
-    SAFE_DELETE(mFixedDebugInfo);
-    SAFE_DELETE(mLog);
-    SAFE_DELETE(mDrawString);
+    safeDelete(mPause);
+    safeDelete(mInspector);
+    safeDelete(mHierarchy);
+    safeDelete(mFixedDebugInfo);
+    safeDelete(mLog);
+    safeDelete(mDrawString);
 }
 
 void DebugUtility::update() {

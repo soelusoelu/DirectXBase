@@ -1,11 +1,10 @@
 #include "VertexArray.h"
-#include "../System/BufferDesc.h"
-#include "../System/DirectX.h"
-#include "../System/Game.h"
-#include "../System/IndexBuffer.h"
-#include "../System/SubResourceDesc.h"
-#include "../System/Usage.h"
-#include "../System/VertexBuffer.h"
+#include "../DirectX/BufferDesc.h"
+#include "../DirectX/DirectX.h"
+#include "../DirectX/IndexBuffer.h"
+#include "../DirectX/SubResourceDesc.h"
+#include "../DirectX/Usage.h"
+#include "../DirectX/VertexBuffer.h"
 
 VertexArray::VertexArray() :
     mNumVerts(0),

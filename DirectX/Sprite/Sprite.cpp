@@ -1,14 +1,14 @@
 ﻿#include "Sprite.h"
 #include "SpriteManager.h"
 #include "../Device/AssetsManager.h"
+#include "../DirectX/Buffer.h"
+#include "../DirectX/DirectX.h"
+#include "../DirectX/InputElementDesc.h"
+#include "../DirectX/SubResourceDesc.h"
+#include "../DirectX/TextureDesc.h"
 #include "../GameObject/Transform2D.h"
-#include "../System/Buffer.h"
-#include "../System/DirectX.h"
-#include "../System/InputElementDesc.h"
 #include "../System/Shader.h"
-#include "../System/SubResourceDesc.h"
 #include "../System/Texture.h"
-#include "../System/TextureDesc.h"
 #include <cassert>
 
 Sprite::Sprite(const std::string& fileName) :

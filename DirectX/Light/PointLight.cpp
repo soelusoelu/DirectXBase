@@ -1,8 +1,8 @@
 ﻿#include "PointLight.h"
 #include "../Device/AssetsManager.h"
+#include "../DirectX/InputElement.h"
 #include "../Mesh/IMeshLoader.h"
 #include "../Mesh/Material.h"
-#include "../System/InputElement.h"
 #include "../System/Shader.h"
 
 PointLight::PointLight() :
