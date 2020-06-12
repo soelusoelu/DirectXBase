@@ -9,6 +9,7 @@ class GameObject;
 class PlayerComponent;
 class FriedChickenComponent;
 class SoundComponent;
+class Time;
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection : public Component {
@@ -62,6 +63,7 @@ private:
     float mChickenRadius;
 
     std::shared_ptr<SoundComponent> mSound;
+    std::unique_ptr<Time> mReplaySoundTimer;
 
     KeyCode mCollectionKey;
     JoyCode mCollectionPad;

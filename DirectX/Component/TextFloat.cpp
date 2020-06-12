@@ -22,7 +22,7 @@ void TextFloat::lateUpdate() {
     if (!mIsActive) {
         return;
     }
-    owner()->renderer()->getDrawString()->drawNumber(mNumber, mPosition, mScale, mDecimalDigits, mPivot);
+    owner()->renderer()->getDrawString()->drawNumber(mNumber, mPosition, mScale, mDecimalDigits, mAlpha, mPivot);
 }
 
 void TextFloat::loadProperties(const rapidjson::Value& inObj) {

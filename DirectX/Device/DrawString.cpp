@@ -43,22 +43,24 @@ void DrawString::clear() {
     mParamsString.clear();
 }
 
-void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, Pivot pivot) {
+void DrawString::drawNumber(int number, const Vector2 & position, const Vector2 & scale, float alpha, Pivot pivot) {
     ParamInt param;
     param.number = number;
     param.position = position;
     param.scale = scale;
+    param.alpha = alpha;
     param.pivot = pivot;
 
     mParamsInt.emplace_back(param);
 }
 
-void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, Pivot pivot) {
+void DrawString::drawNumber(float number, const Vector2 & position, const Vector2 & scale, int decimalDigits, float alpha, Pivot pivot) {
     ParamFloat param;
     param.number = number;
     param.position = position;
     param.scale = scale;
     param.decimalDigits = decimalDigits;
+    param.alpha = alpha;
     param.pivot = pivot;
 
     mParamsFloat.emplace_back(param);
@@ -81,6 +83,7 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
     auto number = param.number;
     auto pos = param.position;
     auto scale = param.scale;
+    auto alpha = param.alpha;
     auto pivot = param.pivot;
 
     //マイナスは扱わない
@@ -103,6 +106,7 @@ void DrawString::drawInt(const ParamInt & param, const Matrix4 & proj) const {
 
     //数字を文字列化し、1文字ずつ取り出す
     mNumberSprite->transform()->setScale(scale);
+    mNumberSprite->setAlpha(alpha);
     for (const auto& n : std::to_string(number)) {
         mNumberSprite->transform()->setPosition(pos);
         //数字のテクスチャが数字1つにつき幅32高さ64
@@ -126,6 +130,7 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
     auto pos = param.position;
     auto scale = param.scale;
     auto decimalDigits = param.decimalDigits;
+    auto alpha = param.alpha;
     auto pivot = param.pivot;
 
     //マイナスは扱わない
@@ -146,6 +151,7 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
 
     //数字を文字列化し、1文字ずつ取り出す
     mNumberSprite->transform()->setScale(scale);
+    mNumberSprite->setAlpha(alpha);
     for (const auto& n : num) {
         mNumberSprite->transform()->setPosition(pos);
         //数字のテクスチャが数字1つにつき幅32高さ64

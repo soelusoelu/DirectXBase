@@ -7,6 +7,7 @@
 #include "MeshComponent.h"
 #include "PlayerComponent.h"
 #include "SoundComponent.h"
+#include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
@@ -18,6 +19,7 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mJumpTarget(nullptr),
     mChickenRadius(0.f),
     mSound(nullptr),
+    mReplaySoundTimer(std::make_unique<Time>(1.f)),
     mCollectionKey(KeyCode::None),
     mCollectionPad(JoyCode::None),
     mIsJumpRoll(true) {
@@ -60,6 +62,7 @@ void PlayerChickenConnection::update() {
         tooBurntUnderThePlayer();
         eatenChicken();
     }
+    mReplaySoundTimer->update();
 }
 
 void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
@@ -170,7 +173,10 @@ void PlayerChickenConnection::collection() {
     //}
     //すべての面が普通以上で
     if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
-        mSound->playSE();
+        if (mReplaySoundTimer->isTime()) {
+            mSound->playSE();
+            mReplaySoundTimer->reset();
+        }
         return;
     }
 

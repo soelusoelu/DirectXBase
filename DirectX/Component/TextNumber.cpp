@@ -21,7 +21,7 @@ void TextNumber::lateUpdate() {
     if (!mIsActive) {
         return;
     }
-    owner()->renderer()->getDrawString()->drawNumber(mNumber, mPosition, mScale, mPivot);
+    owner()->renderer()->getDrawString()->drawNumber(mNumber, mPosition, mScale, mAlpha, mPivot);
 }
 
 void TextNumber::loadProperties(const rapidjson::Value& inObj) {
