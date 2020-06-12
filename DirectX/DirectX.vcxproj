@@ -218,6 +218,7 @@
     <ClCompile Include="Component\ResultChickenManager.cpp" />
     <ClCompile Include="GameObject\Pivot.cpp" />
     <ClCompile Include="DebugLayer\Pause.cpp" />
+    <ClCompile Include="Component\TextNumber.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="DebugLayer\Pause.h" />
     <ClInclude Include="System\GlobalFunction.h" />
     <ClInclude Include="System\SystemInclude.h" />
+    <ClInclude Include="Component\TextNumber.h" />
     <ClInclude Include="Utility\Directory.h" />
     <ClInclude Include="Input\JoyPad.h" />
     <ClInclude Include="Input\Keyboard.h" />

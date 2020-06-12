@@ -310,6 +310,33 @@
       ]
     },
     {
+      "type": "Score",
+      "components": [
+        {
+          "type": "Score",
+          "properties": {
+            "highScore": 340
+          }
+        },
+        {
+          "type": "TextNumber",
+          "properties": {
+            "position": [ 1870.0, 15.0 ],
+            "scale": [ 1.25, 1.25 ],
+            "pivot": "RightTop"
+          }
+        },
+        {
+          "type": "SpriteComponent",
+          "properties": {
+            "fileName": "Score.png",
+            "position": [ 1400.0, -50.0 ],
+            "scale": [ 0.75, 0.75 ]
+          }
+        }
+      ]
+    },
+    {
       "type": "ResultChicken",
       "components": [
         {

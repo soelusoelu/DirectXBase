@@ -1,37 +1,6 @@
 {
   "UIs": [
     {
-      "type": "Score",
-      "components": [
-        {
-          "type": "Score",
-          "properties": {
-            "highScore": 340
-          }
-        },
-        {
-          "type": "Text",
-          "properties": {
-            "position": [ 1920.0, 0.0 ],
-            "scale": [ 1.0, 1.0 ],
-            "color": [ 1.0, 1.0, 1.0 ],
-            "alpha": 1.0,
-            "pivot": "RightTop"
-          }
-        },
-        {
-          "type": "Text",
-          "properties": {
-            "text": "Score",
-            "position": [ 1600.0, 0.0 ],
-            "scale": [ 1.0, 1.0 ],
-            "color": [ 1.0, 1.0, 1.0 ],
-            "alpha": 1.0
-          }
-        }
-      ]
-    },
-    {
       "type": "JumpTarget",
       "components": [
         {

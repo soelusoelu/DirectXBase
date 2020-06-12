@@ -2,7 +2,7 @@
 
 #include "Component.h"
 
-class Text;
+class TextNumber;
 
 class Score : public Component {
 public:
@@ -17,7 +17,7 @@ public:
     int getScore() const;
 
 private:
-    std::shared_ptr<Text> mText;
+    std::shared_ptr<TextNumber> mText;
     int mScore;
     int mHighScore;
 };

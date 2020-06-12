@@ -36,6 +36,7 @@
 #include "../Component/Sprite3D.h"
 #include "../Component/SpriteComponent.h"
 #include "../Component/Text.h"
+#include "../Component/TextNumber.h"
 #include "../Component/TimeLimit.h"
 #include "../Component/TransparentMeshComponent.h"
 #include "../Component/Scene/GamePlay.h"
@@ -82,6 +83,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteComponent);
     ADD_COMPONENT(Text);
+    ADD_COMPONENT(TextNumber);
     ADD_COMPONENT(TimeLimit);
     ADD_COMPONENT(TransparentMeshComponent);
     ADD_COMPONENT(GamePlay);

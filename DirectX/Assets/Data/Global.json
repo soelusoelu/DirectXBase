@@ -14,7 +14,7 @@
     "fps": 60.0,
     "ambientLight": [ 0.1, 0.1, 0.1 ],
     "drawString": {
-      "number": "number.png",
+      "number": "number2.png",
       "font": "font2.png"
     },
     "log": {

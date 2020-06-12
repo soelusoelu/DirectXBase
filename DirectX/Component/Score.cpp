@@ -1,6 +1,6 @@
 ﻿#include "Score.h"
 #include "ComponentManager.h"
-#include "Text.h"
+#include "TextNumber.h"
 #include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
 #include "../Utility/StringUtil.h"
@@ -15,14 +15,14 @@ Score::Score() :
 Score::~Score() = default;
 
 void Score::start() {
-    mText = owner()->componentManager()->getComponent<Text>();
+    mText = owner()->componentManager()->getComponent<TextNumber>();
 }
 
 void Score::update() {
     if (mScore > mHighScore) {
         mHighScore = mScore;
     }
-    mText->setText(StringUtil::intToString(mScore));
+    mText->setNumber(mScore);
 }
 
 void Score::loadProperties(const rapidjson::Value& inObj) {
