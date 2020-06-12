@@ -129,6 +129,7 @@
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Component\TextNumber.cpp" />
     <ClCompile Include="Component\TextFloat.cpp" />
+    <ClCompile Include="Component\OneRemain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -274,5 +275,6 @@
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="Component\TextNumber.h" />
     <ClInclude Include="Component\TextFloat.h" />
+    <ClInclude Include="Component\OneRemain.h" />
   </ItemGroup>
 </Project>

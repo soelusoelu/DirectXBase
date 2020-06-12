@@ -10,6 +10,7 @@ class Score;
 class TimeLimit;
 class JumpTarget;
 class Oil;
+class OneRemain;
 
 class GamePlay : public Component {
 public:
@@ -27,5 +28,6 @@ private:
     std::shared_ptr<TimeLimit> mTimeLimit;
     std::shared_ptr<JumpTarget> mJumpTarget;
     std::shared_ptr<Oil> mOil;
+    std::shared_ptr<OneRemain> mOneRemain;
     bool mIsFirstSleep;
 };

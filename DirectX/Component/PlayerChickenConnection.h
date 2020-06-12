@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "../Input/Input.h"
 #include "../Math/Math.h"
+#include <functional>
 #include <memory>
 
 class GameObject;
@@ -10,6 +11,7 @@ class PlayerComponent;
 class FriedChickenComponent;
 class SoundComponent;
 class Time;
+class Subject;
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection : public Component {
@@ -33,6 +35,8 @@ public:
     //ジャンプターゲットのトップポジション
     Vector3 getJumpTargetTopPos() const;
     void setPlayerJumpTarget(const ChickenPtr& chicken);
+    //回収条件を満たしていない
+    void onFailedCollection(const std::function<void()>& f);
 
 private:
     //プレイヤーの位置を引数の唐揚げの上に設定
@@ -64,6 +68,9 @@ private:
 
     std::shared_ptr<SoundComponent> mSound;
     std::unique_ptr<Time> mReplaySoundTimer;
+
+    //回収失敗のサブジェクト
+    std::unique_ptr<Subject> mFailedCollectionSubject;
 
     KeyCode mCollectionKey;
     JoyCode mCollectionPad;

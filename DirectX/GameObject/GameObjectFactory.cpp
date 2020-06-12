@@ -20,6 +20,7 @@
 #include "../Component/JumpTarget.h"
 #include "../Component/MeshComponent.h"
 #include "../Component/Oil.h"
+#include "../Component/OneRemain.h"
 #include "../Component/PlayerChickenConnection.h"
 #include "../Component/PlayerComponent.h"
 #include "../Component/PlayerJump.h"
@@ -68,6 +69,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(JumpTarget);
     ADD_COMPONENT(MeshComponent);
     ADD_COMPONENT(Oil);
+    ADD_COMPONENT(OneRemain);
     ADD_COMPONENT(PlayerChickenConnection);
     ADD_COMPONENT(PlayerComponent);
     ADD_COMPONENT(PlayerJump);

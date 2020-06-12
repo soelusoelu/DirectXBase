@@ -5,6 +5,7 @@
 #include "../../Component/FriedChickenManager.h"
 #include "../../Component/JumpTarget.h"
 #include "../../Component/Oil.h"
+#include "../../Component/OneRemain.h"
 #include "../../Component/PlayerChickenConnection.h"
 #include "../../Component/Score.h"
 #include "../../Component/SoundComponent.h"
@@ -14,6 +15,7 @@
 #include "../../GameObject/GameObject.h"
 #include "../../GameObject/GameObjectFactory.h"
 #include "../../GameObject/GameObjectManager.h"
+#include "../../GameObject/Transform3D.h"
 #include "../../Input/Input.h"
 
 GamePlay::GamePlay() :
@@ -25,6 +27,7 @@ GamePlay::GamePlay() :
     mTimeLimit(nullptr),
     mJumpTarget(nullptr),
     mOil(nullptr),
+    mOneRemain(nullptr),
     mIsFirstSleep(false) {
 }
 
@@ -49,6 +52,9 @@ void GamePlay::awake() {
     GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");
     mOil = oil->componentManager()->getComponent<Oil>();
+    auto oneRe = GameObjectCreater::create("OneRemain");
+    mOneRemain = oneRe->componentManager()->getComponent<OneRemain>();
+    mOneRemain->addObserver(mPCConnection);
 
     DebugUtility::inspector()->setTarget(p);
 }
@@ -79,6 +85,8 @@ void GamePlay::update() {
     } else {
         mJumpTarget->setActive(false);
     }
+    //警告が必要なときは表示する
+    mOneRemain->setPosition(mPCConnection->getChicken()->owner()->transform()->getPosition());
     //油の流れに沿って移動させる
     mOil->flow(p);
     auto list = mFriedChickenManager->getFriedChickens();

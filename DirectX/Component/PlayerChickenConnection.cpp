@@ -7,6 +7,7 @@
 #include "MeshComponent.h"
 #include "PlayerComponent.h"
 #include "SoundComponent.h"
+#include "../Device/Subject.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
@@ -20,6 +21,7 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mChickenRadius(0.f),
     mSound(nullptr),
     mReplaySoundTimer(std::make_unique<Time>(1.f)),
+    mFailedCollectionSubject(std::make_unique<Subject>()),
     mCollectionKey(KeyCode::None),
     mCollectionPad(JoyCode::None),
     mIsJumpRoll(true) {
@@ -113,6 +115,10 @@ void PlayerChickenConnection::setPlayerJumpTarget(const ChickenPtr & chicken) {
     }
 }
 
+void PlayerChickenConnection::onFailedCollection(const std::function<void()>& f) {
+    mFailedCollectionSubject->addObserver(f);
+}
+
 void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenComponent & chicken) {
     auto pt = mPlayer->owner()->transform();
     auto pos = pt->getPosition();
@@ -177,6 +183,7 @@ void PlayerChickenConnection::collection() {
             mSound->playSE();
             mReplaySoundTimer->reset();
         }
+        mFailedCollectionSubject->notify();
         return;
     }
 

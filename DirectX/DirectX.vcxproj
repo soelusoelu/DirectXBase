@@ -220,6 +220,7 @@
     <ClCompile Include="DebugLayer\Pause.cpp" />
     <ClCompile Include="Component\TextNumber.cpp" />
     <ClCompile Include="Component\TextFloat.cpp" />
+    <ClCompile Include="Component\OneRemain.cpp" />
     <ClCompile Include="Utility\Directory.cpp" />
     <ClCompile Include="Input\JoyPad.cpp" />
     <ClCompile Include="Input\Keyboard.cpp" />
@@ -350,6 +351,7 @@
     <ClInclude Include="GameObject\Pivot.h" />
     <ClInclude Include="Component\Rank.h" />
     <ClInclude Include="DebugLayer\Pause.h" />
+    <ClInclude Include="Component\OneRemain.h" />
     <ClInclude Include="System\GlobalFunction.h" />
     <ClInclude Include="System\SystemInclude.h" />
     <ClInclude Include="Component\TextNumber.h" />
