@@ -4,8 +4,8 @@
     "window": {
       "windowWidth": 1024,
       "windowHeight": 576,
-      "releaseWindowWidth": 1920,
-      "releaseWindowHeight": 1080,
+      "releaseWindowWidth": 1600,
+      "releaseWindowHeight": 900,
       "windowStandardWidth": 1920,
       "windowStandardHeight": 1080,
       "windowDebugWidth": 1920,

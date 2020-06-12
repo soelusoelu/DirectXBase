@@ -1,8 +1,10 @@
 ﻿#include "PlayerComponent.h"
 #include "ComponentManager.h"
+#include "MeshComponent.h"
 #include "PlayerJump.h"
 #include "PlayerWalk.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/Transform3D.h"
 
 PlayerComponent::PlayerComponent() :
     Component(),
@@ -15,10 +17,13 @@ PlayerComponent::PlayerComponent() :
 PlayerComponent::~PlayerComponent() = default;
 
 void PlayerComponent::start() {
-    mWalk = owner()->componentManager()->getComponent<PlayerWalk>();
-    mJump = owner()->componentManager()->getComponent<PlayerJump>();
+    const auto& cm = owner()->componentManager();
+    mWalk = cm->getComponent<PlayerWalk>();
+    mJump = cm->getComponent<PlayerJump>();
     mJump->onJumpStart([&]() {mState = State::JUMP; });
     mJump->onJumpEnd([&]() { mState = State::WALK; });
+    auto mesh = cm->getComponent<MeshComponent>();
+    owner()->transform()->setPivot(Vector3::back * mesh->getRadius());
 }
 
 void PlayerComponent::update() {

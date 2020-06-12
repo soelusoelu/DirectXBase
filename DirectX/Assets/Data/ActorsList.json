@@ -48,7 +48,7 @@
         {
           "type": "TransparentMeshComponent",
           "properties": {
-            "fileName": "Player/Player_.fbx"
+            "fileName": "Player/Player.fbx"
           }
         },
         {
@@ -246,6 +246,7 @@
     {
       "type": "Bird",
       "properties": {
+        "rotation": [ 0.0, 90.0, 90.0 ],
         "scale": [ 10.0, 10.0, 10.0 ]
       },
       "components": [
@@ -254,6 +255,7 @@
           "properties": {
             "moveSpeed": 20.0,
             "climbSpeed": 10.0,
+            "collideRadius": 0.4,
             "restartTimer": 20.0
           }
         },

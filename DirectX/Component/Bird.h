@@ -30,6 +30,7 @@ private:
     void waiting();
     void predictLine();
     void move();
+    void updateCollider();
     void hitMove();
     void takeChicken();
     void isEndMoving();
@@ -46,4 +47,5 @@ private:
     State mState;
     float mMoveSpeed;
     float mClimbSpeed;
+    float mCollideRadius;
 };

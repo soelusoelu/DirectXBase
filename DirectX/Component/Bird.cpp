@@ -24,7 +24,8 @@ Bird::Bird() :
     mTarget(nullptr),
     mState(State::WAIT),
     mMoveSpeed(0.f),
-    mClimbSpeed(0.f) {
+    mClimbSpeed(0.f),
+    mCollideRadius(0.f) {
 }
 
 Bird::~Bird() = default;
@@ -36,9 +37,6 @@ void Bird::start() {
     mMesh->setActive(false);
     mCollider = compMana->getComponent<SphereCollisionComponent>();
     mSound = compMana->getComponent<SoundComponent>();
-    auto t = owner()->transform();
-    t->rotate(Vector3::up, 90.f);
-    t->rotate(Vector3::forward, 90.f);
 }
 
 void Bird::update() {
@@ -48,6 +46,7 @@ void Bird::update() {
         predictLine();
     } else if (mState == State::MOVE) {
         move();
+        updateCollider();
         takeChicken();
         isEndMoving();
     } else if (mState == State::HIT_MOVE) {
@@ -59,6 +58,7 @@ void Bird::update() {
 void Bird::loadProperties(const rapidjson::Value & inObj) {
     JsonHelper::getFloat(inObj, "moveSpeed", &mMoveSpeed);
     JsonHelper::getFloat(inObj, "climbSpeed", &mClimbSpeed);
+    JsonHelper::getFloat(inObj, "collideRadius", &mCollideRadius);
     float time;
     if (JsonHelper::getFloat(inObj, "restartTimer", &time)) {
         mRestartTimer->setLimitTime(time);
@@ -78,9 +78,6 @@ void Bird::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
         info.second = "HIT_MOVE";
     }
     inspect->emplace_back(info);
-    inspect->emplace_back("MoveSpeed", mMoveSpeed);
-    inspect->emplace_back("ClimbSpeed", mClimbSpeed);
-    inspect->emplace_back("RestartTimer", mRestartTimer->limitTime());
 }
 
 void Bird::waiting() {
@@ -107,6 +104,10 @@ void Bird::move() {
         return;
     }
     owner()->transform()->translate(Vector3::left * Time::deltaTime * mMoveSpeed);
+}
+
+void Bird::updateCollider() {
+    mCollider->set(owner()->transform()->getPosition() + Vector3::forward, mCollideRadius);
 }
 
 void Bird::hitMove() {
@@ -153,6 +154,12 @@ void Bird::initialize() {
         if (comp->isFrying()) {
             result.emplace_back(chicken);
         }
+    }
+    //揚げてる最中の唐揚げがなければ終わり
+    if (result.empty()) {
+        mRestartTimer->reset();
+        mState = State::WAIT;
+        return;
     }
     auto randomIndex = Random::randomRange(0, result.size());
     mTarget = result[randomIndex];
