@@ -21,6 +21,7 @@
 GamePlay::GamePlay() :
     Component(),
     mScene(nullptr),
+    mPlayer(nullptr),
     mFriedChickenManager(nullptr),
     mPCConnection(nullptr),
     mScore(nullptr),
@@ -34,13 +35,13 @@ GamePlay::GamePlay() :
 GamePlay::~GamePlay() = default;
 
 void GamePlay::awake() {
-    auto p = GameObjectCreater::create("Player");
+    mPlayer = GameObjectCreater::create("Player");
     auto fcm = GameObjectCreater::create("FriedChickenManager");
     mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
-    auto c = mFriedChickenManager->findNearestChicken(*p);
+    auto c = mFriedChickenManager->findNearestChicken(*mPlayer);
     auto pcc = GameObjectCreater::create("PlayerChickenConnection");
     mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
-    mPCConnection->setPlayer(*p);
+    mPCConnection->setPlayer(*mPlayer);
     mPCConnection->setChicken(c);
     GameObjectCreater::create("Bird");
     auto score = GameObjectCreater::create("Score");
@@ -56,7 +57,7 @@ void GamePlay::awake() {
     mOneRemain = oneRe->componentManager()->getComponent<OneRemain>();
     mOneRemain->addObserver(mPCConnection);
 
-    DebugUtility::inspector()->setTarget(p);
+    DebugUtility::inspector()->setTarget(mPlayer);
 }
 
 void GamePlay::start() {
@@ -74,9 +75,8 @@ void GamePlay::update() {
         mIsFirstSleep = true;
         return;
     }
-    const auto& p = owner()->getGameObjectManager()->find("Player");
     //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
-    auto c = mFriedChickenManager->findNearestChicken(*p, mPCConnection->getChicken());
+    auto c = mFriedChickenManager->findNearestChicken(*mPlayer, mPCConnection->getChicken());
     mPCConnection->setPlayerJumpTarget(c);
     //ジャンプ地点を更新する
     if (mPCConnection->isJumpTarget()) {
@@ -88,7 +88,7 @@ void GamePlay::update() {
     //警告が必要なときは表示する
     mOneRemain->setPosition(mPCConnection->getChicken()->owner()->transform()->getPosition());
     //油の流れに沿って移動させる
-    mOil->flow(p);
+    mOil->flow(mPlayer);
     auto list = mFriedChickenManager->getFriedChickens();
     for (auto&& c : list) {
         mOil->flow(c);

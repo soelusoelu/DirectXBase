@@ -22,6 +22,8 @@ public:
 
     //描画
     void draw(const Matrix4& viewProj) const;
+    //ビルボードで描画
+    void drawBillboard(const Matrix4& invView, const Matrix4& viewProj);
     //トランスフォーム
     const std::shared_ptr<Transform3D>& transform() const;
     //色味、たぶん0～1
@@ -43,6 +45,10 @@ public:
     const Shader& shader() const;
     //ファイル名の取得
     const std::string& fileName() const;
+    //ビルボードにするか
+    void setBillboard(bool value);
+    //ビルボードか
+    bool isBillboard() const;
 
     //SpriteManagerの登録
     static void setSpriteManager(SpriteManager* manager);
@@ -60,6 +66,7 @@ protected:
     Vector4 mUV;
     std::string mFileName;
     bool mIsActive;
+    bool mIsBillboard;
 
     static inline SpriteManager* mSpriteManager = nullptr;
 };

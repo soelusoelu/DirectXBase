@@ -22,16 +22,26 @@ void SpriteManager::drawComponents(const Matrix4& proj) const {
     }
 }
 
-void SpriteManager::draw3Ds(const Matrix4& viewProj) const {
+void SpriteManager::draw3Ds(const Matrix4& view, const Matrix4& proj) const {
     if (mSprite3Ds.empty()) {
         return;
     }
+
+    auto cancelRotation = view;
+    cancelRotation.m[3][0] = 0.f;
+    cancelRotation.m[3][1] = 0.f;
+    cancelRotation.m[3][2] = 0.f;
+    cancelRotation.inverse();
 
     for (const auto& sprite : mSprite3Ds) {
         if (!sprite->getActive() || sprite->isDead()) {
             continue;
         }
-        sprite->draw(viewProj);
+        if (sprite->isBillboard()) {
+            sprite->drawBillboard(cancelRotation, view * proj);
+        } else {
+            sprite->draw(view * proj);
+        }
     }
 }
 

@@ -80,7 +80,6 @@ void SpriteComponent::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) cons
     inspect->emplace_back("Position", transform()->getPosition());
     inspect->emplace_back("Rotation", transform()->getRotation());
     inspect->emplace_back("Scale", transform()->getScale());
-    inspect->emplace_back("DrawOrder", mDrawOrder);
 }
 
 void SpriteComponent::draw(const Matrix4& proj) const {

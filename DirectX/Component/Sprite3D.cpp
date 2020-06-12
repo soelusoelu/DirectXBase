@@ -20,7 +20,8 @@ Sprite3D::Sprite3D() :
     mColor(Vector4(1.f, 1.f, 1.f, 1.f)),
     mUV(Vector4(0.f, 0.f, 1.f, 1.f)),
     mFileName(""),
-    mIsActive(true) {
+    mIsActive(true),
+    mIsBillboard(false) {
 }
 
 Sprite3D::~Sprite3D() = default;
@@ -69,10 +70,8 @@ void Sprite3D::onSetActive(bool value) {
 
 void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getString(inObj, "fileName", &mFileName);
-    bool isActive = true;
-    if (JsonHelper::getBool(inObj, "isActive", &isActive)) {
-        setActive(isActive);
-    }
+    JsonHelper::getBool(inObj, "isActive", &mIsActive);
+    JsonHelper::getBool(inObj, "isBillboard", &mIsBillboard);
     Vector3 vec3;
     if (JsonHelper::getVector3(inObj, "position", &vec3)) {
         mTransform->setPosition(vec3);
@@ -91,20 +90,14 @@ void Sprite3D::loadProperties(const rapidjson::Value& inObj) {
     if (JsonHelper::getFloat(inObj, "alpha", &alpha)) {
         setAlpha(alpha);
     }
-    Vector4 vec4;
-    if (JsonHelper::getVector4(inObj, "uv", &vec4)) {
-        setUV(vec4.x, vec4.y, vec4.z, vec4.w);
-    }
+    JsonHelper::getVector4(inObj, "uv", &mUV);
 }
 
 void Sprite3D::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
     inspect->emplace_back("FileName", mFileName);
-    inspect->emplace_back("IsActive", getActive());
     inspect->emplace_back("Position", mTransform->getPosition());
     inspect->emplace_back("Rotation", mTransform->getRotation().euler());
     inspect->emplace_back("Scale", mTransform->getScale());
-    inspect->emplace_back("Color", mColor);
-    inspect->emplace_back("UV", mUV);
 }
 
 void Sprite3D::draw(const Matrix4& viewProj) const {
@@ -123,6 +116,37 @@ void Sprite3D::draw(const Matrix4& viewProj) const {
         TextureConstantBuffer cb;
         //ワールド、射影行列を渡す
         cb.wp = mTransform->getWorldTransform() * viewProj;
+        cb.wp.transpose();
+        cb.color = mColor;
+        cb.uv = mUV;
+
+        memcpy_s(msrd.data, msrd.rowPitch, (void*)(&cb), sizeof(cb));
+        mShader->unmap();
+    }
+    //テクスチャーをシェーダーに渡す
+    mTexture->setPSTextures();
+    //サンプラーのセット
+    mTexture->setPSSamplers();
+    //プリミティブをレンダリング
+    Singleton<DirectX>::instance().drawIndexed(6);
+}
+
+void Sprite3D::drawBillboard(const Matrix4& invView, const Matrix4& viewProj) {
+    //シェーダーを登録
+    mShader->setVSShader();
+    mShader->setPSShader();
+    //コンスタントバッファーを使うシェーダーの登録
+    mShader->setVSConstantBuffers();
+    mShader->setPSConstantBuffers();
+    //頂点レイアウトをセット
+    mShader->setInputLayout();
+
+    //シェーダーのコンスタントバッファーに各種データを渡す
+    MappedSubResourceDesc msrd;
+    if (mShader->map(&msrd)) {
+        TextureConstantBuffer cb;
+        //ワールド、射影行列を渡す
+        cb.wp = invView * mTransform->getWorldTransform() * viewProj;
         cb.wp.transpose();
         cb.color = mColor;
         cb.uv = mUV;
@@ -196,6 +220,14 @@ const Shader& Sprite3D::shader() const {
 
 const std::string& Sprite3D::fileName() const {
     return mFileName;
+}
+
+void Sprite3D::setBillboard(bool value) {
+    mIsBillboard = value;
+}
+
+bool Sprite3D::isBillboard() const {
+    return mIsBillboard;
 }
 
 void Sprite3D::setSpriteManager(SpriteManager* manager) {

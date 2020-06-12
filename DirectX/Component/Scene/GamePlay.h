@@ -4,6 +4,7 @@
 #include <memory>
 
 class Scene;
+class GameObject;
 class FriedChickenManager;
 class PlayerChickenConnection;
 class Score;
@@ -22,6 +23,7 @@ public:
 
 private:
     std::shared_ptr<Scene> mScene;
+    std::shared_ptr<GameObject> mPlayer;
     std::shared_ptr<FriedChickenManager> mFriedChickenManager;
     std::shared_ptr<PlayerChickenConnection> mPCConnection;
     std::shared_ptr<Score> mScore;

@@ -120,7 +120,7 @@ void SceneManager::draw() const {
     mRenderer->renderSprite();
     //3Dスプライト
     mRenderer->renderSprite3D();
-    mSpriteManager->draw3Ds(mCamera->getViewProjection());
+    mSpriteManager->draw3Ds(mCamera->getView(), mCamera->getProjection());
     //2Dスプライト
     auto proj = Matrix4::identity;
     mRenderer->renderSprite2D(&proj);

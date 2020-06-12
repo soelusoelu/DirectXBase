@@ -18,7 +18,7 @@ public:
     ~SpriteManager();
     void update();
     void drawComponents(const Matrix4& proj) const;
-    void draw3Ds(const Matrix4& viewProj) const;
+    void draw3Ds(const Matrix4& view, const Matrix4& proj) const;
     void addComponent(const SpriteComponentPtr& add);
     void add3D(const Sprite3DPtr& add);
     void clear();
