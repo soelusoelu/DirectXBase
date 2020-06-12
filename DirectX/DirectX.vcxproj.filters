@@ -130,6 +130,7 @@
     <ClCompile Include="Component\TextNumber.cpp" />
     <ClCompile Include="Component\TextFloat.cpp" />
     <ClCompile Include="Component\OneRemain.cpp" />
+    <ClCompile Include="Component\ChickenCollection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -276,5 +277,6 @@
     <ClInclude Include="Component\TextNumber.h" />
     <ClInclude Include="Component\TextFloat.h" />
     <ClInclude Include="Component\OneRemain.h" />
+    <ClInclude Include="Component\ChickenCollection.h" />
   </ItemGroup>
 </Project>

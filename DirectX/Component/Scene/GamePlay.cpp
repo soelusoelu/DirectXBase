@@ -79,7 +79,7 @@ void GamePlay::update() {
     auto c = mFriedChickenManager->findNearestChicken(*mPlayer, mPCConnection->getChicken());
     mPCConnection->setPlayerJumpTarget(c);
     //ジャンプ地点を更新する
-    if (mPCConnection->isJumpTarget()) {
+    if (mPCConnection->existsJumpTarget()) {
         mJumpTarget->setActive(true);
         mJumpTarget->setTargetPosition(mPCConnection->getJumpTargetTopPos());
     } else {

@@ -3,6 +3,7 @@
 #include "../Component/Bird.h"
 #include "../Component/BirdOrbit.h"
 #include "../Component/Camera.h"
+#include "../Component/ChickenCollection.h"
 #include "../Component/ChickenColorChanger.h"
 #include "../Component/ChickenExclamation.h"
 #include "../Component/ChickenFry.h"
@@ -54,6 +55,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(Bird);
     ADD_COMPONENT(BirdOrbit);
     ADD_COMPONENT(Camera);
+    ADD_COMPONENT(ChickenCollection);
     ADD_COMPONENT(ChickenColorChanger);
     ADD_COMPONENT(ChickenExclamation);
     ADD_COMPONENT(ChickenFry);

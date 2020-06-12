@@ -1,6 +1,6 @@
 ﻿#include "Directory.h"
 #include "FileUtil.h"
-#include "../System/DirectXIncLib.h"
+#include "../System/SystemInclude.h"
 
 Directory::Directory() = default;
 

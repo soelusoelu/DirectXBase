@@ -1,17 +1,16 @@
 ﻿#include "PlayerChickenConnection.h"
+#include "ChickenCollection.h"
 #include "ComponentManager.h"
 #include "FriedChickenComponent.h"
-#include "IChickenFry.h"
 #include "IPlayerJump.h"
 #include "IPlayerWalk.h"
 #include "MeshComponent.h"
 #include "PlayerComponent.h"
-#include "SoundComponent.h"
 #include "../Device/Subject.h"
-#include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
+#include <string>
 
 PlayerChickenConnection::PlayerChickenConnection() :
     Component(),
@@ -19,11 +18,8 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mChicken(nullptr),
     mJumpTarget(nullptr),
     mChickenRadius(0.f),
-    mSound(nullptr),
-    mReplaySoundTimer(std::make_unique<Time>(1.f)),
+    mCollection(nullptr),
     mFailedCollectionSubject(std::make_unique<Subject>()),
-    mCollectionKey(KeyCode::None),
-    mCollectionPad(JoyCode::None),
     mIsJumpRoll(true) {
 }
 
@@ -37,7 +33,8 @@ void PlayerChickenConnection::start() {
             mChickenRadius = mesh->getRadius();
         }
     }
-    mSound = owner()->componentManager()->getComponent<SoundComponent>();
+
+    mCollection = owner()->componentManager()->getComponent<ChickenCollection>();
 
     mPlayer->getJumpState()->onJumpStart([&]() {
         if (mIsJumpRoll) {
@@ -55,7 +52,7 @@ void PlayerChickenConnection::update() {
         trackingJumpTarget();
     }
     if (mPlayer->isWalking()) {
-        jump->canJump(isJumpTarget());
+        jump->canJump(existsJumpTarget());
         setPlayerPosOnTheChicken(*mChicken);
         setChickenPosUnderThePlayer();
 
@@ -64,17 +61,9 @@ void PlayerChickenConnection::update() {
         tooBurntUnderThePlayer();
         eatenChicken();
     }
-    mReplaySoundTimer->update();
 }
 
 void PlayerChickenConnection::loadProperties(const rapidjson::Value & inObj) {
-    std::string src;
-    if (JsonHelper::getString(inObj, "collectionKey", &src)) {
-        Keyboard::stringToKeyCode(src, &mCollectionKey);
-    }
-    if (JsonHelper::getString(inObj, "collectionPad", &src)) {
-        JoyPad::stringToJoyCode(src, &mCollectionPad);
-    }
     JsonHelper::getBool(inObj, "isJumpRoll", &mIsJumpRoll);
 }
 
@@ -94,7 +83,7 @@ const std::shared_ptr<FriedChickenComponent>& PlayerChickenConnection::getChicke
     return mChicken;
 }
 
-bool PlayerChickenConnection::isJumpTarget() const {
+bool PlayerChickenConnection::existsJumpTarget() const {
     return (mJumpTarget) ? true : false;
 }
 
@@ -153,44 +142,21 @@ void PlayerChickenConnection::rollChicken() {
     mChicken->roll(dir);
 }
 
+void PlayerChickenConnection::collection() {
+    if (!mJumpTarget) {
+        return;
+    }
+    bool result = mCollection->tryCollection(mChicken);
+    if (result) {
+        setPlayerPosOnTheJumpTarget();
+    }
+}
+
 void PlayerChickenConnection::setPlayerPosOnTheJumpTarget() {
     auto pos = mJumpTarget->owner()->transform()->getPosition();
     mPlayer->owner()->transform()->setPosition(pos);
     setPlayerPosOnTheChicken(*mJumpTarget);
     mChicken = mJumpTarget;
-}
-
-void PlayerChickenConnection::collection() {
-    bool isPressed = Input::joyPad()->getJoyDown(mCollectionPad);
-#ifdef _DEBUG
-    if (!isPressed) {
-        isPressed = Input::keyboard()->getKeyDown(mCollectionKey);
-    }
-#endif // _DEBUG
-    if (!isPressed) {
-        return;
-    }
-    if (!mJumpTarget) {
-        return;
-    }
-    //半分の面が良い以上で
-    //if (!mChicken->getFry().isBurntHalfSurfaces()) {
-    //    return;
-    //}
-    //すべての面が普通以上で
-    if (!mChicken->getFry().isUpSelectState(FryState::USUALLY)) {
-        if (mReplaySoundTimer->isTime()) {
-            mSound->playSE();
-            mReplaySoundTimer->reset();
-        }
-        mFailedCollectionSubject->notify();
-        return;
-    }
-
-    mChicken->setUp();
-    mChicken->setWaitingScore(true);
-
-    setPlayerPosOnTheJumpTarget();
 }
 
 void PlayerChickenConnection::tooBurntUnderThePlayer() {
