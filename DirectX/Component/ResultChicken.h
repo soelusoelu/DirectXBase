@@ -8,7 +8,7 @@ class ResultRank;
 class ResultChickenManager;
 class Fade;
 class Time;
-class Text;
+class TextNumber;
 
 class ResultChicken : public Component {
     enum class State {
@@ -37,7 +37,7 @@ private:
     std::shared_ptr<GameObject> mResultChickenManager;
     std::shared_ptr<Fade> mFade;
     std::unique_ptr<Time> mFallToFadeTimer;
-    std::shared_ptr<Text> mText;
+    std::shared_ptr<TextNumber> mText;
     State mState;
     int mScore;
     bool mIsSleepedFirstFrame;

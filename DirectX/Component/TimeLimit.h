@@ -3,7 +3,7 @@
 #include "Component.h"
 #include <memory>
 
-class Text;
+class TextFloat;
 class Time;
 
 class TimeLimit : public Component {
@@ -16,7 +16,6 @@ public:
     bool isTime() const;
 
 private:
-    std::shared_ptr<Text> mText;
+    std::shared_ptr<TextFloat> mText;
     std::unique_ptr<Time> mTimer;
-    int mDecimalDigit;
 };

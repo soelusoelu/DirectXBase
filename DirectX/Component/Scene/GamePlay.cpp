@@ -15,7 +15,6 @@
 #include "../../GameObject/GameObjectFactory.h"
 #include "../../GameObject/GameObjectManager.h"
 #include "../../Input/Input.h"
-#include "../../Utility/LevelLoader.h"
 
 GamePlay::GamePlay() :
     Component(),
@@ -43,9 +42,9 @@ void GamePlay::awake() {
     GameObjectCreater::create("Bird");
     auto score = GameObjectCreater::create("Score");
     mScore = score->componentManager()->getComponent<Score>();
-    auto tl = GameObjectCreater::createUI("TimeLimit");
+    auto tl = GameObjectCreater::create("TimeLimit");
     mTimeLimit = tl->componentManager()->getComponent<TimeLimit>();
-    auto jt = GameObjectCreater::createUI("JumpTarget");
+    auto jt = GameObjectCreater::create("JumpTarget");
     mJumpTarget = jt->componentManager()->getComponent<JumpTarget>();
     GameObjectCreater::create("Field");
     auto oil = GameObjectCreater::create("Oil");

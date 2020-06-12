@@ -27,7 +27,6 @@ public:
     void initialize(const std::shared_ptr<Renderer> renderer);
     //ファイルからゲームオブジェクト生成
     GameObjectPtr loadGameObject(const std::string& type) const;
-    GameObjectPtr loadUIGameObject(const std::string& type) const;
 
 private:
     //アクターの読み込み
@@ -39,7 +38,6 @@ private:
     std::unordered_map<std::string, ComponentFunc> mComponents;
     std::shared_ptr<Renderer> mRenderer;
     rapidjson::Document mDocument;
-    rapidjson::Document mUIDocument;
 };
 
 class GameObjectCreater {
@@ -48,5 +46,4 @@ public:
     ~GameObjectCreater() = delete;
 
     static std::shared_ptr<GameObject> create(const std::string& type);
-    static std::shared_ptr<GameObject> createUI(const std::string& type);
 };

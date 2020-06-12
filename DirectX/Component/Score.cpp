@@ -3,7 +3,6 @@
 #include "TextNumber.h"
 #include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
-#include "../Utility/StringUtil.h"
 
 Score::Score() :
     Component(),

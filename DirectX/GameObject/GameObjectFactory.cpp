@@ -36,6 +36,7 @@
 #include "../Component/Sprite3D.h"
 #include "../Component/SpriteComponent.h"
 #include "../Component/Text.h"
+#include "../Component/TextFloat.h"
 #include "../Component/TextNumber.h"
 #include "../Component/TimeLimit.h"
 #include "../Component/TransparentMeshComponent.h"
@@ -83,6 +84,7 @@ GameObjectFactory::GameObjectFactory() :
     ADD_COMPONENT(Sprite3D);
     ADD_COMPONENT(SpriteComponent);
     ADD_COMPONENT(Text);
+    ADD_COMPONENT(TextFloat);
     ADD_COMPONENT(TextNumber);
     ADD_COMPONENT(TimeLimit);
     ADD_COMPONENT(TransparentMeshComponent);
@@ -98,12 +100,8 @@ GameObjectFactory::~GameObjectFactory() = default;
 void GameObjectFactory::initialize(const std::shared_ptr<Renderer> renderer) {
     mRenderer = renderer;
 
-    std::string fileName = "ActorsList.json";
+    const std::string& fileName = "ActorsList.json";
     if (!Singleton<LevelLoader>::instance().loadJSON(fileName, &mDocument)) {
-        Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
-    }
-    fileName = "UIList.json";
-    if (!Singleton<LevelLoader>::instance().loadJSON(fileName, &mUIDocument)) {
         Debug::windowMessage(fileName + ": レベルファイルのロードに失敗しました");
     }
 }
@@ -111,16 +109,6 @@ void GameObjectFactory::initialize(const std::shared_ptr<Renderer> renderer) {
 std::shared_ptr<GameObject> GameObjectFactory::loadGameObject(const std::string& type) const {
     GameObjectPtr obj = nullptr;
     const auto& objs = mDocument["gameObjects"];
-    if (objs.IsArray()) {
-        obj = loadGameObjectProperties(objs, type);
-    }
-
-    return obj;
-}
-
-std::shared_ptr<GameObject> GameObjectFactory::loadUIGameObject(const std::string& type) const {
-    GameObjectPtr obj = nullptr;
-    const auto& objs = mUIDocument["UIs"];
     if (objs.IsArray()) {
         obj = loadGameObjectProperties(objs, type);
     }
@@ -192,8 +180,4 @@ void GameObjectFactory::loadComponents(const GameObjectPtr& gameObject, const ra
 
 std::shared_ptr<GameObject> GameObjectCreater::create(const std::string& type) {
     return Singleton<GameObjectFactory>::instance().loadGameObject(type);
-}
-
-std::shared_ptr<GameObject> GameObjectCreater::createUI(const std::string& type) {
-    return Singleton<GameObjectFactory>::instance().loadUIGameObject(type);
 }

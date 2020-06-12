@@ -128,6 +128,7 @@
     <ClCompile Include="System\SceneManager.cpp" />
     <ClCompile Include="GameObject\Object.cpp" />
     <ClCompile Include="Component\TextNumber.cpp" />
+    <ClCompile Include="Component\TextFloat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component\Collider.h" />
@@ -272,5 +273,6 @@
     <ClInclude Include="System\SceneManager.h" />
     <ClInclude Include="GameObject\Object.h" />
     <ClInclude Include="Component\TextNumber.h" />
+    <ClInclude Include="Component\TextFloat.h" />
   </ItemGroup>
 </Project>

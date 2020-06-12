@@ -4,7 +4,7 @@
 #include "ResultChickenManager.h"
 #include "ResultRank.h"
 #include "SoundComponent.h"
-#include "Text.h"
+#include "TextNumber.h"
 #include "../Device/DrawString.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
@@ -20,6 +20,7 @@ ResultChicken::ResultChicken() :
     mResultChickenManager(nullptr),
     mFade(nullptr),
     mFallToFadeTimer(std::make_unique<Time>()),
+    mText(nullptr),
     mState(State::FALL),
     mScore(0),
     mIsSleepedFirstFrame(false) {
@@ -40,8 +41,8 @@ void ResultChicken::start() {
     auto rcm = mResultChickenManager->componentManager()->getComponent<ResultChickenManager>();
     rcm->createChickensFromRank(mRank->getRank());
 
-    mText = owner()->componentManager()->getComponent<Text>();
-    mText->setText(StringUtil::intToString(mScore));
+    mText = owner()->componentManager()->getComponent<TextNumber>();
+    mText->setNumber(mScore);
 }
 
 void ResultChicken::update() {

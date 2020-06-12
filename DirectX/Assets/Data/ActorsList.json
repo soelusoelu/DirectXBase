@@ -330,8 +330,47 @@
           "type": "SpriteComponent",
           "properties": {
             "fileName": "Score.png",
-            "position": [ 1400.0, -50.0 ],
+            "position": [ 1350.0, -50.0 ],
             "scale": [ 0.75, 0.75 ]
+          }
+        }
+      ]
+    },
+    {
+      "type": "TimeLimit",
+      "components": [
+        {
+          "type": "TimeLimit",
+          "properties": {
+            "timer": 90.0
+          }
+        },
+        {
+          "type": "TextFloat",
+          "properties": {
+            "position": [ 960.0, 0.0 ],
+            "scale": [ 1.5, 1.5 ],
+            "decimalDigits": 2,
+            "pivot": "CenterTop"
+          }
+        }
+      ]
+    },
+    {
+      "type": "JumpTarget",
+      "components": [
+        {
+          "type": "Sprite3D",
+          "properties": {
+            "fileName": "ArrowDown.png",
+            "scale": [ 1.0, 1.0 ]
+          }
+        },
+        {
+          "type": "JumpTarget",
+          "properties": {
+            "offsetPosY": 0.5,
+            "amountRotation": 3.0
           }
         }
       ]
@@ -354,7 +393,7 @@
           }
         },
         {
-          "type": "Text",
+          "type": "TextNumber",
           "properties": {
             "position": [ 960.0, 50.0 ],
             "scale": [ 3.0, 3.0 ],
