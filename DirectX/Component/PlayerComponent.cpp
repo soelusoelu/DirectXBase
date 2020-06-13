@@ -10,6 +10,7 @@ PlayerComponent::PlayerComponent() :
     Component(),
     mWalk(nullptr),
     mJump(nullptr),
+    mAwakenJump(nullptr),
     mState(State::WALK),
     mIsWaitFirstFrame(false) {
 }
@@ -20,7 +21,8 @@ void PlayerComponent::start() {
     const auto& cm = owner()->componentManager();
     mWalk = cm->getComponent<PlayerWalk>();
     mJump = cm->getComponent<PlayerJump>();
-    mJump->onJumpStart([&]() {mState = State::JUMP; });
+    mJump->onJumpStart(mAwakenJump);
+    mJump->onJumpStart([&]() { mState = State::JUMP; });
     mJump->onJumpEnd([&]() { mState = State::WALK; });
     auto mesh = cm->getComponent<MeshComponent>();
     owner()->transform()->setPivot(Vector3::back * mesh->getRadius());
@@ -50,4 +52,8 @@ std::shared_ptr<IPlayerJump> PlayerComponent::getJumpState() const {
 
 bool PlayerComponent::isWalking() const {
     return mState == State::WALK;
+}
+
+void PlayerComponent::onAwakenJump(const std::function<void()>& f) {
+    mAwakenJump = f;
 }

@@ -1,6 +1,7 @@
 ﻿#include "OneRemain.h"
 #include "ComponentManager.h"
 #include "PlayerChickenConnection.h"
+#include "PlayerComponent.h"
 #include "Sprite3D.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
@@ -39,13 +40,17 @@ void OneRemain::loadProperties(const rapidjson::Value& inObj) {
     JsonHelper::getVector3(inObj, "offset", &mOffset);
 }
 
-void OneRemain::addObserver(const std::shared_ptr<PlayerChickenConnection>& pcc) {
+void OneRemain::addObserver(const std::shared_ptr<PlayerComponent>& player, const std::shared_ptr<PlayerChickenConnection>& pcc) {
+    player->onAwakenJump([&]() {
+        mSprite->setActive(false);
+        mHiddenTimer->reset();
+    });
     pcc->onFailedCollection([&]() {
         mSprite->setActive(true);
         mHiddenTimer->reset();
     });
 }
 
-void OneRemain::setPosition(const Vector3& pos) {
-    mSprite->transform()->setPosition(pos + mOffset);
+void OneRemain::setPositionAndRadius(const Vector3& pos, float radius) {
+    mSprite->transform()->setPosition(pos + Vector3::back * radius + Vector3::up * radius + mOffset);
 }

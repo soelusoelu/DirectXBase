@@ -5,11 +5,9 @@
 #include <functional>
 #include <memory>
 
-class GameObject;
 class PlayerComponent;
 class FriedChickenComponent;
 class ChickenCollection;
-class Subject;
 
 //プレイヤーと唐揚げの情報をやり取りするクラス
 class PlayerChickenConnection : public Component {
@@ -18,12 +16,13 @@ class PlayerChickenConnection : public Component {
 public:
     PlayerChickenConnection();
     ~PlayerChickenConnection();
+    virtual void awake() override;
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
     virtual void drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const override;
     //プレイヤーのセット
-    void setPlayer(const GameObject& player);
+    void setPlayer(const std::shared_ptr<PlayerComponent>& player);
     //プレイヤーの足元の唐揚げのセット
     void setChicken(const ChickenPtr& chicken);
     const ChickenPtr& getChicken() const;
@@ -31,9 +30,12 @@ public:
     bool existsJumpTarget() const;
     //ジャンプターゲットのトップポジション
     Vector3 getJumpTargetTopPos() const;
-    void setPlayerJumpTarget(const ChickenPtr& chicken);
+    //歩いているなら、ジャンプターゲットを設定する
+    void setJumpTargetIfWalking(const ChickenPtr& chicken);
     //回収条件を満たしていない
     void onFailedCollection(const std::function<void()>& f);
+    //スケールを適用した半径を返す
+    float getScalingRadiusFromChicken() const;
 
 private:
     //プレイヤーの位置を引数の唐揚げの上に設定
@@ -64,8 +66,6 @@ private:
 
     //回収クラス
     std::shared_ptr<ChickenCollection> mCollection;
-    //回収失敗のサブジェクト
-    std::unique_ptr<Subject> mFailedCollectionSubject;
 
     bool mIsJumpRoll;
 };

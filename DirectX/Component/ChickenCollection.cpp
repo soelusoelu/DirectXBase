@@ -4,6 +4,7 @@
 #include "FryState.h"
 #include "IChickenFry.h"
 #include "SoundComponent.h"
+#include "../Device/Subject.h"
 #include "../Device/Time.h"
 #include "../GameObject/GameObject.h"
 #include "../Utility/LevelLoader.h"
@@ -13,6 +14,7 @@ ChickenCollection::ChickenCollection() :
     Component(),
     mSound(nullptr),
     mReplaySoundTimer(std::make_unique<Time>(1.f)),
+    mFailedCollectionSubject(std::make_unique<Subject>()),
     mCollectionKey(KeyCode::None),
     mCollectionPad(JoyCode::None) {
 }
@@ -45,6 +47,9 @@ bool ChickenCollection::tryCollection(const ChickenPtr& target) {
         return false;
     }
     if (!successCollection(*target)) {
+        if (oneRemain(*target)) {
+            mFailedCollectionSubject->notify();
+        }
         setUpSound();
         return false;
     }
@@ -53,6 +58,10 @@ bool ChickenCollection::tryCollection(const ChickenPtr& target) {
     collection(target);
 
     return true;
+}
+
+void ChickenCollection::onFailedCollection(const std::function<void()>& f) {
+    mFailedCollectionSubject->addObserver(f);
 }
 
 bool ChickenCollection::pressedCollectionKey() const {
@@ -66,8 +75,6 @@ bool ChickenCollection::pressedCollectionKey() const {
 }
 
 bool ChickenCollection::successCollection(const FriedChickenComponent& target) const {
-    //mFailedCollectionSubject->notify();
-
     //半分の面が良い以上で
     //return target.getFry().isBurntHalfSurfaces();
     //すべての面が普通以上で
@@ -84,4 +91,15 @@ void ChickenCollection::setUpSound() {
 void ChickenCollection::collection(const ChickenPtr& target) {
     target->setUp();
     target->setWaitingScore(true);
+}
+
+bool ChickenCollection::oneRemain(const FriedChickenComponent& target) const {
+    int count = 0;
+    for (size_t i = 0; i < 6; i++) {
+        auto state = target.getFry().getFryState(i);
+        if (static_cast<unsigned>(state) < static_cast<unsigned>(FryState::USUALLY)) {
+            ++count;
+        }
+    }
+    return count == 1;
 }

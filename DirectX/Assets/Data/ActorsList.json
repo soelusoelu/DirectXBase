@@ -194,7 +194,7 @@
           "type": "OneRemain",
           "properties": {
             "hiddenTime": 2.0,
-            "offset": [ 0.0, 1.5, -0.8 ]
+            "offset": [ 0.0, 0.5, 0.0 ]
           }
         },
         {
@@ -252,7 +252,12 @@
           "properties": {
             "isJumpRoll": false
           }
-        },
+        }
+      ]
+    },
+    {
+      "type": "ChickenCollection",
+      "components": [
         {
           "type": "ChickenCollection",
           "properties": {
@@ -553,8 +558,8 @@
           "type": "OperationExplanation",
           "properties": {
             "operationTextures": [
-              "sousa1.png",
-              "sousa2.png"
+              "sousa2_1.png",
+              "sousa2_2.png"
             ]
           }
         },

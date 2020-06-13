@@ -7,6 +7,7 @@
 #include "../../Component/Oil.h"
 #include "../../Component/OneRemain.h"
 #include "../../Component/PlayerChickenConnection.h"
+#include "../../Component/PlayerComponent.h"
 #include "../../Component/Score.h"
 #include "../../Component/SoundComponent.h"
 #include "../../Component/TimeLimit.h"
@@ -36,12 +37,13 @@ GamePlay::~GamePlay() = default;
 
 void GamePlay::awake() {
     mPlayer = GameObjectCreater::create("Player");
+    auto pc = mPlayer->componentManager()->getComponent<PlayerComponent>();
     auto fcm = GameObjectCreater::create("FriedChickenManager");
     mFriedChickenManager = fcm->componentManager()->getComponent<FriedChickenManager>();
     auto c = mFriedChickenManager->findNearestChicken(*mPlayer);
     auto pcc = GameObjectCreater::create("PlayerChickenConnection");
     mPCConnection = pcc->componentManager()->getComponent<PlayerChickenConnection>();
-    mPCConnection->setPlayer(*mPlayer);
+    mPCConnection->setPlayer(pc);
     mPCConnection->setChicken(c);
     GameObjectCreater::create("Bird");
     auto score = GameObjectCreater::create("Score");
@@ -55,7 +57,7 @@ void GamePlay::awake() {
     mOil = oil->componentManager()->getComponent<Oil>();
     auto oneRe = GameObjectCreater::create("OneRemain");
     mOneRemain = oneRe->componentManager()->getComponent<OneRemain>();
-    mOneRemain->addObserver(mPCConnection);
+    mOneRemain->addObserver(pc, mPCConnection);
 
     DebugUtility::inspector()->setTarget(mPlayer);
 }
@@ -77,7 +79,7 @@ void GamePlay::update() {
     }
     //プレイヤーが乗ってる唐揚げを除く一番近い唐揚げを探す
     auto c = mFriedChickenManager->findNearestChicken(*mPlayer, mPCConnection->getChicken());
-    mPCConnection->setPlayerJumpTarget(c);
+    mPCConnection->setJumpTargetIfWalking(c);
     //ジャンプ地点を更新する
     if (mPCConnection->existsJumpTarget()) {
         mJumpTarget->setActive(true);
@@ -86,7 +88,7 @@ void GamePlay::update() {
         mJumpTarget->setActive(false);
     }
     //警告が必要なときは表示する
-    mOneRemain->setPosition(mPCConnection->getChicken()->owner()->transform()->getPosition());
+    mOneRemain->setPositionAndRadius(mPCConnection->getChicken()->owner()->transform()->getPosition(), mPCConnection->getScalingRadiusFromChicken());
     //油の流れに沿って移動させる
     mOil->flow(mPlayer);
     auto list = mFriedChickenManager->getFriedChickens();

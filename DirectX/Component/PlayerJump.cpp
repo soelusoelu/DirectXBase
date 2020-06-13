@@ -35,8 +35,6 @@ void PlayerJump::loadProperties(const rapidjson::Value & inObj) {
 }
 
 void PlayerJump::drawDebugInfo(ComponentDebug::DebugInfoList* inspect) const {
-    inspect->emplace_back("Speed", mSpeed);
-    inspect->emplace_back("MoveRate", mMoveRate);
     inspect->emplace_back("CanJump", mCanJump);
 
     ComponentDebug::DebugInfo info;

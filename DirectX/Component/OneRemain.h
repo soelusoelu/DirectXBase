@@ -6,6 +6,7 @@
 
 class Sprite3D;
 class Time;
+class PlayerComponent;
 class PlayerChickenConnection;
 
 class OneRemain : public Component {
@@ -15,8 +16,8 @@ public:
     virtual void start() override;
     virtual void update() override;
     virtual void loadProperties(const rapidjson::Value& inObj) override;
-    void addObserver(const std::shared_ptr<PlayerChickenConnection>& pcc);
-    void setPosition(const Vector3& pos);
+    void addObserver(const std::shared_ptr<PlayerComponent>& player, const std::shared_ptr<PlayerChickenConnection>& pcc);
+    void setPositionAndRadius(const Vector3& pos, float radius);
 
 private:
     std::shared_ptr<Sprite3D> mSprite;

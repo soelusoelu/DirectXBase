@@ -3,6 +3,7 @@
 #include "Component.h"
 #include "IPlayerJump.h"
 #include "IPlayerWalk.h"
+#include <functional>
 
 class PlayerWalk;
 class PlayerJump;
@@ -23,10 +24,12 @@ public:
     std::shared_ptr<IPlayerWalk> getWalkState() const;
     std::shared_ptr<IPlayerJump> getJumpState() const;
     bool isWalking() const;
+    void onAwakenJump(const std::function<void()>& f);
 
 private:
     std::shared_ptr<PlayerWalk> mWalk;
     std::shared_ptr<PlayerJump> mJump;
+    std::function<void()> mAwakenJump;
     State mState;
     bool mIsWaitFirstFrame;
 };

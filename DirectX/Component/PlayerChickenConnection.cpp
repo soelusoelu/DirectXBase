@@ -6,8 +6,8 @@
 #include "IPlayerWalk.h"
 #include "MeshComponent.h"
 #include "PlayerComponent.h"
-#include "../Device/Subject.h"
 #include "../GameObject/GameObject.h"
+#include "../GameObject/GameObjectFactory.h"
 #include "../GameObject/Transform3D.h"
 #include "../Utility/LevelLoader.h"
 #include <string>
@@ -19,11 +19,15 @@ PlayerChickenConnection::PlayerChickenConnection() :
     mJumpTarget(nullptr),
     mChickenRadius(0.f),
     mCollection(nullptr),
-    mFailedCollectionSubject(std::make_unique<Subject>()),
     mIsJumpRoll(true) {
 }
 
 PlayerChickenConnection::~PlayerChickenConnection() = default;
+
+void PlayerChickenConnection::awake() {
+    auto coll = GameObjectCreater::create("ChickenCollection");
+    mCollection = coll->componentManager()->getComponent<ChickenCollection>();
+}
 
 void PlayerChickenConnection::start() {
     //メッシュ形状が変わらない・統一前提で
@@ -33,8 +37,6 @@ void PlayerChickenConnection::start() {
             mChickenRadius = mesh->getRadius();
         }
     }
-
-    mCollection = owner()->componentManager()->getComponent<ChickenCollection>();
 
     mPlayer->getJumpState()->onJumpStart([&]() {
         if (mIsJumpRoll) {
@@ -71,8 +73,8 @@ void PlayerChickenConnection::drawDebugInfo(ComponentDebug::DebugInfoList* inspe
     inspect->emplace_back("IsJumpRoll", mIsJumpRoll);
 }
 
-void PlayerChickenConnection::setPlayer(const GameObject & player) {
-    mPlayer = player.componentManager()->getComponent<PlayerComponent>();
+void PlayerChickenConnection::setPlayer(const std::shared_ptr<PlayerComponent>& player) {
+    mPlayer = player;
 }
 
 void PlayerChickenConnection::setChicken(const ChickenPtr & chicken) {
@@ -98,14 +100,18 @@ Vector3 PlayerChickenConnection::getJumpTargetTopPos() const {
     return pos;
 }
 
-void PlayerChickenConnection::setPlayerJumpTarget(const ChickenPtr & chicken) {
+void PlayerChickenConnection::setJumpTargetIfWalking(const ChickenPtr & chicken) {
     if (mPlayer->isWalking()) {
         mJumpTarget = chicken;
     }
 }
 
 void PlayerChickenConnection::onFailedCollection(const std::function<void()>& f) {
-    mFailedCollectionSubject->addObserver(f);
+    mCollection->onFailedCollection(f);
+}
+
+float PlayerChickenConnection::getScalingRadiusFromChicken() const {
+    return mChickenRadius * mChicken->owner()->transform()->getScale().x;
 }
 
 void PlayerChickenConnection::setPlayerPosOnTheChicken(const FriedChickenComponent & chicken) {
