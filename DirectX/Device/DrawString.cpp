@@ -159,16 +159,10 @@ void DrawString::drawFloat(const ParamFloat & param, const Matrix4 & proj) const
         float offsetX = 0.f;
         if (n == '.') {
             constexpr float num = 10 * WIDTH_RATE; //ピリオドは画像の10番目
-            //mNumberSprite->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
-
-            ////「.」のときは1文字の半分ずらす
-            //offsetX = PERIOD_WIDTH;
-
-            mNumberSprite->setUV(num, 0.f, num + WIDTH_RATE, 1.f);
+            mNumberSprite->setUV(num, 0.f, num + PERIOD_RATE, 1.f);
 
             //「.」のときは1文字の半分ずらす
-            offsetX = OFFSET_X;
-
+            offsetX = PERIOD_WIDTH;
         } else {
             float num = (n - '0') * WIDTH;
             num /= SPRITE_WIDTH;

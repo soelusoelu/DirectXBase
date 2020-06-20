@@ -4,7 +4,7 @@
 #include "../Math/Math.h"
 #include <rapidjson/document.h>
 
-#define TITLE L"DirectX"
+#define TITLE L"からあげ"
 
 class Window {
 public:
